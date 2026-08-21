@@ -1,0 +1,9 @@
+<p
+  class="product__sku no-js-hidden {% if product.selected_or_first_available_variant.sku.size == 0 %} visibility-hidden{% endif %}"
+  id="Sku-{{ section.id }}"
+  role="status"
+  {{ block.shopify_attributes }}
+>
+  <span class="visually-hidden">SKU:</span>
+  {{- product.selected_or_first_available_variant.sku -}}
+</p> 

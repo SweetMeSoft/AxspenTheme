@@ -1,0 +1,140 @@
+{%- liquid
+	capture go_back
+		render 'icon', code: 'chevron-left'
+		echo 'general.text.back' | t
+	endcapture
+
+	assign section_id = '#shopify-section-' | append: section.id
+-%}
+
+{%- for block in section.blocks -%}
+	{%- case block.type -%}
+		{%- when 'mega_menu' -%}
+			{%- liquid
+				assign overlay_opacity = block.settings.overlay_opacity
+				assign mega_item       = block.settings.mega_item | upcase
+				assign link_title      = link.title | upcase
+			-%}
+
+			{%- if block.settings.image_1 != blank -%}
+				{%- capture image_1 -%}
+					<style>
+						{{ section_id }} .mega-menu-wrap[data-{{ block.id }}] .image-wrapper{% if block.settings.link_1 != blank %} .image-link{% endif %}:before {
+							content: '';
+							background: linear-gradient(to bottom,rgba(0,0,0,0),{%- if overlay_opacity == 100 -%}rgb(0,0,0){%- else -%}rgba(0,0,0,0.{{ overlay_opacity }}){%- endif -%});
+						}
+					</style>
+
+					<div class="image-wrapper">
+						{%- if block.settings.link_1 != blank -%}<a class="image-link" href="{{ block.settings.link_1 }}">{%- endif -%}
+							<img srcset= "{{ block.settings.image_1 | image_url: width: 540 }} 1x, {{ block.settings.image_1 | image_url: width: 768 }} 2x"
+								src="{{ block.settings.image_1 | image_url: width: 740 }}"
+								loading="lazy"
+								width="370"
+								height="210">
+
+							{%- if block.settings.text_1 or block.settings.arrow_1 -%}
+								<div class="image-content">
+									{%- if block.settings.text_1 -%}
+										<span class="image-text">{{- block.settings.text_1 -}}</span>
+									{%- endif -%}
+
+									{%- if block.settings.arrow_1 -%}
+										<span class="image-arrow">
+											{%- render 'icon', code: 'arrow-right-short' -%}
+										</span>
+									{%- endif -%}
+								</div>
+							{%- endif -%}
+						{%- if block.settings.link_1 != blank -%}</a>{%- endif -%}
+					</div>
+				{%- endcapture -%}
+			{%- endif -%}
+
+			{% comment %} Content {% endcomment %}
+			{%- if block.settings.data == 'menu' and block.settings.data_menu != blank and mega_item == link_title -%}
+				<div class="sub-menu mega-menu-wrap color-{{ section.settings.menu_color_scheme }}" data-{{ block.id }} data-navigation data-level="2">
+					<div class="container{% if full %}-fluid{% endif %}">
+                        <ul class="mega-menu{% if block.settings.image_1 != blank %} has-image-item{% endif %}">
+							<li class="back">{{- go_back -}}</li>
+
+							{% comment %} Menu items {% endcomment %}
+							{%- for mega in block.settings.data_menu.links -%}
+								<li class="menu-item">
+									<a href="{{ mega.url }}" class="menu-link{% if mega.links != blank %} has-children menu-heading{% endif %}">
+										<span class="menu-text">{{- mega.title -}}</span>
+
+										{%- if mega.links != blank -%}
+											<span class="menu-arrow hidden-desktop">{%- render 'icon', code: 'chevron-right' -%}</span>
+										{%- endif -%}
+									</a>
+
+									{%- if mega.links != blank -%}
+										<ul class="sub-mega-menu" data-level="3">
+											<li class="back">{{- go_back -}}</li>
+
+											{%- for mega_sub in mega.links -%}
+												<li class="menu-item{% if mega_sub.links != blank %} has-heading{% endif %}">
+													<a href="{{ mega_sub.url }}" class="menu-link{% if mega_sub.links != blank %} has-children menu-heading{% endif %}">
+														<span class="menu-text">{{ mega_sub.title }}</span>
+													</a>
+												</li>
+
+												{%- if mega_sub.links != blank -%}
+													<ul class="sub-mega-menu">
+														{%- for mega_sub in mega_sub.links -%}
+															<li class="menu-item">
+																<a href="{{ mega_sub.url }}">{{- mega_sub.title -}}</a>
+															</li>
+														{%- endfor -%}
+													</ul>
+												{%- endif -%}
+											{%- endfor -%}
+										</ul>
+									{%- endif -%}
+								</li>
+							{%- endfor -%}
+
+							{% comment %} Image {% endcomment %}
+							{%- if block.settings.image_1 != blank -%}
+								<li class="menu-item has-image">{{- image_1 -}}</li>
+							{%- endif -%}
+						</ul>
+					</div>
+				</div>
+			{%- elsif block.settings.data == 'collection' and block.settings.data_collection != blank and mega_item == link_title -%}
+				<div class="sub-menu mega-menu-wrap color-{{ section.settings.menu_color_scheme }}" data-{{ block.id }} data-collection data-level="2">
+					<div class="container{% if full %}-fluid{% endif %}">
+						<ul class="mega-menu{% if block.settings.image_1 != blank %} has-image-item{% endif %}">
+							<li class="back">{{- go_back -}}</li>
+
+							{% comment %} Menu items {% endcomment %}
+							{%- for product in block.settings.data_collection.products limit: 4 -%}
+								<li class="menu-item">
+									<a class="product-title {{ block.settings.image_ratio }}-media" href="{{ product.url | split: '?' | first }}">
+										{%- if product.featured_media -%}
+											<img class="product-image"
+												src="{{ product.featured_media | image_url: width: 450 }}"
+												alt="{{ product.featured_media.alt | escape }}"
+												loading="lazy"
+												width="180"
+												height="120">
+										{%- endif -%}
+									</a>
+
+									<a class="product-link" href="{{ product.url | split: '?' | first }}">
+										{{- product.title | escape -}}
+									</a>
+								</li>
+							{%- endfor -%}
+
+							{% comment %} Image {% endcomment %}
+							{%- if block.settings.image_1 != blank -%}
+								<li class="menu-item has-image">{{- image_1 -}}</li>
+							{%- endif -%}
+						</ul>
+					</div>
+				</div>
+			{%- endif -%}
+	{%- endcase -%}
+{%- endfor -%}

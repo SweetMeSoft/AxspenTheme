@@ -1,0 +1,38 @@
+.atlas-isolation-wrapper .totals {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.atlas-isolation-wrapper .totals > * {
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.atlas-isolation-wrapper .totals > h2 {
+  font-size: calc(var(--atlas-font-heading-scale) * 1.6rem);
+}
+
+.atlas-isolation-wrapper .totals * {
+  line-height: 1;
+}
+
+.atlas-isolation-wrapper .totals > * + * {
+  margin-left: 2rem;
+}
+
+.atlas-isolation-wrapper .totals__subtotal-value {
+  font-size: 1.8rem;
+  font-weight: var(--atlas-font-heading-weight);
+}
+
+.atlas-isolation-wrapper .cart__ctas + .totals {
+  margin-top: 2rem;
+}
+
+/* @media all and (min-width: 750px) {
+  .totals {
+    justify-content: flex-end;
+  }
+}
+ */

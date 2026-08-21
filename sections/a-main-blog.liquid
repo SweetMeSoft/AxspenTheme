@@ -1,0 +1,496 @@
+{{ 'a-component-article-card.css' | asset_url | stylesheet_tag }}
+{{ 'a-component-card.css' | asset_url | stylesheet_tag }}
+{{ 'a-section-main-blog.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  #shopify-section-{{ section.id }} .main-blog__navigation {
+    width: 100%;
+    border-bottom: {{  section.settings.blog_navigation_border_thickness }}px solid {{ section.settings.blog_navigation_border_color }};
+    padding-bottom: {{ section.settings.blog_navigation_padding_bottom_desktop }}px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: {{ section.settings.space_between_navigation_and_articles_desktop }}px;
+  }
+  @media (max-width: 768px) {
+    #shopify-section-{{ section.id }} .main-blog__navigation {
+      margin-bottom: {{ section.settings.space_between_navigation_and_articles_mobile }}px;
+      flex-direction: column;
+      gap: 20px;
+      padding-bottom: {{ section.settings.blog_navigation_padding_bottom_mobile }}px;
+    }
+    #shopify-section-{{ section.id }} .main-blog__navigation-search {
+      max-width: 100%;
+    }
+    #shopify-section-{{ section.id }} .main-blog__navigation-pages {
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+  }
+  #shopify-section-{{ section.id }} .main-blog__navigation-pages {
+    display: flex;
+    width: 100%; 
+    gap: 35px;
+    align-items: center;
+  }
+  #shopify-section-{{ section.id }} .main-blog__navigation-pages a {
+    font-size: {{ section.settings.blog_navigation_font_size_desktop }}px;
+    font-weight: 400;
+    color: {{ section.settings.blog_navigation_color }};
+    text-decoration: none;
+  }
+  @media (max-width: 768px) {
+    #shopify-section-{{ section.id }} .main-blog__navigation-pages a {
+      font-size: {{ section.settings.blog_navigation_font_size_mobile }}px;
+    }
+  }
+  #shopify-section-{{ section.id }} .main-blog__navigation-page.active {
+    color: {{ section.settings.blog_navigation_active_color }};
+    font-weight: 500;
+  }
+  #shopify-section-{{ section.id }} .main-blog__navigation-search {
+    width: 100%;
+    max-width: 300px;
+  }
+  #shopify-section-{{ section.id }} .main-blog__navigation-search .main-search__form {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  #shopify-section-{{ section.id }} .main-blog__navigation-search .main-search__form svg {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  #blog-articles-container {
+    position: relative;
+    min-height: 504px;
+  }
+  @media (max-width: 768px) {
+    #blog-articles-container {
+      min-height: 300px;
+    }
+  }
+  .loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    margin-bottom: 30px;
+    width: 100%;
+    z-index: 10;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  #blog-articles-container.loading-active .loading-spinner {
+    position: absolute;
+  }
+
+  #blog-articles-container.loading-active > *:not(.loading-spinner) {
+    opacity: 0.4;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .no-results-message {
+    text-align: center;
+    font-size: {{ section.settings.no_results_font_size_desktop }}px;
+    color: {{ section.settings.no_results_color }};
+    font-weight: 600;
+    width: 100%;
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+  }
+
+  @media (max-width: 768px) {
+    .no-results-message {
+      font-size: {{ section.settings.no_results_font_size_mobile }}px;
+    }
+  }
+
+.loading-spinner .spinner {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 20px;
+}
+
+.loading-spinner p {
+  margin: 0;
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+
+.main-blog__navigation-page {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.main-blog__navigation-page:hover {
+  color: #1D1A2D;
+}
+
+.main-blog__navigation-page.active {
+  color: #1D1A2D;
+  font-weight: 500;
+}
+
+/* Cache indicator (optional - for debugging) */
+.cache-indicator {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(29, 26, 45, 0.9);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 1000;
+  display: none;
+}
+
+.cache-indicator.show {
+  display: block;
+}
+  #shopify-section-{{ section.id }} .main-blog__navigation-search .main-search__input {
+    width: 100%;
+    height: 43px;
+    border-radius: {{ section.settings.blog_navigation_search_border_radius }}px;
+    border: none;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 40px;
+    padding-right: 8px;
+    background: {{ section.settings.blog_navigation_search_background_color }};
+    font-size: 15px;
+    font-weight: 400;
+    color: {{ section.settings.blog_navigation_search_color }} !important;
+  }
+  #shopify-section-{{ section.id }} .main-blog__navigation-search .main-search__input::placeholder {
+    color: {{ section.settings.blog_navigation_search_color }} !important;
+    opacity: 0.5;
+  }
+  #shopify-section-{{ section.id }} .main-blog__navigation-search .main-search__input:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  #shopify-section-{{ section.id }} .blog-articles {
+    width:100%;
+    grid-template-columns: repeat({{ section.settings.grid_columns_desktop }},1fr);
+    position: relative;
+  }
+  @media (max-width: 1024px) {
+    #shopify-section-{{ section.id }} .blog-articles {
+      grid-template-columns: repeat({{ section.settings.grid_columns_tablet }},1fr);
+    }
+  }
+  @media (max-width: 768px) {
+    #shopify-section-{{ section.id }} .blog-articles {
+      grid-template-columns: repeat({{ section.settings.grid_columns_mobile }},1fr);
+    }
+  }
+{%- endstyle -%}
+
+{%- paginate blog.articles by 8 -%}
+  <div class="main-blog page-width section-{{ section.id }}-padding">
+    <div class="main-blog__navigation">
+      <div class="main-blog__navigation-pages">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'blog_navigation' and block.settings.title != blank and block.settings.url != blank -%}
+            {% assign blog_handle = blog.url  %}
+            {% assign block_handle = block.settings.url  %}
+            {% if blog_handle == block_handle %}
+              <a class="main-blog__navigation-page active" href="{{ block.settings.url }}" data-blog-url="{{ block.settings.url }}">{{ block.settings.title }}</a>
+            {% else %}
+              <a class="main-blog__navigation-page" href="{{ block.settings.url }}" data-blog-url="{{ block.settings.url }}">{{ block.settings.title }}</a>
+            {% endif %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="main-blog__navigation-search">
+        <form class="main-search__form" id="blog-search-form" autocomplete="off">
+          <input type="hidden" name="type" value="article" />
+          <input type="hidden" name="options[prefix]" value="last" />
+          <input type="hidden" name="sort_by[filter-search-by-blogs]"/>
+          <input
+            id="main-search__input--label"
+            class="main-search__input"
+            type="text"
+            name="q"
+            autocomplete="off"
+            placeholder="Search"
+            value="{{ search.terms | escape }}" />
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14.855 13.9537C13.881 12.9637 13.3865 12.6374 12.4106 11.6492C12.3332 11.5709 12.26 11.4895 12.1868 11.4112C14.954 7.92493 13.6696 3.46946 11.0512 1.50176C8.27131 -0.586478 4.46169 -0.323996 2.0496 2.17173C-0.364299 4.66868 -0.550636 8.54901 1.57892 11.287C3.68428 13.9932 7.9271 14.9745 11.2672 12.2537C11.3187 12.3399 11.4451 12.4612 11.5219 12.5395C12.4941 13.5307 12.9874 13.8595 13.9657 14.8445C14.2609 15.1419 14.5816 15.1786 14.8544 14.9602C15.1811 14.6977 15.1866 14.2908 14.855 13.9537ZM6.90706 12.6202C3.83795 12.597 1.36355 10.0829 1.36415 6.98819C1.36476 3.88735 3.84702 1.37572 6.9125 1.37449C9.97374 1.37327 12.4554 3.8696 12.4832 6.9784C12.5111 10.0444 9.94228 12.6435 6.90706 12.6202Z" fill="#222222" stroke="#222222" stroke-width="0.2"/>
+            </svg>
+              
+        </form>
+      </div>
+    </div>
+    <div class="blog-articles" id="blog-articles-container">
+      {%- for article in blog.articles -%}
+        <div class="blog-articles__article article">
+          {%- render 'a-article-card',
+            article: article,
+            show_excerpt: section.settings.show_excerpt,
+            media_height: section.settings.image_height,
+            show_image: section.settings.show_image,
+            show_date: section.settings.show_date,
+            show_author: section.settings.show_author
+          -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div id="blog-pagination-container">
+      {%- if paginate.pages > 1 -%}
+        {%- render 'a-pagination', paginate: paginate -%}
+      {%- endif -%}
+    </div>
+  </div>
+{%- endpaginate -%}
+
+{% render 'a-main-blog-search-script' %}
+
+
+{% schema %}
+{
+  "name": "Blog posts",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "grid_columns_desktop",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 4,
+      "label": "Desktop grid columns"
+    },
+    {
+      "type": "range",
+      "id": "grid_columns_tablet",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2,
+      "label": "Tablet grid columns"
+    },
+    {
+      "type": "range",
+      "id": "grid_columns_mobile",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 1,
+      "label": "Mobile grid columns"
+    },
+    {
+      "type": "range",
+      "id": "blog_navigation_border_thickness",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "default": 1,
+      "label": "Blog navigation border thickness"
+    },
+    {
+      "type": "color",
+      "id": "blog_navigation_border_color",
+      "label": "Blog navigation border color",
+      "default": "#E0E0E0"
+    },
+    {
+      "type": "range",
+      "id": "blog_navigation_padding_bottom_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 33,
+      "label": "Desktop blog navigation padding bottom"
+    },
+    {
+      "type": "range",
+      "id": "blog_navigation_padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 10,
+      "label": "Mobile blog navigation padding bottom"
+    },
+    {
+      "type": "range",
+      "id": "space_between_navigation_and_articles_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 59,
+      "label": "Desktop space between navigation and articles"
+    },
+    {
+      "type": "range",
+      "id": "space_between_navigation_and_articles_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 33,
+      "label": "Mobile space between navigation and articles"
+    },
+    {
+      "type": "range",
+      "id": "blog_navigation_font_size_desktop",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "default": 16,
+      "label": "Desktop blog navigation font size"
+    },
+    {
+      "type": "range",
+      "id": "blog_navigation_font_size_mobile",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "default": 14,
+      "label": "Mobile blog navigation font size"
+    },
+    {
+      "type": "color",
+      "id": "blog_navigation_color",
+      "label": "Blog navigation color",
+      "default": "#686868"
+    },
+    {
+      "type": "color",
+      "id": "blog_navigation_active_color",
+      "label": "Blog navigation active color",
+      "default": "#1D1A2D"
+    },
+    {
+      "type": "color",
+      "id": "blog_navigation_search_background_color",
+      "label": "Blog navigation search background color",
+      "default": "#F9F9F9"
+    },
+    {
+      "type": "color",
+      "id": "blog_navigation_search_color",
+      "label": "Blog navigation search color",
+      "default": "#222222"
+    },
+    {
+      "type": "range",
+      "id": "blog_navigation_search_border_radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 16,
+      "label": "Blog navigation search border radius"
+    },
+    {
+      "type": "color",
+      "id": "loading_spinner_color",
+      "label": "Loading spinner color",
+      "default": "#1D1A2D"
+    },
+    {
+      "type": "header",
+      "content": "No Results Message"
+    },
+    {
+      "type": "text",
+      "id": "no_results_text",
+      "label": "No results found text",
+      "default": "No results found"
+    },
+    {
+      "type": "range",
+      "id": "no_results_font_size_desktop",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "default": 32,
+      "label": "Desktop no results font size"
+    },
+    {
+      "type": "range",
+      "id": "no_results_font_size_mobile",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "default": 16,
+      "label": "Mobile no results font size"
+    },
+    {
+      "type": "color",
+      "id": "no_results_color",
+      "label": "No results color",
+      "default": "#1D1A2D"
+    },
+    {
+      "type": "header",
+      "content": "Blog Card",
+      "info": "To adjust the blog cards settings you can visit [Theme Settings > Blog Cards](/editor?context=theme&category=blog%20cards)"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "blog_navigation",
+      "name": "Blog navigation",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

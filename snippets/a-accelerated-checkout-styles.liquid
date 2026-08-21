@@ -1,0 +1,55 @@
+{% comment %}
+  Accelerated Checkout Styles Hook - Pure Liquid Version
+  
+  This snippet provides a way to manually render the accelerated checkout styles.
+  Since the main theme.liquid now handles deferring via preload, this snippet 
+  can force immediate loading by rendering the styles directly.
+  
+  Usage:
+  {% render 'a-accelerated-checkout-styles' %}
+  
+  Optional parameters:
+  - force_load: true/false (default: false) - Force render styles immediately
+  - media: 'screen'|'print'|'all' (default: 'screen') - Media attribute
+  
+  Examples:
+  {% render 'a-accelerated-checkout-styles', force_load: true %}
+  {% render 'a-accelerated-checkout-styles', force_load: true, media: 'all' %}
+{% endcomment %}
+
+{%- liquid
+  assign force_load = force_load | default: false
+  assign media_attr = media | default: 'screen'
+-%}
+
+{% if force_load %}
+  {% comment %} Force load the accelerated checkout styles immediately {% endcomment %}
+  <link 
+    id="shopify-accelerated-checkout-styles-forced" 
+    rel="stylesheet" 
+    media="{{ media_attr }}" 
+    href="https://{{ shop.permanent_domain }}/cdn/shopifycloud/portable-wallets/latest/accelerated-checkout-backwards-compat.css" 
+    crossorigin="anonymous"
+  >
+{% else %}
+  {% comment %} 
+    Render a preload version that will be upgraded to stylesheet on load
+    This provides a way to manually trigger loading while still being deferred
+  {% endcomment %}
+  <link 
+    id="shopify-accelerated-checkout-styles-manual" 
+    rel="preload" 
+    as="style" 
+    href="https://{{ shop.permanent_domain }}/cdn/shopifycloud/portable-wallets/latest/accelerated-checkout-backwards-compat.css" 
+    crossorigin="anonymous"
+    onload="this.onload=null;this.rel='stylesheet';this.media='{{ media_attr }}'"
+  >
+  <noscript>
+    <link 
+      rel="stylesheet" 
+      media="{{ media_attr }}" 
+      href="https://{{ shop.permanent_domain }}/cdn/shopifycloud/portable-wallets/latest/accelerated-checkout-backwards-compat.css" 
+      crossorigin="anonymous"
+    >
+  </noscript>
+{% endif %}

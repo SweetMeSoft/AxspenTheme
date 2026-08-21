@@ -1,0 +1,191 @@
+/* ====================== */
+/* ANIMATED LINE DIVIDER STYLES */
+/* ====================== */
+
+.atlas-isolation-wrapper .pulsing-divider {
+  position: relative;
+  width: 100%;
+  height: var(--atlas-divider-size);
+  overflow: hidden;
+  transform: scaleY(var(--atlas-glow_animation_flip));
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--atlas-divider-color), 0.01) 0%,
+    rgba(var(--atlas-divider-color), 0.02) 5%,
+    rgba(var(--atlas-divider-color), 0.03) 10%,
+    rgba(var(--atlas-divider-color), 0.05) 15%,
+    rgba(var(--atlas-divider-color), 0.08) 20%,
+    rgba(var(--atlas-divider-color), 0.12) 25%,
+    rgba(var(--atlas-divider-color), 0.17) 30%,
+    rgba(var(--atlas-divider-color), 0.23) 35%,
+    rgba(var(--atlas-divider-color), 0.3) 40%,
+    rgba(var(--atlas-divider-color), 0.38) 45%,
+    rgba(var(--atlas-divider-color), 0.46) 50%,
+    rgba(var(--atlas-divider-color), 0.54) 55%,
+    rgba(var(--atlas-divider-color), 0.62) 60%,
+    rgba(var(--atlas-divider-color), 0.7) 65%,
+    rgba(var(--atlas-divider-color), 0.77) 70%,
+    rgba(var(--atlas-divider-color), 0.83) 75%,
+    rgba(var(--atlas-divider-color), 0.88) 80%,
+    rgba(var(--atlas-divider-color), 0.92) 85%,
+    rgba(var(--atlas-divider-color), 0.97) 90%,
+    rgba(var(--atlas-divider-color), 0.99) 95%,
+    rgba(var(--atlas-divider-color), 1) 100%
+  );
+}
+
+.atlas-isolation-wrapper .pulsing-divider::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+  pointer-events: none;
+}
+
+.atlas-isolation-wrapper .pulse-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--atlas-divider-color), 0) 0%,
+    rgba(var(--atlas-divider-color), 0.02) 5%,
+    rgba(var(--atlas-divider-color), 0.04) 10%,
+    rgba(var(--atlas-divider-color), 0.06) 15%,
+    rgba(var(--atlas-divider-color), 0.09) 20%,
+    rgba(var(--atlas-divider-color), 0.13) 25%,
+    rgba(var(--atlas-divider-color), 0.18) 30%,
+    rgba(var(--atlas-divider-color), 0.24) 35%,
+    rgba(var(--atlas-divider-color), 0.3) 40%,
+    rgba(var(--atlas-divider-color), 0.37) 45%,
+    rgba(var(--atlas-divider-color), 0.44) 50%,
+    rgba(var(--atlas-divider-color), 0.52) 55%,
+    rgba(var(--atlas-divider-color), 0.6) 60%,
+    rgba(var(--atlas-divider-color), 0.68) 65%,
+    rgba(var(--atlas-divider-color), 0.76) 70%,
+    rgba(var(--atlas-divider-color), 0.82) 75%,
+    rgba(var(--atlas-divider-color), 0.86) 80%,
+    rgba(var(--atlas-divider-color), 0.9) 85%,
+    rgba(var(--atlas-divider-color), 0.95) 90%,
+    rgba(var(--atlas-divider-color), 1) 100%
+  );
+  animation: pulse var(--atlas-animation-duration) cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite; 
+  transform-origin: bottom center;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.4;
+    transform: scaleY(0.6);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scaleY(0.6);
+  }
+}
+
+.atlas-isolation-wrapper .pulsing-divider.subtle .pulse-overlay {
+  animation: pulse-subtle var(--atlas-animation-duration) cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+}
+
+@keyframes pulse-subtle {
+  0% {
+    opacity: 0.3;
+    transform: scaleY(0.7);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scaleY(0.7);
+  }
+}
+
+.atlas-isolation-wrapper .pulsing-divider.strong .pulse-overlay {
+  animation: pulse-strong var(--atlas-animation-duration) cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+}
+
+@keyframes pulse-strong {
+  0% {
+    opacity: 0.2;
+    transform: scaleY(0.5);
+  }
+  50% {
+    opacity: 1.2;
+    transform: scaleY(1.1);
+  }
+  100% {
+    opacity: 0.2;
+    transform: scaleY(0.5);
+  }
+}
+
+.atlas-isolation-wrapper .pulse-overlay:empty {
+  display: block;
+}
+
+@media screen and (max-width: 768px) {
+  .atlas-isolation-wrapper .pulsing-divider {
+    height: calc(var(--atlas-divider-size) - 20px);
+  }
+}
+
+/* ============================= */
+/* ANIMATED STAR DIVIDER STYLES */
+/* =========================== */
+
+.atlas-isolation-wrapper .starlight-divider-container {
+  position: relative;
+  height: var(--atlas-divider-size);
+  overflow: hidden;
+  background-color: rgb(var(--atlas-divider-bg-color));
+  transform: scaleY(var(--atlas-star_animation_flip_y))
+    scaleX(var(--atlas-star_animation_flip_x));
+}
+
+@media screen and (max-width: 750px) {
+  .atlas-isolation-wrapper .starlight-divider-container {
+    height: calc(var(--atlas-divider-size) - 10px);
+  }
+}
+
+.atlas-isolation-wrapper .star {
+  /* position: absolute; */
+  border-radius: 50%;
+  background-color: var(--atlas-star-color);
+  opacity: var(--star-opacity, 0.9);
+  /* animation: twinkle var(--twinkle-duration, 3s) infinite ease-in-out; */
+  animation-delay: var(--twinkle-delay, 0s);
+  box-shadow: var(--atlas-twinkle-glow);
+}
+
+.atlas-isolation-wrapper .star {
+  display: block;
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: var(--star-min-opacity, 0.3);
+    transform: scale(0.7) translateY(0);
+  }
+  50% {
+    opacity: var(--star-max-opacity, 1);
+    transform: scale(1);
+  }
+  100% {
+    opacity: var(--star-min-opacity, 0.3);
+    transform: scale(0.7) translateY(var(--travel-distance, 0));
+  }
+}

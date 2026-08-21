@@ -1,0 +1,451 @@
+<link rel="stylesheet" href="{{ 'a-component-slider.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'a-component-card.css' | asset_url }}" media="print" onload="this.media='all'">
+<link
+  rel="stylesheet"
+  href="{{ 'a-component-article-card.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'"
+>
+<link
+  rel="stylesheet"
+  href="{{ 'a-section-featured-blog.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'"
+>
+
+<noscript>{{ 'a-component-slider.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'a-component-card.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'a-component-article-card.css' | asset_url | stylesheet_tag }}</noscript>
+
+{{ 'a-section-featured-blog.css' | asset_url | stylesheet_tag }}
+
+{% render 'a-preview-necessary-assets' %}
+{% if request.visual_preview_mode %}
+  {% assign section_id_variable = 'id' %}
+  {% assign section_id_selector = '' %}
+{% else %}
+  {% assign section_id_variable = section.id %}
+  {% assign section_id_selector = '#section-' | append: section.id %}
+{% endif %}
+{%- liquid
+  assign global_heading_size = settings.enable_global_heading_font_size
+  assign global_body_size = settings.enable_global_body_font_size
+  assign global_color = settings.enable_global_color
+-%}
+
+{%- style -%}
+  {%- if request.visual_preview_mode -%}
+    {% comment %} don't want fade-in animation in preview mode because it messes up preview {% endcomment %}
+    .animation_section,
+    .animation_section * {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+      will-change: auto !important;
+    }
+  {%- endif -%}
+
+  .atlas-isolation-wrapper .section__featured_blogs {
+    padding: 5px 0;
+  }
+
+  .atlas-isolation-wrapper .section-{{ section_id_variable }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .section-{{ section_id_variable }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+{% style %}
+  .atlas-isolation-wrapper .blogs-slider{
+    width: 100%;
+  }
+  .atlas-isolation-wrapper .blog__posts {
+    display: flex;
+    padding: 0;
+  }
+  .atlas-isolation-wrapper #heading-{{ section_id_variable }}{
+    font-size: {% if global_heading_size %}var(--atlas-font-heading-size)!important{% else %}{{ section.settings.heading_size }}px!important{% endif %};
+    line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-size) + 8px)!important{% else %}{{ section.settings.heading_size | plus: 8 }}px!important{% endif %};
+    color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ section.settings.heading_color }}{% endif %};
+  }
+  .atlas-isolation-wrapper #heading-{{ section_id_variable }} strong{
+    {% if section.settings.bolded_heading_use_gradient %}
+      background: {{ section.settings.bolded_heading_gradient_color }};
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    {% else %}
+      color: {{ section.settings.bolded_heading_color }};
+    {% endif %}
+  }
+  .atlas-isolation-wrapper .blog__button {
+    background: {{ section.settings.button_background_color }};
+    color: {{ section.settings.button_text_color }};
+    font-size: {{ section.settings.button_text_size }}px;
+    border-radius: {{ section.settings.button_border_radius }}px !important;
+    width: {{ section.settings.button_width_increase_desktop }}%;
+    min-width: fit-content;
+    padding: {{ section.settings.button_padding_vertical }}px 12px;
+  }
+
+  @media (max-width: 1024px){
+    .atlas-isolation-wrapper #heading-{{ section_id_variable }}{
+      font-size: {% if global_heading_size %}var(--atlas-font-heading-mob-size) !important{% else %}{{ section.settings.heading_mob_size }}px!important{% endif %};
+      line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-mob-size) + 8px) !important{% else %}{{ section.settings.heading_mob_size | plus: 8 }}px!important{% endif %};
+    }
+    .atlas-isolation-wrapper .blogs-slider{
+      padding-inline: 2rem;
+    }
+    .atlas-isolation-wrapper .blog__posts {
+      margin: 0;
+    }
+    .atlas-isolation-wrapper .swiper-slide {
+      width: min(330px, 90%) !important;
+    }
+    .atlas-isolation-wrapper .blog__button {
+      width: {{ section.settings.button_width_increase_mobile }}%;
+    }
+  }
+{% endstyle %}
+
+{%- liquid
+  assign posts_displayed = section.settings.blog.articles_count
+  if section.settings.post_limit <= section.settings.blog.articles_count
+    assign posts_exceed_limit = true
+    assign posts_displayed = section.settings.post_limit
+  endif
+-%}
+
+<div
+  id="section-{{ section_id_variable }}"
+  class="blog gradient{% if section.settings.heading == blank %} no-heading{% endif %} section__featured_blogs"
+  style="{% if section.settings.use_gradient_background %}background: {{ section.settings.section_background_gradient }};{% else %}background-color: {{ section.settings.section_background_color }};{% endif %}"
+>
+  <div class="page-width-desktop isolate{% if posts_displayed < 3 %} page-width-tablet{% endif %} section-{{ section_id_variable }}-padding">
+    {%- unless section.settings.heading == blank -%}
+      <div class="title-wrapper-with-link{% if posts_displayed > 2 %} title-wrapper--self-padded-tablet-down{% else %} title-wrapper--self-padded-mobile{% endif %} title-wrapper--no-top-margin">
+        <h2 id="heading-{{ section_id_variable }}" class="title blog__title {{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h2>
+      </div>
+    {%- endunless -%}
+    {%- if section.settings.blog != blank and section.settings.blog.articles_count > 0 -%}
+      <div id="Slider-{{ section_id_variable }}" class="blogs-slider swiper">
+        <ul
+          id="Slider-{{ section_id_variable }}"
+          class="blog__posts articles-wrapper contains-card contains-card--article swiper-wrapper"
+          role="list"
+        >
+          {%- for article in section.settings.blog.articles limit: section.settings.post_limit -%}
+            <li
+              id="Slide-{{ section_id_variable }}-{{ forloop.index }}"
+              class="blog__post article swiper-slide"
+            >
+              {% render 'a-article-card',
+                blog: section.settings.blog,
+                article: article,
+                media_aspect_ratio: 1.66,
+                show_image: section.settings.show_image,
+                show_excerpt: true
+              %}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      {%- if section.settings.show_view_all -%}
+        <div class="blog__view-all center">
+          <a
+            href="{{ section.settings.blog.url }}"
+            id="ViewAll-{{ section_id_variable }}"
+            class="blog__button button"
+            aria-labelledby="ViewAll-{{ section_id_variable }} SectionHeading-{{ section_id_variable }}"
+          >
+            View All Blogs
+          </a>
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="blog-placeholder">
+        <div class="placeholder media media--landscape">
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+        <div class="blog-placeholder__content">
+          <h2 style="color: {{ section.settings.blog_title_color }};">Blog post</h2>
+          <p class="rte-width" style="color: {{ section.settings.blog_des_color }};">
+            Give your customers a summary of your blog post
+          </p>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  let swiper{{ section_id_variable | replace: '-', '' }};
+  function setupSwiperJs{{ section_id_variable | replace: '-', '' }}() {
+    swiper{{ section_id_variable | replace: '-', '' }} = new Swiper('#Slider-{{ section_id_variable }}', {
+      slidesPerView: 3,
+      spaceBetween: {{ section.settings.blog_cards_gap }},
+      breakpoints: {
+        320: {
+          slidesPerView: 'auto'
+        },
+        768: {
+          slidesPerView: 2
+        },
+        1024: {
+          slidesPerView: 3
+        }
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    window.requestAnimationFrame(() => setupSwiperJs{{ section_id_variable | replace: '-', '' }}())
+  });
+    document.addEventListener('shopify:section:unload', function() {
+      swiper{{ section_id_variable | replace: '-', '' }}.destroy();
+      swiper{{ section_id_variable | replace: '-', '' }} = null;
+    });
+  document.addEventListener('shopify:section:load', function() {
+    window.requestAnimationFrame(() => setupSwiperJs{{ section_id_variable | replace: '-', '' }}())
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Blog posts",
+  "class": "section animation_section",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Blog posts",
+      "label": "Heading"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop heading size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_mob_size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile heading size",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Post count"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Column count"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "default": false,
+      "label": "Show featured image",
+      "info": "For best results, use an image with a 3:2 aspect ratio. [Learn more](https://help.shopify.com/manual/shopify-admin/productivity-tools/image-editor#understanding-image-aspect-ratio)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": false,
+      "label": "Show view all"
+    },
+    {
+      "type": "range",
+      "id": "blog_cards_gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Blog cards gap",
+      "default": 27
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bolded_heading_color",
+      "label": "Bolded heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "bolded_heading_use_gradient",
+      "label": "Bolded heading use gradient",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "bolded_heading_gradient_color",
+      "label": "Bolded heading gradient color",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.bolded_heading_use_gradient }}"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "color",
+      "id": "button_background_color",
+      "label": "Button background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_text_size",
+      "label": "Button text size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Button padding vertical",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "button_width_increase_desktop",
+      "label": "Desktop button width increase",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "button_width_increase_mobile",
+      "label": "Mobile button width increase",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Color scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_background_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.use_gradient_background == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 24
+    }
+  ]
+}
+{% endschema %}

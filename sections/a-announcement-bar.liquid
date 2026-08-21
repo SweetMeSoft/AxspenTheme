@@ -1,0 +1,262 @@
+{% style %}
+  .atlas-isolation-wrapper .announcement-swiper-{{ section.id }} {
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px 0;
+  }
+
+  .atlas-isolation-wrapper .announcement-swiper-{{ section.id }} .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: {{ section.settings.font_size }}px;
+    font-weight: {{ section.settings.font_weight }};
+    text-align: center;
+    width: 100%;
+  }
+
+  .atlas-isolation-wrapper .announcement-swiper-{{ section.id }} .swiper-slide a {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .atlas-isolation-wrapper .announcement-swiper-{{ section.id }} .swiper-slide a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .atlas-isolation-wrapper .announcement-swiper-{{ section.id }} {
+      padding: {{ section.settings.padding_top | times: 0.75 | round }}px 0 {{ section.settings.padding_bottom | times: 0.75 | round }}px 0;
+    }
+
+    .atlas-isolation-wrapper .announcement-swiper-{{ section.id }} .swiper-slide {
+      font-size: {{ section.settings.mobile_font_size | default: section.settings.font_size }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="announcement-swiper-{{ section.id }}">
+  <div
+    class="swiper page-width announcement-swiper"
+    data-swiper-config='
+      {
+        "autoplay": {
+          "delay": {{ section.settings.autoplay_delay | default: 5 | times: 1000 }},
+          "disableOnInteraction": false,
+          "pauseOnMouseEnter": true
+        },
+        "loop": true,
+        "speed": {{ section.settings.transition_speed | default: 1000 }},
+        "effect": "slide",
+        "direction": "horizontal",
+        "allowTouchMove": true,
+        "grabCursor": true
+      }
+    '
+  >
+    <div class="swiper-wrapper">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'announcement' and block.settings.text != blank -%}
+          <div class="swiper-slide" {{ block.shopify_attributes }}>
+            {%- if block.settings.link != blank -%}
+              <a href="{{ block.settings.link }}">
+                {{ block.settings.text }}
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                  <path d="M6 0L7.5 1.5L4.5 4.5H12V7.5H4.5L7.5 10.5L6 12L0 6L6 0Z"/>
+                </svg>
+              </a>
+            {%- else -%}
+              {{ block.settings.text }}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  function setupSwiper{{ section.id | replace: '-', '' }}() {
+    const swiperEl = document.querySelector('.announcement-swiper-{{ section.id }} .swiper');
+    if (swiperEl) {
+      const swiperConfig = JSON.parse(swiperEl.getAttribute('data-swiper-config'));
+
+      // Initialize Swiper with autoplay
+      const swiper = new Swiper(swiperEl, {
+        ...swiperConfig,
+      });
+
+      // Ensure autoplay is running
+      if (swiper && swiper.autoplay) {
+        swiper.autoplay.start();
+      }
+    }
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    setupSwiper{{ section.id | replace: '-', '' }}();
+  });
+  if (Shopify.designMode) {
+    document.addEventListener('shopify:section:load', function() {
+      setupSwiper{{ section.id | replace: '-', '' }}();
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "header",
+      "content": "General settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#1E1E1E"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Swiper settings"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "unit": "s",
+      "label": "Auto-slide delay (seconds)",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "transition_speed",
+      "min": 300,
+      "max": 2000,
+      "step": 100,
+      "unit": "ms",
+      "label": "Transition speed (milliseconds)",
+      "default": 1000
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_font_size",
+      "label": "Mobile font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "bold",
+          "label": "Bold"
+        }
+      ],
+      "default": "normal",
+      "label": "Font weight"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 15
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "default": "Free shipping on orders over $50 | Fast worldwide delivery",
+          "label": "Announcement text"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional)"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "announcement",
+        "settings": {
+          "text": "Free shipping on orders over $50"
+        }
+      },
+      {
+        "type": "announcement",
+        "settings": {
+          "text": "Fast worldwide delivery"
+        }
+      },
+      {
+        "type": "announcement",
+        "settings": {
+          "text": "30-day money-back guarantee"
+        }
+      }
+    ]
+  }
+}
+{% endschema %}

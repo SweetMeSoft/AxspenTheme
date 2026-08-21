@@ -1,0 +1,131 @@
+{% assign product = closest.product %}
+{% style %}
+  .product-block-{{ block.id }} {
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+  }
+  .product-block-{{ block.id }} .product-add-ons{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  .product-block-{{ block.id }} .product-add-ons-title{
+    font-family: var(--atlas-font-heading-family);
+    font-weight: 500;
+    font-size: {{ block.settings.title_font_size | default: 18 }}px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: {{ block.settings.title_color | default: '#000000' }};
+    margin: 0 0 {{ block.settings.title_bottom_spacing | default: 16 }}px 0;
+  }
+  @media screen and (max-width: 768px) {
+    .product-block-{{ block.id }} {
+      padding-top: {{block.settings.padding_top_mobile }}px;
+      padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+    }
+  }
+{% endstyle %}
+<div class="product-block-{{ block.id }} product-add-ons" {{ block.shopify_attributes }}>
+  <h2 class="product-add-ons-title">{{ block.settings.title }}</h2>
+  {% content_for 'block', type: '_add_ons_container', id: 'add_ons_container' %}
+</div>
+
+{% schema %}
+{
+  "name": "Add-ons",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_a-add_ons_container"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Add-Ons"
+    },
+    {
+      "type": "header",
+      "content": "Title Styling"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Title font size",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "title_bottom_spacing",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Space below title",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Add-ons",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,70 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "collections": {
+      "type": "main-collection",
+      "settings": {
+        "color_scheme": "",
+        "layout": "top",
+        "full": true,
+        "show_collection_image": false,
+        "infinite_scroll": true,
+        "content_width": 100,
+        "rows": 15,
+        "columns": "3",
+        "columns_mobile": "2",
+        "show_filters": true,
+        "show_sorting": true,
+        "show_count": true,
+        "show_heading": true,
+        "heading_font_size": 17,
+        "align": "left",
+        "show_description": true,
+        "description_font_size": 16,
+        "padding_top": 33,
+        "padding_bottom": 61,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 50
+      }
+    },
+    "image_with_text_overlay_eqfWxX": {
+      "type": "image-with-text-overlay",
+      "disabled": true,
+      "name": "t:sections.image-with-text-overlay.presets.name",
+      "settings": {
+        "full": false,
+        "color_scheme": "",
+        "image": "shopify://shop_images/IMG_1635.jpg",
+        "mobile_image": "shopify://shop_images/IMG_1635.jpg",
+        "height": 90,
+        "color_overlay": "",
+        "overlay_opacity": 50,
+        "horizontal": "center",
+        "vertical": "bottom",
+        "alignment": "left",
+        "sub_heading_text": "",
+        "sub_heading_size": 10,
+        "heading_text": "",
+        "heading_font_size": 10,
+        "button_text": "",
+        "button_link": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0
+      }
+    }
+  },
+  "order": [
+    "image_with_text_overlay_eqfWxX",
+    "collections"
+  ]
+}

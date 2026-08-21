@@ -1,0 +1,366 @@
+.atlas-isolation-wrapper .review-item {
+  display: flex;
+}
+.atlas-isolation-wrapper .review-item--middle {
+  align-items: center;
+}
+.atlas-isolation-wrapper .review-item__image {
+  width: 5rem;
+  height: 5rem;
+  position: relative;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 1.5rem;
+}
+.atlas-isolation-wrapper .review-item__image img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+.atlas-isolation-wrapper .review-item__right {
+  flex-grow: 1;
+}
+.atlas-isolation-wrapper .review-item__text p {
+  margin-top: 0;
+  line-height: 1.3em;
+  font-size: 1.4rem;
+  color: rgb(var(--atlas-color-base-text));
+}
+.atlas-isolation-wrapper .review-item__text p:last-of-type {
+  margin-bottom: 0;
+}
+.atlas-isolation-wrapper .review-item__author-and-stars {
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+  border-top: solid 1px rgba(var(--atlas-color-foreground), 0.06);
+}
+.atlas-isolation-wrapper .review-item__author {
+  margin: 0;
+  line-height: 2em;
+  color: rgba(var(--atlas-color-base-text), 0.5);
+  font-style: italic;
+  font-size: 1.3rem;
+}
+.atlas-isolation-wrapper .review-item__stars {
+  color: #ffd700;
+  letter-spacing: 0.2em;
+  line-height: 2em;
+  line-height: 1.3rem;
+}
+.atlas-isolation-wrapper .review-items-container .slideshow__slide {
+  flex-basis: 100%;
+}
+.atlas-isolation-wrapper .review-items-container .slideshow__controls {
+  border: none;
+}
+.atlas-isolation-wrapper .review-items-container .slider-button {
+  width: 2rem;
+  height: 2rem;
+}
+.atlas-isolation-wrapper .review-items-container .slider-button svg {
+  height: 0.7rem;
+}
+.atlas-isolation-wrapper .review-items-container .slider-counter__link--dots .dot {
+  width: 0.7rem;
+  height: 0.7rem;
+}
+
+.atlas-isolation-wrapper .review-items-container .slider-counter__link {
+  padding: 0.5rem;
+}
+.atlas-isolation-wrapper .review-items-container .slider-counter--dots {
+  margin: 0 0.2rem;
+}
+
+.atlas-isolation-wrapper .review-cards {
+  align-self: stretch;
+  display: grid;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 20px;
+  grid-template-columns: repeat(4, minmax(229px, 1fr));
+  font-size: 16px;
+  color: #ffffff;
+}
+.atlas-isolation-wrapper .review-card-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.atlas-isolation-wrapper .review-card-body {
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  padding: 41px 20px 20px;
+  gap: 24px;
+}
+.atlas-isolation-wrapper .partner-details,
+.atlas-isolation-wrapper .partner-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.atlas-isolation-wrapper .partner-info {
+  align-self: stretch;
+  gap: 10px;
+}
+.atlas-isolation-wrapper .partner-details {
+  width: 622px;
+  padding: 0 0 88px;
+  box-sizing: border-box;
+  min-width: 622px;
+  min-height: 349px;
+  max-width: 100%;
+}
+.atlas-isolation-wrapper .partner-images-icon {
+  height: 438px;
+  flex: 1;
+  position: relative;
+  border-radius: 20px;
+  max-width: 100%;
+  overflow: hidden;
+  object-fit: cover;
+  min-width: 411px;
+}
+.atlas-isolation-wrapper .partner-content,
+.atlas-isolation-wrapper .partner-content-wrapper {
+  display: flex;
+  flex-direction: row;
+  max-width: 100%;
+}
+.atlas-isolation-wrapper .partner-content {
+  width: 1281px;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 26px;
+}
+.atlas-isolation-wrapper .partner-content-wrapper {
+  align-self: stretch;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 20px 100px 23px;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 40px;
+  color: #000000;
+}
+.atlas-isolation-wrapper .partner-details,
+.atlas-isolation-wrapper .partner-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.atlas-isolation-wrapper .partner-info {
+  align-self: stretch;
+  gap: 10px;
+}
+.atlas-isolation-wrapper .partner-details {
+  width: 622px;
+  padding: 0 0 88px;
+  box-sizing: border-box;
+  min-width: 622px;
+  min-height: 349px;
+  max-width: 100%;
+}
+.atlas-isolation-wrapper .partner-images-icon {
+  height: 438px;
+  flex: 1;
+  position: relative;
+  border-radius: 20px;
+  max-width: 100%;
+  overflow: hidden;
+  object-fit: cover;
+  min-width: 411px;
+}
+.atlas-isolation-wrapper .partner-content,
+.atlas-isolation-wrapper .partner-content-wrapper {
+  display: flex;
+  flex-direction: row;
+  max-width: 100%;
+}
+.atlas-isolation-wrapper .partner-content {
+  width: 1281px;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 26px;
+}
+.atlas-isolation-wrapper .review-card-image {
+  align-self: stretch;
+  height: 248px;
+  position: relative;
+  border-radius: 20px 20px 0 0;
+  max-width: 100%;
+  overflow: hidden;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+.atlas-isolation-wrapper .review-card-component-quote {
+  height: 171px;
+  width: 245.7px;
+  position: absolute;
+  margin: 0 !important;
+  top: -41px;
+  right: -52.7px;
+}
+.atlas-isolation-wrapper .review-card-description {
+  margin: 0;
+  text-align: center;
+}
+.atlas-isolation-wrapper .review-card-description-container {
+  flex: 1;
+  position: relative;
+  letter-spacing: 0em;
+  line-height: 28.8px;
+  font-weight: 500;
+  z-index: 1;
+}
+.atlas-isolation-wrapper .review-card-components,
+.atlas-isolation-wrapper .review-card-review {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.atlas-isolation-wrapper .review-card-components {
+  flex: 1;
+  justify-content: flex-start;
+  position: relative;
+}
+.atlas-isolation-wrapper .review-card-review {
+  align-self: stretch;
+  justify-content: flex-end;
+  padding: 0 2px 0 3px;
+}
+.atlas-isolation-wrapper .review-card-user-image {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  position: absolute;
+  left: 0;
+  top: 4px;
+  transform: scale(1.609);
+}
+.atlas-isolation-wrapper .review-card-user-image-container {
+  margin-bottom: -4px;
+  height: 46px;
+  width: 46px;
+  position: relative;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.atlas-isolation-wrapper .review-card-user-name {
+  margin-bottom: -2px;
+  width: 110px;
+  position: relative;
+  font-weight: 500;
+  display: inline-block;
+  min-width: 110px;
+  flex-shrink: 0;
+}
+.atlas-isolation-wrapper .review-card-user-name-row {
+  height: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0;
+  box-sizing: border-box;
+}
+.atlas-isolation-wrapper .review-card-user-customer {
+  position: relative;
+  font-size: 14px;
+  letter-spacing: 0em;
+  font-weight: 500;
+  color: #383838;
+  text-align: left;
+  display: inline-block;
+  min-width: 77px;
+  flex-shrink: 0;
+}
+.atlas-isolation-wrapper .review-card-user-details {
+  margin-bottom: -1px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.atlas-isolation-wrapper .review-card-user-rating {
+  /*height: 18px;*/
+  /*width: 90px;*/
+  position: relative;
+}
+/*.review-card-user-rating .stars-inner::before {*/
+/*  color: #333333;*/
+/*}*/
+.atlas-isolation-wrapper .review-card-user-info {
+  align-self: stretch;
+  height: 51px;
+  border-top: 1px solid #ffffff;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0 0;
+  gap: 10px;
+  font-size: 18px;
+}
+
+@media screen and (max-width: 1800px) {
+  .atlas-isolation-wrapper .review-cards {
+    justify-content: center;
+    grid-template-columns: repeat(2, minmax(229px, 398px));
+  }
+}
+@media screen and (max-width: 1350px) {
+  .atlas-isolation-wrapper .partner-details {
+    flex: 1;
+  }
+  .atlas-isolation-wrapper .partner-content {
+    flex-wrap: wrap;
+  }
+}
+@media screen and (max-width: 925px) {
+  .atlas-isolation-wrapper .partner-details,
+  .atlas-isolation-wrapper .partner-images-icon {
+    min-width: 100%;
+  }
+  .atlas-isolation-wrapper .partner-content-wrapper {
+    padding-bottom: 65px;
+    box-sizing: border-box;
+  }
+  .atlas-isolation-wrapper .review-cards {
+    grid-template-columns: minmax(229px, 1fr);
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .atlas-isolation-wrapper .review-card-body {
+    padding-top: 27px;
+    box-sizing: border-box;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .atlas-isolation-wrapper .review-card-row {
+    padding: 0 15px !important;
+  }
+}

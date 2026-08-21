@@ -1,0 +1,261 @@
+{%- liquid
+	assign section_id      = '#shopify-section-' | append: section.id
+	assign full            = section.settings.full
+	assign layout          = section.settings.layout
+	assign overlay_opacity = section.settings.overlay_opacity
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	{{ section_id }} .item:before {
+		content: '';
+		background: linear-gradient(to bottom,rgba(0,0,0,0),{%- if overlay_opacity == 100 -%}rgb(0,0,0){%- else -%}rgba(0,0,0,0.{{ overlay_opacity }}){%- endif -%});
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+		<div class="image-box {{ layout }}">
+			{%- for block in section.blocks -%}
+				<div class="image-item">
+					{%- case block.type -%}
+						{%- when '@app' -%}
+							{%- render block -%}
+
+						{%- when 'image' -%}
+							{%- liquid
+								assign image       = block.settings.image
+								assign heading     = block.settings.heading
+								assign sub_heading = block.settings.sub_heading
+								assign link        = block.settings.link
+							-%}
+
+							<div class="item adapt-media">
+								<div class="{% if image == blank %}adapt-svg-placeholder{% endif %}{% if settings.image_lazy and image %} lazy-image{% endif %}">
+									{%- liquid
+										if image != blank
+											render 'lazy-image', image: image, width: 700
+										else
+											render 'icon', code: 'placeholder'
+										endif
+									-%}
+								</div>
+							</div>
+
+							{%- if link != blank -%}
+								<a class="image-link" href="{{ link }}"></a>
+							{%- endif -%}
+
+							{%- if sub_heading != blank or heading != blank -%}
+								<div class="content heading-color text-{{ block.settings.text_align }}">
+									{%- if heading != blank -%}
+										<div class="heading rte">{{- heading -}}</div>
+									{%- endif -%}
+
+									{%- if sub_heading != blank -%}
+										<div class="sub-heading rte">{{- sub_heading -}}</div>
+									{%- endif -%}
+
+									{%- if block.settings.button != blank -%}
+										<a class="button secondary-button" href="{{ link }}">{{- block.settings.button -}}</a>
+									{%- endif -%}
+								</div>
+							{%- endif -%}
+					{%- endcase -%}
+				</div>
+			{%- endfor -%}
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.image-box.name",
+	"tag": "section",
+	"class": "image-box-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "select",
+			"id": "layout",
+			"options": [
+				{
+					"value": "inside",
+					"label": "t:sections.image-box.settings.layout.option_1.label"
+				},
+				{
+					"value": "outside",
+					"label": "t:sections.image-box.settings.layout.option_2.label"
+				}
+			],
+			"default": "inside",
+			"label": "t:sections.image-box.settings.layout.label"
+		},
+		{
+			"type": "range",
+			"id": "overlay_opacity",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 30,
+			"unit": "%",
+			"label": "t:sections.image-box.settings.overlay_opacity.label",
+			"info": "t:sections.image-box.settings.overlay_opacity.info"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "@app"
+		},
+		{
+			"type": "image",
+			"name": "t:sections.image-box.settings.item.name",
+			"limit": 5,
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "t:general.image.label"
+				},
+				{
+					"type": "select",
+					"id": "text_align",
+					"options": [
+						{
+							"value": "left",
+							"label": "t:general.layout.alignment.option_1.label"
+						},
+						{
+							"value": "center",
+							"label": "t:general.layout.alignment.option_2.label"
+						},
+						{
+							"value": "right",
+							"label": "t:general.layout.alignment.option_3.label"
+						}
+					],
+					"default": "left",
+					"label": "t:general.layout.alignment.label",
+					"info": "t:general.layout.alignment.mobile_center.label"
+				},
+				{
+					"type": "richtext",
+					"id": "heading",
+					"default": "<h2>Heading image</h2>",
+					"label": "t:general.typography.heading.label"
+				},
+				{
+					"type": "richtext",
+					"id": "sub_heading",
+					"default": "<p>Sub heading image</p>",
+					"label": "t:general.typography.sub_heading.label"
+				},
+				{
+					"type": "header",
+					"content": "t:general.typography.button.label"
+				},
+				{
+					"type": "text",
+					"id": "button",
+					"default": "Button label",
+					"label": "t:general.typography.text.label"
+				},
+				{
+					"type": "url",
+					"id": "link",
+					"label": "t:general.typography.link.label"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.image-box.presets.name",
+			"blocks": [
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

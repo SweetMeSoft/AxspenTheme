@@ -1,0 +1,269 @@
+@media screen and (max-width: 749px) {
+  .atlas-isolation-wrapper .articles-wrapper .article {
+    width: 100%;
+  }
+}
+
+.atlas-isolation-wrapper .article {
+  display: flex;
+  align-items: center;
+}
+
+.atlas-isolation-wrapper .article.grid__item {
+  padding: 0;
+}
+
+.atlas-isolation-wrapper .grid--peek .article-card {
+  box-sizing: border-box;
+}
+
+.atlas-isolation-wrapper .article-card__image-wrapper > a {
+  display: block;
+}
+
+.atlas-isolation-wrapper .article-card__title {
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.atlas-isolation-wrapper .article-card__title a:after {
+  bottom: 0;
+  content: "";
+  height: 100%;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.atlas-isolation-wrapper .article-card__link.link {
+  padding: 0;
+}
+
+.atlas-isolation-wrapper .article-card__link {
+  text-underline-offset: 0.3rem;
+}
+
+.atlas-isolation-wrapper .article-card .card__heading {
+  margin-bottom: 0.6rem;
+}
+
+.atlas-isolation-wrapper .blog-articles .article-card .card__information,
+.atlas-isolation-wrapper .blog__posts .article-card .card__information {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.atlas-isolation-wrapper .article-card__info {
+  padding-top: 0.4rem;
+}
+
+.atlas-isolation-wrapper .article-card__footer {
+  letter-spacing: 0.1rem;
+  font-size: 1.4rem;
+}
+
+.atlas-isolation-wrapper .article-card__footer:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.atlas-isolation-wrapper .article-card__excerpt {
+  width: 100%;
+  margin-top: 1.2rem;
+}
+
+.atlas-isolation-wrapper .article-card__link:not(:only-child) {
+  margin-right: 3rem;
+}
+
+@media screen and (min-width: 990px) {
+  .atlas-isolation-wrapper .article-card__link:not(:only-child) {
+    margin-right: 4rem;
+  }
+}
+
+.atlas-isolation-wrapper .article-card__image--small .ratio::before {
+  padding-bottom: 11rem;
+}
+
+.atlas-isolation-wrapper .article-card__image--medium .ratio::before {
+  padding-bottom: 22rem;
+}
+
+.atlas-isolation-wrapper .article-card__image--large .ratio::before {
+  padding-bottom: 33rem;
+}
+
+@media screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .article-card__image--small .ratio::before {
+    padding-bottom: 14.3rem;
+  }
+
+  .atlas-isolation-wrapper .article-card__image--medium .ratio::before {
+    padding-bottom: 21.9rem;
+  }
+
+  .atlas-isolation-wrapper .article-card__image--large .ratio::before {
+    padding-bottom: 27.5rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .atlas-isolation-wrapper .article-card__image--small .ratio::before {
+    padding-bottom: 17.7rem;
+  }
+
+  .atlas-isolation-wrapper .article-card__image--medium .ratio::before {
+    padding-bottom: 30.7rem;
+  }
+
+  .atlas-isolation-wrapper .article-card__image--large .ratio::before {
+    padding-bottom: 40.7rem;
+  }
+}
+
+/* check for flexbox gap in older Safari versions */
+@supports not (inset: 10px) {
+  .atlas-isolation-wrapper .articles-wrapper.grid {
+    margin: 0 0 5rem 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .articles-wrapper.grid {
+      margin-bottom: 7rem;
+    }
+  }
+}
+
+/* Make title underline on hover */
+.atlas-isolation-wrapper .full-unstyled-link:hover .card__heading {
+  text-decoration: underline;
+}
+
+/* Additional styling for the full card link */
+.atlas-isolation-wrapper .article-card-full-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: pointer;
+}
+.atlas-isolation-wrapper .article-card-wrapper .card {
+  text-align: var(--atlas-text-alignment);
+  border-radius: var(--atlas-border-radius);
+  border: var(--atlas-border-width) solid rgba(var(--atlas-color-foreground), var(--atlas-border-opacity));
+  box-shadow: var(--atlas-shadow-horizontal-offset) var(--atlas-shadow-vertical-offset)
+  var(--atlas-shadow-blur-radius) rgba(var(--atlas-color-shadow), var(--atlas-shadow-opacity));
+}
+.atlas-isolation-wrapper .article-card-wrapper .card__media, .atlas-isolation-wrapper .article-card-wrapper .card .media {
+  position: initial;
+}
+.atlas-isolation-wrapper .article-card-wrapper .card--card, .atlas-isolation-wrapper .article-card-wrapper .card--standard .card__inner {
+  border-radius: var(--atlas-border-radius);
+  border:none; 
+  overflow: hidden;
+}
+.atlas-isolation-wrapper .article-card-wrapper .card--standard .card__inner:after {
+  box-shadow: none;
+}
+.atlas-isolation-wrapper .article-card-wrapper .article-card .card__information {
+  padding: var(--atlas-blog-card-content-padding-top) var(--atlas-blog-card-content-padding-right) var(--atlas-blog-card-content-padding-bottom) var(--atlas-blog-card-content-padding-left);
+}
+@media screen and (max-width: 749px) {
+  .atlas-isolation-wrapper .article-card-wrapper .article-card .card__information {
+    padding: var(--atlas-blog-card-content-padding-mobile-top) var(--atlas-blog-card-content-padding-mobile-right) var(--atlas-blog-card-content-padding-mobile-bottom) var(--atlas-blog-card-content-padding-mobile-left);
+  }
+}
+.atlas-isolation-wrapper .article-card-full-link{
+  height: 100%;
+  width: 100%;
+}
+.atlas-isolation-wrapper .article-card-wrapper .article-card .card__heading {
+  margin-bottom: 8px;
+}
+.atlas-isolation-wrapper .article-card-wrapper .article-card__excerpt {
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+.atlas-isolation-wrapper .article-card-wrapper .article-card__footer {
+  margin-top: 14px;
+} 
+.atlas-isolation-wrapper .article-card-wrapper .article-card__info {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.atlas-isolation-wrapper .article-card-wrapper .article-card .card__heading {
+  font-size: var(--atlas-blog-card-title-font-size);
+  color: var(--atlas-blog-card-title-color);
+  font-weight: 500;
+  line-height: 100%;
+}
+.atlas-isolation-wrapper .article-card-wrapper .article-card__excerpt {
+  font-size: var(--atlas-blog-card-excerpt-font-size);
+  font-weight: 400;
+  line-height: calc(100% + 10px);
+}
+.atlas-isolation-wrapper .article-card-wrapper .author-name {
+  color: var(--atlas-blog-card-author-color);
+  font-size: var(--atlas-blog-card-author-font-size);
+  font-weight: 500;
+  line-height: 100%;
+  text-transform: capitalize;
+}
+.atlas-isolation-wrapper .article-card-wrapper .author-comment {
+  color: var(--atlas-blog-card-author-color);
+  font-size: var(--atlas-blog-card-author-font-size);
+  font-weight: 500;
+  line-height: 100%;
+  text-transform: capitalize;
+}
+.atlas-isolation-wrapper .article-card-wrapper .article-card__footer {
+  font-size: var(--atlas-blog-card-tags-font-size);
+  font-weight: 500;
+  line-height: 100%;
+}
+.atlas-isolation-wrapper .article-card-wrapper .article-card__footer strong {
+  font-weight: 600;
+}
+.atlas-isolation-wrapper .article-card-wrapper .article-card__excerpt {
+  color: var(--atlas-blog-card-excerpt-color);
+}
+.atlas-isolation-wrapper .article-card-wrapper .article-card__footer {
+  color: var(--atlas-blog-card-tags-color);
+
+}
+.atlas-isolation-wrapper .article-card-wrapper .circle-divider {
+  color: var(--atlas-blog-card-date-color);
+  font-size: var(--atlas-blog-card-date-font-size);
+}
+.atlas-isolation-wrapper .author-icon {
+  height: calc(var(--atlas-blog-card-author-font-size) + 1px);
+}
+@media screen and (max-width: 749px) {
+  .atlas-isolation-wrapper .article-card-wrapper .article-card .card__heading {
+    font-size: var(--atlas-blog-card-title-font-size-mobile);
+  }
+  .atlas-isolation-wrapper .article-card-wrapper .article-card__excerpt {
+    font-size: var(--atlas-blog-card-excerpt-font-size-mobile);
+  }
+  .atlas-isolation-wrapper .article-card-wrapper .circle-divider {
+    font-size: var(--atlas-blog-card-date-font-size-mobile);
+  }
+  .atlas-isolation-wrapper .article-card-wrapper .article-card__footer {
+    font-size: var(--atlas-blog-card-tags-font-size-mobile);
+  }
+  .atlas-isolation-wrapper .article-card-wrapper .author-name {
+    font-size: var(--atlas-blog-card-author-font-size-mobile);
+  }
+  .atlas-isolation-wrapper .article-card-wrapper .author-comment {
+    font-size: var(--atlas-blog-card-author-font-size-mobile);
+  }
+  .atlas-isolation-wrapper .author-icon {
+    height: calc(var(--atlas-blog-card-author-font-size-mobile) + 1px);
+  }
+}

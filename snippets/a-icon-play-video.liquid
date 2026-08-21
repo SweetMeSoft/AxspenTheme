@@ -1,0 +1,22 @@
+{% comment %}
+  Renders play video icon
+  
+  Accepts:
+  - background_color: {String} Background color for the circle (optional)
+  - border_color: {String} Border color for the circle (optional)
+  - icon_color: {String} Color for the play triangle (optional)
+  - size: {String} Size of the icon (optional)
+  
+  Usage:
+  {% render 'a-icon-play-video', background_color: '#090909', border_color: '#B3B3B3', icon_color: '#FFFFFF', size: '33' %}
+{% endcomment %}
+
+{%- assign bg_color = background_color | default: '#090909' -%}
+{%- assign border_color = border_color | default: '#B3B3B3' -%}
+{%- assign icon_color = icon_color | default: '#FFFFFF' -%}
+{%- assign icon_size = size | default: '33' -%}
+
+<svg class="play-icon" width="{{ icon_size }}" height="{{ icon_size }}" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="16.2747" cy="16.5666" r="15.2747" fill="{{ bg_color }}" fill-opacity="0.9" stroke="{{ border_color }}"/>
+  <path d="M20.8682 15.9369C21.5348 16.3218 21.5348 17.2841 20.8682 17.669L15.0817 21.0098C14.4151 21.3947 13.5817 20.9135 13.5817 20.1437L13.5817 13.4621C13.5817 12.6923 14.4151 12.2112 15.0817 12.5961L20.8682 15.9369Z" fill="{{ icon_color }}"/>
+</svg>

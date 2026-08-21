@@ -1,0 +1,248 @@
+<style>
+  .atlas-isolation-wrapper #Slider-Gallery-{{ section.id }} {
+    --atlas-media-border-radius: {{ block.settings.media_border_radius }}px;
+    --atlas-media-border-radius-mobile: {{ block.settings.media_border_radius_mobile }}px;
+  }
+</style>
+{% liquid
+  if block.settings.mobile_media_height == 'small'
+    assign mobile_height = 0.6
+  elsif block.settings.mobile_media_height == 'medium'
+    assign mobile_height = 0.8
+  elsif block.settings.mobile_media_height == 'large'
+    assign mobile_height = 1.0
+  endif
+
+  if block.settings.mobile_media_ratio == 'square'
+    assign mobile_width = 'auto'
+  elsif block.settings.mobile_media_ratio == 'fill'
+    assign mobile_width = '100%'
+  endif
+%}
+{% assign product = closest.product %}
+<ul
+  id="Slider-Gallery-{{ section.id }}{{ id_append }}"
+  class="product__media-list contains-media grid grid--peek list-unstyled slider slider--mobile{% if gallery_layout == 'thumbnail' or gallery_layout == 'thumbnail_slider'%} {{ gallery_layout }} gallery-slider--desktop{% endif %}"
+  role="list"
+  style="--atlas-mobile_height: {{ mobile_height }}; --atlas-mobile-width: {{ mobile_width }};"
+  {{ block.shopify_attributes }}
+>
+  {%- assign initial_media = product.selected_or_first_available_variant.featured_media -%}
+  {%- if section.settings.show_main_image_first and product.featured_media -%}
+    {%- assign initial_media = product.featured_media -%}
+  {%- endif -%}
+  {%- if initial_media != null -%}
+    <li
+      id="Slide-{{ section.id }}-{{ initial_media.id }}{{ id_append }}"
+      class="product__media-item grid__item slider__slide is-active{% if single_media_visible %} product__media-item--single{% endif %}{% if initial_media.media_type != 'image' %} product__media-item--full{% endif %}{% if section.settings.hide_variants and variant_images contains initial_media.src %} product__media-item--variant{% endif %}"
+      data-media-id="{{ section.id }}-{{ initial_media.id }}"
+    >
+      {%- assign media_position = 1 -%}
+      {% render 'a-product-thumbnail',
+        media: initial_media,
+        media_count: media_count,
+        position: media_position,
+        desktop_layout: gallery_layout,
+        mobile_layout: mobile_thumbnails,
+        loop: enable_video_looping,
+        modal_id: section.id,
+        xr_button: true,
+        media_width: media_width,
+        media_fit: block.settings.media_fit,
+        constrain_to_viewport: section.settings.constrain_to_viewport,
+        lazy_load: false,
+        image_zoom: image_zoom,
+        media__badge: block.settings.media_badge,
+        media__badge_position: block.settings.media_badge_position,
+        media__badge_size: block.settings.media_badge_size,
+        section: section
+      %}
+    </li>
+  {%- endif -%}
+  {%- assign initial_media_id = null -%}
+  {%- if initial_media -%}
+    {%- assign initial_media_id = initial_media.id -%}
+  {%- endif -%}
+  {%- for media in product.media -%}
+    {%- unless media.id == initial_media_id -%}
+      <li
+        id="Slide-{{ section.id }}-{{ media.id }}{{ id_append }}"
+        class="product__media-item grid__item slider__slide{% if single_media_visible %} product__media-item--single{% endif %}{% if product.selected_or_first_available_variant.featured_media == null and forloop.index == 1 %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %}{% if section.settings.hide_variants and variant_images contains media.src %} product__media-item--variant{% endif %}"
+        data-media-id="{{ section.id }}-{{ media.id }}"
+      >
+        {%- liquid
+          assign media_position = media_position | default: 0 | plus: 1
+          assign lazy_load = false
+          if media_position > 1
+            assign lazy_load = true
+          endif
+        -%}
+        {% render 'a-product-thumbnail',
+          media: media,
+          media_count: media_count,
+          position: media_position,
+          desktop_layout: gallery_layout,
+          mobile_layout: mobile_thumbnails,
+          loop: enable_video_looping,
+          modal_id: section.id,
+          xr_button: true,
+          media_width: media_width,
+          media_fit: block.settings.media_fit,
+          constrain_to_viewport: section.settings.constrain_to_viewport,
+          lazy_load: lazy_load,
+          image_zoom: image_zoom,
+          media__badge: block.settings.media_badge,
+          media__badge_position: block.settings.media_badge_position,
+          media__badge_size: block.settings.media_badge_size,
+          section: section
+        %}
+      </li>
+    {%- endunless -%}
+  {%- endfor -%}
+</ul>
+{% schema %}
+{
+  "name": "Media",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "select",
+      "id": "media_fit",
+      "options": [
+        {
+          "value": "contain",
+          "label": "Original"
+        },
+        {
+          "value": "cover",
+          "label": "Fill"
+        }
+      ],
+      "default": "contain",
+      "label": "Media fit"
+    },
+    {
+      "type": "range",
+      "id": "media_border_radius",
+      "label": "Desktop media border radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "media_border_radius_mobile",
+      "label": "Mobile media border radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Mobile Media"
+    },
+    {
+      "type": "select",
+      "id": "mobile_media_ratio",
+      "label": "Media aspect ratio",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "fill",
+          "label": "Fill"
+        }
+      ],
+      "default": "fill"
+    },
+    {
+      "type": "select",
+      "id": "mobile_media_height",
+      "label": "Media height",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "header",
+      "content": "Media Badge"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_badge",
+      "label": "Product media badge"
+    },
+    {
+      "type": "select",
+      "id": "media_badge_position",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "top-right",
+      "label": "Media badge position"
+    },
+    {
+      "type": "select",
+      "id": "media_badge_size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium",
+      "label": "Media badge size"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Media"
+    }
+  ]
+}
+{% endschema %}

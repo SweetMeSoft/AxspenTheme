@@ -1,0 +1,455 @@
+<style>
+    {% if request.visual_preview_mode %}
+      {% assign section_id_selector = '#section' %}
+      {% assign section_id_variable = 'id' %}
+    {% else %}
+      {% assign section_id_selector = '#shopify-section-' | append: section.id %}
+      {% assign section_id_variable = section.id %}
+    {% endif %}
+    {{ section_id_selector }} .main-key-feature-card__list{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 29px;
+    }
+
+
+  {{ section_id_selector }} .main-key-feature-card__list-item{
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      position: relative;
+      padding-left: {{ section.settings.card_left_padding }}px;
+      width: 100%;
+      justify-content: space-between;
+    }
+    @media screen and (max-width: 1024px) {
+      {{ section_id_selector }} .main-key-feature-card__list-item{
+        padding-left: {{ section.settings.card_right_padding }}px;
+      }
+    }
+    {{ section_id_selector }} .main-key-feature-card__list-item::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: {{ block.settings.card_list_item_left_line_width }}px;
+      height: 100%;
+      transition: background 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      {% if block.settings.card_list_item_left_line_has_gradient %}
+        background: {{ block.settings.card_list_item_left_line_gradient }};
+        opacity: 0;
+      {% else %}
+        background: rgba({{ block.settings.card_list_item_left_line_color.red | default: 255 }}, {{ block.settings.card_list_item_left_line_color.green | default: 255 }}, {{ block.settings.card_list_item_left_line_color.blue | default: 255 }}, 0);
+      {% endif %}
+    }
+    {{ section_id_selector }} .main-key-feature-card__list-item:hover::before {
+      {% if block.settings.card_list_item_left_line_has_gradient %}
+        opacity: {{ block.settings.card_list_item_left_line_opacity | divided_by: 100.0 | default: 0.6 }};
+      {% else %}
+        background: rgba({{ block.settings.card_list_item_left_line_color.red | default: 255 }}, {{ block.settings.card_list_item_left_line_color.green | default: 255 }}, {{ block.settings.card_list_item_left_line_color.blue | default: 255 }}, {{ block.settings.card_list_item_left_line_opacity | divided_by: 100.0 | default: 0.6 }});
+      {% endif %}
+    }
+    {{ section_id_selector }} .main-key-feature-card__list-item .arrow-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: {{ block.settings.card_list_arrow_size }}px;
+      height: {{ block.settings.card_list_arrow_size }}px;
+    }
+    {{ section_id_selector }}  svg.main-key-feature-card__list-item-arrow {
+      width: {{ block.settings.card_list_arrow_size }}px;
+      height: {{ block.settings.card_list_arrow_size }}px;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    {{ section_id_selector }} .main-key-feature-card__list-item:hover .main-key-feature-card__list-item-arrow{
+      transform: rotate(-45deg);
+    }
+    {{ section_id_selector }} .main-key-feature-card__list-item-content{
+      display: flex;
+      flex-direction: column;
+      max-width: 519px;
+    }
+    @media screen and (max-width: 1024px) {
+      {{ section_id_selector }} .main-key-feature-card__list-item-content{
+        max-width: 80%;
+      }
+    }
+    {{ section_id_selector }} .main-key-feature-card__list-item-badge{
+      background: {{ block.settings.card_list_item_badge_background_color }};
+      padding: {{ block.settings.card_list_item_badge_padding_vertical }}px {{ block.settings.card_list_item_badge_padding_horizontal }}px;
+      border-radius: {{ block.settings.card_list_item_badge_border_radius }}px;
+      font-size: {{ block.settings.card_list_item_badge_font_size_desktop }}px;
+      color: {{ block.settings.card_list_item_badge_color }};
+      font-weight: 400;
+      width: fit-content;
+      margin: 0;
+      {% if block.settings.badge_has_border %}
+        border: {{ block.settings.badge_border_width }}px solid {{ block.settings.badge_border_color }};
+      {% endif %}
+      line-height: 100%;
+    }
+    {{ section_id_selector }} .main-key-feature-card__list-item-badge p {
+      margin: 0;
+    }
+    {{ section_id_selector }} .main-key-feature-card__list-item-title {
+      margin: 0;
+      color: {{ block.settings.card_list_item_title_color }};
+      font-size: {{ block.settings.card_list_item_title_font_size_desktop }}px;
+      line-height: 100%;
+      margin-top: 18px;
+    }
+    {{ section_id_selector }} .main-key-feature-card__list-item-title p {
+      margin: 0;
+    }
+    {{ section_id_selector }} .main-key-feature-card__list-item-text {
+      margin: 0;
+      color: {{ block.settings.card_list_item_text_color }};
+      font-weight: 400;
+      font-size: {{ block.settings.card_list_item_text_font_size_desktop }}px;
+      line-height: calc( 100% + 10px);
+      margin-top: 8px;
+    }
+    {{ section_id_selector }} .main-key-feature-card__list-item-text p {
+      margin: 0;
+    }
+
+
+    @media screen and (max-width: 768px) {
+      {{ section_id_selector }} .main-key-feature-card__list-item-badge {
+        font-size: {{ block.settings.card_list_item_title_font_size_mobile }}px;
+      }
+      {{ section_id_selector }} .main-key-feature-card__list-item-badge p {
+        font-size: {{ block.settings.card_list_item_badge_font_size_mobile }}px;
+      }
+      {{ section_id_selector }} .main-key-feature-card__list-item-title {
+        font-size: {{ block.settings.card_list_item_title_font_size_mobile }}px;
+      }
+      {{ section_id_selector }} .main-key-feature-card__list-item-text {
+        font-size: {{ block.settings.card_list_item_text_font_size_mobile }}px;
+      }
+    }
+</style>
+{% capture arrow_icon %}
+    <svg
+        width="18"
+        height="12"
+        viewBox="0 0 18 12"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="main-key-feature-card__list-item-arrow"
+      >
+        <path opacity="{{ block.settings.card_list_item_arrow_opacity | divided_by: 100.0 | default: 0.5 }}" d="M16.8666 6.53033C17.1595 6.23744 17.1595 5.76256 16.8666 5.46967L12.0937 0.696699C11.8008 0.403806 11.3259 0.403806 11.033 0.696699C10.7401 0.989593 10.7401 1.46447 11.033 1.75736L15.2757 6L11.033 10.2426C10.7401 10.5355 10.7401 11.0104 11.033 11.3033C11.3259 11.5962 11.8008 11.5962 12.0937 11.3033L16.8666 6.53033ZM0.71582 6V6.75L16.3363 6.75V6V5.25L0.71582 5.25V6Z" fill="{{ block.settings.card_list_item_arrow_color | default: '#ffffff' }}"/>
+    </svg>
+{% endcapture %}
+{% capture items %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+{% assign items = items | replace: '<!-- arrow_icon -->', arrow_icon %}
+<ul class="main-key-feature-card__list" {{ block.shopify_attributes }}>
+  {{ items }}
+</ul>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get the image container and list items
+    const imageContainer = document.querySelector('.section-{{ section.id }} .main-key-feature-card-image');
+    const listItems = document.querySelectorAll('.section-{{ section.id }} .main-key-feature-card__list-item[data-image]');
+    const mainImage = imageContainer.querySelector('.main-image');
+    if (!imageContainer || listItems.length === 0) return;
+    
+    // Create and inject all images
+    const images = [];
+    listItems.forEach((item, index) => {
+      const imageUrl = item.getAttribute('data-image');
+      if (imageUrl && imageUrl !== 'placeholder') {
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.alt = `Feature image ${index + 1}`;
+        img.classList.add('featured-image')
+        imageContainer.appendChild(img);
+        images.push(img);
+      }else{
+        const svgContent = '{{ 'image' | placeholder_svg_tag }}';
+        const svg = new DOMParser().parseFromString(svgContent, 'image/svg+xml').documentElement;
+        svg.classList.add('featured-image');
+        imageContainer.appendChild(svg);
+        images.push(svg);
+      }
+    });
+    listItems.forEach((item, index) => {
+           // Add hover event listeners
+           item.addEventListener('mouseenter', function() {
+            mainImage.classList.remove('show');
+            // Add show class to current image
+            const img = images[index];
+            img.classList.add('show');
+            // Remove show class from all images
+            images.forEach(image_item =>{
+              if(image_item !== img ) {
+                image_item.classList.remove('show');
+              }
+            });
+          });
+    })
+    const itemsListContainer = document.querySelector('.section-{{ section.id }} .main-key-feature-card__list');
+    itemsListContainer.addEventListener('mouseleave', function() {
+      mainImage.classList.add('show');
+      images.forEach(img => img.classList.remove('show'));
+    }); 
+  });
+</script>
+{% schema %}
+{
+  "name": "Key features list",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_a-key-feature-item"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "card_list_item_title_font_size_desktop",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop feature title font size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_list_item_title_font_size_mobile",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile feature title font size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "card_list_item_title_color",
+      "label": "Feature title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_list_item_text_font_size_desktop",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop feature text font size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_list_item_text_font_size_mobile",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile feature text font size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "card_list_item_text_color",
+      "label": "Feature text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_list_item_badge_font_size_desktop",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop feature badge font size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_list_item_badge_font_size_mobile",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile feature badge font size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "card_list_item_badge_color",
+      "label": "Feature badge text color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Badge"
+    },
+    {
+      "type": "color",
+      "id": "card_list_item_badge_background_color",
+      "label": "Feature badge background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "badge_has_border",
+      "label": "Feature badge has border",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "badge_border_color",
+      "label": "Feature badge border color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.badge_has_border }}"
+    },
+    {
+      "type": "range",
+      "id": "badge_border_width",
+      "label": "Feature badge border width",
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "unit": "px",
+      "default": 1,
+      "visible_if": "{{ block.settings.badge_has_border }}"
+    },
+    {
+      "type": "range",
+      "id": "card_list_item_badge_border_radius",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Feature badge border radius",
+      "default": 140
+    },
+    {
+      "type": "range",
+      "id": "card_list_item_badge_padding_vertical",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Feature badge vertical padding",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "card_list_item_badge_padding_horizontal",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Feature badge horizontal padding",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Left Vertical Line"
+    },
+    {
+      "type": "color",
+      "id": "card_list_item_left_line_color",
+      "label": "Feature left vertical line color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_list_item_left_line_has_gradient",
+      "label": "Feature left vertical line has gradient",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "card_list_item_left_line_gradient",
+      "label": "Feature left vertical line gradient",
+      "default": "linear-gradient(136deg, rgba(10, 234, 237, 1) 11%, rgba(250, 13, 253, 1) 84%)",
+      "visible_if": "{{ block.settings.card_list_item_left_line_has_gradient }}"
+    },
+    {
+      "type": "range",
+      "id": "card_list_item_left_line_opacity",
+      "label": "Feature left vertical line opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "card_list_item_left_line_width",
+      "label": "Feature left vertical line width",
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Arrow"
+    },
+    {
+      "type": "range",
+      "id": "card_list_arrow_size",
+      "label": "Feature arrow size",
+      "min": 12,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "card_list_item_arrow_color",
+      "label": "Feature arrow color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_list_item_arrow_opacity",
+      "label": "Feature arrow opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "Key features list",
+      "blocks": [
+        {
+          "type": "_a-key-feature-item"
+        },
+        {
+          "type": "_a-key-feature-item"
+        },
+        {
+          "type": "_a-key-feature-item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

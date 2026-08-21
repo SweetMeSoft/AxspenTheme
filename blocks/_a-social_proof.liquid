@@ -1,0 +1,136 @@
+{% assign product = closest.product %}
+{% style %}
+  .atlas-isolation-wrapper .product-block-{{ block.id }} {
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+  }
+  @media screen and (max-width: 768px) {
+    .atlas-isolation-wrapper .product-block-{{ block.id }} {
+      padding-top: {{block.settings.padding_top_mobile }}px;
+      padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+    }
+  }
+  .atlas-isolation-wrapper .purchase-notification {
+      display: flex;
+      align-items: center;
+      font-family: var(--atlas-font-body-family);
+      width: 100%;
+      justify-content: center;
+  }
+
+  .atlas-isolation-wrapper .product-block-{{ block.id }}.profile-images {
+    display: flex;
+    margin-right: 15px;
+  }
+
+  .product-block-{{ block.id }} .profile-image {
+    width: {{ block.settings.profile_image_size | default: 21 }}px;
+    height: {{ block.settings.profile_image_size | default: 21 }}px;
+    border-radius: 50%;
+    border: {{ block.settings.profile_image_border_width | default: 1 }}px solid {{ block.settings.profile_image_border_color | default: '#FFFFFF' }};
+    margin-right: -{{ block.settings.profile_image_overlap | default: 8 }}px;
+    object-fit: cover;
+  }
+
+  .atlas-isolation-wrapper .purchase-text {
+      color: {{ block.settings.text_color | default: '#1d1a2d' }};
+      font-size: {{ block.settings.font_size | default: 12 }}px;
+      font-weight: 300;
+      font-family: var(--atlas-font-body-family);
+  }
+
+  .atlas-isolation-wrapper .purchase-count {
+      font-weight: 400;
+  }
+{% endstyle %}
+<div class="product-block-{{ block.id }} payment-methods" {{ block.shopify_attributes }}>
+    <div class="purchase-notification">
+      {% content_for 'block', type: '_a-rating_profile_images', id: 'rating_profile_images', profile_image_overlap: block.settings.profile_image_overlap %}
+      <div class="purchase-text">{{ block.settings.purchase_text }}</div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Social Proof",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "purchase_text",
+      "label": "Purchase text",
+      "default": "Sarah and 438 people purchased"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1d1a2d"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social Proof",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

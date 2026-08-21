@@ -1,0 +1,458 @@
+{%- liquid
+  assign global_heading_size = settings.enable_global_heading_font_size
+  assign global_color = settings.enable_global_color
+-%}
+
+<style>
+  {% if request.visual_preview_mode %}
+    {% assign section_id_variable = 'id' %}
+    {% assign section_id_selector = '' %}
+  {% else %}
+    {% assign section_id_variable = section.id %}
+    {% assign section_id_selector = '#section-' | append: section.id %}
+  {% endif %}
+  .atlas-isolation-wrapper {{ section_id_selector }} {
+    --atlas-section-padding-top: {{ section.settings.padding_top }}px;
+    --atlas-section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .atlas-isolation-wrapper {{ section_id_selector }} .section-{{ section_id_variable }} {
+    padding-top: var(--atlas-section-padding-top);
+    padding-bottom: var(--atlas-section-padding-bottom);
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    align-items: center;
+    padding: {{ section.settings.card_top_padding }}px {{ section.settings.card_right_padding }}px {{ section.settings.card_bottom_padding }}px 0px;
+    padding-left: 0;
+    gap: {{ section.settings.card_gap_desktop }}px;
+    border-radius: {{ section.settings.card_border_radius }}px;
+  }
+
+  .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    flex: 1;
+  }
+
+  .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-title {
+    {% if global_heading_size %}
+      font-size: var(--atlas-font-heading-size);
+    {% else %}
+      font-size: {{ section.settings.card_title_font_size_desktop }}px;
+    {% endif %}
+    {% if global_color %}
+      color: rgb(var(--atlas-color-base-heading));
+    {% else %}
+      color: {{ section.settings.card_title_color }};
+    {% endif %}
+    margin: 0;
+    margin-left: {{ section.settings.card_left_padding }}px;
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-title p {
+    margin: 0;
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-title strong {
+    {% if section.settings.card_title_use_gradient %}
+      background: {{ section.settings.card_title_color_bold_gradient | default: 'linear-gradient(136deg, rgba(10, 234, 237, 1) 11%, rgba(250, 13, 253, 1) 84%)' }};
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    {% else %}
+      color: {{ section.settings.card_title_color_bold }};
+    {% endif %}
+  }
+
+  .main-key-feature-card-image:empty {
+    display: flex;
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-image {
+
+    height: 100%;
+    flex: 1;
+    display: block;
+    overflow: hidden;
+    border-radius: {{ section.settings.card_image_border_radius }}px;
+    position: relative;
+  }
+  @media screen and (min-width: 768px) {
+    .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-image {
+      {% if section.settings.image_height == 'small' and section.settings.card_image != blank %}
+        min-height: 489px;
+      {% elsif section.settings.image_height == 'medium' and section.settings.card_image != blank %}
+        min-height: 639px;
+      {% elsif section.settings.image_height == 'large' and section.settings.card_image != blank %}
+        min-height: 800px;
+      {% endif %}
+    }
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-image img, .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-image svg {
+    width: 100%;
+    height: 0%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index:2;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-image img.show, .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-image svg.show {
+    opacity: 1;
+    height: 100%;
+  }
+
+  .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-image img.main-image, .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-image svg.main-image {
+    opacity: 1;
+    display: block;
+    z-index:1;
+    transition: none;
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-image svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index:1;
+  }
+  @media screen and (max-width: 768px) {
+    .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-title {
+      {% if global_heading_size %}
+        font-size: var(--atlas-font-heading-mob-size);
+      {% else %}
+        font-size: {{ section.settings.card_title_font_size_mobile }}px;
+      {% endif %}
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card {
+      gap: {{ section.settings.card_gap_mobile }}px;
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card {
+      grid-template-columns: 1fr;
+      gap: {{ section.settings.card_gap_mobile }}px;
+    }
+    .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-image {
+      height: 400px;
+      margin-left: {{ section.settings.card_right_padding }}px;
+    }
+  }
+  @media screen and (max-width: 425px) {
+    .atlas-isolation-wrapper {{ section_id_selector }} .main-key-feature-card-image {
+      height: 269px;
+    }
+  }
+</style>
+
+<div id="section-{{ section.id }}">
+  <div
+    class="section__key_features section-{{ section.id }}"
+    style="{% if section.settings.use_gradient_background %}background: {{ section.settings.section_background_gradient }};{% else %}background-color: {{ section.settings.section_background_color }};{% endif %}"
+  >
+    <div
+      class="main-key-feature page-width"
+      style="max-width: {{ section.settings.card_max_width }}px !important;width: 100%;"
+    >
+      <div
+        class="main-key-feature-card"
+        style="{% if section.settings.card_use_gradient_background %}background: {{ section.settings.card_background_gradient }};{% else %}background-color: {{ section.settings.card_background_color }};{% endif %}"
+      >
+        <div class="main-key-feature-card-content">
+          <h2 class="main-key-feature-card-title">{{ section.settings.card_title }}</h2>
+          {% content_for 'blocks' %}
+        </div>
+        <div class="main-key-feature-card-image">
+          {% if section.settings.card_image != blank %}
+            {{ section.settings.card_image | image_url: width: 1000 | image_tag: class: 'main-image show' }}
+          {% else %}
+            {{ 'image' | placeholder_svg_tag: 'main-image show' }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product key features",
+  "tag": "section",
+  "class": "atlas-isolation-wrapper atlas-gradient section animation-section",
+  "blocks": [
+    {
+      "type": "_a-key-features-list"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "richtext",
+      "id": "card_title",
+      "label": "Card title",
+      "default": "<p>How This Product will Transform Customer's Life</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_image",
+      "label": "Card image",
+      "info": "This image will be shown when the key features are not hovered"
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium",
+      "label": "Card image height"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "card_title_font_size_desktop",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop card heading font size",
+      "default": 35
+    },
+    {
+      "type": "range",
+      "id": "card_title_font_size_mobile",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile card heading font size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card heading color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color_bold",
+      "label": "Card heading bold color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_title_use_gradient",
+      "label": "Use gradient for heading",
+      "default": false,
+      "info": "Any text formatted as bold within the heading will be converted to a gradient."
+    },
+    {
+      "type": "color_background",
+      "id": "card_title_color_bold_gradient",
+      "label": "Heading gradient color",
+      "default": "linear-gradient(136deg, rgba(10, 234, 237, 1) 11%, rgba(250, 13, 253, 1) 84%)",
+      "visible_if": "{{ section.settings.card_title_use_gradient }}"
+    },
+    {
+      "type": "header",
+      "content": "Size"
+    },
+    {
+      "type": "range",
+      "id": "card_max_width",
+      "min": 1400,
+      "max": 2500,
+      "step": 100,
+      "unit": "px",
+      "label": "Card max width",
+      "default": 1600
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "card_gap_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop card gap",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "card_gap_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile card gap",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Card border radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "card_top_padding",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Card top padding",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_bottom_padding",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Card bottom padding",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_left_padding",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Card left padding",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_right_padding",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Card right padding",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Image Styling"
+    },
+    {
+      "type": "range",
+      "id": "card_image_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Card image border radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Section Styling"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_use_gradient_background",
+      "label": "Use gradient background for card",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "card_background_gradient",
+      "label": "Card background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.card_use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.card_use_gradient_background == false }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_background_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.use_gradient_background == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 24
+    }
+  ]
+}
+{% endschema %}

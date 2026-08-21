@@ -1,0 +1,92 @@
+{%- assign pick_up_availabilities = product_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+
+{%- if pick_up_availabilities.size > 0 -%}
+	{%- assign closest_location = pick_up_availabilities.first -%}
+	<div class="pickup-availability-info">
+		<span class="pickup-availability-icon">
+			{%- liquid
+				if closest_location.available
+					render 'icon', code: 'success'
+				else
+					render 'icon', code: 'error'
+				endif
+			-%}
+		</span>
+
+		<div class="pickup-availability-info-inner">
+			{%- if closest_location.available -%}
+				<p class="pickup-availability-info-title">
+					{{- 'products.product.pickup_availability.pick_up_available_at_html' | t: location_name: closest_location.location.name -}}
+				</p>
+
+				<p class="pickup-availability-stock">
+					{{- closest_location.pick_up_time -}}
+				</p>
+
+				<button class="toggle-modal" aria-haspopup="dialog">
+					{%- liquid
+						if pick_up_availabilities.size == 1
+							echo 'products.product.pickup_availability.view_store_info' | t
+						else
+							echo 'products.product.pickup_availability.check_other_stores' | t
+						endif
+					-%}
+				</button>
+			{%- else -%}
+				<p class="pickup-availability-info-title">
+					{{ 'products.product.pickup_availability.pick_up_unavailable_at_html' | t: location_name: closest_location.location.name }}
+				</p>
+
+				{%- if pick_up_availabilities.size > 1 -%}
+					<button class="toggle-modal" aria-haspopup="dialog">
+						{{ 'products.product.pickup_availability.check_other_stores' | t }}
+					</button>
+				{%- endif -%}
+			{%- endif -%}
+		</div>
+	</div>
+
+	<div class="pickup-availability-modal" role="dialog" aria-modal="true" aria-labelledby="pickup-availability-modal-product-title">
+		<div class="pickup-availability-header">
+			<h2 id="pickup-availability-modal-product-title" class="pickup-availability-product-title">{{- product_variant.product.title -}}</h2>
+
+			<p class="pickup-availability-variant-title">
+				{{- product_variant.title -}}
+			</p>
+
+			<button class="button secondary-button close-button" aria-label="{{ 'accessibility.close' | t }}">
+				{%- render 'icon', code: 'close-thin' -%}
+			</button>
+		</div>
+
+		<ul class="pickup-availability-list" role="list">
+			{%- for availability in pick_up_availabilities -%}
+				<li class="pickup-availability-item">
+					<h3 class="pickup-availability-location">
+						{{- availability.location.name -}}
+					</h3>
+
+					<div class="pickup-availability-stock">
+						{%- liquid
+							if availability.available
+								render 'icon', code: 'success'
+								echo 'products.product.pickup_availability.pick_up_available' | t
+								echo availability.pick_up_time | prepend: ' ' | downcase
+							endif
+						-%}
+					</div>
+
+					{%- assign address = availability.location.address -%}
+
+					<address class="pickup-availability-address">
+						{{- address | format_address -}}
+					</address>
+
+					{%- if address.phone.size > 0 -%}
+						<p>{{- address.phone -}}</p>
+					{%- endif -%}
+				</li>
+			{%- endfor -%}
+		</ul>
+	</div>
+{%- endif -%}

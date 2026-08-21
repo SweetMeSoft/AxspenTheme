@@ -1,0 +1,226 @@
+{%- liquid
+	assign product_form_id = 'quickview-product-form'
+	assign featured_media  = product.featured_media
+
+	capture sale_number
+		render 'saved-price'
+	endcapture
+-%}
+
+{%- capture product_stock -%}
+	{%- if product.template_suffix != 'pre-order' -%}
+		{%- if product.available -%}
+			{%- liquid
+				assign should_calculate_inventory = true
+
+				for variant in product.variants
+					if variant.inventory_policy == 'continue' or variant.inventory_management == nil
+						assign should_calculate_inventory = false
+						break
+					endif
+				endfor
+			-%}
+
+			{%- if should_calculate_inventory and settings.card_low_stock > 0 -%}
+				{%- liquid
+					assign all_inventory = 0
+
+					for variant in product.variants
+						if variant.inventory_management
+							assign all_inventory = variant.inventory_quantity | at_least: 0 | plus: all_inventory
+						endif
+					endfor
+				-%}
+
+				{%- if all_inventory <= settings.card_low_stock -%}
+					<span class="product-stock-status inventory--low">{{- 'products.product.low_stock_with_quantity_count' | t: count: all_inventory -}}</span>
+				{%- else -%}
+					<span class="product-stock-status inventory--high">{{- 'products.product.in_stock_with_quantity_count' | t: count: all_inventory -}}</span>
+				{%- endif -%}
+			{%- else -%}
+				{%- if product.variants.first.inventory_policy == 'continue' and product.variants.first.inventory_quantity <= 0 and product.variants.first.requires_shipping -%}
+					<span class="product-stock-status inventory--high">{{- 'products.product.oversell_stock' | t -}}</span>
+				{%- else -%}
+					<span class="product-stock-status inventory--high">{{- 'products.product.in_stock' | t -}}</span>
+				{%- endif -%}
+			{%- endif -%}
+		{%- else -%}
+			<span class="product-stock-status">{{- 'products.product.out_of_stock' | t -}}</span>
+		{%- endif -%}
+	{%- endif -%}
+{%- endcapture -%}
+
+<div class="product-summary">
+	<div class="summary-header">
+		{%- comment -%} Image {%- endcomment -%}
+		{%- if featured_media != nil -%}
+			<div class="product-image">
+				<img src="{{ featured_media | image_url: width: 300 }}" alt="{{ featured_media.image.alt | escape }}" loading="lazy" width="70" height="{{ 70 | divided_by: featured_media.aspect_ratio | ceil }}" />
+			</div>
+		{%- endif -%}
+
+		<div class="product-short-info">
+			{%- comment -%} Title {%- endcomment -%}
+			<h2 class="product-title">
+				<a href="{{ product.url | split: '?' | first }}" class="product-url">
+					{{- product.title | escape -}}
+				</a>
+			</h2>
+
+			{% comment %} Price {% endcomment %}
+			<div class="product-price-wrap">
+				{%- render 'price', product: product, use_variant: true, price_class: '' -%}
+
+				{%- form 'product', product, id: 'product-form-installment', class: 'installment' -%}
+					<input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+					{{ form | payment_terms }}
+				{%- endform -%}
+
+				{% comment %} Sale label {% endcomment %}
+				{%- if sale_number != blank -%}
+					<div class="product-sale-label">
+						<span class="sr-only">{{ 'products.product.on_sale' | t }}: </span>
+						{{ 'products.product.save' | t }}
+						<span class="sale-total">{{- sale_number -}}%</span>
+					</div>
+				{%- endif -%}
+			</div>
+		</div>
+	</div>
+
+	<div class="summary-content">
+		{% comment %} Variant picker {% endcomment %}
+		{%- unless product.has_only_default_variant -%}
+			{%- liquid
+				assign swatch       = settings.swatch_type
+				assign option_index = 0
+			-%}
+
+			<div class="product-variants variant-swatch swatches-{{ settings.swatch_style }}" data-url="{{ product.url }}">
+				{%- for option in product.options_with_values -%}
+					{%- liquid
+						assign selected_value = option.selected_value
+						assign id           = 'option-' | append : section.id | append: '-' | append: forloop.index
+						assign name         = option.name | downcase
+						assign is_color     = false
+						assign option_index = forloop.index0
+
+						if name == 'color' or name == 'colour'
+							assign is_color = true
+						endif
+					-%}
+
+					<div class="variant-field">
+						<div class="field-title">
+							{{- option.name -}}:
+							<span class="selected-value">{{- selected_value -}}</span>
+						</div>
+
+						<div class="field-wrap">
+							<div class="field-wrap-inner">
+								{%- assign values = '' -%}
+
+								{%- for variant in product.variants -%}
+									{%- liquid
+										assign value    = variant.options[option_index]
+										assign quantity = variant.inventory_quantity
+
+										capture stock_status
+											if quantity == 0 and variant.available == false
+												echo ' soldout'
+											endif
+										endcapture
+									-%}
+
+									{%- unless values contains value -%}
+										{%- liquid
+											assign values = values | join: ','
+											assign values = values | append: ',' | append: value
+											assign values = values | split: ','
+										-%}
+
+										<input type="radio" id="{{ id | append: forloop.index }}"
+											name="{{ option.name | escape }}"
+											value="{{ value | escape }}"
+											form="{{ product_form_id }}"
+											data-value="{{ value }}"
+											class="field-value sr-only" {% if selected_value == value %}checked{% endif %}>
+
+										{%- if is_color -%}
+											{%- liquid
+												assign color = value | handle | remove: '-'
+
+												if variant.metafields.color.value
+													assign color = variant.metafields.color.value
+												endif
+
+												assign contrast = color | color_contrast: '#ffffff'
+											-%}
+
+											{%- if swatch == 'color' -%}
+												<label class="field-label swatch swatch-{{ swatch }}{% if contrast < 4.5 %} dark{% endif %}{{ stock_status }}" style="background-color: {{ color }};" for="{{ id | append: forloop.index }}"></label>
+											{%- elsif swatch == 'image' -%}
+												<label class="field-label swatch swatch-{% if variant.image %}image{% else %}color{% if contrast < 4.5 %} dark{% endif %}{% endif %}{{ stock_status }}" for="{{ id | append: forloop.index }}"{% unless variant.image %} style="background-color: {{ color }};"{% endunless %}>
+													{%- liquid
+														if variant.image
+															echo variant.image | image_url: width: 150, height: 150, crop: 'center' | image_tag: loading: 'lazy'
+														endif
+													-%}
+												</label>
+											{%- else -%}
+												<label class="field-label field-button{{ stock_status }}" for="{{ id | append: forloop.index }}">{{- value -}}</label>
+											{%- endif -%}
+										{%- else -%}
+											<label class="field-label field-button{{ stock_status }}" for="{{ id | append: forloop.index }}">{{- value -}}</label>
+										{%- endif -%}
+									{%- endunless -%}
+								{%- endfor -%}
+							</div>
+						</div>
+					</div>
+				{%- endfor -%}
+			</div>
+
+			{% comment %} Product variant data {% endcomment %}
+			<script data-product-variants>
+				{{ product.variants | json }}
+			</script>
+
+			{% comment %} Product quantity data {% endcomment %}
+			<script data-inventory-quantity>
+				[
+					{%- for variant in product.variants -%}
+						{"id": {{ variant.id }}, "qty": {{ variant.inventory_quantity }}}{% unless forloop.last %},{% endunless %}
+					{%- endfor -%}
+				]
+			</script>
+		{%- endunless -%}
+
+		<div class="product-quantity">
+			<div class="field-title">Quantity:</div>
+
+			{% render 'quantity', form: product_form_id %}
+		</div>
+
+		{{- product_stock -}}
+
+		<a href="{{ product.url }}" class="link-underline">View product details</a>
+	</div>
+
+	{% comment %} Add to cart {% endcomment %}
+	{%- form 'product', product, id: product_form_id, class: 'product-buy', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+		<input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+		<button type="submit" name="add" class="button add-to-cart-button primary-button" {%- if product.selected_or_first_available_variant.available == false -%}disabled{%- endif -%}>
+			{%- liquid
+				if product.selected_or_first_available_variant.available
+					echo 'products.product.add_to_cart' | t
+				else
+					echo 'products.product.out_of_stock' | t
+				endif
+			-%}
+		</button>
+
+		{{- form | payment_button -}}
+	{%- endform -%}
+</div>

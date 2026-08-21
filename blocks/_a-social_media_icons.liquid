@@ -1,0 +1,72 @@
+{% style %}
+.product-block-{{ block.id }}.social-icons {
+  display: flex;
+  gap: {{ block.settings.gap_between_icons | default: 7 }}px;
+}
+
+.product-block-{{ block.id }} .social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: {{ block.settings.icon_size | default: 28 }}px;
+  height: {{ block.settings.icon_size | default: 28 }}px;
+  border-radius: 50%;
+  background-color: {{ block.settings.icon_container_background | default: '#EDEDED' }};
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+
+{% endstyle %}
+<div class="social-icons product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  {% content_for 'blocks' %}
+</div>
+{% schema %}
+{
+  "name": "Social Media Icons",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_a-social_media_icon"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "icon_container_background",
+      "label": "Icon background color",
+      "default": "#EDEDED"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 20,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon container size",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "gap_between_icons",
+      "min": 4,
+      "max": 16,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between icons",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social Media Icons"
+    }
+  ]
+}
+{% endschema %}

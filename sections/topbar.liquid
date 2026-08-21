@@ -1,0 +1,219 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+-%}
+
+<style>
+	{{ section_id }} * {
+		font-size: {{ section.settings.text_size }}px;
+		letter-spacing: {{ section.settings.letter_spacing }}em;
+	}
+
+	{{ section_id }} .section-wrapper {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{{ section_id }} .topbar-inner {
+			max-width: {{ section.settings.width }}%;
+		}
+	}
+</style>
+
+{%- capture content -%}
+	<div class="swiper">
+		<div class="swiper-wrapper">
+			{%- for block in section.blocks -%}
+				<div class="swiper-slide rte" data-{{ forloop.index0 }} {% if request.design_mode %} data-index="{{ forloop.index0 }}"{% endif %}>
+					<div class="content-wrapper">
+						{{- block.settings.text -}}
+					</div>
+				</div>
+			{%- endfor -%}
+		</div>
+
+		<div class="swiper-controls">
+			<button class="swiper-button-prev" data-noui>{%- render 'icon', code: 'chevron-left' -%}</button>
+			<button class="swiper-button-next" data-noui>{%- render 'icon', code: 'chevron-right' -%}</button>
+		</div>
+	</div>
+{%- endcapture -%}
+
+{%- if section.blocks.size > 0 -%}
+	<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+		<div class="container">
+			<div class="topbar-inner">
+				<div class="carousel-swiper topbar-desktop">
+					<template data-options data-css-mode="off">
+						{
+							"navigation": {
+								"nextEl": "{{ section_id }} .swiper-button-next",
+								"prevEl": "{{ section_id }} .swiper-button-prev"
+							},
+							"loop": true,
+							"spaceBetween": 10,
+							"speed": 800,
+							"slidesPerView": "auto",
+							"autoplay": {
+								"delay": 5000,
+								"disableOnInteraction": false,
+								"pauseOnMouseEnter": true
+							}
+						}
+					</template>
+
+					{{- content -}}
+				</div>
+
+				<div class="carousel-swiper topbar-mobile">
+					<template data-options data-css-mode="off">
+						{
+							"loop": true,
+							"loopedSlides": 15,
+							"speed": 7000,
+							"slidesPerView": "auto",
+							"autoplay": {
+								"delay": 0,
+								"disableOnInteraction": false,
+								"pauseOnMouseEnter": true
+							}
+						}
+					</template>
+
+					{{- content -}}
+				</div>
+			</div>
+		</div>
+	</div>
+{%- endif -%}
+
+{% schema %}
+{
+	"name": "t:sections.topbar.name",
+	"class": "topbar-section",
+	"enabled_on": {
+		"groups": ["header"]
+	},
+	"settings": [
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-2"
+		},
+		{
+			"type": "range",
+			"id": "width",
+			"min": 30,
+			"max": 100,
+			"step": 1,
+			"default": 38,
+			"unit": "%",
+			"label": "t:general.dimensions.width.label"
+		},
+		{
+			"type": "range",
+			"id": "text_size",
+			"min": 8,
+			"max": 30,
+			"step": 1,
+			"default": 14,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "range",
+			"id": "letter_spacing",
+			"min": 0,
+			"max": 2,
+			"step": 0.1,
+			"default": 0.1,
+			"unit": "em",
+			"label": "t:general.typography.letter_spacing.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 5,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 5,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 5,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 5,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "slide",
+			"name": "t:general.slide.label",
+			"settings": [
+				{
+					"type": "richtext",
+					"id": "text",
+					"default": "<p>Welcome to our store</p>",
+					"label": "t:general.typography.text.label"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.topbar.name",
+			"blocks": [
+				{
+					"type": "slide"
+				},
+				{
+					"type": "slide"
+				},
+				{
+					"type": "slide"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

@@ -1,0 +1,331 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+	assign full       = section.settings.full
+	assign heading    = section.settings.heading
+	assign subheading = section.settings.sub_heading_text
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper{
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper{
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+		<div class="map-content">
+			{%- if section.settings.show_left_image -%}
+				<div class="left-map-wrapper content-container">
+					{%- for block in section.blocks -%}
+						{% assign image_left  = block.settings.image_left %}
+
+						<div class="content-map image{% if settings.image_lazy and image_left %} lazy-image {% endif %} {% if forloop.index == 1 %} active{% endif %}" data-id="{{ section.id }}-{{ block.id }}">
+							{%- liquid
+								if image_left != blank
+									render 'lazy-image', image: image_left, width: 888
+								else
+									render 'icon', code: 'placeholder', width: 888
+								endif
+							 -%}
+						</div>
+					{%- endfor -%}
+				</div>
+			{%- endif -%}
+
+			<div class="center-map-wrapper">
+				{% if heading != blank or subheading != blank %}
+					<div class="title-wrapper">
+						{% if subheading != blank %}
+							<h5 class="subheading">{{- subheading -}}</h5>
+						{% endif %}
+
+						{% if heading != blank %}
+							<h2 class="left-heading">
+								{{- heading -}}
+							</h2>
+						{% endif %}
+					</div>
+				{% endif %}
+
+				{%- for block in section.blocks -%}
+					{%- liquid
+						assign image_right     = block.settings.image_right
+						assign address_link    = block.settings.url
+						assign map_coordinates = block.settings.map_coordinates
+					-%}
+
+					<details class="menu-map faq-accordion desktop-hover" data-id="{{ section.id }}-{{ block.id }}">
+						<summary class="accordion-summary" aria-expanded="false">
+							<h4 class="accordion-title">{{- block.settings.heading_accordion -}}</h4>
+
+							<span class="accordion-caret hidden-tablet hidden-mobile">
+								<span class="arrow-down">
+									{%- render 'icon', code: 'arrow-right' -%}
+								</span>
+							</span>
+
+							<span class="accordion-caret hidden-desktop">
+								<span class="plus">
+									{%- render 'icon', code: 'plus' -%}
+								</span>
+
+								<span class="minus">
+									{%- render 'icon', code: 'minus' -%}
+								</span>
+							</span>
+						</summary>
+
+						<div class="accordion-content details-content rte hidden-desktop">
+							{%- if address_link != blank -%}
+								<a href="{{ address_link }}" class="address-link"></a>
+							{%- endif -%}
+
+							{%- if map_coordinates != blank -%}
+								<div class="contact-map">
+									<template data-options>
+										{
+											"coordinates": {{ map_coordinates | json }},
+											"zoom": 15
+										}
+									</template>
+								</div>
+							{%- else -%}
+								<div class="image{% if settings.image_lazy and image_right %} lazy-image fade-in-image{% endif %}">
+									{%- liquid
+										if image_right != blank
+											render 'lazy-image', image: image_right, width: 433
+										else
+											render 'icon', code: 'placeholder', width: 433
+										endif
+									-%}
+								</div>
+							{%- endif -%}
+
+							<div class="description">
+								{% if block.settings.heading_map != blank %}
+									<h6 class="heading">{{- block.settings.heading_map -}}</h6>
+								{% endif %}
+
+								{% if block.settings.description != blank %}
+									<div class="description-map">{{- block.settings.description -}}</div>
+								{% endif %}
+							</div>
+						</div>
+					</details>
+				{%- endfor -%}
+			</div>
+
+			<div class="right-map-wrapper content-container">
+				{%- for block in section.blocks -%}
+					{%- liquid
+						assign image_right     = block.settings.image_right
+						assign address_link    = block.settings.url
+						assign map_coordinates = block.settings.map_coordinates
+					-%}
+
+					<div class="accordion-content details-content desktop rte content-map{% if forloop.index == 1 %} active{% endif %}" data-id="{{ section.id }}-{{ block.id }}">
+						{%- if address_link != blank -%}
+							<a href="{{ address_link }}" class="address-link"></a>
+						{%- endif -%}
+
+						{%- if map_coordinates != blank -%}
+							<div class="contact-map">
+								<template data-options>
+									{
+										"coordinates": {{ map_coordinates | json }},
+										"zoom": 15
+									}
+								</template>
+							</div>
+						{%- else -%}
+							<div class="image{% if settings.image_lazy and image_right %} lazy-image fade-in-image{% endif %}">
+								{%- liquid
+									if image_right != blank
+										render 'lazy-image', image: image_right, width: 433
+									else
+										render 'icon', code: 'placeholder', width: 433
+									endif
+								-%}
+							</div>
+						{%- endif -%}
+
+						<div class="description">
+							{% if block.settings.heading_map != blank %}
+								<h6 class="heading">{{- block.settings.heading_map -}}</h6>
+							{% endif %}
+
+							{% if block.settings.description != blank %}
+								<div class="description-map">{{- block.settings.description -}}</div>
+							{% endif %}
+						</div>
+					</div>
+				{%- endfor -%}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.map.name",
+	"class": "map-section has-accordion-style",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_left_image",
+			"default": true,
+			"label": "t:sections.map.settings.show_left_image.label"
+		},
+		{
+			"type": "text",
+			"id": "heading",
+			"default": "Heading",
+			"label": "t:general.typography.heading.label"
+		},
+		{
+			"type": "text",
+			"id": "sub_heading_text",
+			"default": "Subheading",
+			"label": "t:general.typography.sub_heading.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "item",
+			"name": "t:sections.map.blocks.item.name",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image_left",
+					"label": "t:general.image.label"
+				},
+				{
+					"type": "text",
+					"id": "heading_accordion",
+					"default": "Heading",
+					"label": "t:general.typography.heading.label"
+				},
+				{
+					"type": "header",
+					"content": "t:sections.address-box.blocks.address.name"
+				},
+				{
+					"type": "text",
+					"id": "map_coordinates",
+					"label": "t:sections.contact.settings.map_coordinates.label",
+					"info": "t:sections.contact.settings.map_coordinates.info"
+				},
+				{
+					"type": "image_picker",
+					"id": "image_right",
+					"label": "t:general.image.label"
+				},
+				{
+					"type": "text",
+					"id": "heading_map",
+					"default": "Heading",
+					"label": "t:general.typography.heading.label"
+				},
+				{
+					"type": "richtext",
+					"id": "description",
+					"default": "<p>Address</p>",
+					"label": "t:general.typography.description.label"
+				},
+				{
+					"type": "url",
+					"id": "url",
+					"label": "t:general.typography.link.label"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.map.name",
+			"blocks": [
+			{
+				"type": "item"
+			},
+			{
+				"type": "item"
+			},
+			{
+				"type": "item"
+			}
+		]
+		}
+	]
+}
+{% endschema %}

@@ -1,0 +1,107 @@
+{% assign product = closest.product %}
+{% assign collapsible_id = block.id | append: '-' | append: section.id %}
+{% assign collapsible_title = block.settings.heading | default: block.settings.page.title %}
+<div class="product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  {%- render 'a-collapsible',
+    id: collapsible_id,
+    title: collapsible_title,
+    row_title_color: block.settings.coll_heading_color,
+    row_title_highlighted_color: block.settings.coll_heading_highlighted_color,
+    text_content: block.settings.content,
+    row_text_content_color: block.settings.coll_text_color,
+    row_text_content_highlighted_color: block.settings.coll_text_highlighted_color,
+    collapsible_font_size: block.settings.collapsible_font_size,
+    collapsible_font_heading_size: block.settings.collapsible_font_heading_size,
+    border_radius: block.settings.collapsible_border_radius,
+    padding_top: block.settings.padding_top,
+    padding_bottom: block.settings.padding_bottom
+  -%}
+</div>
+
+{% schema %}
+{
+  "name": "Dropdown row",
+  "tag": null,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Description",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Body"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "collapsible_font_heading_size",
+      "label": "Heading font size",
+      "min": 8,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "collapsible_font_size",
+      "label": "Body font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "color",
+      "id": "coll_heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "coll_heading_highlighted_color",
+      "label": "Bolded heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "coll_text_color",
+      "label": "Body color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "coll_text_highlighted_color",
+      "label": "Bolded body color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "collapsible_border_radius",
+      "min": 0,
+      "max": 25,
+      "step": 1,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collapsible Tab",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,211 @@
+{% style %}
+  .block-{{ block.id }} {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: {{ block.settings.gap_between_cards }}px;
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+    padding-left: 0;
+    padding-right: 0;
+    justify-content: {{ block.settings.cards_layout }};
+  }
+  
+  .block-{{ block.id }} .rich-text__card {
+    flex: 0 0 calc(25% - {{ block.settings.gap_between_cards | times: 0.75 }}px);
+    max-width: calc(25% - {{ block.settings.gap_between_cards | times: 0.75 }}px);
+  }
+  
+  @media screen and (max-width: 1024px) {
+    .block-{{ block.id }} .rich-text__card {
+      flex: 0 0 calc(50% - {{ block.settings.gap_between_cards | divided_by: 2 }}px);
+      max-width: calc(50% - {{ block.settings.gap_between_cards | divided_by: 2 }}px);
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .block-{{ block.id }} .rich-text__card {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+  .block-{{ block.id }} .rich-text__card {
+    display: flex;
+    height: auto;
+    padding: 22px 37px;
+    background: rgba({{ block.settings.bg_color.red }}, {{ block.settings.bg_color.green }}, {{ block.settings.bg_color.blue }}, {{ block.settings.background_opacity | divided_by: 100.0 }});
+    border: 0.5px solid {{ block.settings.border_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    font-size: {{ block.settings.font_size }}px;
+    line-height: calc(100% + 11px);
+    color: {{ block.settings.color }};
+    text-align: {{ block.settings.text_alignment }};
+    max-width: 100%;
+  }
+  .block-{{ block.id }} .rich-text__card p {
+    margin: 0;
+  }
+
+{% endstyle %}
+{% capture cards %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+{% assign has_cards = false %}
+{% if cards contains '<!-- start_rich_text_list_card -->' %}
+  {% assign has_cards = true %}
+{% endif %}
+{% comment %} {% if cards_count > 0 %} {% endcomment %}
+<ul class="rich-text__cards block-{{ block.id }}" {% if has_cards %}style="margin-top: 37px;"{% endif %} {{ block.shopify_attributes }}>
+  {% for card in cards %}
+    {{ card }}
+  {% endfor %}
+</ul>
+{% comment %} {% endif %} {% endcomment %}
+{% schema %}
+{
+  "name": "List cards",
+  "blocks": [
+    {
+      "type": "_a-rich-text-list-card"
+    }
+  ],
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center" 
+    },
+    {
+      "type": "select",
+      "id": "cards_layout",
+      "label": "Cards alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "background_opacity",
+      "label": "Background opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 45
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "gap_between_cards",
+      "label": "Gap between cards",
+      "min": 4,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "List cards",
+      "blocks": [
+        {
+          "type": "_a-rich-text-list-card"
+        },
+        {
+          "type": "_a-rich-text-list-card"
+        },
+        {
+          "type": "_a-rich-text-list-card"
+        },
+        {
+          "type": "_a-rich-text-list-card"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

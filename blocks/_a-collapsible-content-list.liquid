@@ -1,0 +1,359 @@
+
+<style>
+    {% if request.visual_preview_mode %}
+      {% assign section_id_variable = 'id' %}
+    {% else %}
+      {% assign section_id_variable = section.id %}
+    {% endif %}
+    .atlas-isolation-wrapper .singleAccordianContainer-{{ section_id_variable }} {
+      {% if block.settings.rows_have_border %}
+        border-bottom: {{ block.settings.rows_border_width }}px solid rgba({{ block.settings.rows_border_color.red }}, {{ block.settings.rows_border_color.green }}, {{ block.settings.rows_border_color.blue }}, {{ block.settings.rows_border_color_opacity | divided_by: 100.0 }});
+      {% else %}
+        background-color: {{ block.settings.row_container_bg_color_scheme }};
+        border-radius: {{ block.settings.border_radius }}px;
+      {% endif %}
+  }
+  {% if block.settings.rows_have_border %}
+    .atlas-isolation-wrapper .singleAccordianContainer-{{ section_id_variable }}:first-of-type {
+        border-top: {{ block.settings.rows_border_width }}px solid rgba({{ block.settings.rows_border_color.red }}, {{ block.settings.rows_border_color.green }}, {{ block.settings.rows_border_color.blue }}, {{ block.settings.rows_border_color_opacity | divided_by: 100.0 }});
+    }
+  {% endif %}
+
+  .atlas-isolation-wrapper .accordionButtonStyle-{{ section_id_variable }} {
+    border: none;
+    display: block;
+    background-color: transparent;
+    color: #444;
+    cursor: pointer;
+    padding: {{ block.settings.vertical_padding }}px {{ block.settings.horizontal_padding }}px;
+    width: 100%;
+    text-align: left;
+    outline: none;
+    transition: 0.1s;
+    cursor: pointer;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .atlas-isolation-wrapper .allAccordionButtonsContainer-{{ section_id_variable }} {
+    display: flex;
+    flex-direction: column;
+    {% if block.settings.rows_have_border == false%}
+      gap: {{  block.settings.row_gap }}px;
+    {% endif %}
+  }
+  .atlas-isolation-wrapper .panelStyle-{{ section_id_variable }} p {
+    line-height: 1.4em;
+      margin-top: 0px;
+      margin-bottom: {{ block.settings.vertical_padding }}px !important;
+  }
+
+  {% if block.settings.title_row_has_underline_on_hover %}
+    .atlas-isolation-wrapper .accordionButtonStyle-{{ section_id_variable }}:hover .collapsibleTitleSpan-{{ section_id_variable }} {
+      text-decoration: underline;
+    }
+  {% endif %}
+  .atlas-isolation-wrapper .accordionButtonStyle-{{ section_id_variable }} .index-number {
+    font-size: {{ block.settings.index_number_size | divided_by: 2 }}px;
+    color: {{ block.settings.index_number_color }};
+    width: {{ block.settings.index_number_size }}px;
+    height: {{ block.settings.index_number_size }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ block.settings.index_number_background_color }};
+    border-radius: 50%;
+    flex-shrink: 0;
+    line-height: 100%;
+  }
+
+  .atlas-isolation-wrapper .panelStyle-{{ section_id_variable }} {
+    padding: 0 {{ block.settings.horizontal_padding }}px;
+    padding-left: calc({{ block.settings.horizontal_padding }}px + {{ block.settings.index_number_size }}px + 14px);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+  }
+  .atlas-isolation-wrapper .icon-minus-{{ section_id_variable }},
+  .atlas-isolation-wrapper .icon-plus-{{ section_id_variable }} {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    flex-shrink: 0;
+  }
+  .atlas-isolation-wrapper .icon-minus-{{ section_id_variable }} path,
+  .atlas-isolation-wrapper .icon-plus-{{ section_id_variable }} path {
+    fill: {{ block.settings.icon_color }};
+  }
+  .atlas-isolation-wrapper .allAccordionButtonsContainer-{{ section_id_variable }} .collapsibleTitleSpan-{{ section_id_variable }} {
+    font-size: {{ block.settings.heading_font_size }}px;
+    letter-spacing: calc(var(--atlas-font-heading-scale) * 0.06rem);
+  }
+  @media (max-width: 768px) {
+    .atlas-isolation-wrapper .allAccordionButtonsContainer-{{ section_id_variable }} .collapsibleTitleSpan-{{ section_id_variable }} {
+      font-size: {{ block.settings.heading_font_size_mobile }}px;
+    }
+  }
+  .atlas-isolation-wrapper .allAccordionButtonsContainer-{{ section_id_variable }} .panelStyle-{{ section_id_variable }} p {
+    font-size: {{ block.settings.body_font_size }}px;
+  }
+  @media (max-width: 768px) {
+    .atlas-isolation-wrapper .allAccordionButtonsContainer-{{ section_id_variable }} .panelStyle-{{ section_id_variable }} p {
+      font-size: {{ block.settings.body_font_size_mobile }}px;
+    }
+  }
+</style>
+{% capture rows %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+{% assign rows = rows | split: '<!-- end block -->' %}
+
+<div class="allAccordionButtonsContainer-{{ section_id_variable }} fade-in-child" {{ block.shopify_attributes }}>
+ {% for row in rows %} 
+    {% if row contains '<!--@#$%-->' %}
+      {% assign row_new = row | replace: '<!--@#$%-->', forloop.index  %}
+      {{ row_new }}
+    {% else %}
+      {{ row }}
+    {% endif %}
+ {% endfor %}
+</div>
+{% schema %}
+{
+  "name": "Collapsible content list",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Desktop heading font size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size_mobile",
+      "label": "Mobile heading font size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "label": "Desktop body font size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "body_font_size_mobile",
+      "label": "Mobile body font size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "index_number_size",
+      "label": "Row number size",
+      "min": 0,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "index_number_color",
+      "label": "Row number text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "index_number_background_color",
+      "label": "Row number background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "rows_have_border",
+      "label": "Use separator lines between rows",
+      "default": false,
+      "info": "If enabled, rows will have separator lines instead of background colors"
+    },
+    {
+      "type": "range",
+      "id": "row_gap",
+      "label": "Gap between rows",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 15,
+      "visible_if": "{{ block.settings.rows_have_border  == false}}" 
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Row border radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 6,
+      "visible_if": "{{ block.settings.rows_have_border  == false}}" 
+    },
+    {
+      "type": "color",
+      "id": "row_container_bg_color_scheme",  
+      "default": "#F9F9F9",
+      "label": "Row background color",
+      "visible_if": "{{ block.settings.rows_have_border  == false}}"
+    },
+    {
+      "type": "color",
+      "id": "rows_border_color",
+      "label": "Separator line color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.rows_have_border  == true}}"
+    },
+    {
+      "type": "range",
+      "id": "rows_border_color_opacity",
+      "label": "Separator line opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 15,
+      "visible_if": "{{ block.settings.rows_have_border  == true}}"
+    },
+    {
+      "type": "range",
+      "id": "rows_border_width",
+      "label": "Separator line width",
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "unit": "px",
+      "default": 1,
+      "visible_if": "{{ block.settings.rows_have_border  == true}}"
+    },
+    {
+      "type": "range",
+      "id": "vertical_padding",
+      "label": "Row vertical padding",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Row horizontal padding",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Icons"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#181818"
+    },
+    {
+      "type": "header",
+      "content": "Behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "title_row_has_underline_on_hover",
+      "label": "Show underline on hover",
+      "default": false,
+      "info": "Adds underline effect when hovering over row titles"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "_a-collapsible-content-row"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collapsible content list",
+      "blocks": [
+        {
+          "type": "_a-collapsible-content-row",
+          "settings": {
+            "heading": "What is your return policy?",
+            "row_content": "<p>Absolutely. For best results, cleanse your face first, use the wand, and then apply your favorite serums or moisturizers.</p>",
+            "heading_color": "#383838",
+            "heading_highlighted_color": "#383838",
+            "body_color": "#302f2f",
+            "body_highlighted_color": "#302f2f"
+          },
+        },
+        {
+          "type": "_a-collapsible-content-row",
+          "settings": {
+                "heading": "What is your return policy?",
+                "row_content": "<p>Absolutely. For best results, cleanse your face first, use the wand, and then apply your favorite serums or moisturizers.</p>",
+                "heading_color": "#383838",
+                "heading_highlighted_color": "#383838",
+                "body_color": "#302f2f",
+                "body_highlighted_color": "#302f2f"
+            }
+        },
+        {
+          "type": "_a-collapsible-content-row",
+          "settings": {
+            "heading": "What is your return policy?",
+            "row_content": "<p>Absolutely. For best results, cleanse your face first, use the wand, and then apply your favorite serums or moisturizers.</p>",
+            "heading_color": "#383838",
+            "heading_highlighted_color": "#383838",
+            "body_color": "#302f2f",
+            "body_highlighted_color": "#302f2f"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

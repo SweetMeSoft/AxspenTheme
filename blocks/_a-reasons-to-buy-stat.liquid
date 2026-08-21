@@ -1,0 +1,52 @@
+{% if block.settings.row_heading != blank or block.settings.row_text != blank %}
+  <div
+    class="reasons-to-buy__stats-content-item-container"
+    {{ block.shopify_attributes }}
+    percentage-value="{{ block.settings.percentage }}"
+  >
+    <div class="reasons-to-buy__stats-content-item-percentage">
+      <strong>{{ block.settings.percentage }}%</strong>
+    </div>
+    <div class="reasons-to-buy__stats-content-item">
+      <div class="reasons-to-buy__stats-content-item-heading">{{ block.settings.row_heading }}</div>
+      <div class="reasons-to-buy__stats-content-item-text">{{ block.settings.row_text }}</div>
+    </div>
+  </div>
+{% endif %}
+{% schema %}
+{
+  "name": "Reason row",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "row_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "row_text",
+      "label": "Body"
+    },
+    {
+      "type": "range",
+      "id": "percentage",
+      "min": 0,
+      "max": 100,
+      "default": 95,
+      "step": 1,
+      "label": "Percentage"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reason row",
+      "settings": {
+        "row_heading": "<p>Chosen by Thousands</p>",
+        "row_text": "<p>Trusted by thousands for quality and reliability</p>",
+        "percentage": 98
+      }
+    }
+  ]
+}
+{% endschema %}

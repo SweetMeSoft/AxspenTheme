@@ -1,0 +1,140 @@
+  {% assign product = closest.product %}
+  {% style %}
+  .product-block-{{ block.id }} .shopify-payment-button .shopify-payment-button__button--unbranded {
+    min-height: 46px !important;
+    height: 46px !important;
+  }
+{% endstyle %}
+  {%- assign product_form_id = 'product-form-' | append: section.id -%}
+  <div class="product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+    {%- render 'a-buy-buttons',
+      block: block,
+      product: product,
+      product_form_id: product_form_id,
+      section_id: section.id,
+      show_pickup_availability: true,
+      hide_add_to_cart: true,
+      buy_now_text: block.settings.buy_now_text,
+      buy_now_button_font_size: block.settings.buy_now_button_font_size,
+      buy_now_text_color: block.settings.buy_now_text_color,
+      buy_now_bg_color: block.settings.buy_now_bg_color,
+      buy_now_border_radius: block.settings.buy_now_border_radius,
+      buy_now_uppercase_text: block.settings.buy_now_uppercase_text,
+      buy_now_button_font_weight: block.settings.buy_now_button_font_weight
+    -%}
+  </div>
+
+{% schema %}
+{
+  "name": "Buy now button",
+  "tag": null,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "buy_now_text",
+      "label": "Buy now button text",
+      "default": "Buy now"
+    },
+    {
+      "type": "range",
+      "id": "buy_now_button_font_size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Buy now button font size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "buy_now_button_font_weight",
+      "min": 400,
+      "max": 700,
+      "step": 100,
+      "unit": "px",
+      "label": "Buy now button font weight",
+      "default": 400
+    },
+    {
+      "type": "checkbox",
+      "id": "buy_now_uppercase_text",
+      "label": "Buy now uppercase text",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "buy_now_text_color",
+      "label": "Buy now button text color",
+      "default": "#FFFFFF",
+    },
+
+    {
+      "type": "color",
+      "id": "buy_now_bg_color",
+      "default": "#000000",
+      "label": "Buy now button Background color",
+    },
+
+    {
+      "type": "range",
+      "id": "buy_now_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Buy now button border radius",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Buy now button",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

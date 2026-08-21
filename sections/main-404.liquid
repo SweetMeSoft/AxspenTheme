@@ -1,0 +1,366 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+-%}
+
+{{- '404.css' | asset_url | stylesheet_tag -}}
+
+<style>
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			background-size: {{ section.settings.bg_size }}%;
+			background-position: {{ section.settings.bg_position }};
+
+			{%- if section.settings.bg_image != blank -%}
+				background-image: url({{ section.settings.bg_image | image_url: width: 1920 }});
+			{%- endif -%}
+		}
+	}
+
+	{%- for block in section.blocks -%}
+		{%- case block.type -%}
+			{%- when 'space' -%}
+				{{ section_id }} [data-block-{{ block.id }}] .space {
+					height: {{ block.settings.height_mobile }}px;
+				}
+
+				@media (min-width: 992px) {
+					{{ section_id }} [data-block-{{ block.id }}] .space {
+						height: {{ block.settings.height }}px;
+					}
+				}
+			{%- when 'logo' -%}
+				{{ section_id }} [data-block-{{ block.id }}] .logo img,
+				{{ section_id }} [data-block-{{ block.id }}] .logo svg {
+					max-width: {{ block.settings.width }}px;
+				}
+			{%- when 'heading' -%}
+				{{ section_id }} [data-block-{{ block.id }}] .heading {
+					font-size: {{ block.settings.size | times: 0.9 }}px;
+
+					{%- if block.settings.text_color != blank -%}
+						color: {{ block.settings.text_color }};
+					{%- endif -%}
+				}
+
+				@media (min-width: 992px) {
+					{{ section_id }} [data-block-{{ block.id }}] .heading {
+						font-size: {{ block.settings.size }}px;
+					}
+				}
+			{%- when 'description' -%}
+				{{ section_id }} [data-block-{{ block.id }}] .description {
+					font-size: {{ block.settings.size }}px;
+
+					{%- if block.settings.text_color != blank -%}
+						color: {{ block.settings.text_color }};
+					{%- endif -%}
+				}
+
+				{%- if block.settings.link_color != blank -%}
+					{{ section_id }} [data-block-{{ block.id }}] .description a {
+						color: {{ block.settings.link_color }};
+					}
+				{%- endif -%}
+			{%- when 'form' -%}
+		{%- endcase -%}
+	{%- endfor -%}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="container">
+		<div class="error-content-page">
+			{%- for block in section.blocks -%}
+				<div class="list-item" data-block-{{ block.id }}>
+					{%- case block.type -%}
+						{%- when 'space' -%}
+							<div class="space"></div>
+						{%- when 'logo' -%}
+							{%- liquid
+								assign logo_width        = block.settings.width | times: 2
+								assign logo_width_retina = block.settings.width | times: 4
+							-%}
+
+							<h1 class="logo">
+								<a href="{{ routes.root_url }}">
+									{%- if block.settings.svg != blank -%}
+										{{- block.settings.svg -}}
+									{%- elsif block.settings.image != blank -%}
+										<img srcset="{{ block.settings.image | image_url: width: logo_width }} 1x, {{ block.settings.image | image_url: width: logo_width_retina }} 2x"
+											src="{{ block.settings.image | image_url: width: logo_width }}"
+											class="site-branding-image"
+											width="{{ block.settings.image.width }}"
+											height="{{ block.settings.image.height }}"
+											alt="{{ block.settings.image.alt | default: shop.name | escape }}"
+											loading="lazy">
+									{%- else -%}
+										{{- shop.name -}}
+									{%- endif -%}
+								</a>
+							</h1>
+						{%- when 'heading' -%}
+							{%- if block.settings.text != blank -%}
+								{%- assign tag = block.settings.tag -%}
+
+								<{{ tag }} class="heading">{{- block.settings.text -}}</{{ tag }}>
+							{%- endif -%}
+						{%- when 'description' -%}
+							{%- if block.settings.text != blank -%}
+								{%- assign tag = block.settings.tag -%}
+
+								<div class="description rte">{{- block.settings.text -}}</div>
+							{%- endif -%}
+						{%- when 'form' -%}
+							<form action="{{ routes.search_url }}" method="get" role="search" class="error-search-form">
+								<label class="field-label sr-only" for="search-in-template" aria-hidden="true">{{- 'general.search.label' | t -}}</label>
+								<input class="field-input" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ block.settings.input_text }}" {% if search.performed %}autofocus{% endif %} required>
+								<input type="hidden" name="type" value="{{ settings.search_type }}">
+								<input name="options[prefix]" type="hidden" value="last">
+								<input type="hidden" name="options[unavailable_products]" value="{{ settings.search_unavailable_products }}">
+
+								<button class="field-button button primary-button" aria-label="{{ 'general.search.label' | t }}">{{- block.settings.submit_text -}}</button>
+							</form>
+					{%- endcase -%}
+				</div>
+			{%- endfor -%}
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.404.name",
+	"tag": "section",
+	"class": "error-section",
+	"settings": [
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "image_picker",
+			"id": "bg_image",
+			"label": "t:sections.404.settings.bg_image.label"
+		},
+		{
+			"type": "number",
+			"id": "bg_size",
+			"default": 100,
+			"label": "t:sections.404.settings.bg_size.label"
+		},
+		{
+			"type": "select",
+			"id": "bg_position",
+			"default": "center",
+			"label": "t:sections.404.settings.bg_position.label",
+			"options": [
+				{
+					"value": "top left",
+					"label": "t:sections.404.settings.bg_position.option_1.label"
+				},
+				{
+					"value": "top center",
+					"label": "t:sections.404.settings.bg_position.option_2.label"
+				},
+				{
+					"value": "top right",
+					"label": "t:sections.404.settings.bg_position.option_3.label"
+				},
+				{
+					"value": "center left",
+					"label": "t:sections.404.settings.bg_position.option_4.label"
+				},
+				{
+					"value": "center",
+					"label": "t:sections.404.settings.bg_position.option_5.label"
+				},
+				{
+					"value": "center right",
+					"label": "t:sections.404.settings.bg_position.option_6.label"
+				},
+				{
+					"value": "bottom left",
+					"label": "t:sections.404.settings.bg_position.option_7.label"
+				},
+				{
+					"value": "bottom center",
+					"label": "t:sections.404.settings.bg_position.option_8.label"
+				},
+				{
+					"value": "bottom right",
+					"label": "t:sections.404.settings.bg_position.option_9.label"
+				}
+			]
+		}
+	],
+	"blocks": [
+		{
+			"type": "@app"
+		},
+		{
+			"type": "logo",
+			"name": "t:sections.404.blocks.logo.name",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "t:sections.404.blocks.logo.settings.image.label"
+				},
+				{
+					"type": "textarea",
+					"id": "svg",
+					"label": "t:sections.404.blocks.logo.settings.svg.label"
+				},
+				{
+					"type": "number",
+					"id": "width",
+					"default": 100,
+					"label": "t:sections.404.blocks.logo.settings.width.label"
+				}
+			]
+		},
+		{
+			"type": "space",
+			"name": "t:sections.404.blocks.space.name",
+			"settings": [
+				{
+					"type": "number",
+					"id": "height",
+					"default": 100,
+					"label": "t:sections.404.blocks.space.settings.height.label"
+				},
+				{
+					"type": "number",
+					"id": "height_mobile",
+					"default": 50,
+					"label": "t:sections.404.blocks.space.settings.height_mobile.label"
+				}
+			]
+		},
+		{
+			"type": "heading",
+			"name": "t:sections.404.blocks.heading.name",
+			"settings": [
+				{
+					"type": "text",
+					"id": "text",
+					"default": "Seems like something went wrong.",
+					"label": "t:sections.404.blocks.heading.settings.text.label"
+				},
+				{
+					"type": "select",
+					"id": "tag",
+					"default": "h2",
+					"label": "t:sections.heading.settings.tag.label",
+					"options": [
+						{
+							"value": "h1",
+							"label": "t:sections.heading.settings.tag.options__1.label"
+						},
+						{
+							"value": "h2",
+							"label": "t:sections.heading.settings.tag.options__2.label"
+						},
+						{
+							"value": "h3",
+							"label": "t:sections.heading.settings.tag.options__3.label"
+						},
+						{
+							"value": "h4",
+							"label": "t:sections.heading.settings.tag.options__4.label"
+						},
+						{
+							"value": "h5",
+							"label": "t:sections.heading.settings.tag.options__5.label"
+						},
+						{
+							"value": "h6",
+							"label": "t:sections.heading.settings.tag.options__6.label"
+						},
+						{
+							"value": "div",
+							"label": "t:sections.heading.settings.tag.options__7.label"
+						},
+						{
+							"value": "span",
+							"label": "t:sections.heading.settings.tag.options__8.label"
+						},
+						{
+							"value": "p",
+							"label": "t:sections.heading.settings.tag.options__9.label"
+						}
+					]
+				},
+				{
+					"type": "range",
+					"id": "size",
+					"min": 10,
+					"max": 100,
+					"step": 1,
+					"default": 36,
+					"unit": "px",
+					"label": "t:sections.404.blocks.heading.settings.size.label"
+				},
+				{
+					"type": "color",
+					"id": "text_color",
+					"label": "t:sections.404.blocks.heading.settings.text_color.label"
+				}
+			]
+		},
+		{
+			"type": "description",
+			"name": "t:sections.404.blocks.description.name",
+			"settings": [
+				{
+					"type": "richtext",
+					"id": "text",
+					"default": "<p>It looks like nothing was found at this location.</p>",
+					"label": "t:sections.404.blocks.description.settings.text.label"
+				},
+				{
+					"type": "range",
+					"id": "size",
+					"min": 10,
+					"max": 100,
+					"step": 1,
+					"default": 15,
+					"unit": "px",
+					"label": "t:sections.404.blocks.description.settings.size.label"
+				},
+				{
+					"type": "color",
+					"id": "text_color",
+					"label": "t:sections.404.blocks.description.settings.text_color.label"
+				},
+				{
+					"type": "color",
+					"id": "link_color",
+					"label": "t:sections.404.blocks.description.settings.link_color.label"
+				}
+			]
+		},
+		{
+			"type": "form",
+			"name": "t:sections.404.blocks.form.name",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "text",
+					"id": "input_text",
+					"default": "Enter keyword...",
+					"label": "t:sections.404.blocks.form.settings.input_text.label"
+				},
+				{
+					"type": "text",
+					"id": "submit_text",
+					"default": "Search",
+					"label": "t:sections.404.blocks.form.settings.submit_text.label"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

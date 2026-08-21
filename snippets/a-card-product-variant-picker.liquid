@@ -1,0 +1,199 @@
+{% comment %}
+  Renders product variant-picker
+
+  Accepts:
+  - product: {Object} product object.
+  - product_form_id: {String} Id of the product form to which the variant picker is associated.
+  - update_url: {Boolean} whether or not to update url when changing variants. If false, the url isn't updated. Default: true (optional).
+  Usage:
+  {% render 'a-card-product-variant-picker', product: product, product_form_id: product_form_id %}
+{% endcomment %}
+
+
+  {%- if has_custom_color -%}
+    <style>
+      .atlas-isolation-wrapper .swatch-color__label::before,
+      .atlas-isolation-wrapper .swatch-color__label {
+        background-color: var(--atlas-variants-custom-color) !important;
+      }
+      .atlas-isolation-wrapper variant-radios input:after {
+        background-color: var(--atlas-variants-custom-color) !important;
+      }
+      .atlas-isolation-wrapper .custom_variants_select_color {
+        select, select + svg {
+          color: var(--atlas-variants-custom-color) !important;
+        }
+        &:after {
+          box-shadow: 0 0 0 var(--atlas-inputs-border-width) var(--atlas-variants-custom-color) !important;
+        }
+        &:hover:after,
+        select:focus-visible,
+        select:focus {
+          box-shadow: 0 0 0 calc(.1rem + var(--atlas-inputs-border-width)) var(--atlas-variants-custom-color) !important;
+        }
+      }
+    </style>
+  {%- else -%}
+    <style>
+      :root {
+        --atlas-variants-custom-color: #000;
+      }
+    </style>
+  {%- endif -%}
+  
+  <style>
+    :root {
+      --atlas-custom-swatch-border-radius: {% if swatch_type == 'circle' %}50%{% else %}0{% endif %};
+      --atlas-custom-swtach-size: {{ swatch_size }};
+    }
+  
+    .atlas-isolation-wrapper legend span {
+      font-weight: 400;
+      color: currentColor;
+    }
+  </style>
+  
+  
+  {%- unless product.has_only_default_variant -%}
+    <variant-radios
+        id="variant-radios-{{ section.id }}"
+        class="no-js-hidden variant-radios-{{ product.id }}"
+        data-section="{{ section.id }}"
+        data-url="{{ product.url }}"
+        {% if update_url == false %}
+          data-update-url="false"
+        {% endif %}
+      >
+        {%- for option in product.options_with_values -%}
+          <fieldset class="js product-form__input" data-option-index="{{ forloop.index }}" style="min-width: 100%;">
+            <legend class="form__label">
+              {{ option.name }}: <span>{% unless section.settings.show_main_image_first %}{{ option.selected_value }}{% endunless %}</span>
+            </legend>
+            {%- liquid
+                assign variants_available_arr = product.variants | map: 'available'
+                assign variants_option1_arr = product.variants | map: 'option1'
+                assign variants_option2_arr = product.variants | map: 'option2'
+                assign variants_option3_arr = product.variants | map: 'option3'
+              -%}
+              <div class="card-product-variant-selector__inputs swiper">
+                <div class="swiper-wrapper">
+              {%- for value in option.values -%}
+                {%- liquid
+                  assign option_disabled = true
+              
+                  for option1_name in variants_option1_arr
+                    case option.position
+                      when 1
+                        if variants_option1_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                          assign option_disabled = false
+                        endif
+                      when 2
+                        if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                          assign option_disabled = false
+                        endif
+                      when 3
+                        if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == product.selected_or_first_available_variant.option2 and variants_option3_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                          assign option_disabled = false
+                        endif
+                    endcase
+                  endfor
+                -%}
+                <div class="swiper-slide" style="width: fit-content;">
+                <input
+                    style="display: none;"
+                    class="variant_radio_input"
+                    type="radio"
+                    id="product-{{ product.id }}-{{ option.position }}-{{ forloop.index0 }}"
+                    name="{{ option.name }}"
+                    value="{{ value | escape }}"
+                    form="{{ product_form_id_custom }}"
+                    {% unless section.settings.show_main_image_first %}
+                      {% if option.selected_value == value %}
+                        checked
+                      {% endif %}
+                    {% endunless %}
+                    {% if option_disabled %}
+                      class="disabled"
+                    {% endif %}
+                  >
+                  <div class="variant_radio_label_container">
+                    <label for="product-{{ product.id }}-{{ option.position }}-{{ forloop.index0 }}">
+                      {{ value -}}
+                      <span class="visually-hidden">Variant sold out or unavailable</span>
+                    </label>
+                  </div>
+                  </div>
+              {%- endfor -%}
+                </div>
+              </div>
+          </fieldset>
+        {%- endfor -%}
+        <script type="application/json">
+          {{ product.variants | json }}
+        </script>
+      </variant-radios>
+  {%- endunless -%}
+  
+  <noscript class="product-form__noscript-wrapper-{{ section.id }}">
+    <div class="product-form__input{% if product.has_only_default_variant %} hidden{% endif %}">
+      <label class="form__label"  for="Variants-{{ section.id }}">
+        Product variants
+      </label>
+      <div class="select">
+        <select
+          name="id"
+          id="Variants-{{ section.id }}"
+          class="select__select custom_variants_select_color"
+          form="{{ product_form_id }}"
+        >
+          {%- for variant in product.variants -%}
+            <option
+              {% unless section.settings.show_main_image_first %}
+                {% if variant == product.selected_or_first_available_variant %}
+                  selected="selected"
+                {% endif %}
+              {% endunless %}
+              {% if variant.available == false %}
+                disabled
+              {% endif %}
+              value="{{ variant.id }}"
+            >
+              {%- liquid
+                echo variant.title
+                echo variant.price | money | strip_html | prepend: ' - '
+                if variant.available == false
+                  echo 'Sold out' | prepend: ' - '
+                endif
+                if variant.quantity_rule.increment > 1
+                  echo 'Increments of ' | append: variant.quantity_rule.increment | prepend: ' - '
+                endif
+                if variant.quantity_rule.min > 1
+                  echo 'Minimum of ' | append: variant.quantity_rule.min | prepend: ' - '
+                endif
+                if variant.quantity_rule.max != null
+                  echo 'Maximum of ' | append: variant.quantity_rule.max | prepend: ' - '
+                endif
+                assign cart_quantity = cart | item_count_for_variant: variant.id
+                if cart_quantity > 0
+                  echo '<span class="quantity-cart">' | append: cart_quantity | append: '</span> in cart' | prepend: ' - '
+                endif
+              -%}
+            </option>
+          {%- endfor -%}
+        </select>
+        {% render 'a-icon-caret' %}
+      </div>
+    </div>
+  </noscript>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      /* init swiper */
+      const variantRadiosSwipers = document.querySelectorAll('.variant-radios-{{ product.id }} .swiper');
+      variantRadiosSwipers.forEach(swiper => {
+        new Swiper(swiper, {
+          slidesPerView: "auto"
+        });
+      });
+    });
+  </script>
+  

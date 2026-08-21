@@ -1,0 +1,182 @@
+{% comment %}
+  Animated Section Divider
+
+  Usage:
+  {% render 'animated_divider_section' %}
+
+  Optional parameters:
+  - animation_class: Additional CSS classes to add
+  - animation_color: Override the theme setting color
+  - animation_intensity: Override the theme setting intensity (subtle, normal, strong)
+  - animation_speed: Override the theme setting animation speed (in seconds)
+{% endcomment %}
+
+<link
+  rel="stylesheet"
+  href="{{ 'a-animated_divider.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'"
+  defer
+>
+
+{% liquid
+  assign animation_divider_size = section.settings.animation_divider_size
+  assign glow_animation_intensity = section.settings.glow_animation_intensity
+  assign glow_animation_speed = 10 | divided_by: section.settings.glow_animation_speed
+  if section.settings.glow_animation_flip
+    assign glow_animation_flip = -1
+  else
+    assign glow_animation_flip = 1
+  endif
+%}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    background-color: #ffffff;
+  }
+
+  .atlas-isolation-wrapper #animated-divider-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  @media screen and (max-width: 750px) {
+    .atlas-isolation-wrapper #animated-divider-section-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round }}px;
+    }
+  }
+
+  {% if section.settings.use_gradient_background %}
+    .atlas-isolation-wrapper #animated-divider-section-{{ section.id }} {
+      background: var(--atlas-gradient-base-background-1);
+      {% if section.settings.glow_animation_flip %}
+        --atlas-glow_animation_flip: 1 !important;
+      {% else %}
+        --atlas-glow_animation_flip: -1 !important;
+      {% endif %}
+    }
+  {% endif %}
+{% endstyle %}
+
+<div
+  id="animated-divider-section-{{ section.id }}"
+  class="pulsing-divider{% if glow_animation_intensity != 'normal' %} {{ glow_animation_intensity }}{% endif %}"
+  style="{% if section.settings.use_gradient_background %}background: {{ section.settings.section_background_gradient }};{% else %}background-color: {{ section.settings.section_background_color }};{% endif %}"
+  style="--atlas-divider-color: var(--atlas-color-background); --atlas-animation-duration: {{ glow_animation_speed }}s; --atlas-divider-size: {{ animation_divider_size }}; --atlas-glow_animation_flip: {{ glow_animation_flip }};"
+>
+  <div
+    class="pulse-overlay"
+  ></div>
+</div>
+
+{% schema %}
+{
+  "name": "Animated pulsing",
+  "settings": [
+    {
+      "type": "select",
+      "id": "animation_divider_size",
+      "label": "Section size",
+      "options": [
+        {
+          "value": "50px",
+          "label": "Small"
+        },
+        {
+          "value": "80px",
+          "label": "Medium"
+        },
+        {
+          "value": "120px",
+          "label": "Large"
+        }
+      ],
+      "default": "80px"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_background_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.use_gradient_background == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Glow settings"
+    },
+    {
+      "type": "select",
+      "id": "glow_animation_intensity",
+      "label": "Glow intensity",
+      "options": [
+        {
+          "value": "subtle",
+          "label": "Subtle"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "strong",
+          "label": "Strong"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "range",
+      "id": "glow_animation_speed",
+      "min": 1,
+      "max": 6,
+      "step": 0.5,
+      "label": "Animation speed",
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "glow_animation_flip",
+      "label": "Vertical flip",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}

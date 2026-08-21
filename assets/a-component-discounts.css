@@ -1,0 +1,30 @@
+.atlas-isolation-wrapper .discounts {
+  font-size: 1.2rem;
+}
+
+.atlas-isolation-wrapper .discounts__discount {
+  display: flex;
+  align-items: center;
+  line-height: calc(1 + 0.5 / var(--atlas-font-body-scale));
+}
+
+.atlas-isolation-wrapper .discounts__discount svg {
+  color: rgba(var(--atlas-color-button), var(--atlas-alpha-button-background));
+}
+
+.atlas-isolation-wrapper .discounts__discount--position {
+  justify-content: center;
+}
+
+@media screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .discounts__discount--position {
+    justify-content: flex-end;
+  }
+}
+
+.atlas-isolation-wrapper .discounts__discount > .icon {
+  color: rgb(var(--atlas-color-foreground));
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-right: 0.7rem;
+}

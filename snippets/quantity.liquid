@@ -1,0 +1,27 @@
+{%- assign variant = product.selected_or_first_available_variant -%}
+
+<div class="quantity">
+	<button class="quantity-button" name="minus" type="button">
+		<span class="sr-only">{{ 'products.product.quantity.decrease' | t: product: product.title | escape }}</span>
+		{% render 'icon', code: 'minus' %}
+	</button>
+
+	<input class="quantity-input"
+		type="number"
+		name="quantity"
+		min="{{ variant.quantity_rule.min }}"
+		{% if variant.quantity_rule.max != null %}
+		max="{{ variant.quantity_rule.max }}"
+		{% endif %}
+		step="1"
+		value="1"
+		{% if form != nil %}
+		form={{ form }}
+		{%- endif -%}
+		data-noui>
+
+	<button class="quantity-button" name="plus" type="button">
+		<span class="sr-only">{{ 'products.product.quantity.increase' | t: product: product.title | escape }}</span>
+		{% render 'icon', code: 'plus' %}
+	</button>
+</div>

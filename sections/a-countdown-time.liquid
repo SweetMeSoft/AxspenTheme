@@ -1,0 +1,647 @@
+{% comment %}
+  Countdown Timer Section
+  Displays a countdown timer with customizable start/end times
+{% endcomment %}
+
+<style>
+  {% if request.visual_preview_mode %}
+    {% assign section_id_variable = 'id' %}
+    {% assign section_id_selector = '' %}
+  {% else %}
+    {% assign section_id_variable = section.id %}
+    {% assign section_id_selector = '#section-' | append: section.id %}
+  {% endif %}
+  {{ section_id_selector }} .countdown-section {
+    {% if section.settings.background_color_use_gradient %}
+      background: {{ section.settings.background_color_gradient }};
+    {% else %}
+      background-color: {{ section.settings.background_color }};
+    {% endif %}
+    color: {{ section.settings.text_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    padding-left: {{ section.settings.padding_left }}px;
+    padding-right: {{ section.settings.padding_right }}px;
+    text-align: center;
+  }
+
+  {{ section_id_selector }} .countdown-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 9px;
+    margin: 0 auto;
+  }
+
+  {{ section_id_selector }} .countdown-title {
+    font-size: {{ section.settings.font_size_text }}px;
+    font-weight: 400;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: {{ section.settings.text_color }};
+  }
+
+  {{ section_id_selector }} .countdown-display {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 9px;
+  }
+
+  {{ section_id_selector }} .countdown-unit {
+    display: flex;
+    gap: 4px;
+  }
+
+  {{ section_id_selector }} .countdown-number {
+    font-size: {{ section.settings.font_size_text }}px;
+    font-weight: 600;
+    line-height: 100%;
+    margin: 0;
+  }
+
+  {{ section_id_selector }} .countdown-label{
+    font-size: {{ section.settings.font_size_text }}px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 100%;
+    margin: 0;
+  }
+  {{ section_id_selector }} .countdown-separator {
+    font-size: {{ section.settings.font_size_text }}px;
+    font-weight: 600;
+    line-height: 100%;
+    margin: 0;
+    color: {{ section.settings.text_color }};
+  }
+
+  {{ section_id_selector }} .countdown-end-message {
+    font-size: {{ section.settings.font_size_text }}px;
+    color: {{ section.settings.text_color_end_timer }};
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    {{ section_id_selector }} .countdown-container {
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    {{ section_id_selector }} .countdown-display{
+      gap: 6px;
+    }
+    {{ section_id_selector }} .countdown-title {
+      font-size: {{ section.settings.font_size_text_mobile }}px;
+    }
+    {{ section_id_selector }} .countdown-separator {
+      font-size: {{ section.settings.font_size_text_mobile }}px;
+    }
+    {{ section_id_selector }} .countdown-number {
+      font-size: {{ section.settings.font_size_text_mobile }}px;
+    }
+    {{ section_id_selector }} .countdown-label {
+      font-size: {{ section.settings.font_size_text_mobile }}px;
+    }
+  }
+</style>
+{%- liquid
+  assign countdown_id = 'countdown-' | append: section_id_variable
+  assign start_time = section.settings.start_time
+  assign end_time = section.settings.end_time
+  assign end_action = section.settings.end_action
+  assign end_message = section.settings.end_message
+  assign show_hours = section.settings.show_hours
+  assign show_minutes = section.settings.show_minutes
+  assign show_seconds = section.settings.show_seconds
+  assign show_days = section.settings.show_days
+
+  comment
+    Calculate initial countdown values in Liquid to prevent layout shift
+  endcomment
+  assign now_timestamp = 'now' | date: '%s'
+  assign now_seconds = now_timestamp | plus: 0
+
+  comment
+    Determine if we should show the countdown
+  endcomment
+  assign should_show_countdown = false
+
+  if end_time != blank
+    assign end_timestamp = end_time | date: '%s'
+    assign end_seconds = end_timestamp | plus: 0
+
+    comment
+      Check if end time is in the past (invalid configuration)
+    endcomment
+    if end_seconds <= now_seconds
+      comment
+        Invalid configuration - end time is in the past or now
+        Don't show countdown
+      endcomment
+      assign should_show_countdown = false
+    elsif start_time != blank
+      assign start_timestamp = start_time | date: '%s'
+      assign start_seconds = start_timestamp | plus: 0
+
+      comment
+        Check if end time is before start time (invalid configuration)
+      endcomment
+      if end_seconds < start_seconds
+        comment
+          Invalid configuration - end time is before start time
+          Don't show countdown
+        endcomment
+        assign should_show_countdown = false
+      elsif now_seconds < start_seconds
+        comment
+          Before start time - don't show countdown
+        endcomment
+        assign should_show_countdown = false
+      else
+        comment
+          After start time - show time until end
+        endcomment
+        assign should_show_countdown = true
+        assign time_diff = end_seconds | minus: now_seconds
+      endif
+    else
+      comment
+        No start time - show time until end
+      endcomment
+      assign should_show_countdown = true
+      assign time_diff = end_seconds | minus: now_seconds
+    endif
+  endif
+
+  comment
+    Calculate days, hours, minutes, seconds only if we should show countdown
+  endcomment
+  if should_show_countdown
+    comment
+      Calculate days - only if show_days is enabled
+    endcomment
+    if show_days
+      assign initial_days = time_diff | divided_by: 86400
+      assign remaining_after_days = time_diff | modulo: 86400
+    else
+      assign initial_days = 0
+      assign remaining_after_days = time_diff
+    endif
+
+    comment
+      Calculate hours - if days are not shown, use total time for accurate hours
+    endcomment
+    if show_days
+      assign initial_hours = remaining_after_days | divided_by: 3600
+      assign remaining_seconds = remaining_after_days | modulo: 3600
+    else
+      assign initial_hours = time_diff | divided_by: 3600
+      assign remaining_seconds = time_diff | modulo: 3600
+    endif
+
+    assign initial_minutes = remaining_seconds | divided_by: 60
+    assign initial_seconds = remaining_seconds | modulo: 60
+
+    comment
+      Ensure values are not negative
+    endcomment
+    if initial_days < 0
+      assign initial_days = 0
+    endif
+    if initial_hours < 0
+      assign initial_hours = 0
+    endif
+    if initial_minutes < 0
+      assign initial_minutes = 0
+    endif
+    if initial_seconds < 0
+      assign initial_seconds = 0
+    endif
+  else
+    assign initial_days = 0
+    assign initial_hours = 0
+    assign initial_minutes = 0
+    assign initial_seconds = 0
+  endif
+-%}
+
+{% if should_show_countdown %}
+  <div id="section-{{ section.id }}">
+    <div class="countdown-section" id="{{ countdown_id }}">
+      <div class="countdown-container">
+        <div class="countdown-header">
+          {% if section.settings.title != blank %}
+            <h2 class="countdown-title">{{ section.settings.title | append: ' :' }}</h2>
+          {% endif %}
+        </div>
+        <div
+          class="countdown-timer"
+          data-start-time="{{ start_time }}"
+          data-end-time="{{ end_time }}"
+          data-end-action="{{ end_action }}"
+          data-end-message="{{ end_message }}"
+          data-initial-days="{{ initial_days }}"
+          data-initial-hours="{{ initial_hours }}"
+          data-initial-minutes="{{ initial_minutes }}"
+          data-initial-seconds="{{ initial_seconds }}"
+          data-server-time="{{ now_timestamp }}"
+        >
+          <div class="countdown-display">
+            {% if show_days and initial_days > 0 %}
+              <div class="countdown-unit">
+                <span class="countdown-number" id="days-{{ countdown_id }}">{{ initial_days }}</span>
+                <span class="countdown-label">Days</span>
+              </div>
+              {% if show_hours or show_minutes or show_seconds %}
+                <span class="countdown-separator">:</span>
+              {% endif %}
+            {% endif %}
+
+            {% if show_hours %}
+              <div class="countdown-unit">
+                <span class="countdown-number" id="hours-{{ countdown_id }}">{{ initial_hours }}</span>
+                <span class="countdown-label">Hrs</span>
+              </div>
+              {% if show_minutes or show_seconds %}
+                <span class="countdown-separator">:</span>
+              {% endif %}
+            {% endif %}
+
+            {% if show_minutes %}
+              <div class="countdown-unit">
+                <span class="countdown-number" id="minutes-{{ countdown_id }}">
+                  {{- initial_minutes | prepend: '00' | slice: -2, 2 -}}
+                </span>
+                <span class="countdown-label">Mins</span>
+              </div>
+              {% if show_seconds %}
+                <span class="countdown-separator">:</span>
+              {% endif %}
+            {% endif %}
+
+            {% if show_seconds %}
+              <div class="countdown-unit">
+                <span class="countdown-number" id="seconds-{{ countdown_id }}">
+                  {{- initial_seconds | prepend: '00' | slice: -2, 2 -}}
+                </span>
+                <span class="countdown-label">Secs</span>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="countdown-ended" id="ended-{{ countdown_id }}" style="display: none;">
+          <p class="countdown-end-message">{{ end_message | default: 'This offer has ended.' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const countdownElement = document.getElementById('{{ countdown_id }}');
+    if(!countdownElement) {
+      return;
+    }
+    const timerElement = countdownElement.querySelector('.countdown-timer');
+    const endedElement = countdownElement.querySelector('.countdown-ended');
+
+    const startTime = timerElement.dataset.startTime;
+    const endTime = timerElement.dataset.endTime;
+    const endAction = timerElement.dataset.endAction;
+    const endMessage = timerElement.dataset.endMessage;
+    const initialDays = parseInt(timerElement.dataset.initialDays) || 0;
+    const initialHours = parseInt(timerElement.dataset.initialHours) || 0;
+    const initialMinutes = parseInt(timerElement.dataset.initialMinutes) || 0;
+    const initialSeconds = parseInt(timerElement.dataset.initialSeconds) || 0;
+    const serverTime = parseInt(timerElement.dataset.serverTime) || 0;
+    const show_days = {{ show_days | json }};
+
+    let countdownInterval;
+    // Use the total time remaining in seconds (calculated by Liquid)
+    let currentTimeLeft = (initialDays * 86400) + (initialHours * 3600) + (initialMinutes * 60) + initialSeconds;
+
+
+    // Determine if we're initially counting to start time
+    let isCountingToStart = false;
+    if (startTime && endTime) {
+      const now = new Date().getTime();
+      const formattedStartTime = formatDateTime(startTime);
+      const start = new Date(formattedStartTime).getTime();
+      isCountingToStart = now < start;
+    }
+
+    // Helper function to add default time if only date is provided
+    function formatDateTime(dateTimeString) {
+      if (!dateTimeString || dateTimeString.trim() === '') return '';
+
+      // If it's just a date (YYYY-MM-DD), add default time
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateTimeString.trim())) {
+        return dateTimeString.trim() + ' 00:00:00';
+      }
+
+      // If it's date with partial time (YYYY-MM-DD HH), add minutes and seconds
+      if (/^\d{4}-\d{2}-\d{2} \d{2}$/.test(dateTimeString.trim())) {
+        return dateTimeString.trim() + ':00:00';
+      }
+
+      // If it's date with hours and minutes (YYYY-MM-DD HH:MM), add seconds
+      if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(dateTimeString.trim())) {
+        return dateTimeString.trim() + ':00';
+      }
+
+      return dateTimeString;
+    }
+
+    function updateCountdown() {
+      // Decrease the countdown by 1 second
+      currentTimeLeft--;
+
+      // Check if countdown has ended
+      if (currentTimeLeft <= 0) {
+        // If we were counting to start time, switch to counting to end time
+        if (isCountingToStart && startTime && endTime) {
+          const now = new Date().getTime();
+          const formattedEndTime = formatDateTime(endTime);
+          const end = new Date(formattedEndTime).getTime();
+          const timeLeft = end - now;
+
+          if (timeLeft > 0) {
+            currentTimeLeft = Math.floor(timeLeft / 1000);
+            isCountingToStart = false;
+            updateDisplay(currentTimeLeft * 1000);
+            return;
+          }
+        }
+
+        clearInterval(countdownInterval);
+        handleCountdownEnd();
+        return;
+      }
+
+      // Update display with current time left
+      updateDisplay(currentTimeLeft);
+    }
+
+    function updateDisplay(timeLeft) {
+      // timeLeft is already in seconds
+      const totalSeconds = timeLeft;
+
+      // Calculate days, hours, minutes, seconds using the same logic as Liquid
+      let days, hours, minutes, seconds;
+
+      if (show_days) {
+        // When days are shown, calculate normally
+        days = Math.floor(totalSeconds / 86400);
+        const remainingAfterDays = totalSeconds % 86400;
+        hours = Math.floor(remainingAfterDays / 3600);
+        minutes = Math.floor((remainingAfterDays % 3600) / 60);
+        seconds = remainingAfterDays % 60;
+      } else {
+        // When days are not shown, calculate hours from total time
+        days = 0;
+        hours = Math.floor(totalSeconds / 3600);
+        minutes = Math.floor((totalSeconds % 3600) / 60);
+        seconds = totalSeconds % 60;
+      }
+
+
+      const daysElement = countdownElement.querySelector('#days-{{ countdown_id }}');
+      const hoursElement = countdownElement.querySelector('#hours-{{ countdown_id }}');
+      const minutesElement = countdownElement.querySelector('#minutes-{{ countdown_id }}');
+      const secondsElement = countdownElement.querySelector('#seconds-{{ countdown_id }}');
+
+      if (daysElement) {
+        daysElement.textContent = days.toString();
+      }
+      if (hoursElement) {
+        hoursElement.textContent = hours.toString().padStart(2, '0');
+      }
+      if (minutesElement) {
+        minutesElement.textContent = minutes.toString().padStart(2, '0');
+      }
+      if (secondsElement) {
+        secondsElement.textContent = seconds.toString().padStart(2, '0');
+      }
+    }
+
+    function handleCountdownEnd() {
+      timerElement.style.display = 'none';
+      endedElement.style.display = 'block';
+
+      if (endMessage) {
+        const messageElement = endedElement.querySelector('.countdown-end-message');
+        messageElement.textContent = endMessage;
+      }
+
+      // Handle different end actions
+      switch(endAction) {
+        case 'hide_section':
+          countdownElement.style.display = 'none';
+          break;
+        case 'show_message':
+          // Already showing message
+          break;
+        case 'redirect':
+          // Add redirect functionality if needed
+          break;
+      }
+    }
+
+    // Start the countdown
+    if (endTime) {
+      // Update display immediately to fix any initial display issues
+      updateDisplay(currentTimeLeft);
+      updateCountdown();
+      countdownInterval = setInterval(updateCountdown, 1000);
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Countdown Timer",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Countdown Title",
+      "default": "LIMITED TIME",
+      "info": "The main title displayed above the countdown"
+    },
+    {
+      "type": "text",
+      "id": "start_time",
+      "label": "Start Time",
+      "info": "Format: YYYY-MM-DD HH:MM:SS (e.g., 2025-12-25 10:00:00). Leave empty to start immediately. If only date is provided, defaults to 00:00:00."
+    },
+    {
+      "type": "text",
+      "id": "end_time",
+      "label": "End Time",
+      "info": "Format: YYYY-MM-DD HH:MM:SS (e.g., 2025-12-31 23:59:59). If only date is provided, defaults to 23:59:59."
+    },
+    {
+      "type": "select",
+      "id": "end_action",
+      "label": "What happens when countdown ends",
+      "options": [
+        {
+          "value": "show_message",
+          "label": "Show message"
+        },
+        {
+          "value": "hide_section",
+          "label": "Hide entire section"
+        }
+      ],
+      "default": "show_message"
+    },
+    {
+      "type": "text",
+      "id": "end_message",
+      "label": "End Message",
+      "default": "This offer has ended.",
+      "info": "Message to show when countdown ends",
+      "visible_if": "{{ section.settings.end_action == 'show_message' }}"
+    },
+    {
+      "type": "header",
+      "content": "Display Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_days",
+      "label": "Show Days (when > 48 hours)",
+      "default": true,
+      "info": "Show days when countdown is greater than 48 hours"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hours",
+      "label": "Show Hours",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_minutes",
+      "label": "Show Minutes",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_seconds",
+      "label": "Show Seconds",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "font_size_text",
+      "label": "Font Size Text",
+      "min": 8,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "font_size_text_mobile",
+      "label": "Font Size Text Mobile",
+      "min": 8,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#1D1A2D"
+    },
+    {
+      "type": "checkbox",
+      "id": "background_color_use_gradient",
+      "label": "Use Gradient for Background Color",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "background_color_gradient",
+      "label": "Background Color Gradient",
+      "visible_if": "{{ section.settings.background_color_use_gradient }}",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color_end_timer",
+      "label": "Text Color End Timer",
+      "default": "#ff6b6b",
+      "visible_if": "{{ section.settings.end_action == 'show_message' }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Right",
+      "default": 20
+    }
+  ]
+}
+{% endschema %}

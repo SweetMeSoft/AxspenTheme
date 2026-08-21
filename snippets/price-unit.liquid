@@ -1,0 +1,15 @@
+{% comment %}
+	Use: {%- render 'price-unit', product: product -%}
+{% endcomment %}
+
+{%- if product.selected_or_first_available_variant.unit_price_measurement -%}
+	<span class="unit-price">
+		<i class="sr-only">{{- 'products.product.price.unit_price' | t -}}</i>
+		{%- render 'get-price', price: product.selected_or_first_available_variant.unit_price %}
+		 / <i class="sr-only">{{- 'accessibility.unit_price_separator' | t -}}</i>
+		{%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+			{{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+		{%- endif -%}
+		{{- product.selected_or_first_available_variant.unit_price_measurement.reference_unit -}}
+	</span>
+{%- endif -%}

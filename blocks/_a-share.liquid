@@ -1,0 +1,82 @@
+{% style %}
+  .product-block-{{ block.id }} {
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+  }
+  @media screen and (max-width: 768px) {
+    .product-block-{{ block.id }} {
+      padding-top: {{block.settings.padding_top_mobile }}px;
+      padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+    }
+  }
+{% endstyle %}
+{% assign product = closest.product %}
+<div class="product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+                  {% assign share_url = product.selected_variant.url | default: product.url | prepend: request.origin %}
+                  {% render 'a-share-button', block: block, share_link: share_url %}
+                </div>
+
+{% schema %}
+{
+  "name": "Share",
+  "tag": null,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "share_label",
+      "label": "Text",
+      "default": "Share"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Share Buttons",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

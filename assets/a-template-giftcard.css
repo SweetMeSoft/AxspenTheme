@@ -1,0 +1,415 @@
+/* Base */
+.atlas-isolation-wrapper *,
+.atlas-isolation-wrapper *::before,
+.atlas-isolation-wrapper *::after {
+  box-sizing: inherit;
+}
+
+.atlas-isolation-wrapper a:empty,
+.atlas-isolation-wrapper ul:empty,
+.atlas-isolation-wrapper dl:empty,
+.atlas-isolation-wrapper div:empty,
+.atlas-isolation-wrapper section:empty,
+.atlas-isolation-wrapper article:empty,
+.atlas-isolation-wrapper p:empty,
+.atlas-isolation-wrapper h1:empty,
+.atlas-isolation-wrapper h2:empty,
+.atlas-isolation-wrapper h3:empty,
+.atlas-isolation-wrapper h4:empty,
+.atlas-isolation-wrapper h5:empty,
+.atlas-isolation-wrapper h6:empty {
+  display: none;
+}
+
+.atlas-isolation-wrapper {
+  font-size: calc(var(--atlas-font-body-scale) * 62.5%);
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.atlas-isolation-wrapper {
+  background-color: rgb(var(--atlas-color-base-accent-1));
+  color: rgb(var(--atlas-color-base-text));
+  font-size: 1.5rem;
+  letter-spacing: 0.07rem;
+  line-height: calc(1 + 0.8 / var(--atlas-font-body-scale));
+  /*max-width: var(--atlas-page-width);*/
+  margin: 0 auto;
+  padding: 0 2rem;
+  flex: 1 0 auto;
+  font-family: var(--atlas-font-body-family);
+  font-style: var(--atlas-font-body-style);
+  font-weight: var(--atlas-font-body-weight);
+}
+
+@media only screen and (min-width: 750px) {
+  .atlas-isolation-wrapper {
+    font-size: 1.6rem;
+    line-height: calc(1 + 0.8 / var(--atlas-font-body-scale));
+    padding: 0 5rem;
+  }
+}
+
+.atlas-isolation-wrapper ::selection {
+  background-color: rgba(var(--atlas-color-base-text), 0.2);
+}
+
+.atlas-isolation-wrapper h1,
+.atlas-isolation-wrapper .h1,
+.atlas-isolation-wrapper h2,
+.atlas-isolation-wrapper .h2 {
+  font-family: var(--atlas-font-heading-family);
+  font-style: var(--atlas-font-heading-style);
+  font-weight: var(--atlas-font-heading-weight);
+  letter-spacing: calc(var(--atlas-font-heading-scale) * 0.06rem);
+  line-height: calc(1 + 0.3 / max(1, var(--atlas-font-heading-scale)));
+}
+
+.atlas-isolation-wrapper h1,
+.atlas-isolation-wrapper .h1 {
+  font-size: calc(var(--atlas-font-heading-scale) * 3rem);
+}
+
+@media only screen and (min-width: 750px) {
+  .atlas-isolation-wrapper h1,
+  .atlas-isolation-wrapper .h1 {
+    font-size: calc(var(--atlas-font-heading-scale) * 4rem);
+  }
+}
+
+.atlas-isolation-wrapper h2,
+.atlas-isolation-wrapper .h2 {
+  font-size: calc(var(--atlas-font-heading-scale) * 2rem);
+}
+
+@media only screen and (min-width: 750px) {
+  .atlas-isolation-wrapper h2,
+  .atlas-isolation-wrapper .h2 {
+    font-size: calc(var(--atlas-font-heading-scale) * 2.4rem);
+  }
+}
+
+.atlas-isolation-wrapper .skip-to-content-link:focus {
+  z-index: 9999;
+  position: inherit;
+  overflow: auto;
+  width: auto;
+  height: auto;
+  clip: auto;
+}
+
+.atlas-isolation-wrapper .link {
+  cursor: pointer;
+  display: inline-block;
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+  padding: 0.4rem;
+  font-size: 1.6rem;
+  line-height: 1;
+  text-decoration: underline;
+  color: rgb(var(--atlas-color-base-outline-button-labels));
+}
+
+.atlas-isolation-wrapper .link:hover {
+  color: rgba(var(--atlas-color-base-outline-button-labels), 0.75);
+}
+
+.atlas-isolation-wrapper .button {
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  padding: 1.5rem 3rem;
+  text-decoration: none;
+  background-color: rgb(var(--atlas-color-base-accent-1));
+  box-shadow: 0 0 0 0.1rem rgb(var(--atlas-color-base-accent-1));
+  color: rgb(var(--atlas-color-base-solid-button-labels));
+  min-width: 12rem;
+  height: auto;
+  font-size: 1.5rem;
+  letter-spacing: 0.1rem;
+  line-height: calc(1 + 0.2 / var(--atlas-font-body-scale));
+}
+
+.atlas-isolation-wrapper .button::selection {
+  background-color: rgba(var(--atlas-color-base-solid-button-labels), 0.3);
+}
+
+.atlas-isolation-wrapper .button:hover {
+  box-shadow: 0 0 0 0.2rem rgb(var(--atlas-color-base-accent-1));
+}
+
+.atlas-isolation-wrapper .button--secondary {
+  color: rgb(var(--atlas-color-base-outline-button-labels));
+  box-shadow: 0 0 0 0.1rem rgb(var(--atlas-color-base-outline-button-labels));
+  background-color: transparent;
+}
+
+.atlas-isolation-wrapper .button--secondary::selection {
+  background-color: rgba(var(--atlas-color-base-outline-button-labels), 0.3);
+}
+
+.atlas-isolation-wrapper .button--secondary:hover {
+  box-shadow: 0 0 0 0.2rem rgb(var(--atlas-color-base-outline-button-labels));
+}
+
+.atlas-isolation-wrapper .gift-card {
+  padding-bottom: 3.4rem;
+}
+
+.atlas-isolation-wrapper .gift-card__title {
+  text-align: center;
+  word-break: break-word;
+  padding: 4rem 0 1.7rem;
+}
+
+@media only screen and (min-width: 990px) {
+  .atlas-isolation-wrapper .gift-card__title {
+    padding: 6rem 0 2.6rem;
+  }
+}
+
+.atlas-isolation-wrapper .gift-card__image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: rgb(var(--atlas-color-base-accent-1));
+  margin-bottom: 0.8rem;
+  margin: 0 auto;
+}
+
+@media only screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .gift-card__image-wrapper {
+    margin-bottom: 0;
+    width: 40rem;
+  }
+}
+
+.atlas-isolation-wrapper .gift-card__image {
+  max-width: 100%;
+  padding: 0 2rem;
+  height: auto;
+}
+
+@media only screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .gift-card__image {
+    padding: 0;
+  }
+}
+
+.atlas-isolation-wrapper .gift-card__heading {
+  font-weight: 400;
+  margin: 2.5rem 0 1rem;
+}
+
+.atlas-isolation-wrapper .gift-card__price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  line-height: calc(1 + 0.5 / var(--atlas-font-body-scale));
+  opacity: 0.85;
+}
+
+.atlas-isolation-wrapper .gift-card__price > p:first-child {
+  margin-bottom: 1rem;
+}
+
+@media only screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .gift-card__price {
+    font-size: 2rem;
+  }
+}
+
+.atlas-isolation-wrapper .gift-card__label:not(.badge) {
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.atlas-isolation-wrapper .gift-card__number {
+  background-color: transparent;
+  border: none;
+  color: rgb(var(--atlas-color-base-text));
+  font-size: 1.8rem;
+  font-weight: 400;
+  line-height: calc(1 + 0.6 / var(--atlas-font-body-scale));
+  text-align: center;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+@media only screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .gift-card__number {
+    font-size: 1.8rem;
+  }
+}
+
+.atlas-isolation-wrapper .gift-card__text {
+  margin-bottom: 4rem;
+  opacity: 0.7;
+}
+
+.atlas-isolation-wrapper .gift-card__information {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.atlas-isolation-wrapper .gift-card__label {
+  font-size: 1.3rem;
+  letter-spacing: 0.05rem;
+  font-weight: 500;
+  display: inline;
+  margin-left: 1rem;
+}
+
+.atlas-isolation-wrapper .badge {
+  border: 1px solid transparent;
+  margin: 1.7rem 0 1rem 1rem;
+  border-radius: 4rem;
+  display: inline-block;
+  font-size: 1.2rem;
+  letter-spacing: 0.1rem;
+  line-height: 1;
+  padding: 0.6rem 1.3rem;
+  text-align: center;
+  background-color: rgb(var(--atlas-color-base-accent-1));
+  border-color: rgba(var(--atlas-color-base-text), 0.04);
+  color: rgb(var(--atlas-color-base-text));
+}
+
+.atlas-isolation-wrapper .badge--inverse {
+  background-color: rgb(var(--atlas-color-base-text));
+  border-color: rgb(var(--atlas-color-base-text));
+  color: rgb(var(--atlas-color-base-accent-1));
+}
+
+.atlas-isolation-wrapper .caption-large {
+  font-size: 1.3rem;
+  line-height: calc(1 + 0.5 / var(--atlas-font-body-scale));
+  letter-spacing: 0.04rem;
+}
+
+.atlas-isolation-wrapper .gift-card__copy-code {
+  margin-bottom: 2.2rem;
+}
+
+.atlas-isolation-wrapper .gift-card__qr-code {
+  margin-top: 3rem;
+}
+
+@media only screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .gift-card__qr-code {
+    margin-top: 5rem;
+  }
+}
+
+.atlas-isolation-wrapper .gift-card__qr-code img {
+  margin: 0 auto;
+}
+
+.atlas-isolation-wrapper .gift_card__apple-wallet {
+  line-height: 0;
+  display: block;
+  margin-bottom: 5rem;
+}
+
+.atlas-isolation-wrapper .gift-card__buttons {
+  display: flex;
+  flex-direction: column;
+  max-width: 25rem;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+.atlas-isolation-wrapper .gift-card__buttons > .button:first-child {
+  display: block;
+  margin-bottom: 2rem;
+}
+
+/*
+  Focus ring - default (with offset)
+*/
+
+/* Fallback - for browsers that don't support :focus-visible, a fallback is set for :focus */
+.atlas-isolation-wrapper *:focus {
+  outline: 0;
+  box-shadow: none;
+}
+
+.atlas-isolation-wrapper *:focus-visible {
+  outline: 0.2rem solid rgba(var(--atlas-color-base-text), 0.5);
+  outline-offset: 0.3rem;
+  box-shadow: 0 0 0 0.3rem rgb(var(--atlas-color-base-accent-1)),
+  0 0 0.5rem 0.4rem rgba(var(--atlas-color-base-text), 0.3);
+}
+
+/* Fallback - for browsers that don't support :focus-visible, a fallback is set for :focus */
+.atlas-isolation-wrapper .focused, .no-js .atlas-isolation-wrapper *:focus {
+  outline: 0.2rem solid rgba(var(--atlas-color-foreground), 0.5);
+  outline-offset: 0.3rem;
+  box-shadow: 0 0 0 0.3rem rgb(var(--atlas-color-background)),
+  0 0 0.5rem 0.4rem rgba(var(--atlas-color-foreground), 0.3);
+}
+
+.atlas-isolation-wrapper .button:focus-visible {
+  box-shadow: 0 0 0 0.1rem rgb(var(--atlas-color-base-accent-1)),
+  0 0 0 0.3rem rgb(var(--atlas-color-base-accent-1)),
+  0 0 0.5rem 0.4rem rgba(var(--atlas-color-base-text), 0.3);
+}
+
+/* Negate the fallback side-effect for browsers that support :focus-visible */
+.no-js .atlas-isolation-wrapper *:focus:not(:focus-visible) {
+  outline: 0;
+  box-shadow: none;
+}
+
+.atlas-isolation-wrapper .button:focus {
+  box-shadow: 0 0 0 0.1rem rgb(var(--atlas-color-base-accent-1)),
+  0 0 0 0.3rem rgb(var(--atlas-color-base-accent-1)),
+  0 0 0.5rem 0.4rem rgba(var(--atlas-color-base-text), 0.3);
+}
+
+.atlas-isolation-wrapper .button--secondary:focus-visible {
+  box-shadow: 0 0 0 0.1rem rgb(var(--atlas-color-base-outline-button-labels)),
+  0 0 0 0.3rem rgb(var(--atlas-color-base-accent-1)),
+  0 0 0.5rem 0.4rem rgba(var(--atlas-color-base-text), 0.3);
+}
+
+.atlas-isolation-wrapper .button--secondary:focus {
+  box-shadow: 0 0 0 0.1rem rgb(var(--atlas-color-base-outline-button-labels)),
+  0 0 0 0.3rem rgb(var(--atlas-color-base-accent-1)),
+  0 0 0.5rem 0.4rem rgba(var(--atlas-color-base-text), 0.3);
+}
+
+.atlas-isolation-wrapper .form__message {
+  align-items: center;
+  display: flex;
+  font-size: 1.2rem;
+  line-height: 1;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.atlas-isolation-wrapper .form__message .icon {
+  flex-shrink: 0;
+  height: 1.3rem;
+  margin-right: 0.5rem;
+  width: 1.3rem;
+}
+
+@media print {
+  .atlas-isolation-wrapper .no-print {
+    display: none;
+  }
+}
+
+.atlas-isolation-wrapper .gradient {
+  background: rgb(var(--atlas-color-base-accent-1));
+  background-attachment: fixed;
+}

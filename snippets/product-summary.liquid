@@ -1,0 +1,760 @@
+{%- liquid
+	assign section_id      = '#shopify-section-' | append: section.id
+	assign product_form_id = 'product-form-' | append: section.id
+
+	capture saved_number
+		render 'saved-price'
+	endcapture
+-%}
+
+<div class="product-summary{% if class != blank %} {{ class }}{% endif %}">
+	<div class="product-summary-inner text-{{ section.settings.alignment }}{% if section.settings.sticky_content %} is-sticky{% endif %}" data-url="{{ shop.url | append: product.url }}" data-selected-id="{{ product.selected_or_first_available_variant.id }}">
+		<div class="sr-only">
+			{%- liquid
+				if product.featured_media
+					echo product.featured_media | image_url: width: 1066 | image_tag: loading: 'lazy', class: 'product-image'
+				else
+					echo 'image' | placeholder_svg_tag: 'placeholder-svg product-image'
+				endif
+			-%}
+		</div>
+
+		{%- for block in section.blocks -%}
+			{%- liquid
+				capture text_transform
+					if block.settings.text_transform == 'uppercase' or block.settings.text_transform == 'capitalize'
+						echo block.settings.text_transform | prepend: ' text-'
+					endif
+				endcapture
+
+				assign current_variant = product.selected_or_first_available_variant
+
+				capture tags_handle
+					echo product.tags | join: ', '
+				endcapture
+			-%}
+
+			<div class="summary-item {{ block.type }}{% if saved_number == blank and block.type == 'sale-label' %} hidden{% endif %}" data-{{ block.id }} {{ block.shopify_attributes }}>
+				{%- case block.type -%}
+					{%- when '@app' -%}
+						<div class="product-block">
+							{%- render block -%}
+						</div>
+					{%- when 'sale-label' -%}
+						<span class="product-sale-label{{ text_transform }}">
+							<span class="sr-only">{{ 'products.product.on_sale' | t }}: </span>
+							<span class="sale-total">{{ 'products.product.price.saved_price_html' | t: saved_price: saved_number }}%</span>
+						</span>
+					{%- when 'text' -%}
+						{%- if block.settings.text != blank -%}
+							<p class="product-text{{ text_transform }}">
+								{{- block.settings.text -}}
+							</p>
+						{%- endif -%}
+					{%- when 'title' -%}
+						<h1 class="product-title{{ text_transform }}">
+							{{- product.title | escape -}}
+						</h1>
+					{%- when 'price' -%}
+						{%- render 'price', product: product, use_variant: true -%}
+
+						{%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
+							<div class="tax-note">
+								{%- liquid
+									if cart.taxes_included
+										echo 'products.product.include_taxes' | t
+									endif
+
+									if shop.shipping_policy.body != blank
+										echo 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url
+									endif
+								-%}
+							</div>
+						{%- endif -%}
+
+						{%- form 'product', product, id: 'product-form-installment', class: 'installment' -%}
+							<input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+							{{ form | payment_terms }}
+						{%- endform -%}
+					{%- when 'description' -%}
+						{%- if product.description != blank -%}
+							<div class="product-description">
+								{{- product.description -}}
+							</div>
+						{%- endif -%}
+					{%- when 'availability' -%}
+						{%- liquid
+							capture icon_tick
+								echo '<span class="availability-icon icon-tick">'
+									render 'icon', code: 'tick'
+								echo '</span>'
+							endcapture
+
+							capture icon_close
+								echo '<span class="availability-icon icon-close">'
+									render 'icon', code: 'close'
+								echo '</span>'
+							endcapture
+						-%}
+
+						<div class="product-availability">
+							{%- if product.available -%}
+								{%- liquid
+									assign should_calculate_inventory = true
+
+									for variant in product.variants
+										if variant.inventory_policy == 'continue' or variant.inventory_management == null
+											assign should_calculate_inventory = false
+											break
+										endif
+									endfor
+								-%}
+
+								{%- if should_calculate_inventory and block.settings.low_stock > 0 -%}
+									{%- liquid
+										assign all_inventory = 0
+
+										for variant in product.variants
+											if variant.inventory_management
+												assign all_inventory = variant.inventory_quantity | at_least: 0 | plus: all_inventory
+											endif
+										endfor
+									-%}
+
+									{%- if all_inventory <= block.settings.low_stock -%}
+										<span class="product-stock-status inventory--low">{{- icon_close -}}<span class="stock-status-text">{{- 'products.product.low_stock_with_quantity_count' | t: count: all_inventory -}}</span></span>
+									{%- else -%}
+										<span class="product-stock-status inventory--high">{{- icon_tick -}}<span class="stock-status-text">{{- 'products.product.in_stock_with_quantity_count' | t: count: all_inventory -}}</span></span>
+									{%- endif -%}
+								{%- else -%}
+									{%- if product.variants.first.inventory_policy == 'continue' and product.variants.first.inventory_quantity <= 0 and product.variants.first.requires_shipping -%}
+										<span class="product-stock-status inventory--high">{{- icon_tick -}}<span class="stock-status-text">{{- 'products.product.oversell_stock' | t -}}</span></span>
+									{%- else -%}
+										<span class="product-stock-status inventory--high">{{- icon_tick -}}<span class="stock-status-text">{{- 'products.product.in_stock' | t -}}</span></span>
+									{%- endif -%}
+								{%- endif -%}
+							{%- else -%}
+								<span class="product-stock-status inventory--low">{{- icon_close -}}<span class="stock-status-text">{{- 'products.product.out_of_stock' | t -}}</span></span>
+							{%- endif -%}
+						</div>
+					{%- when 'divider' -%}
+						<div class="product-divider"></div>
+					{%- when 'information' -%}
+						<div class="product-information">
+							{%- if block.settings.vendor -%}
+								<div class="info-item product-vendor">
+									<span class="info-name">{{- 'products.product.information.vendor' | t -}}:</span>
+
+									{{- product.vendor | link_to_vendor: class: "product-vendor-link" -}}
+								</div>
+							{%- endif -%}
+
+							{%- if block.settings.collections and product.collections.first -%}
+								<div class="info-item product-collections">
+									<span class="info-name">{{- 'products.product.information.collections' | t -}}:</span>
+
+									{%- for cat in product.collections -%}
+										<a href="{{ cat.url }}">{{ cat.title }}</a>{% unless forloop.last %}, {% endunless %}
+									{%- endfor -%}
+								</div>
+							{%- endif -%}
+
+							{%- if block.settings.tags and tags_handle != blank -%}
+								<div class="info-item product-tags">
+									<span class="info-name">{{- 'products.product.information.tags' | t -}}:</span>
+									<span class="info-value">{{- tags_handle -}}</span>
+								</div>
+							{%- endif -%}
+
+							{%- if block.settings.type and product.type != blank -%}
+								<div class="info-item product-type">
+									<span class="info-name">{{- 'products.product.information.type' | t -}}:</span>
+									<span class="info-value">{{- product.type -}}</span>
+								</div>
+							{%- endif -%}
+
+							{%- if block.settings.sku and current_variant.sku != blank -%}
+								<div class="info-item product-sku">
+									<span class="info-name">{{- 'products.product.information.sku' | t -}}:</span>
+									<span class="info-value">{{- current_variant.sku -}}</span>
+								</div>
+							{%- endif -%}
+
+							{%- if block.settings.barcode and current_variant.barcode != blank -%}
+								<div class="info-item product-barcode">
+									<span class="info-name">{{- 'products.product.information.barcode' | t -}}:</span>
+									<span class="info-value">{{- current_variant.barcode -}}</span>
+								</div>
+							{%- endif -%}
+						</div>
+					{%- when 'custom-liquid' -%}
+						<div class="product-custom-liquid">
+							{{- block.settings.custom-liquid -}}
+						</div>
+					{%- when 'collapsible-tab' -%}
+						<details class="product-accordion">
+							<summary class="accordion-summary" aria-expanded="false">
+								{%- liquid
+									if block.settings.icon != 'none'
+										render 'icon-accordion', icon: block.settings.icon
+									endif
+								-%}
+
+								<h4 class="accordion-title">
+									{{- block.settings.heading | default: block.settings.page.title -}}
+								</h4>
+
+								<span class="accordion-caret">
+									<span class="plus">{%- render 'icon', code: 'plus' -%}</span>
+									<span class="minus">{%- render 'icon', code: 'minus' -%}</span>
+								</span>
+							</summary>
+
+							<div class="accordion-content details-content rte">
+								{{- block.settings.content -}}
+								{{- block.settings.page.content -}}
+							</div>
+						</details>
+					{%- when 'popup' -%}
+						<div class="product-popup">
+							<button class="popup-toggle link-underline-transparent" type="button" aria-haspopup="dialog">
+								{%- render 'icon', code: 'info' -%}
+								{{- block.settings.text | default: block.settings.page.title -}}
+							</button>
+
+							{%- if block.settings.page != blank -%}
+								<div class="popup-view">
+									<div class="popup-inner">
+										<button type="button" class="popup-close primary-button" aria-label="{{- 'accessibility.close' | t -}}">
+											{%- render 'icon', code: 'close-thin' -%}
+										</button>
+
+										<div class="popup-content">
+											<h2 class="popup-heading text-center">{{- block.settings.page.title -}}</h2>
+
+											{{ block.settings.page.content }}
+										</div>
+									</div>
+								</div>
+							{%- endif -%}
+						</div>
+					{%- when 'share' -%}
+						<div class="product-share" data-{{ block.settings.type }}>
+							{%- if block.settings.type == 'os' -%}
+								<button class="share-button link-underline hidden">
+									{%- render 'icon', code: 'share' -%}
+									{{- block.settings.share_label | escape -}}
+								</button>
+
+								<details>
+									<summary class="share-button link-underline hidden">
+										{% render 'icon', code: 'share' %}
+										{{ block.settings.share_label | escape }}
+									</summary>
+
+									<div class="share-content">
+										<div class="share-field">
+											<span class="share-message hidden" role="status"></span>
+
+											<input type="text" class="field-input" id="share-url-{{ section.id }}"
+												value="{{ shop.url | append: product.url }}{% unless product.has_only_default_variant %}?variant={{ product.selected_or_first_available_variant.id }}{% endunless %}"
+												placeholder="{{ 'general.share.share_url' | t }}"
+												onclick="this.select();"
+												readonly />
+											<label class="field-label" for="share-url-{{ section.id }}">{{ 'general.share.share_url' | t }}</label>
+										</div>
+
+										<span class="share-button-close hidden">
+											{% render 'icon', code: 'close-thin' %}
+											<span class="sr-only">{{ 'general.share.close' | t }}</span>
+										</span>
+
+										<span class="share-button-copy">
+											{% render 'icon', code: 'clipboard' %}
+											<span class="sr-only">{{ 'general.share.copy_to_clipboard' | t }}</span>
+										</span>
+									</div>
+								</details>
+							{%- else -%}
+								{%- liquid
+									assign product_url = shop.url | append: product.url
+								-%}
+
+								<ul class="social-media-list" role="list">
+									<li>
+										<a href="//facebook.com/sharer/sharer.php?u={{ product_url }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.facebook' | t }}">
+											{%- render 'icon', code: 'facebook' -%}
+											<span class="tooltip tooltip-top">{{- 'general.social.links.facebook' | t -}}</span>
+										</a>
+									</li>
+
+									<li>
+										<a href="//twitter.com/intent/tweet?text={{ product.title }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.twitter' | t }}">
+											{%- render 'icon', code: 'twitter' -%}
+											<span class="tooltip tooltip-top">{{- 'general.social.links.twitter' | t -}}</span>
+										</a>
+									</li>
+
+									<li>
+										<a href="//linkedin.com/shareArticle?mini=true&url={{ product_url }}&title={{ product.title }}&summary={{ product.description | strip_html }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.linkedin' | t }}">
+											{%- render 'icon', code: 'linkedin' -%}
+											<span class="tooltip tooltip-top">{{- 'general.social.links.linkedin' | t -}}</span>
+										</a>
+									</li>
+
+									<li>
+										<a href="//pinterest.com/pin/create/button/?url={{ product_url }}&media={{ product.featured_media | image_url: width: 1024 }}&description={{ product.description | strip_html }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.pinterest' | t }}">
+											{%- render 'icon', code: 'pinterest' -%}
+											<span class="tooltip tooltip-top">{{- 'general.social.links.pinterest' | t -}}</span>
+										</a>
+									</li>
+
+									<li>
+										<a href="mailto:info@example.com?&subject=&cc=&bcc=&body={{ product_url }}%0A{{ product.title }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.email' | t }}">
+											{%- render 'icon', code: 'email' -%}
+											<span class="tooltip tooltip-top">{{- 'general.social.links.email' | t -}}</span>
+										</a>
+									</li>
+								</ul>
+							{%- endif -%}
+						</div>
+					{%- when 'variant-picker' -%}
+						{%- unless product.has_only_default_variant -%}
+							{%- liquid
+								assign swatch_trigger = 'products.product.swatch.color_swatch_trigger' | t | handle
+								assign swatch         = settings.swatch_type
+							-%}
+
+							<div class="product-variants variant-{{ block.settings.picker_type }} swatches-{{ settings.swatch_style }}" data-section-id="{{ section.id }}" data-url="{{ product.url }}">
+								{%- for option in product.options_with_values -%}
+									{%- liquid
+										assign option_name    = option.name | handle
+										assign selected_value = option.selected_value
+										assign variant_option = 'option' | append: forloop.index
+										assign id             = 'option-' | append : section.id | append: '-' | append: forloop.index
+									-%}
+
+									<div class="variant-field">
+										{%- if block.settings.picker_type == 'swatch' -%}
+											<div class="field-title">
+												{{- option.name -}}:
+												<span class="selected-value">{{- selected_value -}}</span>
+											</div>
+
+											<div class="field-wrap">
+												<div class="field-wrap-inner">
+													{%- for value in option.values -%}
+														{%- liquid
+															assign is_sold_out  = false
+															if product.variants.size >= 250 and value.available == false
+																assign is_sold_out = true
+															endif
+
+															# Check variant name is a valid color value.
+															assign value_to_rgb = value | handle | remove: '-' | color_to_rgb
+
+															# Get featured image of current variant
+															assign variant_for_value = nil
+															for variant in product.variants
+																if variant[variant_option] == value
+																	assign variant_for_value = variant
+
+																	break
+																endif
+															endfor
+														-%}
+
+														<input type="radio" id="{{ id | append: forloop.index }}"
+															name="{{ option.name | escape }}"
+															value="{{ value | escape }}"
+															form="{{ product_form_id }}"
+															data-option-value-id="{{ value.id }}"
+															class="field-value sr-only"{% if selected_value == value %} checked{% endif %}>
+
+														{%- liquid
+															case swatch
+																when 'color'
+																	### Color first ###
+																	if value.swatch.color
+																		assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+																		assign contrast     = swatch_value | color_contrast: '#ffffff'
+																		assign swatch_type  = 'color'
+																	elsif value_to_rgb
+																		assign swatch_value = value_to_rgb
+																		assign swatch_type  = 'color'
+																	elsif value.swatch.image
+																		assign image_url          = value.swatch.image | image_url: width: 100
+																		assign swatch_value       = 'url(' | append: image_url | append: ')'
+																		assign swatch_focal_point = value.swatch.image.presentation.focal_point
+																		assign swatch_type        = 'image'
+																	elsif variant_for_value.featured_media
+																		assign image_url          = variant_for_value.featured_media | image_url: width: 100
+																		assign swatch_value       = 'url(' | append: image_url | append: ')'
+																		assign swatch_focal_point = variant_for_value.featured_media.presentation.focal_point
+																		assign swatch_type        = 'image'
+																	else
+																		assign swatch_value = null
+																		assign swatch_type  = 'button'
+																	endif
+																when 'image'
+																	### Image is first ###
+																	if value.swatch.image
+																		assign image_url          = value.swatch.image | image_url: width: 100
+																		assign swatch_value       = 'url(' | append: image_url | append: ')'
+																		assign swatch_focal_point = value.swatch.image.presentation.focal_point
+																		assign swatch_type        = 'image'
+																	elsif variant_for_value.featured_media
+																		assign image_url          = variant_for_value.featured_media | image_url: width: 100
+																		assign swatch_value       = 'url(' | append: image_url | append: ')'
+																		assign swatch_focal_point = variant_for_value.featured_media.presentation.focal_point
+																		assign swatch_type        = 'image'
+																	elsif value.swatch.color
+																		assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+																		assign contrast     = swatch_value | color_contrast: '#ffffff'
+																		assign swatch_type  = 'color'
+																	elsif value_to_rgb
+																		assign swatch_value = value_to_rgb
+																		assign swatch_type  = 'color'
+																	else
+																		assign swatch_value = null
+																		assign swatch_type  = 'button'
+																	endif
+															endcase
+														-%}
+
+														{%- if option_name == swatch_trigger and swatch == 'color' or option_name == swatch_trigger and swatch == 'image' -%}
+															<label class="field-label {% if swatch_type == 'button' %}field-button{% else %}swatch swatch-{{ swatch_type }}{% endif %}{% if swatch_type == 'color' and contrast < 4.5 %} dark{% endif %}{% if is_sold_out %} soldout{% endif %}" for="{{ id | append: forloop.index }}"{% if swatch_value %} style="--swatch--background: {{ swatch_value }};{% if swatch_focal_point %}--swatch-focal-point: {{ swatch_focal_point }};{% endif %}"{% endif %}>
+																<span class="{% if swatch_value %}sr-only{% else %}swatch-text{% endif %}">{{- value -}}</span>
+															</label>
+														{%- else -%}
+															<label class="field-label field-button{% if is_sold_out %} soldout{% endif %}" for="{{ id | append: forloop.index }}">{{- value -}}</label>
+														{%- endif -%}
+													{%- endfor -%}
+												</div>
+											</div>
+										{%- else -%}
+											<div class="field-title">
+												{{- option.name -}}:
+												<span class="selected-value">{{- selected_value -}}</span>
+											</div>
+
+											<div class="field-wrap">
+												<select class="field-value" name="[{{ option.name | escape }}]" form="{{ product_form_id }}" data-noui>
+													{%- for value in option.values -%}
+														<option value="{{ value | escape }}" {% if selected_value == value %}selected="selected"{% endif %}>
+															{{- value -}}
+														</option>
+													{%- endfor -%}
+												</select>
+											</div>
+										{%- endif -%}
+									</div>
+								{%- endfor -%}
+							</div>
+
+							{%- if product.variants.size < 250 -%}
+								{% comment %} Product variant data {% endcomment %}
+								<script data-product-variants>
+									{{ product.variants | json }}
+								</script>
+
+								{% comment %} Product quantity data {% endcomment %}
+								<script data-inventory-quantity>
+									[{%- liquid
+										for var in product.variants
+											echo '{"id":' | append: var.id | append: ',"qty":' | append: var.inventory_quantity | append: '}'
+
+											unless forloop.last
+												echo ','
+											endunless
+										endfor
+									-%}]
+								</script>
+							{%- endif -%}
+						{%- endunless -%}
+					{%- when 'add-to-cart' -%}
+						{%- liquid
+							assign form_class = 'product-buy'
+
+							if product.selected_or_first_available_variant.available == false
+								assign form_class = 'product-buy disabled'
+							endif
+						-%}
+
+						<div class="product-warning error-message message"></div>
+
+						{%- form 'product', product, id: product_form_id, class: form_class, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+							<input type="hidden"
+								class="main-input-product-id"
+								name="id"
+								value="{{ product.selected_or_first_available_variant.id }}"
+								{% if product.variants.size >= 250 and current_variant.featured_media %}
+								data-media-id="{{ current_variant.featured_media.id }}"
+								data-media-position="{{ current_variant.featured_media.position }}"
+								{% endif %} >
+
+							{%- liquid
+								if block.settings.show_gift_card and product.gift_card?
+									render 'gift-card-recipient-form', product: product, form: form, section: section
+								endif
+							-%}
+
+							<noscript>
+								<div class="no-js-select-variants{% if product.has_only_default_variant %} hidden{% endif %}">
+									<label for="no-js-option-{{ section.id }}">{{- 'products.product.product_variants' | t -}}:</label>
+
+									<select name="id" id="no-js-option-{{ section.id }}" form="{{ product_form_id }}" data-noui>
+										{%- for variant in product.variants -%}
+											<option value="{{ variant.id }}"
+												{% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+												{% if variant.available == false %}disabled{% endif %}>
+												{{- variant.title }}
+												{%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+												- {{ variant.price | money | strip_html -}}
+											</option>
+										{%- endfor -%}
+									</select>
+								</div>
+							</noscript>
+
+							<div class="item-field">
+								{%- if block.settings.quantity_selector -%}
+									<span class="field-title sr-only">
+										{{- 'products.product.quantity.label' | t -}}
+									</span>
+
+									<div class="product-quantity">
+										{%- render 'quantity' -%}
+									</div>
+								{%- endif -%}
+
+								<button type="submit" name="add" class="button add-to-cart-button primary-button{{ text_transform }}">
+									{%- liquid
+										if product.selected_or_first_available_variant.available
+											echo 'products.product.add_to_cart' | t
+										else
+											echo 'products.product.out_of_stock' | t
+										endif
+									-%}
+								</button>
+							</div>
+
+							{%- liquid
+								if block.settings.dynamic_checkout
+									echo form | payment_button
+								endif
+							-%}
+						{%- endform -%}
+					{%- when 'image-with-link' -%}
+						{%- liquid
+							assign tag = 'div'
+
+							if block.settings.url != blank
+								assign tag = 'a'
+							endif
+						-%}
+
+						<{{ tag }} class="custom-image"{% if block.settings.url != blank %} href="{{ block.settings.url | default: '#' }}"{% endif %}>
+							{%- liquid
+								if block.settings.image != blank and block.settings.image_width > 0
+									echo block.settings.image | image_url: width: block.settings.image_width | image_tag: loading: 'lazy'
+								else
+									echo 'collection-1' | placeholder_svg_tag: 'placeholder-svg'
+								endif
+							-%}
+						</{{ tag }}>
+					{%- when 'countdown' -%}
+						{%- liquid
+							assign countdown_title = block.settings.title
+							assign countdown_time  = block.settings.time
+
+							assign future_time_calc = 7 | times: 24 | times: 3600 | plus: 43200
+							assign future_time      = 'now' | date: '%s' | plus: future_time_calc
+
+							if countdown_time == blank
+								assign countdown_time = future_time | date: '%m/%d/%y %H:%M:%S'
+							endif
+						-%}
+
+						{%- if countdown_time != blank -%}
+							<div class="product-countdown countdown-time-wrap hidden">
+								{%- if countdown_title != blank -%}
+									<p class="countdown-title">{{- countdown_title | escape -}}</p>
+								{%- endif -%}
+
+								<div class="countdown-time" data-time="{{ countdown_time | escape }}">
+									<div class="time-block">
+										<span class="time-number days"></span>
+										<span class="time-text">{{- 'general.time.days' | t -}}</span>
+									</div>
+
+									<div class="time-block">
+										<span class="time-number hours"></span>
+										<span class="time-text">{{- 'general.time.hours' | t -}}</span>
+									</div>
+
+									<div class="time-block">
+										<span class="time-number minutes"></span>
+										<span class="time-text">{{- 'general.time.minutes' | t -}}</span>
+									</div>
+
+									<div class="time-block">
+										<span class="time-number seconds"></span>
+										<span class="time-text">{{- 'general.time.seconds' | t -}}</span>
+									</div>
+								</div>
+							</div>
+						{%- endif -%}
+					{%- when 'complementary' -%}
+						{%- liquid
+							assign is_collapsible = block.settings.make_collapsible_row
+							assign limit          = block.settings.product_list_limit
+							assign per_page       = block.settings.products_per_page
+							assign details_tag    = 'div'
+							assign summary_tag    = 'div'
+
+							if limit > per_page
+								assign is_carousel = true
+							endif
+
+							if is_collapsible
+								assign details_tag = 'details'
+								assign summary_tag = 'summary'
+							endif
+						-%}
+
+						<div class="complementary-products-container no-js-hidden" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ limit }}&intent=complementary">
+							{%- if recommendations.performed and recommendations.products_count > 0 -%}
+								{%- liquid
+									assign slides = recommendations.products_count | plus: 0.0 | divided_by: per_page | ceil
+								-%}
+
+								<{{ details_tag }} class="product-accordion" aria-label="{{ 'accessibility.complementary_products' | t }}"{% if is_collapsible %} open{% endif %}>
+									<{{ summary_tag }} class="accordion-summary" aria-expanded="true">
+										{%- liquid
+											if block.settings.icon != 'none'
+												render 'icon-accordion', icon: block.settings.icon
+											endif
+										-%}
+
+										<h4 class="accordion-title">
+											{{- block.settings.heading -}}
+										</h4>
+
+										{%- if is_collapsible -%}
+											<span class="accordion-caret">
+												<span class="plus">{%- render 'icon', code: 'chevron-down' -%}</span>
+												<span class="minus">{%- render 'icon', code: 'chevron-down' -%}</span>
+											</span>
+										{%- endif -%}
+									</{{ summary_tag }}>
+
+									<div class="accordion-content details-content">
+										<div class="complementary-products{% if is_carousel %} carousel-swiper{% endif %}">
+											{%- if is_carousel -%}
+												<template data-options data-custom-pagination>
+													{
+														{%- if slides > 1 -%}
+															"navigation": {
+																"nextEl": "{{ section_id }} [data-{{ block.id }}] .swiper-button-next",
+																"prevEl": "{{ section_id }} [data-{{ block.id }}] .swiper-button-prev"
+															},
+															"pagination": {
+																"el": "{{ section_id }} [data-{{ block.id }}] .swiper-pagination"
+															},
+														{%- endif -%}
+														"rewind": true,
+														"autoHeight": true,
+														"slidesPerView": 1,
+														"spaceBetween": 30
+													}
+												</template>
+											{%- endif -%}
+
+											<div class="complementary-products-inner{% if is_carousel %} swiper{% endif %}">
+												<div class="swiper-wrapper">
+													{%- for i in (1..slides) -%}
+														<div class="swiper-slide">
+															{%- for product in recommendations.products limit: per_page offset: continue -%}
+																{%- liquid
+																	assign featured_image = product.featured_media
+																-%}
+
+																<div class="complementary-card">
+																	{%- if featured_image != blank -%}
+																		<div class="card-media-wrapper">
+																			<div class="card-media {{ block.settings.image_ratio }}-media{% if settings.image_lazy %} lazy-image{% endif %}">
+																				{%- render 'lazy-image', image: featured_image, width: 960 -%}
+																			</div>
+
+																			{% comment %} Saved price {% endcomment %}
+																			{%- capture product_badge -%}
+																				{%- liquid
+																					capture saved_price
+																						render 'saved-price', product: product
+																					endcapture
+																				-%}
+
+																				{%- if product.available == false -%}
+																					<span class="badge sold-out" aria-hidden="true">{{- 'products.product.sold_out' | t -}}</span>
+																				{%- elsif product.compare_at_price > product.price and product.available -%}
+																					<span class="badge on-sale{% if saved_price == blank %} hidden{% endif %}" aria-hidden="true">
+																						<span class="sr-only">{{ 'products.product.on_sale' | t }}: </span>
+																						-<span class="saved-price">{{ saved_price | default: 0 }}</span>%
+																					</span>
+																				{%- endif -%}
+																			{%- endcapture -%}
+
+																			{%- if product_badge != blank -%}
+																				<div class="product-badge">{{- product_badge -}}</div>
+																			{%- endif -%}
+																		</div>
+																	{%- endif -%}
+
+																	<div class="card-content">
+																		<h4 class="product-title">
+																			<a href="{{ product.url | split: '?' | first }}" class="link-underline-transparent product-url">{{- product.title -}}</a>
+																		</h4>
+
+																		{%- render 'price', product: product -%}
+
+																		{%- if block.settings.show_add_to_cart -%}
+																			{%- form 'product', product, class: 'form-add-to-cart', novalidate: 'novalidate', data-type: 'add-to-cart-form', id: nil -%}
+																				<input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+																				{%- if product.available -%}
+																					{%- if product.has_only_default_variant -%}
+																						<button type="submit" name="add" class="submit add-to-cart-button">{{- 'products.product.add_to_cart' | t -}}</button>
+																					{%- else -%}
+																						<a href="{{ product.url | split: '?' | first }}" name="add" class="submit product-quick-view">{{- 'products.product.view_options' | t -}}</a>
+																					{%- endif -%}
+																				{%- else -%}
+																					<button type="submit" name="add" class="submit add-to-cart-button" disabled>{{- 'products.product.sold_out' | t -}}</button>
+																				{%- endif -%}
+																			{%- endform -%}
+																		{%- endif -%}
+																	</div>
+																</div>
+															{%- endfor -%}
+														</div>
+													{%- endfor -%}
+												</div>
+
+												{%- if slides > 1 -%}
+													<div class="swiper-controls">
+														<button class="swiper-button-prev">{%- render 'icon', code: 'chevron-left' -%}</button>
+														<div class="swiper-pagination"></div>
+														<button class="swiper-button-next">{%- render 'icon', code: 'chevron-right' -%}</button>
+													</div>
+												{%- endif -%}
+											</div>
+										</div>
+									</div>
+								</{{ details_tag }}>
+							{%- endif -%}
+						</div>
+				{%- endcase -%}
+			</div>
+		{%- endfor -%}
+	</div>
+</div>

@@ -1,0 +1,12 @@
+{% comment %}
+	Use:
+		{%- render 'get-price', price: 100 -%}
+{% endcomment %}
+
+{%- liquid
+	if settings.currency_code_enabled
+		echo price | money_with_currency
+	else
+		echo price | money
+	endif
+-%}

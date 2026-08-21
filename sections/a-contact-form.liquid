@@ -1,0 +1,773 @@
+{{ 'a-section-contact-form.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign global_heading_size = settings.enable_global_heading_font_size
+  assign global_body_size = settings.enable_global_body_font_size
+  assign global_color = settings.enable_global_color
+  assign padding_top = section.settings.padding_top | times: 0.75 | round: 0
+  assign padding_bottom = section.settings.padding_bottom | times: 0.75 | round: 0
+  assign section_id_variable = section.id
+-%}
+
+{% if request.visual_preview_mode %}
+  {% comment %} For rendering in the theme editor visual preview. {% endcomment %}
+  {% assign section_id_variable = 'id' %}
+{% endif %}
+
+<style>
+  .atlas-isolation-wrapper #section-{{ section.id }} .section-padding-{{ section_id_variable }} {
+    padding-top: {{ padding_top }}px;
+    padding-bottom:  {{ padding_bottom }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper #section-{{ section.id }} .section-padding-{{ section_id_variable }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom:  {{ section.settings.padding_bottom }}px;
+    }
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .main-conacts {
+    align-items: {{ section.settings.content_align_desktop }} !important;
+    gap: {{ section.settings.content_gap_desktop }}px !important;
+    {% if section.settings.image_first_desktop == false %}
+      flex-direction: row-reverse;
+    {% endif %}
+  }
+  @media screen and (max-width: 1024px) {
+    .atlas-isolation-wrapper #section-{{ section.id }} .main-conacts {
+      gap: {{ section.settings.content_gap_mobile }}px !important;
+      align-items: {{ section.settings.content_align_mobile }} !important;
+    }
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .contact__fields-{{ section_id_variable }} .field .field__label {
+    color: {{ section.settings.placeholder_color }} !important;
+    font-weight: 400 !important;
+    line-height: 100%;
+    top: calc(20px + var(--atlas-inputs-border-width));
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .contact__fields-{{ section_id_variable }} .field__input:focus ~ .field__label,.atlas-isolation-wrapper #section-{{ section.id }} .contact__fields-{{ section_id_variable }} .field__input:not(:placeholder-shown) ~ .field__label{
+    top: calc(var(--atlas-inputs-border-width) + 5px);
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .contact__fields-{{ section_id_variable }} .field:before {
+    {% if section.settings.input_border %}
+      border: 1px solid rgba({{ section.settings.borders_color.red }}, {{ section.settings.borders_color.green }}, {{ section.settings.borders_color.blue }}, {{ section.settings.borders_opacity | divided_by: 100.0 }}) !important;
+    {% else %}
+      border: none !important;
+    {% endif %}
+    box-shadow: none !important;
+    border-radius: {{ section.settings.input_border_radius }}px !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .contact__fields-{{ section_id_variable }} .field:after {
+    {% if section.settings.input_border %}
+      border: 1px solid rgba({{ section.settings.borders_color.red }}, {{ section.settings.borders_color.green }}, {{ section.settings.borders_color.blue }}, {{ section.settings.borders_opacity | divided_by: 100.0 }}) !important;
+    {% else %}
+      border: none !important;
+    {% endif %}
+    box-shadow: none !important;
+    border-radius: {{ section.settings.input_border_radius }}px !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+  }
+
+  .atlas-isolation-wrapper #section-{{ section.id }} .contact__fields-{{ section_id_variable }} .field .field__input:focus {
+    {% if section.settings.input_border %}
+      box-shadow: 0 0 0 0.5px rgba({{ section.settings.borders_color.red }}, {{ section.settings.borders_color.green }}, {{ section.settings.borders_color.blue }}, {{ section.settings.borders_opacity | divided_by: 100.0 }});
+    {% else %}
+      box-shadow: none !important;
+    {% endif %}
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .contact__fields-{{ section_id_variable }} .field .field__input {
+    background-color: {{ section.settings.input_background_color }} !important;
+    border-radius: {{ section.settings.input_border_radius }}px !important;
+    margin: 0 !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    font-weight: 400 !important;
+    line-height: 100%;
+    color: {{ section.settings.input_text_color }} !important;
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .main-conacts .contact.page-width{
+    width: 100% !important;
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .contactus-image {
+    max-width: {{ section.settings.contact_image_width_desktop }}px !important;
+    width: 100% !important;
+  }
+  @media screen and (max-width: 1024px) {
+    .atlas-isolation-wrapper #section-{{ section.id }} .contactus-image {
+      max-width: 100% !important;
+      width: 100% !important;
+   }
+    .atlas-isolation-wrapper #section-{{ section.id }} .main-conacts {
+      {% if section.settings.image_first_mobile %}
+        flex-direction: column-reverse;
+      {% else %}
+        flex-direction: column;
+      {% endif %}
+    }
+    .atlas-isolation-wrapper #section-{{ section.id }} .main-conacts .contact.page-width{
+      width: 100% !important;
+    }
+    .atlas-isolation-wrapper #section-{{ section.id }} .contact {
+      width: 100%;
+    }
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }}  .contactus-image-inner {
+    width: 100%;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .contactus-image-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media screen and (min-width: 1025px) {
+    .atlas-isolation-wrapper #section-{{ section.id }} .contactus-image-inner {
+      {% if section.settings.contact_image != blank and section.settings.image_height == 'adapt' %}
+        padding-bottom: {{ 1 | divided_by: section.settings.contact_image.aspect_ratio | times: 100 }}%;
+      {% endif %}
+      {% if section.settings.contact_image != blank and section.settings.image_height == 'small' %}
+        min-height: 489px;
+      {% elsif section.settings.contact_image != blank and section.settings.image_height == 'medium' %}
+        min-height: 639px;
+      {% elsif section.settings.contact_image != blank and section.settings.image_height == 'large' %}
+        min-height: 800px;
+      {% endif %}
+    }
+    .atlas-isolation-wrapper #section-{{ section.id }} .contactus-image-inner img {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+</style>
+
+<div id="section-{{ section.id }}">
+  <div
+    class="main-contatcs gradient section__contact_form"
+    style="{% if section.settings.use_gradient_background %}background: {{ section.settings.section_background_gradient }};{% else %}background-color: {{ section.settings.section_background_color }};{% endif %}"
+  >
+    <div class="main-conacts section-padding-{{ section_id_variable }} page-width">
+      <div class="contact" style="flex:1;">
+        {%- if section.settings.heading != blank -%}
+          <style>
+            .atlas-isolation-wrapper #section-heading-{{ section_id_variable }}{
+                font-size: {% if global_heading_size %}var(--atlas-font-heading-size)!important{% else %}{{ section.settings.heading_font_size }}px!important{% endif %};
+                line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-size) + 10px)!important{% else %}{{ section.settings.heading_font_size | plus: 10 }}px!important{% endif %};
+                color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ section.settings.heading_color }}{% endif %} !important;
+                margin: 0 auto {{ section.settings.space_between_heading_and_form_desktop }}px;
+                text-align: {{ section.settings.heading_alignment }};
+            }
+            .atlas-isolation-wrapper #section-heading-{{ section_id_variable }} strong {
+              {%- if section.settings.heading_use_gradient -%}
+                background: {% if section.settings.heading_gradient_color != blank %}{{ section.settings.heading_gradient_color }}{% else %}var(--atlas-gradient-base-background-1){% endif %};
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+              {% else %}
+                color: {{ section.settings.bolded_heading_color }};
+              {%- endif -%}
+            }
+            @media (max-width: 1024px) {
+              .atlas-isolation-wrapper #section-heading-{{ section_id_variable }}{
+                margin: 0 auto {{ section.settings.space_between_heading_and_form_mobile }}px;
+                font-size: {% if global_heading_size %}var(--atlas-font-heading-mob-size) !important{% else %}{{ section.settings.heading_mob_font_size }}px!important{% endif %};
+                line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-mob-size) + 10px) !important{% else %}{{ section.settings.heading_mob_font_size | plus: 10 }}px!important{% endif %};
+              }
+            }
+          </style>
+
+          <h2
+            id="section-heading-{{ section_id_variable }}"
+            class="title title-wrapper--no-top-margin "
+          >
+            {{ section.settings.heading }}
+          </h2>
+        {%- else -%}
+          <h2 class="visually-hidden">Contact form</h2>
+        {%- endif -%}
+        {%- form 'contact', id: 'ContactForm', class: 'isolate' -%}
+          <div class="contact__fields-{{ section_id_variable }}">
+            {%- if form.posted_successfully? -%}
+              <h2 class="form-status form-status-list form__message" tabindex="-1" autofocus>
+                {% render 'a-icon-success' %}
+                Thanks for contacting us. We'll get back to you as soon as possible.
+              </h2>
+            {%- elsif form.errors -%}
+              <div class="form__message">
+                <h2 class="form-status caption-large text-body" role="alert" tabindex="-1" autofocus>
+                  {% render 'a-icon-error' %}
+                  Please adjust the following:
+                </h2>
+              </div>
+              <ul class="form-status-list caption-large" role="list">
+                <li>
+                  <a href="#ContactForm-email" class="link">
+                    {{ form.errors.translated_fields.email | capitalize }}
+                    {{ form.errors.messages.email }}
+                  </a>
+                </li>
+              </ul>
+            {%- endif -%}
+            <div class="contact__fields ">
+              <div class="field">
+                <input
+                  class="field__input"
+                  autocomplete="name"
+                  type="text"
+                  id="ContactForm-first-name"
+                  name="contact[first_name]"
+                  value="{% if form.first_name %}{{ form.first_name }}{% elsif customer %}{{ customer.first_name }}{% endif %}"
+                  placeholder="Name"
+                >
+                <label class="field__label" for="ContactForm-first-name">First name</label>
+              </div>
+              <div class="field field--with-error">
+                <input
+                  class="field__input"
+                  autocomplete="last_name"
+                  type="text"
+                  id="ContactForm-last-name"
+                  name="contact[last_name]"
+                  value="{% if form.last_name %}{{ form.last_name }}{% elsif customer %}{{ customer.last_name }}{% endif %}"
+                  placeholder="Name"
+                >
+                <label class="field__label" for="ContactForm-last-name">Last name</label>
+              </div>
+            </div>
+            <div class="field">
+              <input
+                autocomplete="email"
+                type="email"
+                id="ContactForm-email"
+                class="field__input"
+                name="contact[email]"
+                spellcheck="false"
+                autocapitalize="off"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                aria-required="true"
+                {% if form.errors contains 'email' %}
+                  aria-invalid="true"
+                  aria-describedby="ContactForm-email-error"
+                {% endif %}
+                placeholder="Email"
+              >
+              <label class="field__label" for="ContactForm-email">
+                Email
+                <span aria-hidden="true">*</span></label
+              >
+              {%- if form.errors contains 'email' -%}
+                <small class="contact__field-error" id="ContactForm-email-error">
+                  <span class="visually-hidden">Error</span>
+                  <span class="form__message">
+                    {%- render 'a-icon-error' -%}
+                    {{- form.errors.translated_fields.email | capitalize }}
+                    {{ form.errors.messages.email -}}
+                  </span>
+                </small>
+              {%- endif -%}
+            </div>
+            <div class="field">
+              <input
+                type="tel"
+                id="ContactForm-phone"
+                class="field__input"
+                autocomplete="tel"
+                name="contact[Phone number]"
+                pattern="[0-9\-]*"
+                value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+                placeholder="Phone number"
+              >
+              <label class="field__label" for="ContactForm-phone">Phone number</label>
+            </div>
+            <div class="field">
+              <textarea
+                rows="10"
+                id="ContactForm-body"
+                class="text-area field__input"
+                name="contact[Comment]"
+                placeholder="Comment"
+                style="min-height: 203px !important;"
+              >
+          {{- form.body -}}
+        </textarea>
+              <label class="form__label field__label" for="ContactForm-body"> Comment </label>
+            </div>
+            <style>
+              .atlas-isolation-wrapper #section-{{ section_id_variable }} .contact__button button {
+                background-color: {{ section.settings.button_background_color }} !important;
+                color: {{ section.settings.button_text_color }} !important;
+                border-radius: {{ section.settings.button_border_radius }}px !important;
+                padding: {{ section.settings.button_padding_vertical }}px {{ section.settings.button_padding_horizontal }}px !important;
+                font-size: {{ section.settings.button_font_size }}px !important;
+              }
+              .atlas-isolation-wrapper #section-{{ section_id_variable }} .button.split-slide-button:hover {
+                box-shadow: 0 0 10px 2px rgba({{ section.settings.button_background_color.red }}, {{ section.settings.button_background_color.green }}, {{ section.settings.button_background_color.blue }}, 1.0), 0 0 0 1px rgba({{ section.settings.button_background_color.red }}, {{ section.settings.button_background_color.green }}, {{ section.settings.button_background_color.blue }}, 0.5) !important;
+              }
+              .atlas-isolation-wrapper #section-{{ section_id_variable }} .split-slide-button:hover .button-text{
+                color: {{ section.settings.button_text_color }} !important;
+              }
+              @media (max-width: 1024px) {
+                .atlas-isolation-wrapper #section-{{ section_id_variable }} .contact__button button {
+                  width: 100%;
+                }
+              }
+            </style>
+            <div class="contact__button">
+              <button
+                type="submit"
+                class="button{% if section.settings.button_full_width %} button--full-width{% endif %} "
+              >
+                <span class="button-text">
+                  {{ section.settings.button_text }}
+                </span>
+              </button>
+            </div>
+          </div>
+        {%- endform -%}
+      </div>
+      {% if section.settings.contact_image != blank %}
+        <div
+          style="overflow: hidden; border-radius: {{ section.settings.contact_image_border_radius }}px;"
+          class="contactus-image"
+        >
+          <div class="contactus-image-inner">
+            {{ section.settings.contact_image | image_url: width: 1000 | image_tag: width: 1000, height: 1000 }}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact us",
+  "class": "atlas-isolation-wrapper atlas-gradient",
+  "tag": "section",
+
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Get in touch with us",
+      "label": "Section heading"
+    },
+    {
+      "type": "image_picker",
+      "id": "contact_image",
+      "label": "Contact image",
+      "info": "Optional image to display alongside the contact form"
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium",
+      "label": "Image height"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_first_desktop",
+      "label": "Desktop image first",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "image_first_mobile",
+      "label": "Mobile image first",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "content_gap_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop gap between form and image",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "content_gap_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile gap between form and image",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "space_between_heading_and_form_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop space between heading and form",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "space_between_heading_and_form_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile space between heading and form",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "content_align_desktop",
+      "label": "Desktop content alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "select",
+      "id": "content_align_mobile",
+      "label": "Mobile content alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "header",
+      "content": "Image Settings"
+    },
+    {
+      "type": "range",
+      "id": "contact_image_width_desktop",
+      "label": "Desktop image width",
+      "min": 300,
+      "max": 900,
+      "step": 50,
+      "unit": "px",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "contact_image_border_radius",
+      "label": "Image corner roundness",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 10,
+      "info": "Higher values = more rounded corners"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "min": 20,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop heading size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_mob_font_size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile heading size",
+      "default": 28
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bolded_heading_color",
+      "label": "Bold text color in heading",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_use_gradient",
+      "label": "Use gradient for bold text in heading",
+      "info": "Any text formatted as bold within the heading will be converted to a gradient",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "heading_gradient_color",
+      "label": "Bold text gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "info": "Only visible when gradient is enabled",
+      "visible_if": "{{ section.settings.heading_use_gradient }}"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_background_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.use_gradient_background == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Form Inputs"
+    },
+    {
+      "type": "color",
+      "id": "input_background_color",
+      "label": "Input background color",
+      "default": "#F9F9F9"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Input text color",
+      "default": "#1D1A2D"
+    },
+    {
+      "type": "color",
+      "id": "placeholder_color",
+      "label": "Placeholder text color",
+      "default": "#686868"
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Input corner roundness",
+      "default": 6,
+      "info": "Higher values = more rounded corners"
+    },
+    {
+      "type": "checkbox",
+      "id": "input_border",
+      "label": "Show input borders",
+      "default": false,
+      "info": "Enable to add borders around form inputs"
+    },
+    {
+      "type": "color",
+      "id": "borders_color",
+      "label": "Input border color",
+      "default": "#EBEBEB",
+      "info": "Only visible when borders are enabled",
+      "visible_if": "{{ section.settings.input_border }}"
+    },
+    {
+      "type": "range",
+      "id": "borders_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Input border transparency",
+      "default": 10,
+      "info": "0% = invisible, 100% = fully visible",
+      "visible_if": "{{ section.settings.input_border }}"
+    },
+    {
+      "type": "header",
+      "content": "Submit Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Send Message"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_full_width",
+      "label": "Button full width",
+      "default": false,
+      "info": "Make the button span the full width of the form"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button text size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "button_background_color",
+      "label": "Button background color",
+      "default": "#484848"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button corner roundness",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 6,
+      "info": "Higher values = more rounded corners"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Button left/right padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Button top/bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 10,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 10,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 24
+    }
+  ]
+}
+{% endschema %}

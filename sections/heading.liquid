@@ -1,0 +1,264 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+	assign tag        = section.settings.tag
+	assign class      = ''
+	assign id         = ''
+
+	if section.settings.class != blank
+		assign class = section.settings.class | escape | prepend: ' '
+	endif
+
+	if section.settings.id != blank
+		assign id_handle = section.settings.id | handle | escape
+		assign id        = ' id="' | append: id_handle | append: '"'
+	endif
+-%}
+
+<style>
+	{{ section_id }} {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	{{ section_id }} .heading {
+		font-size: {{ section.settings.font_size_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+	}
+
+	{{ section_id }} .heading {
+		font-size: {{ section.settings.font_size }}px;
+		font-weight: {{ section.settings.font_weight }};
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="container">
+		<{{- tag }} class="heading text-{{ section.settings.alignment }}{{ class }}"{{ id }}>{{- section.settings.title -}}</{{- tag -}}>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.heading.name",
+	"class": "heading-section",
+	"tag": "section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "textarea",
+			"id": "title",
+			"default": "Add Your Heading Text Here",
+			"label": "t:sections.heading.settings.title.label"
+		},
+		{
+			"type": "select",
+			"id": "alignment",
+			"default": "center",
+			"label": "t:sections.heading.settings.alignment.label",
+			"options": [
+				{
+					"value": "left",
+					"label": "t:sections.heading.settings.alignment.options__1.label"
+				},
+				{
+					"value": "center",
+					"label": "t:sections.heading.settings.alignment.options__2.label"
+				},
+				{
+					"value": "right",
+					"label": "t:sections.heading.settings.alignment.options__3.label"
+				}
+			]
+		},
+		{
+			"type": "text",
+			"id": "class",
+			"label": "t:sections.heading.settings.class.label"
+		},
+		{
+			"type": "text",
+			"id": "id",
+			"label": "t:sections.heading.settings.id.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.heading.settings.header.content"
+		},
+		{
+			"type": "select",
+			"id": "tag",
+			"default": "h2",
+			"label": "t:sections.heading.settings.tag.label",
+			"options": [
+				{
+					"value": "h1",
+					"label": "t:sections.heading.settings.tag.options__1.label"
+				},
+				{
+					"value": "h2",
+					"label": "t:sections.heading.settings.tag.options__2.label"
+				},
+				{
+					"value": "h3",
+					"label": "t:sections.heading.settings.tag.options__3.label"
+				},
+				{
+					"value": "h4",
+					"label": "t:sections.heading.settings.tag.options__4.label"
+				},
+				{
+					"value": "h5",
+					"label": "t:sections.heading.settings.tag.options__5.label"
+				},
+				{
+					"value": "h6",
+					"label": "t:sections.heading.settings.tag.options__6.label"
+				},
+				{
+					"value": "div",
+					"label": "t:sections.heading.settings.tag.options__7.label"
+				},
+				{
+					"value": "span",
+					"label": "t:sections.heading.settings.tag.options__8.label"
+				},
+				{
+					"value": "p",
+					"label": "t:sections.heading.settings.tag.options__9.label"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 30,
+			"unit": "px",
+			"label": "t:sections.heading.settings.font_size.label"
+		},
+		{
+			"type": "range",
+			"id": "font_size_mobile",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:sections.heading.settings.font_size_mobile.label"
+		},
+		{
+			"type": "select",
+			"id": "font_weight",
+			"default": "700",
+			"label": "t:general.typography.font_weight.label",
+			"options": [
+				{
+					"value": "100",
+					"label": "t:general.typography.font_weight.option_1.label"
+				},
+				{
+					"value": "200",
+					"label": "t:general.typography.font_weight.option_2.label"
+				},
+				{
+					"value": "300",
+					"label": "t:general.typography.font_weight.option_3.label"
+				},
+				{
+					"value": "400",
+					"label": "t:general.typography.font_weight.option_4.label"
+				},
+				{
+					"value": "500",
+					"label": "t:general.typography.font_weight.option_5.label"
+				},
+				{
+					"value": "600",
+					"label": "t:general.typography.font_weight.option_6.label"
+				},
+				{
+					"value": "700",
+					"label": "t:general.typography.font_weight.option_7.label"
+				},
+				{
+					"value": "800",
+					"label": "t:general.typography.font_weight.option_8.label"
+				},
+				{
+					"value": "900",
+					"label": "t:general.typography.font_weight.option_9.label"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.heading.presets.name"
+		}
+	]
+}
+{% endschema %}

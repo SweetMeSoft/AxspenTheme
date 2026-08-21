@@ -1,0 +1,306 @@
+<!-- start _reasons-to-buy-product-card.liquid -->
+<style>
+  {% if request.visual_preview_mode %}
+    {% assign section_id_selector = '' %}
+    {% assign section_id_variable = 'id' %}
+  {% else %}
+    {% assign section_id_selector = '#shopify-section-' | append: section.id %}
+    {% assign section_id_variable = section.id %}
+  {% endif %}
+  {{ section_id_selector }} .reasons-to-buy__image-card {
+     display: flex;
+     gap: 19px;
+     {% if block.settings.card_has_gradient %}
+     background: {{ block.settings.card_gradient | default: 'linear-gradient(180deg, #EA3885 0%, #5F4DBC 100%)' }};
+     {% else %}
+     background: {{ block.settings.card_background_color }};
+     {% endif %}
+     border-radius:{{ block.settings.card_border_radius }}px;
+     width: 100%;
+     padding: 12px 11px;
+     position: relative;
+     cursor: pointer;
+     text-decoration: none;
+     align-items: center;
+   }
+   {{ section_id_selector }} .reasons-to-buy__image-thumbnail {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 88px;
+     height: 79px;
+     position: relative;
+     border-radius: {{ block.settings.thumbnail_border_radius }}px;
+     overflow: hidden;
+     flex-shrink: 0;
+   }
+   {{ section_id_selector }} .reasons-to-buy__image-thumbnail img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+   }
+   {{ section_id_selector }} .reasons-to-buy__image-description {
+     display: flex;
+     flex-direction: column;
+     align-self: center;
+   }
+   {{ section_id_selector }} .reasons-to-buy__image-description-title {
+     color: {{ block.settings.product_title_color }};
+     font-weight: 500;
+     font-size: {{ block.settings.product_title_font_size }}px;
+     line-height: 100%;
+     margin: 0;
+     padding-right: 22px;
+   }
+   {{ section_id_selector }} .reasons-to-buy__image-description-title p,
+   {{ section_id_selector }} .reasons-to-buy__image-description-text p {
+     margin: 0;
+   }
+   {{ section_id_selector }} .reasons-to-buy__image-description-text {
+     font-weight: 300;
+     font-size: {{  block.settings.product_description_font_size }}px;
+     color: {{ block.settings.product_description_color }};
+     opacity: {{ block.settings.product_description_opacity | divided_by: 100.0 }};
+     margin: 0;
+     margin-top: {{ block.settings.text_content_gap }}px;
+     line-height: 100%;
+   }
+   {{ section_id_selector }} .reasons-to-buy__image-description-text p {
+     margin: 0;
+   }
+   @media screen and (max-width: 990px) {
+    {{ section_id_selector }} .reasons-to-buy__image-description-text {
+      margin-top: {{ block.settings.text_content_gap_mobile }}px;
+    }
+   }
+   {{ section_id_selector }} .reasons-to-buy__arrow-icon {
+     position: absolute;
+     right: 19px;
+     top: 17px;
+     z-index: 1;
+     width: 14px;
+     height: 12px;
+   }
+    {{ section_id_selector }} .reasons-to-buy__image {
+     display: flex;
+     align-items: center;
+     gap: 10px;
+   }
+   {{ section_id_selector }} .reasons-to-buy__image-thumbnail img {
+     width: 88px;
+     height: 79px;
+   }
+   {{ section_id_selector }} .reasons-to-buy__arrow-icon svg {
+     width: 14px;
+     height: 12px;
+   }
+  </style>
+<a class="reasons-to-buy__image-card" {% if block.settings.product_url == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.product_url }}"{% endif %} {{ block.shopify_attributes }}>
+  <div class="reasons-to-buy__image-thumbnail">
+    {%- if block.settings.product_image != blank -%}
+      {{
+        block.settings.product_image
+        | image_url: width: 88
+        | image_tag: width: 88, height: 79, class: 'reasons-to-buy__image'
+      }}
+    {%- endif -%}
+  </div>
+  <div class="reasons-to-buy__image-description">
+    {% if block.settings.product_title != blank %}
+    <h3 class="reasons-to-buy__image-description-title">
+      {{ block.settings.product_title }}
+    </h3>
+    {% endif %}
+    {% if block.settings.product_description != blank %}
+    <div class="reasons-to-buy__image-description-text">
+      <div>{{ block.settings.product_description }}</div>
+    </div>
+    {% endif %}
+  </div>
+  <svg
+    class="reasons-to-buy__arrow-icon"
+    width="14"
+    height="12"
+    viewBox="0 0 14 12"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path opacity="0.5" d="M13.7398 2.11078C13.8008 1.75701 13.5635 1.42078 13.2097 1.35979L7.44479 0.365833C7.09103 0.304838 6.7548 0.542176 6.6938 0.895942C6.63281 1.24971 6.87015 1.58594 7.22391 1.64693L12.3483 2.53045L11.4648 7.65484C11.4038 8.0086 11.6411 8.34483 11.9949 8.40583C12.3487 8.46682 12.6849 8.22948 12.7459 7.87572L13.7398 2.11078ZM1 10.541L1.37484 11.072L13.4741 2.53137L13.0993 2.00034L12.7245 1.46931L0.625156 10.01L1 10.541Z" fill="{{ block.settings.arrow_icon_color }}"/>
+  </svg>
+</a>
+<!-- end _reasons-to-buy-product-card.liquid -->
+{% schema %}
+{
+  "name": "Product card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product information"
+    },
+    {
+      "type": "url",
+      "id": "product_url",
+      "label": "Product URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product image"
+    },
+    {
+      "type": "richtext",
+      "id": "product_title",
+      "label": "Product title",
+      "default": "<p>Product title</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "product_description",
+      "label": "Product description",
+      "default": "<p>Product description</p>"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "label": "Product title font size",
+      "id": "product_title_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 21
+    },
+    {
+      "type": "color",
+      "id": "product_title_color",
+      "label": "Product title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "label": "Product description font size",
+      "id": "product_description_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "product_description_color",
+      "label": "Product description color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background color",
+      "default": "#EA3885"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_has_gradient",
+      "label": "Use gradient for background",
+      "default": true,
+      "info": "Enable to use a gradient instead of solid color for the badge background"
+    },
+    {
+      "type": "color_background",
+      "id": "card_gradient",
+      "label": "Card gradient background",
+      "default": "linear-gradient(180deg, #EA3885 0%, #5F4DBC 100%)"
+    },
+    {
+      "type": "range",
+      "label": "Product description opacity",
+      "id": "product_description_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 70
+    },
+    {
+      "type": "color",
+      "id": "arrow_icon_color",
+      "label": "Arrow icon color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "label": "Card border radius",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "label": "Thumbnail border radius",
+      "id": "thumbnail_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "label": "Desktop text content gap",
+      "id": "text_content_gap",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 19
+    },
+    {
+      "type": "range",
+      "label": "Mobile text content gap",
+      "id": "text_content_gap_mobile",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product card",
+      "settings": {
+        "product_url": "",
+        "product_image": "shopify://shop_images/Rectangle_570.png",
+        "product_title": "<p>Lumineux Red Light</p>",
+        "product_description": "<p>For healthy Glowing Skin Management</p>",
+        "product_title_font_size": 21,
+        "product_description_font_size": 14,
+        "card_gradient": "linear-gradient(180deg, rgba(234, 56, 133, 1), rgba(95, 77, 188, 1) 100%)",
+        "product_title_color": "#ffffff",
+        "product_description_color": "#ffffff",
+        "product_description_opacity": 70,
+        "arrow_icon_color": "#ffffff",
+        "text_content_gap": 10,
+        "text_content_gap_mobile": 11,
+        "card_border_radius": 10,
+        "thumbnail_border_radius": 4
+      }
+    }
+  ]
+}
+{% endschema %}

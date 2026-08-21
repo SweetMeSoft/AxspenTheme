@@ -1,0 +1,644 @@
+{{ 'a-component-rating.css' | asset_url | stylesheet_tag }}
+{{ 'a-quick-add.css' | asset_url | stylesheet_tag }}
+
+
+
+{% style %}
+
+  .product-add-ons-content .product-add-ons-content-item {
+    display: flex;
+    width: 100%;
+    padding: 13px 12px;
+  }
+  
+  .product-block-{{ block.id }} .product-add-ons-content-item__wrapper {
+    display: flex;
+    flex: 1;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .product-block-{{ block.id }} .product-add-ons-content-item__wrapper {
+      flex-direction: column;
+    }
+  }
+  
+  .product-block-{{ block.id }} .product-add-ons-content-item__desc {
+    display: flex;
+    flex-direction: column;
+    margin-left: 17px;
+    margin-right: 6px;
+  }
+  
+  
+  .product-block-{{ block.id }} .product-add-ons-content-item__quick-view {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+    align-items: flex-end;
+  }
+  
+  .product-block-{{ block.id }} .product-add-ons-content-item__price {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+  
+  
+  
+  @media screen and (max-width: 768px) {
+    .product-block-{{ block.id }} .product-add-ons-content-item__quick-view {
+      margin-left: 0;
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    
+    .product-block-{{ block.id }} .product-add-ons-content-item__quick-view-button {
+      width: fit-content;
+    }
+    
+    .product-block-{{ block.id }} .product-add-ons-content-item__desc {
+      margin: 0;
+    }
+    
+    .product-block-{{ block.id }} .product-add-ons-content-item__image {
+      margin-right: 14px;
+    }
+  }
+  .product-block-{{ block.id }} .product-add-ons-content-item__quick-view-button.loading .quick-add__submit-text {
+    opacity: 0;
+  }
+{% endstyle %}
+<div class="product-add-ons-content product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.product_1 != blank %}
+    <div class="product-add-ons-content-item product-block-{{ block.id }}">
+      <div class="product-add-ons-content-item__image">
+        {% if block.settings.product_1.featured_image %}
+          {{
+            block.settings.product_1.featured_image
+            | image_url: width: 200
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100px',
+              widths: '54, 74, 104, 162, 208, 324, 416',
+              alt: block.settings.product_1.featured_image.alt
+          }}
+        {% endif %}
+      </div>
+      <div class="product-add-ons-content-item__wrapper">
+        <div class="product-add-ons-content-item__desc">
+          <h3 class="product-add-ons-content-item__desc-title">{{ block.settings.product_1.title }}</h3>
+          <p class="product-add-ons-content-item__desc-text">{{ block.settings.description_1 }}</p>
+        </div>
+        <div class="product-add-ons-content-item__quick-view">
+          <div class="product-add-ons-content-item__price">
+            {% if block.settings.product_1.compare_at_price > block.settings.product_1.price %}
+              <span class="product-add-ons-content-item__compare-price">{{ block.settings.product_1.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="product-add-ons-content-item__price-value">{{ block.settings.product_1.price | money }}</span>
+          </div>
+          {% render 'a-add-ons-quick-add-button', product: block.settings.product_1, button_text: button_text, section_id: section.id %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if block.settings.product_2 != blank %}
+    <div class="product-add-ons-content-item product-block-{{ block.id }}">
+      <div class="product-add-ons-content-item__image">
+        {% if block.settings.product_2.featured_image %}
+          {{
+            block.settings.product_2.featured_image
+            | image_url: width: 200
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100px',
+              widths: '54, 74, 104, 162, 208, 324, 416',
+              alt: block.settings.product_2.featured_image.alt
+          }}
+        {% endif %}
+      </div>
+      <div class="product-add-ons-content-item__wrapper">
+        <div class="product-add-ons-content-item__desc">
+          <h3 class="product-add-ons-content-item__desc-title">{{ block.settings.product_2.title }}</h3>
+          <p class="product-add-ons-content-item__desc-text">{{ block.settings.description_2 }}</p>
+        </div>
+        <div class="product-add-ons-content-item__quick-view">
+          <div class="product-add-ons-content-item__price">
+            {% if block.settings.product_2.compare_at_price > block.settings.product_2.price %}
+              <span class="product-add-ons-content-item__compare-price">{{ block.settings.product_2.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="product-add-ons-content-item__price-value">{{ block.settings.product_2.price | money }}</span>
+          </div>
+          {% render 'a-add-ons-quick-add-button', product: block.settings.product_2, button_text: button_text, section_id: section.id %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if block.settings.product_3 != blank %}
+    <div class="product-add-ons-content-item product-block-{{ block.id }}">
+      <div class="product-add-ons-content-item__image">
+        {% if block.settings.product_3.featured_image %}
+          {{
+            block.settings.product_3.featured_image
+            | image_url: width: 200
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100px',
+              widths: '54, 74, 104, 162, 208, 324, 416',
+              alt: block.settings.product_3.featured_image.alt
+          }}
+        {% endif %}
+      </div>
+      <div class="product-add-ons-content-item__wrapper">
+        <div class="product-add-ons-content-item__desc">
+          <h3 class="product-add-ons-content-item__desc-title">{{ block.settings.product_3.title }}</h3>
+          <p class="product-add-ons-content-item__desc-text">{{ block.settings.description_3 }}</p>
+        </div>
+        <div class="product-add-ons-content-item__quick-view">
+          <div class="product-add-ons-content-item__price">
+            {% if block.settings.product_3.compare_at_price > block.settings.product_3.price %}
+              <span class="product-add-ons-content-item__compare-price">{{ block.settings.product_3.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="product-add-ons-content-item__price-value">{{ block.settings.product_3.price | money }}</span>
+          </div>
+          {% render 'a-add-ons-quick-add-button', product: block.settings.product_3, button_text: button_text, section_id: section.id %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if block.settings.product_4 != blank %}
+    <div class="product-add-ons-content-item product-block-{{ block.id }}">
+      <div class="product-add-ons-content-item__image">
+        {% if block.settings.product_4.featured_image %}
+          {{
+            block.settings.product_4.featured_image
+            | image_url: width: 200
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100px',
+              widths: '54, 74, 104, 162, 208, 324, 416',
+              alt: block.settings.product_4.featured_image.alt
+          }}
+        {% endif %}
+      </div>
+      <div class="product-add-ons-content-item__wrapper">
+        <div class="product-add-ons-content-item__desc">
+          <h3 class="product-add-ons-content-item__desc-title">{{ block.settings.product_4.title }}</h3>
+          <p class="product-add-ons-content-item__desc-text">{{ block.settings.description_4 }}</p>
+        </div>
+        <div class="product-add-ons-content-item__quick-view">
+          <div class="product-add-ons-content-item__price">
+            {% if block.settings.product_4.compare_at_price > block.settings.product_4.price %}
+              <span class="product-add-ons-content-item__compare-price">{{ block.settings.product_4.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="product-add-ons-content-item__price-value">{{ block.settings.product_4.price | money }}</span>
+          </div>
+          {% render 'a-add-ons-quick-add-button', product: block.settings.product_4, button_text: button_text, section_id: section.id %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if block.settings.product_5 != blank %}
+    <div class="product-add-ons-content-item product-block-{{ block.id }}">
+      <div class="product-add-ons-content-item__image">
+        {% if block.settings.product_5.featured_image %}
+          {{
+            block.settings.product_5.featured_image
+            | image_url: width: 200
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100px',
+              widths: '54, 74, 104, 162, 208, 324, 416',
+              alt: block.settings.product_5.featured_image.alt
+          }}
+        {% endif %}
+      </div>
+      <div class="product-add-ons-content-item__wrapper">
+        <div class="product-add-ons-content-item__desc">
+          <h3 class="product-add-ons-content-item__desc-title">{{ block.settings.product_5.title }}</h3>
+          <p class="product-add-ons-content-item__desc-text">{{ block.settings.description_5 }}</p>
+        </div>
+        <div class="product-add-ons-content-item__quick-view">
+          <div class="product-add-ons-content-item__price">
+            {% if block.settings.product_5.compare_at_price > block.settings.product_5.price %}
+              <span class="product-add-ons-content-item__compare-price">{{ block.settings.product_5.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="product-add-ons-content-item__price-value">{{ block.settings.product_5.price | money }}</span>
+          </div>
+          {% render 'a-add-ons-quick-add-button', product: block.settings.product_5, button_text: button_text, section_id: section.id %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if block.settings.product_6 != blank %}
+    <div class="product-add-ons-content-item product-block-{{ block.id }}">
+      <div class="product-add-ons-content-item__image">
+        {% if block.settings.product_6.featured_image %}
+          {{
+            block.settings.product_6.featured_image
+            | image_url: width: 200
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100px',
+              widths: '54, 74, 104, 162, 208, 324, 416',
+              alt: block.settings.product_6.featured_image.alt
+          }}
+        {% endif %}
+      </div>
+      <div class="product-add-ons-content-item__wrapper">
+        <div class="product-add-ons-content-item__desc">
+          <h3 class="product-add-ons-content-item__desc-title">{{ block.settings.product_6.title }}</h3>
+          <p class="product-add-ons-content-item__desc-text">{{ block.settings.description_6 }}</p>
+        </div>
+        <div class="product-add-ons-content-item__quick-view">
+          <div class="product-add-ons-content-item__price">
+            {% if block.settings.product_6.compare_at_price > block.settings.product_6.price %}
+              <span class="product-add-ons-content-item__compare-price">{{ block.settings.product_6.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="product-add-ons-content-item__price-value">{{ block.settings.product_6.price | money }}</span>
+          </div>
+          {% render 'a-add-ons-quick-add-button', product: block.settings.product_6, button_text: button_text, section_id: section.id %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if block.settings.product_7 != blank %}
+    <div class="product-add-ons-content-item product-block-{{ block.id }}">
+      <div class="product-add-ons-content-item__image">
+        {% if block.settings.product_7.featured_image %}
+          {{
+            block.settings.product_7.featured_image
+            | image_url: width: 200
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100px',
+              widths: '54, 74, 104, 162, 208, 324, 416',
+              alt: block.settings.product_7.featured_image.alt
+          }}
+        {% endif %}
+      </div>
+      <div class="product-add-ons-content-item__wrapper">
+        <div class="product-add-ons-content-item__desc">
+          <h3 class="product-add-ons-content-item__desc-title">{{ block.settings.product_7.title }}</h3>
+          <p class="product-add-ons-content-item__desc-text">{{ block.settings.description_7 }}</p>
+        </div>
+        <div class="product-add-ons-content-item__quick-view">
+          <div class="product-add-ons-content-item__price">
+            {% if block.settings.product_7.compare_at_price > block.settings.product_7.price %}
+              <span class="product-add-ons-content-item__compare-price">{{ block.settings.product_7.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="product-add-ons-content-item__price-value">{{ block.settings.product_7.price | money }}</span>
+          </div>
+          {% render 'a-add-ons-quick-add-button', product: block.settings.product_7, button_text: button_text, section_id: section.id %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if block.settings.product_8 != blank %}
+    <div class="product-add-ons-content-item product-block-{{ block.id }}">
+      <div class="product-add-ons-content-item__image">
+        {% if block.settings.product_8.featured_image %}
+          {{
+            block.settings.product_8.featured_image
+            | image_url: width: 200
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100px',
+              widths: '54, 74, 104, 162, 208, 324, 416',
+              alt: block.settings.product_8.featured_image.alt
+          }}
+        {% endif %}
+      </div>
+      <div class="product-add-ons-content-item__wrapper">
+        <div class="product-add-ons-content-item__desc">
+          <h3 class="product-add-ons-content-item__desc-title">{{ block.settings.product_8.title }}</h3>
+          <p class="product-add-ons-content-item__desc-text">{{ block.settings.description_8 }}</p>
+        </div>
+        <div class="product-add-ons-content-item__quick-view">
+          <div class="product-add-ons-content-item__price">
+            {% if block.settings.product_8.compare_at_price > block.settings.product_8.price %}
+              <span class="product-add-ons-content-item__compare-price">{{ block.settings.product_8.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="product-add-ons-content-item__price-value">{{ block.settings.product_8.price | money }}</span>
+          </div>
+          {% render 'a-add-ons-quick-add-button', product: block.settings.product_8, button_text: button_text, section_id: section.id %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if block.settings.product_9 != blank %}
+    <div class="product-add-ons-content-item product-block-{{ block.id }}">
+      <div class="product-add-ons-content-item__image">
+        {% if block.settings.product_9.featured_image %}
+          {{
+            block.settings.product_9.featured_image
+            | image_url: width: 200
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100px',
+              widths: '54, 74, 104, 162, 208, 324, 416',
+              alt: block.settings.product_9.featured_image.alt
+          }}
+        {% endif %}
+      </div>
+      <div class="product-add-ons-content-item__wrapper">
+        <div class="product-add-ons-content-item__desc">
+          <h3 class="product-add-ons-content-item__desc-title">{{ block.settings.product_9.title }}</h3>
+          <p class="product-add-ons-content-item__desc-text">{{ block.settings.description_9 }}</p>
+        </div>
+        <div class="product-add-ons-content-item__quick-view">
+          <div class="product-add-ons-content-item__price">
+            {% if block.settings.product_9.compare_at_price > block.settings.product_9.price %}
+              <span class="product-add-ons-content-item__compare-price">{{ block.settings.product_9.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="product-add-ons-content-item__price-value">{{ block.settings.product_9.price | money }}</span>
+          </div>
+          {% render 'a-add-ons-quick-add-button', product: block.settings.product_9, button_text: button_text, section_id: section.id %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if block.settings.product_10 != blank %}
+    <div class="product-add-ons-content-item product-block-{{ block.id }}">
+      <div class="product-add-ons-content-item__image">
+        {% if block.settings.product_10.featured_image %}
+          {{
+            block.settings.product_10.featured_image
+            | image_url: width: 200
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100px',
+              widths: '54, 74, 104, 162, 208, 324, 416',
+              alt: block.settings.product_10.featured_image.alt
+          }}
+        {% endif %}
+      </div>
+      <div class="product-add-ons-content-item__wrapper">
+        <div class="product-add-ons-content-item__desc">
+          <h3 class="product-add-ons-content-item__desc-title">{{ block.settings.product_10.title }}</h3>
+          <p class="product-add-ons-content-item__desc-text">{{ block.settings.description_10 }}</p>
+        </div>
+        <div class="product-add-ons-content-item__quick-view">
+          <div class="product-add-ons-content-item__price">
+            {% if block.settings.product_10.compare_at_price > block.settings.product_10.price %}
+              <span class="product-add-ons-content-item__compare-price">{{ block.settings.product_10.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="product-add-ons-content-item__price-value">{{ block.settings.product_10.price | money }}</span>
+          </div>
+          {% render 'a-add-ons-quick-add-button', product: block.settings.product_10, button_text: button_text, section_id: section.id %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if block.settings.product_11 != blank %}
+    <div class="product-add-ons-content-item product-block-{{ block.id }}">
+      <div class="product-add-ons-content-item__image">
+        {% if block.settings.product_11.featured_image %}
+          {{
+            block.settings.product_11.featured_image
+            | image_url: width: 200
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100px',
+              widths: '54, 74, 104, 162, 208, 324, 416',
+              alt: block.settings.product_11.featured_image.alt
+          }}
+        {% endif %}
+      </div>
+      <div class="product-add-ons-content-item__wrapper">
+        <div class="product-add-ons-content-item__desc">
+          <h3 class="product-add-ons-content-item__desc-title">{{ block.settings.product_11.title }}</h3>
+          <p class="product-add-ons-content-item__desc-text">{{ block.settings.description_11 }}</p>
+        </div>
+        <div class="product-add-ons-content-item__quick-view">
+          <div class="product-add-ons-content-item__price">
+            {% if block.settings.product_11.compare_at_price > block.settings.product_11.price %}
+              <span class="product-add-ons-content-item__compare-price">{{ block.settings.product_11.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="product-add-ons-content-item__price-value">{{ block.settings.product_11.price | money }}</span>
+          </div>
+          {% render 'a-add-ons-quick-add-button', product: block.settings.product_11, button_text: button_text, section_id: section.id %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if block.settings.product_12 != blank %}
+    <div class="product-add-ons-content-item product-block-{{ block.id }}">
+      <div class="product-add-ons-content-item__image">
+        {% if block.settings.product_12.featured_image %}
+          {{
+            block.settings.product_12.featured_image
+            | image_url: width: 200
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100px',
+              widths: '54, 74, 104, 162, 208, 324, 416',
+              alt: block.settings.product_12.featured_image.alt
+          }}
+        {% endif %}
+      </div>
+      <div class="product-add-ons-content-item__wrapper">
+        <div class="product-add-ons-content-item__desc">
+          <h3 class="product-add-ons-content-item__desc-title">{{ block.settings.product_12.title }}</h3>
+          <p class="product-add-ons-content-item__desc-text">{{ block.settings.description_12 }}</p>
+        </div>
+        <div class="product-add-ons-content-item__quick-view">
+          <div class="product-add-ons-content-item__price">
+            {% if block.settings.product_12.compare_at_price > block.settings.product_12.price %}
+              <span class="product-add-ons-content-item__compare-price">{{ block.settings.product_12.compare_at_price | money }}</span>
+            {% endif %}
+            <span class="product-add-ons-content-item__price-value">{{ block.settings.product_12.price | money }}</span>
+          </div>
+          {% render 'a-add-ons-quick-add-button', product: block.settings.product_12, button_text: button_text, section_id: section.id %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+  
+{% schema %}
+{
+  "name": "Add-ons list",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product 1"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product 1"
+    },
+    {
+      "type": "text",
+      "id": "description_1",
+      "label": "Description 1"
+    },
+    {
+      "type": "header",
+      "content": "Product 2"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product 2"
+    },
+    {
+      "type": "text",
+      "id": "description_2",
+      "label": "Description 2"
+    },
+    {
+      "type": "header",
+      "content": "Product 3"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product 3"
+    },
+    {
+      "type": "text",
+      "id": "description_3",
+      "label": "Description 3"
+    },
+    {
+      "type": "header",
+      "content": "Product 4"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Product 4"
+    },
+    {
+      "type": "text",
+      "id": "description_4",
+      "label": "Description 4"
+    },
+    {
+      "type": "header",
+      "content": "Product 5"
+    },
+    {
+      "type": "product",
+      "id": "product_5",
+      "label": "Product 5"
+    },
+    {
+      "type": "text",
+      "id": "description_5",
+      "label": "Description 5"
+    },
+    {
+      "type": "header",
+      "content": "Product 6"
+    },
+    {
+      "type": "product",
+      "id": "product_6",
+      "label": "Product 6"
+    },
+    {
+      "type": "text",
+      "id": "description_6",
+      "label": "Description 6"
+    },
+    {
+      "type": "header",
+      "content": "Product 7"
+    },
+    {
+      "type": "product",
+      "id": "product_7",
+      "label": "Product 7"
+    },
+    {
+      "type": "text",
+      "id": "description_7",
+      "label": "Description 7"
+    },
+    {
+      "type": "header",
+      "content": "Product 8"
+    },
+    {
+      "type": "product",
+      "id": "product_8",
+      "label": "Product 8"
+    },
+    {
+      "type": "text",
+      "id": "description_8",
+      "label": "Description 8"
+    },
+    {
+      "type": "header",
+      "content": "Product 9"
+    },
+    {
+      "type": "product",
+      "id": "product_9",
+      "label": "Product 9"
+    },
+    {
+      "type": "text",
+      "id": "description_9",
+      "label": "Description 9"
+    },
+    {
+      "type": "header",
+      "content": "Product 10"
+    },
+    {
+      "type": "product",
+      "id": "product_10",
+      "label": "Product 10"
+    },
+    {
+      "type": "text",
+      "id": "description_10",
+      "label": "Description 10"
+    },
+    {
+      "type": "header",
+      "content": "Product 11"
+    },
+    {
+      "type": "product",
+      "id": "product_11",
+      "label": "Product 11"
+    },
+    {
+      "type": "text",
+      "id": "description_11",
+      "label": "Description 11"
+    },
+    {
+      "type": "header",
+      "content": "Product 12"
+    },
+    {
+      "type": "product",
+      "id": "product_12",
+      "label": "Product 12"
+    },
+    {
+      "type": "text",
+      "id": "description_12",
+      "label": "Description 12"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Add-ons list"
+    }
+  ]
+}
+{% endschema %}
+
+<script src="{{ 'a-quick-add.js' | asset_url }}" defer="defer"></script>

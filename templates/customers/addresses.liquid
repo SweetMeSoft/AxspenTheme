@@ -1,0 +1,458 @@
+{%- paginate customer.addresses by 5 -%}
+	<div class="container">
+		<div class="customer addresses" data-customer-addresses>
+			<div class="addresses-header text-center">
+				<h2 class="title">{{- 'customer.addresses.title' | t -}}</h2>
+
+				<a href="{{ routes.account_url }}">
+					{{- 'customer.account.return' | t -}}
+				</a>
+			</div>
+
+			<div data-address class="data-address-wrapper">
+				<button type="button" aria-expanded="false" aria-controls="AddAddress" class="button medium-button primary-button address-add-new">
+					{{- 'customer.addresses.add_new' | t -}}
+				</button>
+
+				<div id="add-address">
+					<h2 id="address-new-heading" class="title text-center">{{- 'customer.addresses.add_new' | t -}}</h2>
+
+					{%- form 'customer_address', customer.new_address, aria-labelledBy: 'address-new-heading', class: 'address-form-field' -%}
+						<div class="field field-customer-name">
+							<input type="text" id="address-first-name-new" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name" placeholder="{{ 'customer.addresses.first_name' | t }}">
+							<label for="address-first-name-new">{{ 'customer.addresses.first_name' | t }}</label>
+						</div>
+
+						<div class="field field-customer-name">
+							<input type="text" id="address-last-name-new" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name" placeholder="{{ 'customer.addresses.last_name' | t }}">
+							<label for="address-last-name-new">{{ 'customer.addresses.last_name' | t }}</label>
+						</div>
+
+						<div class="field">
+							<input type="text" id="address-company-new" name="address[company]" value="{{ form.company }}" autocomplete="organization" placeholder="{{ 'customer.addresses.company' | t }}">
+							<label for="address-company-new">{{ 'customer.addresses.company' | t }}</label>
+						</div>
+
+						<div class="field">
+							<input type="text" id="address-address1-new" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" placeholder="{{ 'customer.addresses.address1' | t }}">
+							<label for="address-address1-new">{{ 'customer.addresses.address1' | t }}</label>
+						</div>
+
+						<div class="field">
+							<input type="text" id="address-address2-new" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2" placeholder="{{ 'customer.addresses.address2' | t }}">
+							<label for="address-address2-new">{{ 'customer.addresses.address2' | t }}</label>
+						</div>
+
+						<div class="field">
+							<input type="text" id="address-city-new" name="address[city]" value="{{ form.city }}" autocomplete="address-level2" placeholder="{{ 'customer.addresses.city' | t }}">
+							<label for="address-city-new">{{ 'customer.addresses.city' | t }}</label>
+						</div>
+
+						<div class="select">
+							<label for="address-country-new" class="new-label-style">{{- 'customer.addresses.country' | t -}}</label>
+
+							<select id="address-country-new" name="address[country]" data-default="{{ form.country }}" autocomplete="country">
+								{{ all_country_option_tags }}
+							</select>
+						</div>
+
+						<div id="address-province-container-new" style="display: none" class="select">
+							<label for="address-province-new" class="new-label-style">{{- 'customer.addresses.province' | t -}}</label>
+
+							<select id="address-province-new" name="address[province]" data-default="{{ form.province }}" autocomplete="address-level1"></select>
+						</div>
+
+						<div class="field">
+							<input type="text" id="address-zip-new" name="address[zip]" value="{{ form.zip }}" autocapitalize="characters" autocomplete="postal-code" placeholder="{{ 'customer.addresses.zip' | t }}">
+							<label for="address-zip-new">{{ 'customer.addresses.zip' | t }}</label>
+						</div>
+
+						<div class="field">
+							<input type="tel" id="address-phone-new" name="address[phone]" value="{{ form.phone }}" autocomplete="tel" placeholder="{{ 'customer.addresses.phone' | t }}">
+							<label for="address-phone-new">{{ 'customer.addresses.phone' | t }}</label>
+						</div>
+
+						<div class="set-default-label">
+							{{ form.set_as_default_checkbox }}
+							<label for="address_default_address_new">{{- 'customer.addresses.set_default' | t -}}</label>
+						</div>
+
+						<div class="buttons-wrap">
+							<button class="button primary-button small-button">{{- 'customer.addresses.add' | t -}}</button>
+							<button class="button secondary-button small-button" type="reset">{{- 'customer.addresses.cancel' | t -}}</button>
+						</div>
+					{%- endform -%}
+				</div>
+			</div>
+
+			<ul role="list" class="address-list">
+				{%- for address in customer.addresses -%}
+					<li data-address>
+						{%- if address == customer.default_address -%}
+							<h2 class="title">{{- 'customer.addresses.default' | t -}}</h2>
+						{%- endif -%}
+
+						{{- address | format_address -}}
+
+						<button type="button" id="edit-form-button-{{ address.id }}" aria-label="{{ 'customer.addresses.edit_address' | t }} {{ forloop.index }}" aria-controls="edit-address-{{ address.id }}" aria-expanded="false" data-address-id="{{ address.id }}" class="secondary-button small-button">
+							{{- 'customer.addresses.edit' | t -}}
+						</button>
+
+						<button type="button" aria-label="{{ 'customer.addresses.delete' | t }} {{ forloop.index }}" data-target="{{ address.url }}" data-confirm-message="{{ 'customer.addresses.delete_confirm' | t }}" class="secondary-button small-button">
+							{{- 'customer.addresses.delete' | t -}}
+						</button>
+
+						<div id="edit-address-{{ address.id }}">
+							<h2 class="title">{{- 'customer.addresses.edit_address' | t -}}</h2>
+
+							{%- form 'customer_address', address, class: 'address-form-field' -%}
+								<div class="field field-customer-name">
+									<input type="text" id="address-first-name-{{ form.id }}" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name" placeholder="{{ 'customer.addresses.first_name' | t }}">
+									<label for="address-first-name-{{ form.id }}">{{ 'customer.addresses.first_name' | t }}</label>
+								</div>
+
+								<div class="field field-customer-name">
+									<input type="text" id="address-last-name-{{ form.id }}" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name" placeholder="{{ 'customer.addresses.last_name' | t }}">
+									<label for="address-last-name-{{ form.id }}">{{ 'customer.addresses.last_name' | t }}</label>
+								</div>
+
+								<div class="field">
+									<input type="text" id="address-company-{{ form.id }}" name="address[company]" value="{{ form.company }}" autocomplete="organization" placeholder="{{ 'customer.addresses.company' | t }}">
+									<label for="address-company-{{ form.id }}">{{ 'customer.addresses.company' | t }}</label>
+								</div>
+
+								<div class="field">
+									<input type="text" id="address-address1-{{ form.id }}" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" placeholder="{{ 'customer.addresses.address1' | t }}">
+									<label for="address-address1-{{ form.id }}">{{ 'customer.addresses.address1' | t }}</label>
+								</div>
+
+								<div class="field">
+									<input type="text" id="address-address2-{{ form.id }}" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2" placeholder="{{ 'customer.addresses.address2' | t }}">
+									<label for="address-address2-{{ form.id }}">{{ 'customer.addresses.address2' | t }}</label>
+								</div>
+
+								<div class="field">
+									<input type="text" id="address-city-{{ form.id }}" name="address[city]" value="{{ form.city }}" autocomplete="address-level2" placeholder="{{ 'customer.addresses.city' | t }}">
+									<label for="address-city-{{ form.id }}">{{ 'customer.addresses.city' | t }}</label>
+								</div>
+
+								<div class="select">
+									<label for="address-country-{{ form.id }}">
+										{{ 'customer.addresses.country' | t }}
+									</label>
+
+									<select id="address-country-{{ form.id }}" name="address[country]" data-address-country-select data-default="{{ form.country }}" data-form-id="{{ form.id }}" autocomplete="country">
+										{{ all_country_option_tags }}
+									</select>
+								</div>
+
+								<div id="address-province-container-{{ form.id }}" style="display:none;" class="select">
+									<label for="address-province-{{ form.id }}">
+										{{ 'customer.addresses.province' | t }}
+									</label>
+
+									<select id="address-province-{{ form.id }}" name="address[province]" data-default="{{ form.province }}" autocomplete="address-level1"></select>
+								</div>
+
+								<div class="field">
+									<input type="text" id="address-zip-{{ form.id }}" name="address[zip]" value="{{ form.zip }}" autocapitalize="characters" autocomplete="postal-code" placeholder="{{ 'customer.addresses.zip' | t }}">
+									<label for="address-zip-{{ form.id }}">{{ 'customer.addresses.zip' | t }}</label>
+								</div>
+
+								<div class="field">
+									<input type="tel" id="address-phone-{{ form.id }}"  name="address[phone]" value="{{ form.phone }}" autocomplete="tel" placeholder="{{ 'customer.addresses.phone' | t }}">
+									<label for="address-phone-{{ form.id }}">{{ 'customer.addresses.phone' | t }}</label>
+								</div>
+
+								<div class="set-default-label">
+									{{ form.set_as_default_checkbox }}
+									<label for="address_default_address_{{ form.id }}">
+										{{ 'customer.addresses.set_default' | t }}
+									</label>
+								</div>
+
+								<div class="buttons-wrap">
+									<button class="button small-button">{{- 'customer.addresses.update' | t -}}</button>
+									<button class="button secondary-button small-button" type="reset">{{- 'customer.addresses.cancel' | t -}}</button>
+								</div>
+							{%- endform -%}
+						</div>
+					</li>
+				{%- endfor -%}
+			</ul>
+
+			{%- if paginate.pages > 1 -%}
+				{%- if paginate.parts.size > 0 -%}
+						<nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+							<ul role="list">
+							{%- if paginate.previous -%}
+								<li>
+									<a href="{{ paginate.previous.url }}" aria-label="{{ 'general.pagination.previous' | t }}">
+										<svg aria-hidden="true" focusable="false" viewBox="0 0 10 6">
+											<path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor">
+										</svg>
+									</a>
+								</li>
+							{%- endif -%}
+
+							{%- for part in paginate.parts -%}
+								<li>
+									{%- if part.is_link -%}
+										<a href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+									{%- else -%}
+										{%- if part.title == paginate.current_page -%}
+											<span aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</span>
+										{%- else -%}
+											<span>{{ part.title }}</span>
+										{%- endif -%}
+									{%- endif -%}
+								</li>
+							{%- endfor -%}
+
+							{%- if paginate.next -%}
+								<li>
+									<a href="{{ paginate.next.url }}" aria-label="{{ 'general.pagination.next' | t }}" >
+										<svg aria-hidden="true" focusable="false" viewBox="0 0 10 6">
+											<path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor">
+										</svg>
+									</a>
+								</li>
+							{%- endif -%}
+							</ul>
+						</nav>
+				{%- endif -%}
+			{%- endif -%}
+		</div>
+	</div>
+{%- endpaginate -%}
+
+<script>
+	Shopify.bind = function( fn, scope ) {
+		return function() {
+			return fn.apply( scope, arguments );
+		}
+	};
+
+	Shopify.setSelectorByValue = function(selector, value) {
+		for ( let i = 0, count = selector.options.length; i < count; i++ ) {
+			let option = selector.options[i];
+
+			if ( value == option.value || value == option.innerHTML ) {
+				selector.selectedIndex = i;
+				return i;
+			}
+		}
+	};
+
+	Shopify.addListener = function( target, eventName, callback ) {
+		target.addEventListener ? target.addEventListener( eventName, callback, false ) : target.attachEvent( 'on' + eventName, callback );
+	};
+
+	Shopify.postLink = function( path, options ) {
+		options = options || {};
+
+		let method = options['method'] || 'post',
+			params = options['parameters'] || {},
+			form   = document.createElement( 'form' );
+
+		form.setAttribute( 'method', method );
+		form.setAttribute( 'action', path );
+
+		for(var key in params) {
+			var hiddenField = document.createElement( 'input' );
+			hiddenField.setAttribute( 'type', 'hidden' );
+			hiddenField.setAttribute( 'name', key );
+			hiddenField.setAttribute( 'value', params[key] );
+			form.appendChild( hiddenField );
+		}
+		document.body.appendChild( form );
+		form.submit();
+		document.body.removeChild( form );
+	};
+
+	Shopify.CountryProvinceSelector = function( country_domid, province_domid, options ) {
+		this.countryEl         = document.getElementById(country_domid);
+		this.provinceEl        = document.getElementById(province_domid);
+		this.provinceContainer = document.getElementById( options['hideElement'] || province_domid );
+
+		Shopify.addListener( this.countryEl, 'change', Shopify.bind( this.countryHandler, this ) );
+
+		this.initCountry();
+		this.initProvince();
+	};
+
+	Shopify.CountryProvinceSelector.prototype = {
+		initCountry: function() {
+			let value = this.countryEl.getAttribute( 'data-default' );
+
+			Shopify.setSelectorByValue( this.countryEl, value );
+			this.countryHandler();
+		},
+
+		initProvince: function() {
+			let value = this.provinceEl.getAttribute( 'data-default' );
+
+			if (value && this.provinceEl.options.length > 0) {
+				Shopify.setSelectorByValue(this.provinceEl, value);
+			}
+		},
+
+		countryHandler: function(e) {
+			let opt       = this.countryEl.options[this.countryEl.selectedIndex],
+				raw       = opt.getAttribute('data-provinces'),
+				provinces = JSON.parse(raw);
+
+			this.clearOptions( this.provinceEl );
+
+			if ( provinces && ! provinces.length ) {
+				this.provinceContainer.style.display = 'none';
+			} else {
+				for ( let i = 0, j = provinces.length; i < j; i++ ) {
+					let opt = document.createElement( 'option' );
+
+					opt.value     = provinces[i][0];
+					opt.innerHTML = provinces[i][1];
+					this.provinceEl.appendChild( opt );
+				}
+
+				this.provinceContainer.style.display = '';
+			}
+		},
+
+		clearOptions: function(selector) {
+			while (selector.firstChild) {
+				selector.removeChild(selector.firstChild);
+			}
+		},
+
+		setOptions: function( selector, values ) {
+			for ( let i = 0, count = values.length; i < count; i++ ) {
+				let opt = document.createElement('option');
+
+				opt.value     = values[i];
+				opt.innerHTML = values[i];
+				selector.appendChild( opt );
+			}
+		}
+	};
+
+	const selectors = {
+		customerAddresses: '[data-customer-addresses]',
+		addressCountrySelect: '[data-address-country-select]',
+		addressContainer: '[data-address]',
+		toggleAddressButton: 'button[aria-expanded]',
+		cancelAddressButton: 'button[type="reset"]',
+		deleteAddressButton: 'button[data-confirm-message]'
+	};
+
+	const attributes = {
+		expanded: 'aria-expanded',
+		confirmMessage: 'data-confirm-message'
+	};
+
+	class CustomerAddresses {
+		constructor() {
+			this.elements = this._getElements();
+			if ( ! Object.keys( this.elements ).length ) {
+				return;
+			}
+			this._setupCountries();
+			this._setupEventListeners();
+		}
+
+		_getElements() {
+			const container = document.querySelector( selectors.customerAddresses );
+
+			return container ? {
+				container,
+				addressContainer: container.querySelector( selectors.addressContainer ),
+				toggleButtons: document.querySelectorAll( selectors.toggleAddressButton ),
+				cancelButtons: container.querySelectorAll( selectors.cancelAddressButton ),
+				deleteButtons: container.querySelectorAll( selectors.deleteAddressButton ),
+				countrySelects: container.querySelectorAll( selectors.addressCountrySelect )
+			} : {};
+		}
+
+		_setupCountries() {
+			if ( Shopify && Shopify.CountryProvinceSelector ) {
+				new Shopify.CountryProvinceSelector(
+					'address-country-new',
+					'address-province-new',
+					{
+						hideElement: 'address-province-container-new'
+					}
+				);
+
+				this.elements.countrySelects.forEach(
+					function( select ) {
+						const formId = select.dataset.formId;
+
+						new Shopify.CountryProvinceSelector(
+							'address-country-' + formId,
+							'address-province-' + formId,
+							{
+								hideElement: 'address-province-container-' + formId
+							}
+						);
+					}
+				);
+			}
+		}
+
+		_setupEventListeners() {
+			const that = this;
+
+			this.elements.toggleButtons.forEach(
+				function( element ) {
+					element.addEventListener( 'click', that._handleAddEditButtonClick );
+				}
+			);
+
+			this.elements.cancelButtons.forEach(
+				function( element ) {
+					element.addEventListener( 'click', that._handleCancelButtonClick );
+				}
+			);
+
+			this.elements.deleteButtons.forEach(
+				function( element ) {
+					element.addEventListener( 'click', that._handleDeleteButtonClick );
+				}
+			);
+		}
+
+		_toggleExpanded(target) {
+			target.setAttribute(
+				attributes.expanded,
+				( target.getAttribute( attributes.expanded ) === 'false' ).toString()
+			);
+		}
+
+		_handleAddEditButtonClick = ({ currentTarget }) => {
+			this._toggleExpanded( currentTarget );
+		}
+
+		_handleCancelButtonClick = ({ currentTarget }) => {
+			this._toggleExpanded(
+				currentTarget
+					.closest( selectors.addressContainer )
+					.querySelector( '[' + attributes.expanded + ']' )
+			)
+		}
+
+		_handleDeleteButtonClick = ({ currentTarget }) => {
+			if ( confirm( currentTarget.getAttribute( attributes.confirmMessage ) ) ) {
+				Shopify.postLink(
+					currentTarget.dataset.target,
+					{
+						parameters: { _method: 'delete' },
+					}
+				);
+			}
+		}
+	}
+
+	window.onload = function() {
+		new CustomerAddresses();
+	}
+</script>

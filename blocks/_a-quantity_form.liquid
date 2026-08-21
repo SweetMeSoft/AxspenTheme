@@ -1,0 +1,183 @@
+{% assign product = closest.product %}
+{% style %}
+  #Quantity-Form-{{ section.id }} .quantity-icons-parent{
+    border-radius: {{ block.settings.border_radius }}px !important;
+    background-color: {{ block.settings.background_color }} !important;
+    border-color: {{ block.settings.border_color }} !important;
+  }
+  #Quantity-Form-{{ section.id }} .quantity-icon {
+    border-radius: {{ block.settings.button_border_radius }}px !important;
+    background-color: {{ block.settings.button_background_color }} !important;
+  }
+{% endstyle %}
+<div
+  id="Quantity-Form-{{ section.id }}"
+  class="product-form__input product-form__quantity{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} product-form__quantity-top{% endif %}"
+>
+  {% comment %} TODO: enable theme-check once `item_count_for_variant` is accepted as valid filter {% endcomment %}
+  {% # theme-check-disable %}
+  {%- assign cart_qty = cart | item_count_for_variant: product.selected_or_first_available_variant.id -%}
+  {% # theme-check-enable %}
+  <label
+    class="quantity__label form__label"
+    style="color: var(rgb(--color-foreground));"
+    for="Quantity-{{ section.id }}"
+  >
+    <span class="quantity__rules-cart no-js-hidden{% if cart_qty == 0 %} hidden{% endif %}">
+      <span class="loading-overlay hidden">
+        <span class="loading-overlay__spinner">
+          {% render 'a-icon-spinner' %}
+        </span>
+      </span>
+      {% comment %} {%- if block.settings.show_cart_count %}
+        <span
+          >(
+          <span class="quantity-cart">{{ cart_qty }}</span> in cart
+          )</span
+        >
+      {% endif %} {% endcomment %}
+    </span>
+  </label>
+  <quantity-input-v2 class="quantity-buttons">
+    <input
+      id="Quantity-{{ section.id }}"
+      class="quantity__input hidden"
+      type="number"
+      name="quantity"
+      data-cart-quantity="0"
+      data-min="1"
+      min="1"
+      step="1"
+      value="1"
+    >
+    <div
+      class="quantity-icons-parent quantity-animated"
+      style="border-color: #EBEBEB"
+    >
+      <button
+        class="quantity-icon quantity-minus-icon quantity-icons-left"
+        style="border-color: {{ block.settings.border_color }};"
+      >
+        <svg
+          width="8"
+          height="2"
+          viewBox="0 0 8 2"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="8" height="1.5" rx="100" fill="{{ block.settings.button_icon_color }}" />
+        </svg>
+        
+      </button>
+      <div class="quantity-value">
+        <div
+          class="quantity-number"
+          style="color: {{ block.settings.text_color }}"
+        >
+          1
+        </div>
+      </div>
+      <button
+        class="quantity-icon quantity-plus-icon quantity-icons-right"
+        style="border-color: {{ block.settings.border_color }};"
+      >
+        <svg
+          width="9"
+          height="9"
+          viewBox="0 0 9 9"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M4.5 0V9M0 4.5H9" stroke="{{ block.settings.button_icon_color }}" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        
+      </button>
+    </div>
+  </quantity-input-v2>
+  <div class="quantity__rules caption no-js-hidden" style="display:block;">
+    {%- if product.selected_or_first_available_variant.quantity_rule.increment > 1 -%}
+      <span class="divider">
+        {{-
+          'products.product.quantity.multiples_of'
+          | t: quantity: product.selected_or_first_available_variant.quantity_rule.increment
+        -}}
+      </span>
+    {%- endif -%}
+    {%- if product.selected_or_first_available_variant.quantity_rule.min > 1 -%}
+      <span class="divider">
+        {{-
+          'products.product.quantity.minimum_of'
+          | t: quantity: product.selected_or_first_available_variant.quantity_rule.min
+        -}}
+      </span>
+    {%- endif -%}
+    {%- if product.selected_or_first_available_variant.quantity_rule.max != null -%}
+      <span class="divider">
+        {{-
+          'products.product.quantity.maximum_of'
+          | t: quantity: product.selected_or_first_available_variant.quantity_rule.max
+        -}}
+      </span>
+    {%- endif -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Quantity input",
+  "tag": null,
+  "blocks": [],
+  "settings": [
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Input border radius",
+      "default": 6,
+      "min": 0,
+      "max": 100,
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button border radius",
+      "default": 3,
+      "min": 0,
+      "max": 100,
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#F6F6F6"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Input border color",
+      "default": "#EBEBEB"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "button_icon_color",
+      "label": "Button icon color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "button_background_color",
+      "label": "Button background color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quantity input"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,130 @@
+{%- assign social_media_count = false -%}
+
+{%- capture social_media -%}
+	{%- if settings.social_facebook_link != blank -%}
+		<li>
+			<a href="{{ settings.social_facebook_link | replace_first: 'https:', '' | replace_first: 'http:', '' }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.facebook' | t }}">
+				{%- render 'icon', code: 'facebook' -%}
+				<span class="tooltip tooltip-top">{{- 'general.social.links.facebook' | t -}}</span>
+			</a>
+		</li>
+
+		{% assign social_media_count = true %}
+	{%- endif -%}
+
+	{%- if settings.social_twitter_link != blank -%}
+		<li>
+			<a href="{{ settings.social_twitter_link | replace_first: 'https:', '' | replace_first: 'http:', '' }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.twitter' | t }}">
+				{%- render 'icon', code: 'twitter' -%}
+				<span class="tooltip tooltip-top">{{- 'general.social.links.twitter' | t -}}</span>
+			</a>
+		</li>
+
+		{% assign social_media_count = true %}
+	{%- endif -%}
+
+	{%- if settings.social_instagram_link != blank -%}
+		<li>
+			<a href="{{ settings.social_instagram_link | replace_first: 'https:', '' | replace_first: 'http:', '' }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.instagram' | t }}">
+				{%- render 'icon', code: 'instagram' -%}
+				<span class="tooltip tooltip-top">{{- 'general.social.links.instagram' | t -}}</span>
+			</a>
+		</li>
+
+		{% assign social_media_count = true %}
+	{%- endif -%}
+
+	{%- if settings.social_pinterest_link != blank -%}
+		<li>
+			<a href="{{ settings.social_pinterest_link | replace_first: 'https:', '' | replace_first: 'http:', '' }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.pinterest' | t }}">
+				{%- render 'icon', code: 'pinterest' -%}
+				<span class="tooltip tooltip-top">{{- 'general.social.links.pinterest' | t -}}</span>
+			</a>
+		</li>
+
+		{% assign social_media_count = true %}
+	{%- endif -%}
+
+	{%- if settings.social_youtube_link != blank -%}
+		<li>
+			<a href="{{ settings.social_youtube_link | replace_first: 'https:', '' | replace_first: 'http:', '' }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.youtube' | t }}">
+				{%- render 'icon', code: 'youtube' -%}
+				<span class="tooltip tooltip-top">{{- 'general.social.links.youtube' | t -}}</span>
+			</a>
+		</li>
+
+		{% assign social_media_count = true %}
+	{%- endif -%}
+
+	{%- if settings.social_tiktok_link != blank -%}
+		<li>
+			<a href="{{ settings.social_tiktok_link | replace_first: 'https:', '' | replace_first: 'http:', '' }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.tiktok' | t }}">
+				{%- render 'icon', code: 'tiktok' -%}
+				<span class="tooltip tooltip-top">{{- 'general.social.links.tiktok' | t -}}</span>
+			</a>
+		</li>
+
+		{% assign social_media_count = true %}
+	{%- endif -%}
+
+	{%- if settings.social_vimeo_link != blank -%}
+		<li>
+			<a href="{{ settings.social_vimeo_link | replace_first: 'https:', '' | replace_first: 'http:', '' }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.vimeo' | t }}">
+				{%- render 'icon', code: 'vimeo' -%}
+				<span class="tooltip tooltip-top">{{- 'general.social.links.vimeo' | t -}}</span>
+			</a>
+		</li>
+
+		{% assign social_media_count = true %}
+	{%- endif -%}
+
+	{%- if settings.social_linkedin_link != blank -%}
+		<li>
+			<a href="{{ settings.social_linkedin_link | replace_first: 'https:', '' | replace_first: 'http:', '' }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.linkedin' | t }}">
+				{%- render 'icon', code: 'linkedin' -%}
+				<span class="tooltip tooltip-top">{{- 'general.social.links.linkedin' | t -}}</span>
+			</a>
+		</li>
+
+		{% assign social_media_count = true %}
+	{%- endif -%}
+
+	{%- if settings.social_snapchat_link != blank -%}
+		<li>
+			<a href="{{ settings.social_snapchat_link | replace_first: 'https:', '' | replace_first: 'http:', '' }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.snapchat' | t }}">
+				{%- render 'icon', code: 'snapchat' -%}
+				<span class="tooltip tooltip-top">{{- 'general.social.links.snapchat' | t -}}</span>
+			</a>
+		</li>
+
+		{% assign social_media_count = true %}
+	{%- endif -%}
+
+	{%- if settings.social_tumblr_link != blank -%}
+		<li>
+			<a href="{{ settings.social_tumblr_link | replace_first: 'https:', '' | replace_first: 'http:', '' }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.tumblr' | t }}">
+				{%- render 'icon', code: 'tumblr' -%}
+				<span class="tooltip tooltip-top">{{- 'general.social.links.tumblr' | t -}}</span>
+			</a>
+		</li>
+
+		{% assign social_media_count = true %}
+	{%- endif -%}
+
+	{%- if settings.social_whatsapp_link != blank -%}
+		<li>
+			<a href="{{ settings.social_whatsapp_link | replace_first: 'https:', '' | replace_first: 'http:', '' }}" class="icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.links.whatsapp' | t }}">
+				{%- render 'icon', code: 'whatsapp' -%}
+				<span class="tooltip tooltip-top">{{- 'general.social.links.whatsapp' | t -}}</span>
+			</a>
+		</li>
+
+		{% assign social_media_count = true %}
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- if social_media_count -%}
+	<ul class="social-media-list" role="list">
+		{{- social_media -}}
+	</ul>
+{%- endif -%}

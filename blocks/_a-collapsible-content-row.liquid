@@ -1,0 +1,138 @@
+{% if request.visual_preview_mode %}
+  {% assign section_id_variable = 'id' %}
+{% else %}
+  {% assign section_id_variable = section.id %}
+{% endif %}
+{% assign global_color = settings.enable_global_color %}
+<style>
+.atlas-isolation-wrapper .accordionButtonStyle-{{ section_id_variable }}.active .icon-plus-{{ section_id_variable }} {
+    display: none;
+}
+.atlas-isolation-wrapper .accordionButtonStyle-{{ section_id_variable }} .icon-minus-{{ section_id_variable }} {
+    display: none;
+}
+.atlas-isolation-wrapper .accordionButtonStyle-{{ section_id_variable }}.active .icon-minus-{{ section_id_variable }} {
+    display: inline-block;
+}
+.atlas-isolation-wrapper .accordionButtonStyle-{{ section_id_variable }}.active .index-number, .atlas-isolation-wrapper .accordionButtonStyle-{{ section_id_variable }}.active .collapsibleTitleSpan-{{ section_id_variable }}{
+    font-weight: bold;
+}
+</style>
+<div class="singleAccordianContainer-{{ section_id_variable }} block-{{ block.id }}" {{ block.shopify_attributes }}>
+  <button class="accordionButtonStyle-{{ section_id_variable }}">
+    <div style="display: flex; justify-content: space-between; align-items: center;gap:6px;">
+      <h3
+        class="accordianTitle-{{ section_id_variable }} rowTitleColor-{{ section_id_variable }} boldText-{{ section_id_variable }}"
+      >
+        <div style="display: flex; align-items: center; gap: 14px;">
+            {% if section.settings.show_index %}
+                <div class="index-number">
+                    <!--@#$%-->
+                </div>
+            {% endif %}
+          <span
+            class="collapsibleTitleSpan-{{ section_id_variable }} collapsible_title_span"
+            style="
+              --atlas-color-highlighted-color: {{ block.settings.heading_highlighted_color }};
+              color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ block.settings.heading_color }}{% endif %};
+            "
+          >
+            {{ block.settings.heading }}
+          </span>
+        </div>
+      </h3>
+      {% comment %} <svg
+        aria-hidden="true"
+        focusable="false"
+        class="icon icon-caret rowTitleColor-{{ section_id_variable }}"
+        viewBox="0 0 10 6"
+        width="100"
+        height="100"
+      >
+        <path d="M9.354.646a.5.5 0 0 0-.708 0L5 4.293 1.354.646a.5.5 0 0 0-.708.708l4 4a.5.5 0 0 0 .708 0l4-4a.5.5 0 0 0 0-.708">
+      </svg> {% endcomment %}
+      <svg class="icon rowTitleColor-{{ section_id_variable }} icon-plus-{{ section_id_variable }}" width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5.15625 10.3125C4.673 10.3125 4.28125 9.92075 4.28125 9.4375V0.875C4.28125 0.391751 4.673 0 5.15625 0C5.6395 0 6.03125 0.391751 6.03125 0.875V9.4375C6.03125 9.92075 5.6395 10.3125 5.15625 10.3125ZM0.875 6.03125C0.391751 6.03125 0 5.6395 0 5.15625C0 4.673 0.391751 4.28125 0.875 4.28125H9.4375C9.92075 4.28125 10.3125 4.673 10.3125 5.15625C10.3125 5.6395 9.92075 6.03125 9.4375 6.03125H0.875Z"/>
+      </svg>
+      <svg class="icon rowTitleColor-{{ section_id_variable }} icon-minus-{{ section_id_variable }}" width="11" height="2" viewBox="0 0 11 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0.875 1.75C0.391751 1.75 0 1.35825 0 0.875C0 0.391751 0.391751 0 0.875 0H9.4375C9.92075 0 10.3125 0.391751 10.3125 0.875C10.3125 1.35825 9.92075 1.75 9.4375 1.75H0.875Z" />
+      </svg>
+        
+    </div>
+  </button>
+  <div
+    class="panelStyle-{{ section_id_variable }} collapsible-body-text"
+    style="
+      --atlas-color-highlighted-color: {{ block.settings.body_highlighted_color }};
+      color: {% if global_color %}rgb(var(--atlas-color-base-text)){% else %}{{ block.settings.body_color }}{% endif %};
+    "
+  >
+    {{ block.settings.row_content }}
+  </div>
+</div><!-- end block -->
+{% schema %}
+{
+  "name": "Collapsible content row",
+  "tag": null,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Frequently Asked Questions",
+      "label": "Heading",
+      "info": "Include a heading that explains the content."
+    },
+    {
+      "type": "richtext",
+      "id": "row_content",
+      "label": "Body",
+      "default": "<p>Enter text content...</p>"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#383838"
+    },
+    {
+      "type": "color",
+      "id": "heading_highlighted_color",
+      "label": "Bolded heading color",
+      "default": "#383838"
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Body color",
+      "default": "#302f2f"
+    },
+    {
+      "type": "color",
+      "id": "body_highlighted_color",
+      "label": "Bolded body color",
+      "default": "#302f2f"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collapsible content row",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "row_content": "<p>Enter text content...</p>",
+        "heading_color": "#383838",
+        "heading_highlighted_color": "#383838",
+        "body_color": "#302f2f",
+        "body_highlighted_color": "#302f2f"
+      }
+    }
+  ]
+}
+{% endschema %}

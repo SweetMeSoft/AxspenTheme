@@ -1,0 +1,293 @@
+{% style %}
+  .atlas-isolation-wrapper #section-{{ section.id }} .benefits-cards {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      width: 100%;
+      justify-content: center;
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .benefits-cards__wrapper {
+      display: grid;
+      grid-template-columns: repeat({{ section.settings.cards_per_row }}, 1fr);
+      width: 100%;
+      gap: {{ section.settings.gap_cards }}px {{ section.settings.gap_cards }}px;
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .benefits-card {
+      display: flex;
+      background-color: rgba({{ section.settings.card_background_color.red }}, {{ section.settings.card_background_color.green }}, {{ section.settings.card_background_color.blue }}, {{ section.settings.card_background_color_opacity | divided_by: 100.0 }});
+      padding: {{ section.settings.card_vertical_padding }}px {{ section.settings.card_horizontal_padding }}px;
+      border-radius: {{ section.settings.card_border_radius }}px;
+      gap: {{ section.settings.gap_icon_text }}px;
+      align-items: center;
+      flex-shrink: 0;
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .benefits-card__icon {
+      width: {{ section.settings.icon_size }}px;
+      height: {{ section.settings.icon_size }}px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background-color: {{ section.settings.icon_background_color }};
+      border-radius: 50%;
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .benefits-card__icon svg,
+  .atlas-isolation-wrapper #section-{{ section.id }} .benefits-card__icon img {
+      width: calc({{ section.settings.icon_size }}px / 1.5);
+      height: calc({{ section.settings.icon_size }}px / 1.5);
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .benefits-card__icon svg {
+      fill: {{ section.settings.icon_color }};
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .benefits-card__text {
+      font-size: {{ section.settings.text_size }}px;
+      font-weight: 300;
+      color: {{ section.settings.text_color }};
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .benefits-card__text p {
+      margin: 0;
+  }
+  @media (max-width: 1024px) {
+      .atlas-isolation-wrapper #section-{{ section.id }} .benefits-cards__wrapper {
+          grid-template-columns: repeat(2, 1fr);
+      }
+  }
+
+  @media (max-width: 768px) {
+      .atlas-isolation-wrapper #section-{{ section.id }} .benefits-cards__wrapper {
+          display:flex;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+      }
+      .atlas-isolation-wrapper #section-{{ section.id }} .benefits-cards__wrapper::-webkit-scrollbar {
+          display: none;
+      }
+      .atlas-isolation-wrapper #section-{{ section.id }} .benefits-card {
+          flex-shrink: 0;
+          flex: unset;
+          min-width: 327px;
+          width: 100%;
+      }
+  }
+{% endstyle %}
+
+<div id="section-{{ section.id }}">
+  <div
+    class="benefits-cards"
+    style="{% if section.settings.use_gradient_background %}background: {{ section.settings.section_background_gradient }};{% else %}background-color: {{ section.settings.section_background_color }};{% endif %}"
+  >
+    <div class="benefits-cards__wrapper page-width">
+      {% for block in section.blocks %}
+        <div class="benefits-card">
+          <div class="benefits-card__icon">
+            {% if block.settings.benefit_image != blank %}
+              {{ block.settings.benefit_image | image_url: width: 100 | image_tag: loading: 'lazy' }}
+            {% elsif block.settings.icon != blank %}
+              {{ block.settings.icon }}
+            {% endif %}
+          </div>
+          <div class="benefits-card__text">
+            {{ block.settings.benefit_text }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Benefits cards",
+  "class": "atlas-isolation-wrapper atlas-gradient",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Card"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "cards_per_row",
+      "label": "Cards per row",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background color",
+      "default": "#F9F9F9"
+    },
+    {
+      "type": "range",
+      "id": "card_background_color_opacity",
+      "label": "Card background color opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "card_vertical_padding",
+      "label": "Card vertical padding",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "card_horizontal_padding",
+      "label": "Card horizontal padding",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "gap_cards",
+      "label": "Gap between cards",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "gap_icon_text",
+      "label": "Gap between icon and text",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 30,
+      "max": 130,
+      "step": 1,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#1D1A2D"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1D1A2D"
+    },
+    {
+      "type": "color",
+      "id": "icon_background_color",
+      "label": "Icon background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_background_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.use_gradient_background == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "benefit_text",
+          "label": "Benefit text",
+          "default": "<p>#1_Benefit</p>"
+        },
+        {
+          "type": "textarea",
+          "id": "icon",
+          "label": "Icon",
+          "default": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#1f1f1f\"><path d=\"m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z\"/></svg>",
+          "info": "Note: [View all available icons](https://fonts.google.com/icons?icon.set=Material+Symbols&icon.platform=web). You MUST copy the SVG code to display your desired icon. Its all the way at the top right of the page."
+        },
+        {
+          "type": "image_picker",
+          "id": "benefit_image",
+          "label": "Custom icon"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

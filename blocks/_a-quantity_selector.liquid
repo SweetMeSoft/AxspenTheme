@@ -1,0 +1,181 @@
+{% assign product = closest.product %}
+{%- assign product_form_id = 'product-form-' | append: section.id -%}
+{% style %}
+  .product-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0;
+    padding: 0 4px;
+    width: 100%;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .product-info-left {
+    display: flex;
+    align-items: baseline;
+    flex: 0 0 auto;
+    gap: 5px;
+  }
+  .product-info-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  .buy-buttons-container {
+    display: flex;
+    {% if block.settings.add_to_cart_full_width %}
+      flex-direction: column;
+    {% else %}
+      gap: 7px;
+    {% endif %} 
+  }
+  @media screen and (max-width: 1024px) {
+    .buy-buttons-container {
+      flex-direction: column;
+    }
+    .buy-buttons-container .quantity-buttons {
+      width: 100%;
+    }
+    .buy-buttons-container .quantity-buttons .quantity-icons-parent {
+      width: 100%;
+    }
+  }
+  .buy-buttons-container .product-form__input {
+    flex: 0;
+    margin-bottom: 0;
+  }
+  .buy-buttons-container .product-form__quantity .form__label {
+    margin-bottom: 0;
+  }
+{% endstyle %}
+{% style %}
+  .product-block-{{ block.id }}{
+    padding-top: {{block.settings.padding_top }}px;
+    padding-bottom: {{block.settings.padding_bottom }}px;
+  }
+  @media screen and (max-width: 768px) {
+    .product-block-{{ block.id }} {
+      padding-top: {{block.settings.padding_top_mobile }}px;
+      padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+    }
+  }
+  label[for="Quantity-{{ section.id }}"]{
+    color: var(rgb(--color-foreground))!important;
+  }
+  #Quantity-Form-{{ section.id }} .quantity-icons-parent {
+      border-color: var(rgb(--color-foreground))!important;
+  }
+
+  #Quantity-Form-{{ section.id }} button.quantity-icon {
+      border-color: var(rgb(--color-foreground))!important;
+  }
+
+  #Quantity-Form-{{ section.id }} button.quantity-icon svg path {
+      fill: var(rgb(--color-foreground))!important;
+  }
+
+  #Quantity-Form-{{ section.id }} .quantity-number {
+      color: var(rgb(--color-foreground))!important;
+  }
+{% endstyle %}
+<div class="product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  <div class="product-info-header">
+    {% content_for 'block', type: '_a-quantity_label', id: 'quantity_label' %}
+    {% content_for 'block', type: '_a-inventory_quantity', id: 'inventory_quantity' %}
+  </div>
+  <div class="buy-buttons-container">
+    {% content_for 'block',
+      type: '_a-quantity_form',
+      id: 'quantity_form',
+      product: product,
+      product_form_id: product_form_id,
+      section_id: section.id
+    %}
+    {% content_for 'block',
+      type: '_a-add_to_cart_button',
+      id: 'add_to_cart_button',
+      product: product,
+      product_form_id: product_form_id,
+      section_id: section.id
+    %}
+  </div>
+   
+    {% if block.settings.show_buy_now_button %}
+      {% content_for 'block', type: '_a-buy_now_button', id: 'buy_now_button' %}
+    {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Buy buttons",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "add_to_cart_full_width",
+      "label": "Add to cart button full width on desktop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buy_now_button",
+      "label": "Show buy now button",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Buy buttons",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

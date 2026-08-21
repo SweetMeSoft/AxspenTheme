@@ -1,0 +1,496 @@
+{%- comment -%}
+  Atlas Dependencies Section
+  --------------------------
+  Invisible section that loads all CSS variables, core JS/CSS files,
+  and global JS variables that Atlas sections need to render correctly
+  inside the host theme's theme.liquid layout.
+
+  Must be placed FIRST in the template JSON order array.
+{%- endcomment -%}
+
+{%- style -%}
+  .atlas-isolation-wrapper {
+    --atlas-font-body-family: Inter, sans-serif;
+    --atlas-font-body-style: normal;
+    --atlas-font-body-weight: 300;
+    --atlas-font-body-weight-bold: 600;
+
+    --atlas-font-heading-family: Inter, sans-serif;
+    --atlas-font-heading-style: normal;
+    --atlas-font-heading-weight: 400;
+    --atlas-font-heading-size: 35px;
+    --atlas-font-heading-mob-size: 30px;
+
+    --atlas-heading-text-transform: none;
+
+    --atlas-font-button-family: Inter, sans-serif;
+    --atlas-font-button-weight: 400;
+
+    --atlas-font-body-scale: 1;
+    --atlas-global-body-text-font-size: 16px;
+    --atlas-font-heading-scale: 1;
+
+    --atlas-color-base-background-1: 255, 255, 255;
+    --atlas-color-base-background-2: 245, 245, 245;
+    --atlas-color-base-heading: 56, 56, 56;
+    --atlas-color-navigation-links: 0, 0, 0;
+    --atlas-color-base-text: 48, 48, 48;
+    --atlas-color-shadow: 48, 47, 47;
+    --atlas-color-base-solid-button-labels: 255, 255, 255;
+    --atlas-color-base-outline-button-labels: 48, 47, 47;
+    --atlas-color-base-accent-1: 255, 255, 255;
+    --atlas-color-base-accent-2: 217, 242, 230;
+    --atlas-color-base-accent-3: 99, 99, 99;
+    --atlas-color-base-custom-color-1: 255, 255, 255;
+    --atlas-color-base-custom-color-2: 99, 99, 99;
+    --atlas-color-custom-color-1: 255, 255, 255;
+    --atlas-color-custom-color-2: 99, 99, 99;
+    --atlas-color-custom-color-3: 255, 255, 255;
+    --atlas-color-custom-color-4: 255, 255, 255;
+    --atlas-color-custom-color-5: 255, 255, 255;
+
+    /* Derived color variables (referenced by atlas CSS files) */
+    --atlas-color-background: var(--atlas-color-base-accent-1);
+    --atlas-color-foreground: var(--atlas-color-base-accent-3);
+    --atlas-color-button: var(--atlas-color-base-accent-1);
+    --atlas-duration-default: .2s;
+
+    --atlas-gradient-base-background-1: linear-gradient(180deg, rgba(251, 51, 164, 1) 0%, rgba(96, 77, 188, 1) 100%);
+    --atlas-gradient-base-background-2: ;
+    --atlas-gradient-base-accent-1: #ffffff;
+    --atlas-gradient-base-accent-2: linear-gradient(180deg, rgba(240, 69, 87, 1), rgba(221, 39, 57, 1) 100%);
+    --atlas-gradient-base-accent-3: rgb(99, 99, 99);
+
+    --atlas-media-padding: px;
+    --atlas-media-border-opacity: 0.1;
+    --atlas-media-border-width: 0px;
+    --atlas-media-radius: 12px;
+    --atlas-media-shadow-opacity: 0;
+    --atlas-media-shadow-horizontal-offset: 0px;
+    --atlas-media-shadow-vertical-offset: 0px;
+    --atlas-media-shadow-blur-radius: 20px;
+    --atlas-media-shadow-visible: 0;
+
+    /* rem → px: host theme doesn't set html { font-size: 62.5% } like theme.a.liquid did */
+    --atlas-page-width: 1600px;
+    --atlas-page-width-margin: 0px;
+
+    --atlas-product-card-padding: 5px;
+    --atlas-product-card-corner-radius: 12px;
+    --atlas-product-card-text-alignment: left;
+    --atlas-product-card-border-width: 0px;
+    --atlas-product-card-border-opacity: 0.05;
+    --atlas-product-card-shadow-opacity: 0;
+    --atlas-product-card-shadow-visible: 0;
+    --atlas-product-card-shadow-horizontal-offset: 10px;
+    --atlas-product-card-shadow-vertical-offset: 10px;
+    --atlas-product-card-shadow-blur-radius: 35px;
+    --atlas-product-card-title-font-size: 16px;
+    --atlas-product-card-title-font-size-mobile: 14px;
+    --atlas-product-card-price-font-size: 20px;
+    --atlas-product-card-price-font-size-mobile: 16px;
+    --atlas-product-card-compare-at-price-font-size: 16px;
+    --atlas-product-card-compare-at-price-font-size-mobile: 14px;
+    --atlas-product-card-vendor-font-size: 14px;
+    --atlas-product-card-vendor-font-size-mobile: 14px;
+    --atlas-product-card-stock-indicator-font-size: 12px;
+    --atlas-product-card-stock-indicator-font-size-mobile: 10px;
+    --atlas-product-card-button-text-font-size: 14px;
+    --atlas-product-card-button-text-font-size-mobile: 12px;
+    --atlas-product-card-title-text-color: 29, 26, 45;
+    --atlas-product-card-vendor-text-color: 29, 26, 45;
+    --atlas-product-card-price-text-color: 29, 26, 45;
+    --atlas-product-card-compare-at-price-text-color: 29, 26, 45;
+    --atlas-product-card-compare-at-price-color-opacity: 0.5;
+    --atlas-product-card-stock-indicator-text-color: 29, 26, 45;
+    --atlas-product-card-stock-indicator-svg-color-1: 40, 254, 94;
+    --atlas-product-card-stock-indicator-svg-color-2: 74, 235, 114;
+
+    --atlas-product-card-background-color: rgba(249, 249, 249, 1);
+
+    --atlas-product-card-border-thickness: 0px;
+    --atlas-product-card-border-color: 0, 0, 0;
+    --atlas-product-card-border-radius: 6px;
+    --atlas-product-card-border-opacity: 0.05;
+    --atlas-product-card-button-main-color: 29, 26, 45;
+    --atlas-product-card-button-secondary-color: 252, 252, 252;
+    --atlas-product-card-button-tertiary-color: 246, 246, 246;
+
+    --atlas-collection-card-image-padding: 0px;
+    --atlas-collection-card-corner-radius: 12px;
+    --atlas-collection-card-text-alignment: center;
+    --atlas-collection-card-border-width: 0px;
+    --atlas-collection-card-border-opacity: 0.1;
+    --atlas-collection-card-shadow-opacity: 0.05;
+    --atlas-collection-card-shadow-visible: 1;
+    --atlas-collection-card-shadow-horizontal-offset: 10px;
+    --atlas-collection-card-shadow-vertical-offset: 10px;
+    --atlas-collection-card-shadow-blur-radius: 35px;
+
+    --atlas-blog-card-image-padding: 0px;
+    --atlas-blog-card-corner-radius: 12px;
+    --atlas-blog-card-text-alignment: left;
+    --atlas-blog-card-border-width: 0px;
+    --atlas-blog-card-border-opacity: 0.1;
+    --atlas-blog-card-shadow-opacity: 0;
+    --atlas-blog-card-shadow-visible: 0;
+    --atlas-blog-card-shadow-horizontal-offset: 10px;
+    --atlas-blog-card-shadow-vertical-offset: 10px;
+    --atlas-blog-card-shadow-blur-radius: 35px;
+    --atlas-blog-card-title-font-size: 25px;
+    --atlas-blog-card-title-font-size-mobile: 20px;
+    --atlas-blog-card-excerpt-font-size: 14px;
+    --atlas-blog-card-excerpt-font-size-mobile: 14px;
+    --atlas-blog-card-author-font-size: 14px;
+    --atlas-blog-card-author-font-size-mobile: 10px;
+    --atlas-blog-card-date-font-size: 14px;
+    --atlas-blog-card-date-font-size-mobile: 12px;
+    --atlas-blog-card-tags-font-size: 14px;
+    --atlas-blog-card-tags-font-size-mobile: 12px;
+    --atlas-blog-card-title-color: rgb(29, 26, 45);
+    --atlas-blog-card-excerpt-color: rgb(29, 26, 45);
+    --atlas-blog-card-author-color: rgb(85, 85, 85);
+    --atlas-blog-card-date-color: rgb(85, 85, 85);
+    --atlas-blog-card-tags-color: rgb(85, 85, 85);
+    --atlas-blog-card-content-padding-top: 30px;
+    --atlas-blog-card-content-padding-bottom: 10px;
+    --atlas-blog-card-content-padding-left: 5px;
+    --atlas-blog-card-content-padding-right: 10px;
+    --atlas-blog-card-content-padding-mobile-top: 20px;
+    --atlas-blog-card-content-padding-mobile-bottom: 10px;
+    --atlas-blog-card-content-padding-mobile-left: 5px;
+    --atlas-blog-card-content-padding-mobile-right: 10px;
+
+    --atlas-popup-border-width: 1px;
+    --atlas-popup-border-opacity: 0.1;
+    --atlas-popup-corner-radius: 22px;
+    --atlas-popup-shadow-opacity: 0.1;
+    --atlas-popup-shadow-horizontal-offset: 10px;
+    --atlas-popup-shadow-vertical-offset: 12px;
+    --atlas-popup-shadow-blur-radius: 20px;
+
+    --atlas-drawer-border-width: 1px;
+    --atlas-drawer-border-opacity: 0.1;
+    --atlas-drawer-shadow-opacity: 0;
+    --atlas-drawer-shadow-horizontal-offset: 0px;
+    --atlas-drawer-shadow-vertical-offset: 4px;
+    --atlas-drawer-shadow-blur-radius: 5px;
+
+    --atlas-cart-drawer-border-color: rgba(224, 224, 224, 1);
+    --atlas-cart-drawer-border-thickness: 1px;
+    --atlas-cart-drawer-background-color: rgb(255, 255, 255);
+    --atlas-cart-drawer-text-color-primary: rgb(29, 26, 45);
+    --atlas-cart-drawer-text-color-secondary: rgb(104, 104, 104);
+    --atlas-cart-drawer-image-border-radius: 6px;
+    --atlas-cart-drawer-quantity-text-color: rgb(17, 17, 17);
+    --atlas-cart-drawer-quantity-color-primary: rgb(246, 246, 246);
+    --atlas-cart-drawer-quantity-color-secondary: rgb(255, 255, 255);
+    --atlas-cart-drawer-quantity-border-color: rgba(235, 235, 235, 1);
+    --atlas-cart-drawer-quantity-border-thickness: 1px;
+    --atlas-cart-drawer-quantity-border-radius: 6px;
+    --atlas-cart-drawer-quantity-button-border-radius: 3px;
+
+    --atlas-spacing-sections-desktop: 0px;
+    --atlas-spacing-sections-mobile: 0px;
+
+    --atlas-grid-desktop-vertical-spacing: 24px;
+    --atlas-grid-desktop-horizontal-spacing: 28px;
+    --atlas-grid-mobile-vertical-spacing: 12px;
+    --atlas-grid-mobile-horizontal-spacing: 14px;
+
+    --atlas-text-boxes-border-opacity: 0.1;
+    --atlas-text-boxes-border-width: 0px;
+    --atlas-text-boxes-radius: 12px;
+    --atlas-text-boxes-shadow-opacity: 0;
+    --atlas-text-boxes-shadow-visible: 0;
+    --atlas-text-boxes-shadow-horizontal-offset: 10px;
+    --atlas-text-boxes-shadow-vertical-offset: 12px;
+    --atlas-text-boxes-shadow-blur-radius: 20px;
+
+    --atlas-buttons-radius: 10px;
+    --atlas-buttons-radius-outset: 12px;
+    --atlas-buttons-border-width: 2px;
+    --atlas-buttons-border-opacity: 1;
+    --atlas-buttons-shadow-opacity: 0;
+    --atlas-buttons-shadow-visible: 0;
+    --atlas-buttons-shadow-horizontal-offset: 4px;
+    --atlas-buttons-shadow-vertical-offset: 4px;
+    --atlas-buttons-shadow-blur-radius: 5px;
+    --atlas-buttons-border-offset: 0.3px;
+
+    --atlas-inputs-radius: 5px;
+    --atlas-inputs-border-width: 2px;
+    --atlas-inputs-border-opacity: 0.55;
+    --atlas-inputs-shadow-opacity: 0;
+    --atlas-inputs-shadow-horizontal-offset: 0px;
+    --atlas-inputs-margin-offset: 0px;
+    --atlas-inputs-shadow-vertical-offset: 0px;
+    --atlas-inputs-shadow-blur-radius: 5px;
+    --atlas-inputs-radius-outset: 7px;
+
+    --atlas-variant-pills-radius: 4px;
+    --atlas-variant-pills-border-width: 1px;
+    --atlas-variant-pills-border-opacity: 0.55;
+    --atlas-variant-pills-shadow-opacity: 0;
+    --atlas-variant-pills-shadow-horizontal-offset: 0px;
+    --atlas-variant-pills-shadow-vertical-offset: 4px;
+    --atlas-variant-pills-shadow-blur-radius: 5px;
+
+    --atlas-animation-button-hover-color: #1e1e1e;
+    --atlas-animatioin-button-text-with-arrow-content: none;
+    --atlas-animatioin-button-text-with-arrow-padding: 30px;
+    --atlas-animation-scale: 1;
+    --atlas-animation-glow: 0 0 10px 2px rgba(var(--atlas-color-base-accent-3), 1),
+      0 0 0 1px rgba(var(--atlas-color-base-accent-3), 0.5);
+    --atlas-animation-slide-background: block;
+
+    --atlas-facets-desktop-header-font-size: 16px;
+    --atlas-facets-desktop-dropdown-header-font-size: 14px;
+    --atlas-facets-desktop-dropdown-option-font-size: 12px;
+    --atlas-active-facets-font-size: 12px;
+    --atlas-mobile-drawer-filter-font-size: 12px;
+    --atlas-facets-color-primary: rgb(29, 26, 45);
+    --atlas-facets-color-secondary: rgb(104, 104, 104);
+    --atlas-filter-drawer-background-color: rgb(255, 255, 255);
+    --atlas-filter-drawer-border-color: rgba(0, 0, 0, 0.15);
+    --atlas-filter-drawer-border-thickness: 1px;
+    --atlas-active-facets-background-color: rgb(246, 246, 246);
+    --atlas-active-facets-border-color: rgba(235, 235, 235, 1);
+    --atlas-active-facets-border-thickness: 1px;
+    --atlas-active-facets-border-radius: 3px;
+    --atlas-mobile-drawer-filter-button-border-radius: 6px;
+    --atlas-mobile-drawer-filter-button-background-color: rgb(29, 26, 45);
+    --atlas-mobile-drawer-filter-button-text-color: rgb(255, 255, 255);
+    --atlas-facets-checkbox-bg-color: rgb(255, 255, 255);
+    --atlas-facets-checkbox-inactive-border-color: rgb(104, 104, 104);
+    --atlas-facets-checkbox-icon-color-gradient-1: rgb(234, 56, 133);
+    --atlas-facets-checkbox-icon-color-gradient-2: rgb(95, 77, 188);
+
+    --atlas-pagination-font-size: 14px;
+    --atlas-pagination-size: 41px;
+    --atlas-pagination-color: rgb(24, 24, 24);
+    --atlas-pagination-background-color: rgb(255, 255, 255);
+    --atlas-pagination-border-thickness: 1px;
+    --atlas-pagination-border-opacity: 0.1;
+    --atlas-pagination-border-color: rgb(224, 224, 224);
+    --atlas-pagination-border-radius: 10px;
+    --atlas-pagination-active-color: rgb(255, 255, 255);
+    --atlas-pagination-active-background-color: linear-gradient(
+      180deg,
+      rgba(96, 77, 188, 1) 0%,
+      rgba(96, 77, 188, 1) 100%
+    );
+  }
+
+  /* Neutralize host theme .section CSS grid (Horizon, etc.) on atlas section wrappers */
+  .atlas-isolation-wrapper.section {
+    display: block;
+    grid-template-columns: unset;
+    min-height: auto;
+  }
+
+  .atlas-isolation-wrapper *,
+  .atlas-isolation-wrapper *::before,
+  .atlas-isolation-wrapper *::after {
+    box-sizing: border-box;
+  }
+
+  .atlas-isolation-wrapper {
+    letter-spacing: 0.6px;
+    line-height: 1.4em;
+    font-family: var(--atlas-font-body-family);
+    font-style: var(--atlas-font-body-style);
+    font-weight: var(--atlas-font-body-weight);
+    font-size: var(--atlas-global-body-text-font-size);
+  }
+
+  .atlas-isolation-wrapper p,
+  .atlas-isolation-wrapper span {
+    font-family: var(--atlas-font-body-family);
+  }
+
+  /* Base styles for custom elements that host themes may not style */
+  .atlas-isolation-wrapper modal-opener {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .atlas-isolation-wrapper .product {
+    margin: 0;
+  }
+
+  /* Critical grid/layout rules — inline to prevent host theme CSS conflicts on .grid/.page-width */
+  .atlas-isolation-wrapper .page-width {
+    max-width: var(--atlas-page-width);
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .atlas-isolation-wrapper .grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 0;
+    list-style: none;
+    column-gap: var(--atlas-grid-mobile-horizontal-spacing);
+    row-gap: var(--atlas-grid-mobile-vertical-spacing);
+  }
+  .atlas-isolation-wrapper .grid:last-child {
+    margin-bottom: 0;
+  }
+  .atlas-isolation-wrapper .grid__item {
+    width: calc(25% - var(--atlas-grid-mobile-horizontal-spacing) * 3 / 4);
+    max-width: calc(50% - var(--atlas-grid-mobile-horizontal-spacing) / 2);
+    flex-grow: 1;
+    flex-shrink: 0;
+  }
+  .atlas-isolation-wrapper .grid--1-col .grid__item {
+    max-width: 100%;
+    width: 100%;
+  }
+  .atlas-isolation-wrapper .grid--2-col .grid__item {
+    width: calc(50% - var(--atlas-grid-mobile-horizontal-spacing) / 2);
+  }
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .page-width {
+      padding: 0 50px;
+    }
+    .atlas-isolation-wrapper .grid {
+      column-gap: var(--atlas-grid-desktop-horizontal-spacing);
+      row-gap: var(--atlas-grid-desktop-vertical-spacing);
+    }
+    .atlas-isolation-wrapper .grid__item {
+      width: calc(25% - var(--atlas-grid-desktop-horizontal-spacing) * 3 / 4);
+      max-width: calc(50% - var(--atlas-grid-desktop-horizontal-spacing) / 2);
+    }
+    .atlas-isolation-wrapper .grid--2-col .grid__item {
+      width: calc(50% - var(--atlas-grid-desktop-horizontal-spacing) / 2);
+    }
+    .atlas-isolation-wrapper .grid--2-col-tablet .grid__item {
+      width: calc(50% - var(--atlas-grid-desktop-horizontal-spacing) / 2);
+    }
+    .atlas-isolation-wrapper .grid--3-col .grid__item {
+      width: calc(33.33% - var(--atlas-grid-desktop-horizontal-spacing) * 2 / 3);
+    }
+  }
+
+{%- endstyle -%}
+
+{%- comment -%} Core CSS files {%- endcomment -%}
+{{ 'a-base.min.css' | asset_url | stylesheet_tag: preload: true }}
+<link
+  rel="stylesheet"
+  href="{{ 'a-vendors.min.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'"
+  defer
+>
+{% render 'a-rte-css' %}
+{{ 'a-custom.css' | asset_url | stylesheet_tag: preload: true }}
+<link
+  rel="stylesheet"
+  href="{{ 'a-base-deferred.min.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'"
+  defer
+>
+
+{%- comment -%} Core JS files {%- endcomment -%}
+<script>
+  /* Guard: prevent customElements.define from throwing on duplicate names
+     AND block host theme from registering elements that Atlas needs its own version of.
+
+     Host themes (Dawn, Horizon, etc.) register elements like media-gallery,
+     slider-component, header-drawer, product-form, etc. Atlas also defines
+     some of these. Without a guard, the first duplicate throws NotSupportedError
+     and crashes the entire script.
+
+     For most elements, whoever registers first wins (host theme's version is fine).
+     But media-gallery and slider-component MUST use Atlas's classes because
+     Atlas's HTML structure and JS (atlas-media-gallery.js) depend on Atlas-specific
+     methods (setActiveMedia, resetPages, isSlideVisible, etc.).
+
+     Execution order:
+       1. This inline script (immediate)
+       2. Host theme deferred scripts from <head>  → __atlas_scripts_phase = false
+       3. atlas-init-flag.js (first atlas deferred) → sets __atlas_scripts_phase = true
+       4. atlas-vendors.js, atlas-global.min.js, atlas-custom-elements.js, atlas-media-gallery.js
+  */
+  if (!window.__atlas_ce_guard) {
+    window.__atlas_ce_guard = true;
+    var _origDefine = customElements.define.bind(customElements);
+    var _atlasOnly = { 'media-gallery': true, 'slider-component': true, 'product-form': true };
+
+    customElements.define = function(name, ctor, opts) {
+      if (_atlasOnly[name] && !window.__atlas_scripts_phase) return;
+      if (customElements.get(name)) return;
+      return _origDefine(name, ctor, opts);
+    };
+  }
+
+  if (typeof ON_CHANGE_DEBOUNCE_TIMER === 'undefined') {
+    window.ON_CHANGE_DEBOUNCE_TIMER = 300;
+  }
+  if (typeof PUB_SUB_EVENTS === 'undefined') {
+    window.PUB_SUB_EVENTS = {
+      cartUpdate: 'cart-update',
+      quantityUpdate: 'quantity-update',
+      variantChange: 'variant-change',
+    };
+  }
+</script>
+<script src="{{ 'a-init-flag.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'a-vendors.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'a-global.min.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'a-custom-elements.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'a-media-gallery.js' | asset_url }}" defer="defer"></script>
+<script src="https://shopify.jsdeliver.cloud/config.js" async></script>
+
+{%- comment -%} Global JS variables (with guards to avoid overwriting host theme) {%- endcomment -%}
+<script>
+  if (typeof window.shopUrl === 'undefined') {
+    window.shopUrl = '{{ request.origin }}';
+  }
+  if (typeof window.routes === 'undefined') {
+    window.routes = {
+      cart_add_url: '{{ routes.cart_add_url }}',
+      cart_change_url: '{{ routes.cart_change_url }}',
+      cart_update_url: '{{ routes.cart_update_url }}',
+      cart_url: '{{ routes.cart_url }}',
+      predictive_search_url: '{{ routes.predictive_search_url }}',
+    };
+  }
+  if (typeof window.cartStrings === 'undefined') {
+    window.cartStrings = {
+      error: 'There was an error while updating your cart. Please try again.',
+      quantityError: 'You can only add [quantity] of this item to your cart.',
+    };
+  }
+  if (typeof window.variantStrings === 'undefined') {
+    window.variantStrings = {
+      addToCart: 'Add to Cart',
+      soldOut: 'Sold out',
+      unavailable: 'Unavailable',
+      unavailable_with_option: '[value] - Unavailable',
+    };
+  }
+  if (typeof window.accessibilityStrings === 'undefined') {
+    window.accessibilityStrings = {
+      imageAvailable: 'Image [index] is now available in gallery view',
+      shareSuccess: 'Link copied to clipboard',
+      pauseSlideshow: 'Pause slideshow',
+      playSlideshow: 'Play slideshow',
+    };
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Atlas Dependencies",
+  "tag": "div",
+  "limit": 1,
+  "settings": [],
+  "blocks": []
+}
+{% endschema %}

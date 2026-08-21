@@ -1,0 +1,67 @@
+{% comment %}
+  Renders cart notification
+
+  Accepts:
+  - color_scheme: {String} sets the color scheme of the notification (optional)
+
+  Usage:
+  {% render 'a-cart-notification' %}
+{% endcomment %}
+
+<cart-notification>
+  <div class="cart-notification-wrapper page-width">
+    <div
+      id="cart-notification"
+      class="cart-notification focus-inset{% if color_scheme %} color-{{ color_scheme }} gradient{% endif %}"
+      aria-modal="true"
+      aria-label="Item added to your cart"
+      role="dialog"
+      tabindex="-1"
+    >
+      <div class="cart-notification__header">
+        <h2 class="cart-notification__heading caption-large text-body">
+          {%- render 'a-icon-checkmark' -%}
+          Item added to your cart
+        </h2>
+        <button
+          type="button"
+          class="cart-notification__close modal__close-button link link--text focus-inset"
+          aria-label="Close"
+        >
+          <svg class="icon icon-close" aria-hidden="true" focusable="false">
+            <use href="#icon-close">
+          </svg>
+        </button>
+      </div>
+      <div id="cart-notification-product" class="cart-notification-product"></div>
+      <div class="cart-notification__links">
+        <a
+          href="{{ routes.cart_url }}"
+          id="cart-notification-button"
+          class="button button--secondary button--full-width"
+        >
+          <span class="button-text">
+            View my cart
+          </span>
+        </a>
+        <form action="{{ routes.cart_url }}" method="post" id="cart-notification-form">
+          <button class="button button--primary button--full-width" name="checkout">
+            <span class="button-text">
+              Check out
+            </span>
+          </button>
+        </form>
+        <button type="button" class="link button-label">
+          <span class="button-text">
+            Continue shopping
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</cart-notification>
+{% style %}
+  .atlas-isolation-wrapper .cart-notification {
+    display: none;
+  }
+{% endstyle %}

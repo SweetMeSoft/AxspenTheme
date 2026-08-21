@@ -1,0 +1,277 @@
+{% style %}
+.atlas-isolation-wrapper .product-block-{{ block.id }} .testimonials-swiper {
+  width: 100%;
+}
+
+.atlas-isolation-wrapper .product-block-{{ block.id }} .swiper-slide {
+  height: {{ block.settings.card_height_desktop | default: 200 }}px;
+}
+
+.atlas-isolation-wrapper .product-block-{{ block.id }} .video-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.atlas-isolation-wrapper .product-block-{{ block.id }} .video-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
+
+.atlas-isolation-wrapper .product-block-{{ block.id }} .video-card.playing .play-icon {
+  display: none;
+}
+
+.atlas-isolation-wrapper .product-block-{{ block.id }} .video-card.playing .stop-icon {
+  display: block !important;
+}
+
+.atlas-isolation-wrapper .product-block-{{ block.id }} .swiper-button-next,
+.atlas-isolation-wrapper .product-block-{{ block.id }} .swiper-button-prev {
+  display: none;
+}
+
+.atlas-isolation-wrapper .product-block-{{ block.id }} .swiper-button-next:after,
+.atlas-isolation-wrapper .product-block-{{ block.id }} .swiper-button-prev:after {
+  font-size: 20px;
+}
+
+/* Progress bar styles */
+.atlas-isolation-wrapper video-testimonials .swiper-horizontal > .swiper-pagination-progressbar,
+.atlas-isolation-wrapper video-testimonials .swiper-pagination-progressbar.swiper-pagination-horizontal {
+  top: inherit;
+  bottom: 0;
+  background: {{ block.settings.progress_bar_background | default: '#E8E8E8' }};
+  height: 2px;
+  border-radius: 100px;
+  margin-top: 8px;
+  position: inherit;
+}
+
+.atlas-isolation-wrapper video-testimonials .swiper-pagination-progressbar .swiper-pagination-progressbar-fill{
+  background: {{ block.settings.progress_bar_fill | default: '#1D1A2D' }};
+  border-radius: 100px;
+}
+
+@media screen and (max-width: 1024px) {
+  .atlas-isolation-wrapper video-testimonials .product-block-{{ block.id }} .swiper-slide {
+    height: {{ block.settings.card_height_mobile | default: 150 }}px;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .atlas-isolation-wrapper .product-block-{{ block.id }} .testimonials-swiper {
+    overflow: initial;
+  }
+  .product-block-{{ block.id }} .swiper-slide {
+    width: var(--slide-width-mobile, {{ block.settings.card_width_mobile | default: 110 }}px);
+    height: {{ block.settings.card_height_mobile | default: 150 }}px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .atlas-isolation-wrapper .product-block-{{ block.id }} .swiper-slide {
+    width: var(--slide-width-desktop, auto);
+  }
+}
+.atlas-isolation-wrapper .product-block-{{ block.id }} .play-button {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  cursor: pointer;
+  z-index: 10;
+  width: {{ block.settings.play_button_size | default: 33 }}px;
+  height: {{ block.settings.play_button_size | default: 33 }}px;
+}
+
+.atlas-isolation-wrapper .product-block-{{ block.id }} .play-button svg {
+  width: {{ block.settings.play_button_size | default: 33 }}px;
+  height: {{ block.settings.play_button_size | default: 33 }}px;
+}
+{% endstyle %}
+
+<div class="testimonials-swiper product-block-{{ block.id }} swiper" 
+     data-slides-desktop="{{ block.settings.slides_per_view_desktop }}"
+     data-slides-tablet="{{ block.settings.slides_per_view_tablet}}"
+     data-slides-mobile="{{ block.settings.slides_per_view_mobile }}"
+     data-enable-fixed-desktop-width="{{ block.settings.enable_slide_width }}"
+     data-fixed-desktop-width="{{ block.settings.card_width_desktop }}"
+     data-enable-fixed-mobile-width="{{ block.settings.enable_slide_width_mobile }}"
+     data-fixed-mobile-width="{{ block.settings.card_width_mobile }}"
+     data-gap="{{ block.settings.gap_between_cards }}"
+     {{ block.shopify_attributes }}>
+     {% content_for 'block', type: '_a-video_testimonial_list', id: 'video_testimonial_list',play_button_background: block.settings.play_button_background, play_button_border: block.settings.play_button_border, play_button_icon: block.settings.play_button_icon, play_button_size: block.settings.play_button_size %}
+  <div class="swiper-button-next swiper-button-next-{{ block.id }}"></div>
+  <div class="swiper-button-prev swiper-button-prev-{{ block.id }}"></div>
+</div>
+<div class="swiper-pagination"></div>
+
+{% schema %}
+{
+  "name": "Video slider settings",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Slider settings"
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Desktop slides per view",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_tablet",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Tablet slides per view",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_mobile",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "label": "Mobile slides per view",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "gap_between_cards",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap between cards",
+      "default": 15
+    },
+    {
+      "type":"checkbox",
+      "id": "enable_slide_width",
+      "label": "Desktop enable slide width",
+      "default": false,
+      "info": "When enabled, you can set a custom slide width below"
+    },
+    {
+      "type": "range",
+      "id": "card_width_desktop",
+      "min": 80,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop custom slide width",
+      "default": 110,
+      "visible_if": "{{ block.settings.enable_slide_width }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_slide_width_mobile",
+      "label": "Mobile enable slide width",
+      "default": true,
+      "info": "When enabled, you can set a custom slide width below"
+    },
+    {
+      "type": "range",
+      "id": "card_width_mobile",
+      "min": 80,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile custom slide width",
+      "default": 110,
+      "visible_if": "{{ block.settings.enable_slide_width_mobile }}"
+    },
+    {
+      "type": "header",
+      "content": "Card dimensions"
+    },
+    {
+      "type": "range",
+      "id": "card_height_desktop",
+      "min": 150,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop card height",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "card_height_mobile",
+      "min": 100,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile card height",
+      "default": 150
+    },
+    {
+      "type": "header",
+      "content": "Play button"
+    },
+    {
+      "type": "range",
+      "id": "play_button_size",
+      "min": 20,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Play button size",
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "play_button_background",
+      "label": "Play button background",
+      "default": "#090909"
+    },
+    {
+      "type": "color",
+      "id": "play_button_border",
+      "label": "Play button border",
+      "default": "#B3B3B3"
+    },
+    {
+      "type": "color",
+      "id": "play_button_icon",
+      "label": "Play/stop icon color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Progress bar"
+    },
+    {
+      "type": "color",
+      "id": "progress_bar_background",
+      "label": "Progress bar background",
+      "default": "#E8E8E8"
+    },
+    {
+      "type": "color",
+      "id": "progress_bar_fill",
+      "label": "Progress bar fill color",
+      "default": "#1D1A2D"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video slider settings"
+    }
+  ]
+}
+{% endschema %}

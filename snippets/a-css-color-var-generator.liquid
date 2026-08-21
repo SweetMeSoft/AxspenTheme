@@ -1,0 +1,20 @@
+{% if selected_color == 'accent-1' %}
+  --{{ variable_name }}: {{ settings.colors_accent_1.red }}, {{ settings.colors_accent_1.green }},
+  {{ settings.colors_accent_1.blue }};
+{% elsif selected_color == 'accent-2' %}
+  --{{ variable_name }}: {{ settings.colors_accent_2.red }}, {{ settings.colors_accent_2.green }},
+  {{ settings.colors_accent_2.blue }};
+{% elsif selected_color == 'accent-3' %}
+  --{{ variable_name }}: {{ settings.colors_accent_3.red }}, {{ settings.colors_accent_3.green }},
+  {{ settings.colors_accent_3.blue }};
+{% elsif selected_color == 'custom-color-1' %}
+  --{{ variable_name }}: {{ settings.colors_custom_color_1.red }}, {{ settings.colors_custom_color_1.green }},
+  {{ settings.colors_custom_color_1.blue }};
+{% elsif selected_color == 'custom-color-2' %}
+  --{{ variable_name }}: {{ settings.colors_custom_color_2.red }}, {{ settings.colors_custom_color_2.green }},
+  {{ settings.colors_custom_color_2.blue }};
+{% elsif selected_color == 'inverse' %}
+  --{{ variable_name }}: #fff; /* Example color for inverse scheme */
+{% else %}
+
+{% endif %}

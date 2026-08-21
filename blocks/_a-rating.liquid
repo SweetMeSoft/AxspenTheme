@@ -1,0 +1,129 @@
+{%- comment -%} Product is accessed via closest.product in the template {%- endcomment -%}
+{% style %}
+    .product-block-{{ block.id }} {
+      padding-top: {{block.settings.padding_top }}px;
+      padding-bottom: {{block.settings.padding_bottom }}px;
+    }
+    @media screen and (max-width: 768px) {
+      .product-block-{{ block.id }} {
+        padding-top: {{block.settings.padding_top_mobile }}px;
+        padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+      }
+    }
+    /*reviews*/
+  .product-reviews {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 3px 0;
+  }
+
+
+
+
+
+
+
+  .product-block-{{ block.id }} .sku-label {
+    font-weight: 600;
+  }
+
+  @media screen and (max-width: 768px) {
+    .product-block-{{ block.id }} .sku {
+      margin-top: 6px;
+    }
+  }
+{% endstyle %}
+<div
+  class="product-reviews product-block-{{ block.id }}"
+  style="display:flex; align-items: center; justify-content: {{ block.settings.rating_alignment }};"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'block', type: '_a-rating_profile_images', id: 'rating_profile_images' %}
+  {% content_for 'block', type: '_a-rating_content', id: 'rating_content' %}
+</div>
+
+{% schema %}
+{
+  "name": "Rating",
+  "tag": null,
+  "blocks": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "rating_alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ],
+      "default": "flex-start",
+      "label": "Alignment"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 3
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Rating",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

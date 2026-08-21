@@ -1,0 +1,45 @@
+<div class="fetch-search">
+	{%- if search.results_count > 0 -%}
+		<div class="result-list">
+			{%- for item in search.results limit: 4 -%}
+				{%- liquid
+					case item.object_type
+						when 'product'
+							assign image = item.featured_media
+						when 'article'
+							assign image = item.image
+					endcase
+				-%}
+
+				<div class="result-item">
+					<a class="item-image" href="{{ item.url | split: '?' | first }}">
+						{%- liquid
+							if image != blank
+								echo image | image_url: width: 150 | image_tag: width: 150, loading: 'lazy'
+							else
+								render 'icon', code: 'placeholder'
+							endif
+						-%}
+
+						{%- if item.object_type == 'article' -%}
+							<span class="badge">{{- 'blogs.article.blog' | t -}}</span>
+						{%- endif -%}
+					</a>
+
+					<h3 class="item-title">
+						<a href="{{ item.url | split: '?' | first }}">{{ item.title | highlight: search.terms }}</a>
+					</h3>
+				</div>
+			{%- endfor -%}
+		</div>
+
+		{%- if search.results.size > 4 -%}
+			<button class="view-more-results link-underline" type="submit">
+				{{- 'general.search.view_all_results' | t -}}
+				{%- render 'icon', code: 'arrow-right-short' -%}
+			</button>
+		{%- endif -%}
+	{%- else -%}
+		<p class="no-results">{{- 'general.search.no_results' | t -}}</p>
+	{%- endif -%}
+</div>

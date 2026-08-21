@@ -1,0 +1,63 @@
+{% assign product = closest.product %}
+{% style %}
+  .product-block-{{ block.id }}.unit-price {
+    font-family: var(--atlas-font-body-family);
+    font-size: {{ block.settings.unit_price_font_size | default: 12 }}px;
+    font-weight: 600;
+    line-height: calc({{ block.settings.unit_price_font_size | default: 12 }}px + 3px);
+    color: {{ block.settings.unit_price_color | default: 'rgb(var(--atlas-color-base-text))' }};
+    margin: 0;
+  }
+{% endstyle %}
+
+{%- if block.settings.show_unit_price and product.selected_or_first_available_variant.unit_price_measurement -%}
+  <span class="product-block-{{ block.id }} unit-price" {{ block.shopify_attributes }}>
+    Unit Price :
+    {{ product.selected_or_first_available_variant.unit_price | money }}
+    {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+      {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+    {%- endif -%}
+    {{- product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+  </span>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Unit Price",
+  "tag": null,
+  "blocks": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Unit Price"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_unit_price",
+      "label": "Show unit price",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "unit_price_font_size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Unit price font size",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "unit_price_color",
+      "label": "Unit price color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Unit Price"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1358 @@
+{% if request.visual_preview_mode %}
+  {% assign section_id_variable = 'id' %}
+  {% assign section_id_selector = '' %}
+{% else %}
+  {% assign section_id_variable = section.id %}
+  {% assign section_id_selector = '#section-' | append: section.id %}
+{% endif %}
+<style>
+  .image-with-text__content--desktop-right > * {
+    align-self: flex-end;
+    text-align: right;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__content--desktop-left > * {
+    align-self: flex-start;
+    text-align: left;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__content--desktop-center > * {
+    align-self: center;
+    text-align: center;
+  }
+  {% if section_id_selector != blank %}
+    .atlas-isolation-wrapper {{ section_id_selector }} .image-with-text__grid {
+      margin-bottom: 0;
+      padding: {{ section.settings.section_padding_top }}px {{ section.settings.section_padding_right_padding }}px {{ section.settings.section_padding_bottom }}px {{ section.settings.section_padding_left_padding }}px !important;
+      {% if section.settings.card_use_gradient %}
+        background: {{ section.settings.card_gradient }} !important;
+      {% else %}
+        background: {% if section.settings.card_background_color != blank %}{{ section.settings.card_background_color }}{% else %}transparent{% endif %} !important;
+      {% endif %}
+      border-radius: {{ section.settings.grid_border_radius }}px;
+    }
+  {% else %}
+    .atlas-isolation-wrapper .image-with-text__grid {
+      margin-bottom: 0;
+      padding: {{ section.settings.section_padding_top }}px {{ section.settings.section_padding_right_padding }}px {{ section.settings.section_padding_bottom }}px {{ section.settings.section_padding_left_padding }}px !important;
+      {% if section.settings.card_use_gradient %}
+        background: {{ section.settings.card_gradient }} !important;
+      {% else %}
+        background: {% if section.settings.card_background_color != blank %}{{ section.settings.card_background_color }}{% else %}transparent{% endif %} !important;
+      {% endif %}
+      border-radius: {{ section.settings.grid_border_radius }}px;
+    }
+  {% endif %}
+
+  .atlas-isolation-wrapper .image-with-text__grid {
+    gap: 2rem !important;
+    align-items: stretch;
+  }
+
+  .atlas-isolation-wrapper .image-with-text .grid__item {
+    position: relative;
+    flex: 1;
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .image-with-text__grid--reverse {
+      flex-direction: row-reverse;
+    }
+  }
+
+  .atlas-isolation-wrapper .image-with-text__media {
+    min-height: 100%;
+    overflow: visible;
+    background: transparent;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__media--small {
+    height: 19.4rem;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__media--medium {
+    height: 29.6rem;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__media--large {
+    height: 43.5rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .image-with-text__media--small {
+      height: 31.4rem;
+    }
+
+    .atlas-isolation-wrapper .image-with-text__media--medium {
+      height: 46rem;
+    }
+
+    .atlas-isolation-wrapper .image-with-text__media--large {
+      height: 69.5rem;
+    }
+  }
+
+  .atlas-isolation-wrapper .image-with-text__media--placeholder {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__media--placeholder:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(var(--atlas-color-foreground), 0.04);
+  }
+
+
+
+  .atlas-isolation-wrapper .image-with-text__media--placeholder > svg {
+    position: absolute;
+    left: 50%;
+    max-width: 80rem;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    fill: currentColor;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__content {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    align-self: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  @media screen and (max-width: 990px) {
+    .atlas-isolation-wrapper .bg-is-accent-1.text-is-accent-1,
+    .atlas-isolation-wrapper .bg-is-accent-2.text-is-accent-2,
+    .atlas-isolation-wrapper .bg-is-background-1.text-is-background-1,
+    .atlas-isolation-wrapper .bg-is-background-2.text-is-background-2,
+    .atlas-isolation-wrapper .bg-is-inverse.text-is-inverse {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  .atlas-isolation-wrapper .image-with-text .grid__item::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  .atlas-isolation-wrapper .image-with-text:not(.image-with-text--overlap)
+    .image-with-text__media-item:after {
+    border-radius: var(--atlas-media-radius);
+  }
+
+  .atlas-isolation-wrapper .image-with-text:not(.image-with-text--overlap)
+    .image-with-text__text-item:after {
+    border-radius: var(--atlas-text-boxes-radius);
+    box-shadow: var(--atlas-text-boxes-shadow-horizontal-offset)
+      var(--atlas-text-boxes-shadow-vertical-offset)
+      var(--atlas-text-boxes-shadow-blur-radius)
+      rgba(var(--atlas-color-shadow), var(--atlas-text-boxes-shadow-opacity));
+  }
+
+  .atlas-isolation-wrapper .image-with-text .image-with-text__media-item > div {
+    border-radius: var(--atlas-media-radius);
+    overflow: hidden;
+  }
+
+  .atlas-isolation-wrapper .image-with-text .global-media-settings {
+    overflow: hidden !important;
+
+  }
+
+  .atlas-isolation-wrapper .image-with-text .image-with-text__text-item > div {
+    border-radius: var(--atlas-text-boxes-radius);
+    overflow: hidden;
+    box-shadow: var(--atlas-text-boxes-shadow-horizontal-offset)
+      var(--atlas-text-boxes-shadow-vertical-offset)
+      var(--atlas-text-boxes-shadow-blur-radius)
+      rgba(var(--atlas-color-shadow), var(--atlas-text-boxes-shadow-opacity));
+  }
+
+  .atlas-isolation-wrapper .image-with-text:not(.image-with-text--overlap)
+    .atlas-isolation-wrapper .image-with-text__media-item
+    > div,
+  .atlas-isolation-wrapper .image-with-text:not(.image-with-text--overlap)
+    .image-with-text__text-item
+    > div {
+    box-shadow: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .image-with-text__media-item:after,
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .grid__item
+      .image-with-text__media,
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .image-with-text__media
+      img {
+      /* border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0; */
+    }
+
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .image-with-text__text-item:after,
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .grid__item
+      .image-with-text__content {
+      /* border-top-left-radius: 0;
+      border-top-right-radius: 0; */
+    }
+
+    .atlas-isolation-wrapper .image-with-text.collapse-borders:not(.image-with-text--overlap)
+      .image-with-text__content {
+      border-top: 0;
+    }
+  }
+
+  .atlas-isolation-wrapper .image-with-text__content--mobile-right > h2,
+  .atlas-isolation-wrapper .image-with-text__content--mobile-right > div,
+  .atlas-isolation-wrapper .image-with-text__content--mobile-right > p,
+  .atlas-isolation-wrapper .image-with-text__content--mobile-right > a {
+    align-self: flex-end;
+    text-align: right;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__content--mobile-center > h2,
+  .atlas-isolation-wrapper .image-with-text__content--mobile-center > div,
+  .atlas-isolation-wrapper .image-with-text__content--mobile-center > p,
+  .atlas-isolation-wrapper .image-with-text__content--mobile-center > a {
+    align-self: center;
+    text-align: center;
+  }
+
+  .atlas-isolation-wrapper .image-with-text--overlap .image-with-text__content {
+    width: 90%;
+    margin: -3rem auto 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .image-with-text__grid--reverse .image-with-text__content {
+      margin-left: auto;
+    }
+
+    .atlas-isolation-wrapper .image-with-text__content--bottom {
+      justify-content: flex-end;
+      align-self: flex-end;
+    }
+
+    .atlas-isolation-wrapper .image-with-text__content--top {
+      justify-content: flex-start;
+      align-self: flex-start;
+    }
+
+    .atlas-isolation-wrapper .image-with-text__content--mobile-right > h2,
+    .atlas-isolation-wrapper .image-with-text__content--mobile-right > div,
+    .atlas-isolation-wrapper .image-with-text__content--mobile-right > p,
+    .atlas-isolation-wrapper .image-with-text__content--mobile-right > a  {
+      align-self: flex-end;
+      text-align: right;
+    }
+
+     .atlas-isolation-wrapper .image-with-text__content--mobile-left > h2,
+    .atlas-isolation-wrapper .image-with-text__content--mobile-left > div,
+    .atlas-isolation-wrapper .image-with-text__content--mobile-left > p,
+    .atlas-isolation-wrapper .image-with-text__content--mobile-left > a {
+      align-self: flex-start;
+      text-align: left;
+    }
+
+
+     .atlas-isolation-wrapper .image-with-text__content--mobile-`center` > h2,
+    .atlas-isolation-wrapper .image-with-text__content--mobile-center > div,
+    .atlas-isolation-wrapper .image-with-text__content--mobile-center > p,
+    .atlas-isolation-wrapper .image-with-text__content--mobile-center > a{
+      align-self: center;
+      text-align: center;
+    }
+
+    .atlas-isolation-wrapper .image-with-text--overlap .image-with-text__text-item {
+      display: flex;
+      padding: 3rem 0;
+    }
+
+    .atlas-isolation-wrapper .image-with-text--overlap .image-with-text__content {
+      height: auto;
+      width: calc(100% + 4rem);
+      min-width: calc(100% + 4rem);
+      margin-top: 0;
+      margin-left: -4rem;
+    }
+
+    .atlas-isolation-wrapper .image-with-text--overlap
+      .image-with-text__grid--reverse
+      .image-with-text__content {
+      margin-left: 0;
+      margin-right: -4rem;
+    }
+
+    .atlas-isolation-wrapper .image-with-text--overlap
+      .image-with-text__grid--reverse
+      .image-with-text__text-item {
+      justify-content: flex-end;
+    }
+
+    .atlas-isolation-wrapper .image-with-text__media-item--top {
+      align-self: flex-start;
+    }
+    .atlas-isolation-wrapper .image-with-text__media-item--middle {
+      align-self: center;
+    }
+
+    .atlas-isolation-wrapper .image-with-text__media-item--bottom {
+      align-self: flex-end;
+    }
+
+
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .grid:not(.image-with-text__grid--reverse)
+      .image-with-text__media-item:after,
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .grid:not(.image-with-text__grid--reverse)
+      .image-with-text__media,
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .grid:not(.image-with-text__grid--reverse)
+      .image-with-text__media
+      img,
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .image-with-text__grid--reverse
+      .image-with-text__text-item:after,
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .image-with-text__grid--reverse
+      .image-with-text__content,
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .image-with-text__grid--reverse
+      .image-with-text__content:after {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .grid:not(.image-with-text__grid--reverse)
+      .image-with-text__text-item:after,
+    /* .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .grid:not(.image-with-text__grid--reverse)
+      .image-with-text__content, */
+    .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .grid:not(.image-with-text__grid--reverse)
+      .image-with-text__content:after,
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .image-with-text__grid--reverse
+      .image-with-text__media-item:after,
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .image-with-text__grid--reverse
+      .image-with-text__media,
+    .atlas-isolation-wrapper .image-with-text.collapse-corners:not(.image-with-text--overlap)
+      .image-with-text__grid--reverse
+      .image-with-text__media
+      img {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .atlas-isolation-wrapper .image-with-text.collapse-borders:not(.image-with-text--overlap)
+      .grid:not(.image-with-text__grid--reverse)
+      .image-with-text__content {
+      border-left: 0;
+    }
+
+    .atlas-isolation-wrapper .image-with-text.collapse-borders:not(.image-with-text--overlap)
+      .image-with-text__grid--reverse
+      .image-with-text__content {
+      border-right: 0;
+    }
+  }
+
+  .atlas-isolation-wrapper .image-with-text:not(.collapse-corners, .image-with-text--overlap)
+    .image-with-text__media-item {
+    z-index: 2;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__content {
+    border-radius: var(--atlas-text-boxes-radius);
+    box-shadow: var(--atlas-text-boxes-shadow-horizontal-offset)
+      var(--atlas-text-boxes-shadow-vertical-offset)
+      var(--atlas-text-boxes-shadow-blur-radius)
+      rgba(var(--atlas-color-shadow), var(--atlas-text-boxes-shadow-opacity));
+    word-break: break-word;
+  }
+
+  {% if section.settings.card_use_gradient %}
+    {% if section_id_selector != blank %}
+      .atlas-isolation-wrapper {{ section_id_selector }} .image-with-text__grid {
+        background: {{ section.settings.card_gradient }} !important;
+      }
+    {% else %}
+      .atlas-isolation-wrapper .image-with-text__grid {
+        background: {{ section.settings.card_gradient }} !important;
+      }
+    {% endif %}
+  {% else %}
+    {% if section_id_selector != blank %}
+      .atlas-isolation-wrapper {{ section_id_selector }} .image-with-text__grid {
+        background: {% if section.settings.card_background_color != blank %}{{ section.settings.card_background_color }}{% else %}transparent{% endif %} !important;
+      }
+    {% else %}
+      .atlas-isolation-wrapper .image-with-text__grid {
+        background: {% if section.settings.card_background_color != blank %}{{ section.settings.card_background_color }}{% else %}transparent{% endif %} !important;
+      }
+    {% endif %}
+  {% endif %}
+
+  @media screen and (min-width: 990px) {
+    .atlas-isolation-wrapper .image-with-text__content {
+      padding: 6rem 7rem 7rem;
+    }
+  }
+
+  .atlas-isolation-wrapper .image-with-text__content > :is(h2, div, p, a) + :is(h2, div, p, a),
+  {
+    margin-top: 2rem;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__content > .image-with-text__text:empty ~ a {
+    margin-top: 2rem;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__content > :first-child:is(.image-with-text__heading),
+  .atlas-isolation-wrapper .image-with-text__text--caption + .image-with-text__heading,
+  .atlas-isolation-wrapper .image-with-text__text--caption:first-child {
+    margin-top: 0;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__content :last-child:is(.image-with-text__heading),
+  .atlas-isolation-wrapper .image-with-text__text--caption {
+    margin-bottom: 0;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__content .button + .image-with-text__text {
+    margin-top: 2rem;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__content .image-with-text__text + .button {
+    margin-top: 3rem;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__heading {
+    margin-bottom: 0;
+  }
+
+  .atlas-isolation-wrapper .image-with-text__text p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .atlas-isolation-wrapper .collapse-padding .image-with-text__grid .image-with-text__content {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+  /* .image-with-text .global-media-settings {
+    border-radius: 0px;
+  } */
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .collapse-padding
+      .image-with-text__grid:not(.image-with-text__grid--reverse)
+      .image-with-text__content:not(.image-with-text__content--desktop-center) {
+      padding-right: 0;
+    }
+
+    .atlas-isolation-wrapper .collapse-padding
+      .image-with-text__grid--reverse
+      .image-with-text__content:not(.image-with-text__content--desktop-center) {
+      padding-left: 0;
+    }
+  }
+
+  /* check for flexbox gap in older Safari versions */
+  @supports not (inset: 10px) {
+    .atlas-isolation-wrapper .image-with-text__grid {
+      margin-left: 0;
+    }
+  }
+
+  /*
+    Multirow
+    note: consider removing from this stylesheet if multirow-specific styles increase signficantly
+  */
+  .atlas-isolation-wrapper .multirow__inner {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--atlas-grid-mobile-vertical-spacing);
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .multirow__inner {
+      row-gap: var(--atlas-grid-desktop-vertical-spacing);
+    }
+  }
+</style>
+
+{%- liquid
+  assign global_heading_size = settings.enable_global_heading_font_size
+  assign global_body_size = settings.enable_global_body_font_size
+  assign global_color = settings.enable_global_color
+-%}
+
+<style>
+  {%- if request.visual_preview_mode -%}
+    {% comment %} don't want fade-in animation in preview mode because it messes up preview {% endcomment %}
+    .animation_section,
+    .animation_section * {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+      will-change: auto !important;
+    }
+  {%- endif -%}
+
+  .atlas-isolation-wrapper {{ section_id_selector }} .section__image_with_text {
+    padding: 5px 0;
+    margin: -1px 0;
+  }
+
+  #image-with-text-container-{{ section_id_variable }} {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px !important;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px !important;
+  }
+
+  @media screen and (min-width: 750px) {
+    #image-with-text-container-{{ section_id_variable }} {
+      padding-top: {{ section.settings.padding_top }}px !important;
+      padding-bottom: {{ section.settings.padding_bottom }}px !important;
+    }
+  }
+
+  {% if section_id_selector != blank %}
+    .atlas-isolation-wrapper {{ section_id_selector }} .section-{{ section_id_variable }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px !important;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px !important;
+    }
+
+    @media screen and (min-width: 750px) {
+      .atlas-isolation-wrapper {{ section_id_selector }} .section-{{ section_id_variable }}-padding {
+        padding-top: {{ section.settings.padding_top }}px !important;
+        padding-bottom: {{ section.settings.padding_bottom }}px !important;
+      }
+    }
+  {% else %}
+    .atlas-isolation-wrapper .section-{{ section_id_variable }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px !important;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px !important;
+    }
+
+    @media screen and (min-width: 750px) {
+      .atlas-isolation-wrapper .section-{{ section_id_variable }}-padding {
+        padding-top: {{ section.settings.padding_top }}px !important;
+        padding-bottom: {{ section.settings.padding_bottom }}px !important;
+      }
+    }
+  {% endif %}
+
+  @media screen and (max-width: 600px) {
+    .atlas-isolation-wrapper .image-with-text .image-with-text__content {
+      padding: 0 10px !important;
+    }
+  }
+
+  .atlas-isolation-wrapper #block-description-text-{{ section_id_variable }} p {
+    font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size){% else %}{{ section.settings.font_size }}px{% endif %} !important;
+    color: {% if global_color %}rgb(var(--atlas-color-base-text)){% else %}{{ section.settings.body_color }}{% endif %};
+  }
+
+  .atlas-isolation-wrapper #block-heading-{{ section_id_variable }} {
+    font-weight: {{ section.settings.heading_font_weight }} !important;
+    font-size: {% if global_heading_size %}var(--atlas-font-heading-size){% else %}{{ section.settings.desktop_font_size }}px{% endif %};
+    color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ section.settings.heading_color }}{% endif %};
+    --atlas-color-highlighted-color: {{ section.settings.heading_highlighted_color }};
+    margin-top: 0;
+    margin-bottom: 2rem;
+  }
+  {%- if section.settings.heading_use_gradient -%}
+    .atlas-isolation-wrapper #block-heading-{{ section_id_variable }} strong {
+      background: {% if section.settings.heading_gradient_color != blank %}{{ section.settings.heading_gradient_color }}{% else %}var(--atlas-gradient-base-background-1){% endif %};
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  {%- endif -%}
+
+  @media (max-width: 768px) {
+    .atlas-isolation-wrapper #block-heading-{{ section_id_variable }} {
+      font-size: {% if global_heading_size %}var(--atlas-font-heading-mob-size){% else %}{{ section.settings.mobile_font_size }}px{% endif %};
+      margin-bottom: 1rem;
+    }
+  }
+
+  /* Benefits Section Styling */
+  .atlas-isolation-wrapper #benefits-{{ section_id_variable }} {
+    margin-top: 4rem;
+  }
+
+  .atlas-isolation-wrapper #benefits-{{ section_id_variable }} .image-with-text-benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: {{ section.settings.benefits_gap | default: 12 }}px;
+  }
+
+  .atlas-isolation-wrapper #benefits-{{ section_id_variable }} .image-with-text-benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .atlas-isolation-wrapper #benefits-{{ section_id_variable }} .benefit-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .atlas-isolation-wrapper #benefits-{{ section_id_variable }} .benefit-text {
+    font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size){% else %}{{ section.settings.benefits_text_size | default: 14 }}px{% endif %};
+    margin: 0;
+  }
+</style>
+
+<div id="section-{{ section_id_variable }}" class="rtl">
+  <div
+    class="section__image_with_text"
+    style="{% if section.settings.use_gradient_background %}background: {{ section.settings.section_background_gradient }};{% else %}background-color: {{ section.settings.section_background_color }};{% endif %}"
+  >
+    <div
+      id="image-with-text-container-{{ section_id_variable }}"
+      class="image-with-text image-with-text--no-overlap page-width isolate{% if false and settings.text_boxes_border_opacity > 0 and settings.media_border_thickness > 0 and settings.media_border_opacity > 0 %} collapse-borders{% endif %} section-{{ section_id_variable }}-padding"
+      style="max-width: {{ section.settings.card_max_width }}px !important;width: 100%;"
+    >
+      <div
+        class="image-with-text__grid grid grid--gapless grid--1-col{% if section.settings.layout == 'text_first' %} image-with-text__grid--reverse{% endif %}"
+        style="padding: {{ section.settings.section_padding_top }}px {{ section.settings.section_padding_right_padding }}px {{ section.settings.section_padding_bottom }}px {{ section.settings.section_padding_left_padding }}px; {% if section.settings.card_use_gradient %}background: {{ section.settings.card_gradient }};{% elsif section.settings.card_background_color != blank %}background-color: {{ section.settings.card_background_color }};{% endif %} border-radius: {{ section.settings.grid_border_radius }}px;"
+      >
+        <div
+          class="image-with-text__media-item image-with-text__media-item--middle grid__item"
+        >
+          {% style %}
+            {{ section_id_selector }} .image-with-text__media img {
+              border-radius: {{ section.settings.image_radius }}px !important;
+            }
+          {% endstyle %}
+          <div
+            class="image-with-text__media image-with-text__media--{{ section.settings.height }} gradient global-media-settings {% if section.settings.image != blank %}media{% else %}image-with-text__media--placeholder placeholder{% endif %}"
+            {% if section.settings.height == 'adapt' and section.settings.image != blank %}
+              style="padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;"
+            {% endif %}
+          >
+            {%- if section.settings.image != blank -%}
+              {% if section.settings.defer_loading_image %}
+                {% assign loading = 'lazy' %}
+              {% else %}
+                {% assign loading = 'high' %}
+              {% endif %}
+              {{ section.settings.image | image_url: width: 1200, format: 'webp' | image_tag: loading: loading }}
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+        </div>
+        <div
+          class="image-with-text__text-item grid__item"
+        >
+          <div
+            id="ImageWithText--{{ section_id_variable }}"
+            class="image-with-text__content image-with-text__content--middle image-with-text__content--desktop-{{ section.settings.desktop_content_alignment }} image-with-text__content--{{ section.settings.height }} content-container"
+          >
+            {%- if section.settings.heading != blank -%}
+              <h2
+                id="block-heading-{{ section_id_variable }}"
+                class="title image-with-text__heading {{ section.settings.heading_size }}"
+                {{ section.shopify_attributes }}
+              >
+                {{ section.settings.heading }}
+              </h2>
+            {%- endif -%}
+
+            {%- if section.settings.text != blank -%}
+              <div
+                id="block-description-text-{{ section_id_variable }}"
+                class="image-with-text__text sw-base-text-color rte body"
+                style="--atlas-color-highlighted-color: {{ section.settings.body_highlighted_color }}; {% if section.settings.layout == 'image_first' %}margin-bottom: 0;{% endif %}"
+                {{ section.shopify_attributes }}
+              >
+                {{ section.settings.text }}
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.benefit_1_text != blank
+              or section.settings.benefit_2_text != blank
+              or section.settings.benefit_3_text != blank
+            -%}
+              <div class="image-with-text-benefits-container" id="benefits-{{ section_id_variable }}">
+                {% style %}
+                  #benefits-{{ section_id_variable }} .benefit-text {
+                    color: {% if global_color %}rgb(var(--atlas-color-base-text)){% else %}{{ section.settings.benefits_text_color | default: '#000000' }}{% endif %};
+                    --atlas-color-highlighted-color: {{ section.settings.benefits_text_highlighted_color | default: '#000000' }};
+                  }
+                  #benefits-{{ section_id_variable }} .material-icon svg {
+                    width: {{ section.settings.benefits_icon_size | default: 20 }}px !important;
+                    height: {{ section.settings.benefits_icon_size | default: 20 }}px !important;
+                    fill: {% if section.settings.benefits_icon_color %}{{ section.settings.benefits_icon_color }} !important{% else %}{{ settings.colors_accent_3 }}{% endif %};
+                  }
+                {% endstyle %}
+                <ul class="image-with-text-benefits-list">
+                  {%- if section.settings.benefit_1_text != blank -%}
+                    <li class="image-with-text-benefit-item">
+                      {%- if section.settings.benefit_1_custom_icon -%}
+                        <img
+                          style="margin-right: 8px; width: {{ section.settings.benefits_icon_size | default: 20 }}px !important; min-width: {{ section.settings.benefits_icon_size | default: 20 }}px !important;"
+                          width="{{ section.settings.benefits_icon_size | default: 20 }}"
+                          height="{{ section.settings.benefits_icon_size | default: 20 }}"
+                          src="{{ section.settings.benefit_1_custom_icon | image_url }}"
+                          alt="Benefit 1 icon"
+                        >
+                      {%- elsif section.settings.benefit_1_icon != blank -%}
+                        <span
+                          style="display:flex;font-size: {{ section.settings.benefits_icon_size | default: 20 }}px !important; color: {% if section.settings.benefits_icon_color %}{{ section.settings.benefits_icon_color }} !important{% else %}{{ settings.colors_accent_3 }}{% endif %};"
+                          class="material-icon material-symbols-outlined notranslate"
+                        >
+                          {{ section.settings.benefit_1_icon }}
+                        </span>
+                      {%- endif -%}
+                      <div class="benefit-text sw-base-text-color">
+                        {{ section.settings.benefit_1_text }}
+                      </div>
+                    </li>
+                  {%- endif -%}
+
+                  {%- if section.settings.benefit_2_text != blank -%}
+                    <li class="image-with-text-benefit-item">
+                      {%- if section.settings.benefit_2_custom_icon -%}
+                        <img
+                          style="margin-right: 8px; width: {{ section.settings.benefits_icon_size | default: 20 }}px !important; min-width: {{ section.settings.benefits_icon_size | default: 20 }}px !important;"
+                          width="{{ section.settings.benefits_icon_size | default: 20 }}"
+                          height="{{ section.settings.benefits_icon_size | default: 20 }}"
+                          src="{{ section.settings.benefit_2_custom_icon | image_url }}"
+                          alt="Benefit 2 icon"
+                        >
+                      {%- elsif section.settings.benefit_2_icon != blank -%}
+                        <span
+                          style="display:flex;font-size: {{ section.settings.benefits_icon_size | default: 20 }}px !important; color: {% if section.settings.benefits_icon_color %}{{ section.settings.benefits_icon_color }} !important{% else %}{{ settings.colors_accent_3 }}{% endif %};"
+                          class="material-icon material-symbols-outlined notranslate"
+                        >
+                          {{ section.settings.benefit_2_icon }}
+                        </span>
+                      {%- endif -%}
+                      <div class="benefit-text sw-base-text-color">
+                        {{ section.settings.benefit_2_text }}
+                      </div>
+                    </li>
+                  {%- endif -%}
+
+                  {%- if section.settings.benefit_3_text != blank -%}
+                    <li class="image-with-text-benefit-item">
+                      {%- if section.settings.benefit_3_custom_icon -%}
+                        <img
+                          style="margin-right: 8px; width: {{ section.settings.benefits_icon_size | default: 20 }}px !important; min-width: {{ section.settings.benefits_icon_size | default: 20 }}px !important;"
+                          width="{{ section.settings.benefits_icon_size | default: 20 }}"
+                          height="{{ section.settings.benefits_icon_size | default: 20 }}"
+                          src="{{ section.settings.benefit_3_custom_icon | image_url }}"
+                          alt="Benefit 3 icon"
+                        >
+                      {%- elsif section.settings.benefit_3_icon != blank -%}
+                        <span
+                          style="display:flex;font-size: {{ section.settings.benefits_icon_size | default: 20 }}px !important; color: {% if section.settings.benefits_icon_color %}{{ section.settings.benefits_icon_color }} !important{% else %}{{ settings.colors_accent_3 }}{% endif %};"
+                          class="material-icon material-symbols-outlined notranslate"
+                        >
+                          {{ section.settings.benefit_3_icon }}
+                        </span>
+                      {%- endif -%}
+                      <div class="benefit-text sw-base-text-color">
+                        {{ section.settings.benefit_3_text }}
+                      </div>
+                    </li>
+                  {%- endif -%}
+                </ul>
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.button_text != blank -%}
+              <style>
+                {{ section_id_selector }} .button {
+                  padding: {{ section.settings.button_padding_vertical }}px 12px;
+                  font-size: {{ section.settings.button_label_1_size }}px !important;
+                  line-height: {{ section.settings.button_label_1_size | plus: 8 }}px !important;
+                  color: {{ section.settings.button_1_text_color }};
+                  background-color: {{ section.settings.button_1_background_color }};
+                  border-radius: {{ section.settings.button_1_border_radius }}px !important;
+                  max-width: {{ section.settings.button_width_increase_desktop }}%;
+                  min-width: fit-content;
+                  width: 100%;
+                  flex-shrink: 0;
+                  margin-top: 4rem;
+                }
+                @media (max-width: 768px) {
+                  {{ section_id_selector }} .button {
+                    padding: {{ section.settings.button_padding_vertical_mobile }}px {{ section.settings.button_padding_horizontal_mobile }}px;
+                    font-size: {{ section.settings.button_label_1_size_mobile }}px !important;
+                    line-height: {{ section.settings.button_label_1_size_mobile | plus: 8 }}px !important;
+                    max-width: {{ section.settings.button_width_increase_mobile }}%;
+                  }
+                }
+              </style>
+              <a
+                {% if section.settings.button_link == blank %}
+                  role="link" aria-disabled="true"
+                {% else %}
+                  href="{{ section.settings.button_link }}"
+                {% endif %}
+                class="button"
+              >
+                {{- section.settings.button_text -}}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "class": "atlas-isolation-wrapper atlas-gradient section animation_section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "label": "Image border radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "defer_loading_image",
+      "label": "Defer loading image",
+      "info": "Loads the image only when it's close to appearing on screen. Improves performance when this section is further down the page."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Lorem ipsum",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
+      "label": "Body"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "image_first",
+          "label": "Image first"
+        },
+        {
+          "value": "text_first",
+          "label": "Image second"
+        }
+      ],
+      "default": "image_first",
+      "label": "Image placement"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium",
+      "label": "Image height"
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "label": "Desktop content alignment"
+    },
+    {
+      "type": "range",
+      "id": "grid_border_radius",
+      "label": "Section border radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "section_padding_left_padding",
+      "label": "Left padding",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "section_padding_right_padding",
+      "label": "Right padding",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "desktop_font_size",
+      "label": "Desktop font size",
+      "min": 20,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_font_size",
+      "label": "Mobile font size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "heading_font_weight",
+      "label": "Heading font weight",
+      "options": [
+        { "value": "500", "label": "Semibold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_use_gradient",
+      "label": "Use gradient for heading",
+      "info": "Any text formatted as bold within the heading will be converted to a gradient.",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "heading_gradient_color",
+      "label": "Heading gradient",
+      "default": "linear-gradient(136deg, rgba(10, 234, 237, 1) 11%, rgba(250, 13, 253, 1) 84%)",
+      "visible_if": "{{ section.settings.heading_use_gradient }}"
+    },
+    {
+      "type": "color",
+      "id": "heading_highlighted_color",
+      "label": "Bolded heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Body font size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Body color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "body_highlighted_color",
+      "label": "Bolded body color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient for section background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_background_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.use_gradient_background == false }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_use_gradient",
+      "label": "Use gradient for card background",
+      "info": "When enabled, the card will use a gradient background instead of solid color",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.card_use_gradient == false }}"
+    },
+    {
+      "type": "color_background",
+      "id": "card_gradient",
+      "label": "Card gradient",
+      "visible_if": "{{ section.settings.card_use_gradient }}",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)"
+    },
+    {
+      "type": "header",
+      "content": "Product Benefits"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "benefit_1_text",
+      "label": "Benefit 1 text"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_1_icon",
+      "label": "Benefit 1 icon SVG",
+      "default": "<svg xmlns=\"http://www.w3.org/2000/svg\" enable-background=\"new 0 0 24 24\" height=\"24px\" viewBox=\"0 0 24 24\" width=\"24px\" fill=\"#e3e3e3\"><g><rect fill=\"none\" height=\"24\" width=\"24\"/></g><g><path d=\"M23,12l-2.44-2.79l0.34-3.69l-3.61-0.82L15.4,1.5L12,2.96L8.6,1.5L6.71,4.69L3.1,5.5L3.44,9.2L1,12l2.44,2.79l-0.34,3.7 l3.61,0.82L8.6,22.5l3.4-1.47l3.4,1.46l1.89-3.19l3.61-0.82l-0.34-3.69L23,12z M10.09,16.72l-3.8-3.81l1.48-1.48l2.32,2.33 l5.85-5.87l1.48,1.48L10.09,16.72z\"/></g></svg>",
+      "info": "You can get SVG codes from [Google Material Icons](https://material.io/tools/icons)"
+    },
+    {
+      "type": "image_picker",
+      "id": "benefit_1_custom_icon",
+      "label": "Benefit 1 custom icon"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "benefit_2_text",
+      "label": "Benefit 2 text"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_2_icon",
+      "label": "Benefit 2 icon SVG",
+      "default": "<svg xmlns=\"http://www.w3.org/2000/svg\" enable-background=\"new 0 0 24 24\" height=\"24px\" viewBox=\"0 0 24 24\" width=\"24px\" fill=\"#e3e3e3\"><g><rect fill=\"none\" height=\"24\" width=\"24\"/></g><g><path d=\"M23,12l-2.44-2.79l0.34-3.69l-3.61-0.82L15.4,1.5L12,2.96L8.6,1.5L6.71,4.69L3.1,5.5L3.44,9.2L1,12l2.44,2.79l-0.34,3.7 l3.61,0.82L8.6,22.5l3.4-1.47l3.4,1.46l1.89-3.19l3.61-0.82l-0.34-3.69L23,12z M10.09,16.72l-3.8-3.81l1.48-1.48l2.32,2.33 l5.85-5.87l1.48,1.48L10.09,16.72z\"/></g></svg>",
+      "info": "You can get SVG codes from [Google Material Icons](https://material.io/tools/icons)"
+    },
+    {
+      "type": "image_picker",
+      "id": "benefit_2_custom_icon",
+      "label": "Benefit 2 custom icon"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "benefit_3_text",
+      "label": "Benefit 3 text"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_3_icon",
+      "label": "Benefit 3 icon SVG",
+      "default": "<svg xmlns=\"http://www.w3.org/2000/svg\" enable-background=\"new 0 0 24 24\" height=\"24px\" viewBox=\"0 0 24 24\" width=\"24px\" fill=\"#e3e3e3\"><g><rect fill=\"none\" height=\"24\" width=\"24\"/></g><g><path d=\"M23,12l-2.44-2.79l0.34-3.69l-3.61-0.82L15.4,1.5L12,2.96L8.6,1.5L6.71,4.69L3.1,5.5L3.44,9.2L1,12l2.44,2.79l-0.34,3.7 l3.61,0.82L8.6,22.5l3.4-1.47l3.4,1.46l1.89-3.19l3.61-0.82l-0.34-3.69L23,12z M10.09,16.72l-3.8-3.81l1.48-1.48l2.32,2.33 l5.85-5.87l1.48,1.48L10.09,16.72z\"/></g></svg>",
+      "info": "You can get SVG codes from [Google Material Icons](https://material.io/tools/icons)"
+    },
+    {
+      "type": "image_picker",
+      "id": "benefit_3_custom_icon",
+      "label": "Benefit 3 custom icon"
+    },
+    {
+      "type": "header",
+      "content": "Benefits Styling"
+    },
+    {
+      "type": "range",
+      "id": "benefits_icon_size",
+      "label": "Icon size",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "benefits_text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "benefits_gap",
+      "label": "Gap between benefits",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "benefits_icon_color",
+      "label": "Icon color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "benefits_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "benefits_text_highlighted_color",
+      "label": "Bolded text color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "card_max_width",
+      "min": 1400,
+      "max": 2500,
+      "step": 100,
+      "unit": "px",
+      "label": "Card max width",
+      "default": 1600
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "range",
+      "id": "button_label_1_size",
+      "step": 1,
+      "min": 12,
+      "max": 30,
+      "unit": "px",
+      "label": "Desktop button label size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_label_1_size_mobile",
+      "step": 1,
+      "min": 12,
+      "max": 30,
+      "unit": "px",
+      "label": "Mobile button label size",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "button_1_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_1_background_color",
+      "label": "Button background color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "button_1_border_radius",
+      "step": 1,
+      "min": 0,
+      "max": 40,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Button padding vertical",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "button_width_increase_desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "unit": "%",
+      "label": "Desktop button width increase",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "button_width_increase_mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "unit": "%",
+      "label": "Mobile button width increase",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 12
+    }
+  ]
+}
+{% endschema %}

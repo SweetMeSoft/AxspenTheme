@@ -1,0 +1,493 @@
+{% comment %}
+	Renders a product card
+
+	Accepts:
+	- product: {Object} Product Liquid object (optional)
+	- highlight: {String} Product title match highlight (optional)
+	- show_product_id: {Boolean} Show product id (optional)
+	- image_ratio: {String} The image ratio (optional)
+
+	Usage:
+	{% render 'product-card' %}
+{% endcomment %}
+
+{%- liquid
+	assign swatch           = settings.swatch_type
+	assign swatch_trigger   = 'products.product.swatch.color_swatch_trigger' | t | handle
+	assign featured_image   = product.featured_media
+	assign hover_media      = product.media[1]
+	assign card_image_ratio = settings.card_image_ratio
+	assign card_index       = index | default: 2
+
+	if product.compare_at_price > product.price and product.available
+		assign product_sale = true
+	endif
+
+	if settings.show_card_scrolling_text and settings.card_scrolling_text != blank
+		assign scrolling_text = settings.card_scrolling_text
+	endif
+
+	if image_ratio
+		assign card_image_ratio = image_ratio
+	endif
+
+	if featured_image and hover_media != nil and settings.card_image_hover_effect != 'none'
+		assign image_effect = settings.card_image_hover_effect | prepend: ' hover-'
+	endif
+
+	capture sale_tag
+		echo 'products.product.on_sale' | t
+	endcapture
+
+	capture sold_out_tag
+		echo 'products.product.sold_out' | t
+	endcapture
+-%}
+
+{% comment %} Badge {% endcomment %}
+{%- capture product_badge -%}
+	{%- if product.available == false and sold_out_tag != blank -%}
+		<span class="badge sold-out" aria-hidden="true">{{- sold_out_tag -}}</span>
+	{%- elsif product_sale and sale_tag != blank -%}
+		<span class="badge on-sale" aria-hidden="true">
+			{%- liquid
+				assign sale_percent = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price
+
+				if product.has_only_default_variant and sale_percent > 0
+					echo '-' | append: sale_percent | append: '%'
+				else
+					echo sale_tag
+				endif
+			-%}
+		</span>
+	{%- endif -%}
+{%- endcapture -%}
+
+{% comment %} Stock status {% endcomment %}
+{%- capture product_stock -%}
+	{%- if settings.card_show_stock and product.template_suffix != 'pre-order' -%}
+		{%- if product.available -%}
+			{%- liquid
+				assign should_calculate_inventory = true
+
+				for variant in product.variants
+					if variant.inventory_policy == 'continue' or variant.inventory_management == nil
+						assign should_calculate_inventory = false
+						break
+					endif
+				endfor
+			-%}
+
+			{%- if should_calculate_inventory and settings.card_low_stock > 0 -%}
+				{%- liquid
+					assign all_inventory = 0
+
+					for variant in product.variants
+						if variant.inventory_management
+							assign all_inventory = variant.inventory_quantity | at_least: 0 | plus: all_inventory
+						endif
+					endfor
+				-%}
+
+				{%- if all_inventory <= settings.card_low_stock -%}
+					<span class="product-stock-status inventory--low">{{- 'products.product.low_stock_with_quantity_count' | t: count: all_inventory -}}</span>
+				{%- else -%}
+					<span class="product-stock-status inventory--high">{{- 'products.product.in_stock_with_quantity_count' | t: count: all_inventory -}}</span>
+				{%- endif -%}
+			{%- else -%}
+				{%- if product.variants.first.inventory_policy == 'continue' and product.variants.first.inventory_quantity <= 0 and product.variants.first.requires_shipping -%}
+					<span class="product-stock-status inventory--high">{{- 'products.product.oversell_stock' | t -}}</span>
+				{%- else -%}
+					<span class="product-stock-status inventory--high">{{- 'products.product.in_stock' | t -}}</span>
+				{%- endif -%}
+			{%- endif -%}
+		{%- else -%}
+			<span class="product-stock-status">{{- 'products.product.out_of_stock' | t -}}</span>
+		{%- endif -%}
+	{%- endif -%}
+{%- endcapture -%}
+
+{% comment %} Swatches {% endcomment %}
+{%- capture product_swatches -%}
+	{%- unless product.has_only_default_variant -%}
+		{%- for option in product.options_with_values -%}
+			{%- liquid
+				assign option_name    = option.name | handle
+				assign variant_option = 'option' | append: forloop.index
+				assign selected_value = option.selected_value
+			-%}
+
+			{%- if swatch_trigger == option_name and swatch == 'color' or swatch_trigger == option_name and swatch == 'image' -%}
+				<div class="product-swatches swatch-{{ settings.swatch_style }}{% unless settings.card_show_swatches %} hidden{% endunless %}" data-url="{{ product.url }}">
+					{%- for value in option.values -%}
+						{%- liquid
+							assign variant          = product.variants[ forloop.index0 ]
+							assign handle_value     = value | handle
+							assign is_valid_color   = handle_value | remove: '-' | color_to_rgb
+
+							for variant in product.variants
+								if variant[variant_option] == value
+									assign variant_for_value = variant
+
+									break
+								endif
+							endfor
+
+							assign quantity = variant.inventory_quantity
+							capture stock_status
+								if quantity == 0 and variant.available == false and product.options.size == 1
+									echo ' soldout'
+								endif
+							endcapture
+						-%}
+
+						{%- liquid
+							case swatch
+								when 'color'
+									### Color first ###
+									if value.swatch.color
+										assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+										assign contrast     = swatch_value | color_contrast: '#ffffff'
+										assign swatch_type  = 'color'
+									elsif is_valid_color
+										assign swatch_value = is_valid_color
+										assign contrast     = swatch_value | color_contrast: '#ffffff'
+										assign swatch_type  = 'color'
+									elsif value.swatch.image
+										assign image_url          = value.swatch.image | image_url: width: 100
+										assign swatch_value       = 'url(' | append: image_url | append: ')'
+										assign swatch_focal_point = value.swatch.image.presentation.focal_point
+										assign swatch_type        = 'image'
+									elsif variant_for_value.featured_media
+										assign image_url          = variant_for_value.featured_media | image_url: width: 100
+										assign swatch_value       = 'url(' | append: image_url | append: ')'
+										assign swatch_focal_point = variant_for_value.featured_media.presentation.focal_point
+										assign swatch_type        = 'image'
+									else
+										assign swatch_value = null
+										assign swatch_type  = 'button'
+									endif
+								when 'image'
+									### Image is first ###
+									if value.swatch.image
+										assign image_url          = value.swatch.image | image_url: width: 100
+										assign swatch_value       = 'url(' | append: image_url | append: ')'
+										assign swatch_focal_point = value.swatch.image.presentation.focal_point
+										assign swatch_type        = 'image'
+									elsif variant_for_value.featured_media
+										assign image_url          = variant_for_value.featured_media | image_url: width: 100
+										assign swatch_value       = 'url(' | append: image_url | append: ')'
+										assign swatch_focal_point = variant_for_value.featured_media.presentation.focal_point
+										assign swatch_type        = 'image'
+									elsif value.swatch.color
+										assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+										assign contrast     = swatch_value | color_contrast: '#ffffff'
+										assign swatch_type  = 'color'
+									elsif is_valid_color
+										assign swatch_value = is_valid_color
+										assign contrast     = swatch_value | color_contrast: '#ffffff'
+										assign swatch_type  = 'color'
+									else
+										assign swatch_value = null
+										assign swatch_type  = 'button'
+									endif
+							endcase
+						-%}
+
+						{%- if swatch == 'color' or swatch == 'image' -%}
+							<a class="swatch swatch-{{ swatch_type }}{% if swatch_type == 'color' and contrast < 4.5 %} dark{% endif %}{% if selected_value == value %} selected{% endif %}{{ stock_status }}"
+								data-name="{{ option.name | escape }}"
+								data-value="{{ value | escape }}"
+								href="{{ variant_for_value.url | within: collection }}"
+								{% if swatch_value %} style="--swatch--background: {{ swatch_value }};{% if swatch_focal_point %}--swatch-focal-point: {{ swatch_focal_point }};{% endif %}"{% endif %}
+								{% if variant_for_value.featured_media != blank %}
+								data-key="{{ variant_for_value.featured_image.src | handle | append: '-grid' }}"
+								data-src="{{ variant_for_value.featured_media | image_url: width: 768 }}"
+								{% endif %}>
+								<span class="{% if swatch_value %}sr-only{% else %}swatch-text{% endif %}">{{- value -}}</span>
+							</a>
+						{%- else -%}
+							<a class="swatch swatch-{{ swatch }}{% if selected_value == value %} selected{% endif %}{{ stock_status }}"
+								data-name="{{ option.name | escape }}"
+								data-value="{{ value | escape }}"
+								href="{{ variant_for_value.url | within: collection }}"
+								{% if variant_for_value.featured_media != blank %}
+								data-key="{{ variant_for_value.featured_image.src | handle | append: '-grid' }}"
+								data-src="{{ variant_for_value.featured_media | image_url: width: 768 }}"{% endif %}>
+								{{- value -}}
+							</a>
+						{%- endif -%}
+					{%- endfor -%}
+
+					{%- if swatch != 'button' -%}
+						<span class="swatch-selected">{{- selected_value -}}</span>
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+		{%- endfor -%}
+	{%- endunless -%}
+{%- endcapture -%}
+
+{% comment %} Add to cart {% endcomment %}
+{%- capture product_add_to_cart -%}
+	{%- form 'product', product, class: 'form-add-to-cart', novalidate: 'novalidate', data-type: 'add-to-cart-form', id: nil -%}
+		<input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+		{%- if product.available -%}
+			{%- if product.has_only_default_variant -%}
+				<button type="submit" name="add" class="button primary-button add-to-cart-button">
+					{{- 'products.product.add_to_cart' | t -}}
+				</button>
+			{%- else -%}
+				{% comment %} Quick add {% endcomment %}
+				{%- capture quick_add_box -%}
+					{%- for option in product.options_with_values -%}
+						{%- liquid
+							assign selected_value = option.selected_value
+							assign option_name    = option.name | handle
+							assign is_color       = false
+							assign option_index   = forloop.index0
+
+							if option_name == swatch_trigger and swatch == 'color'
+								assign is_color = true
+							endif
+						-%}
+
+						{%- unless is_color -%}
+							<div class="field-title">
+								{{- option.name -}}
+							</div>
+
+							{%- assign values = '' -%}
+
+							<div class="field-swatch">
+								{%- for variant in product.variants -%}
+									{%- liquid
+										assign value    = variant.options[option_index]
+										assign quantity = variant.inventory_quantity
+
+										capture stock_status
+											if quantity == 0 and variant.available == false
+												echo ' soldout'
+											endif
+										endcapture
+									-%}
+
+									{%- unless values contains value -%}
+										{%- liquid
+											assign values = values | join: ','
+											assign values = values | append: ',' | append: value
+											assign values = values | split: ','
+										-%}
+
+										<span class="field-item{{ stock_status }}{% if selected_value == value %} selected{% endif %}" data-name="{{ option.name | escape }}" data-value="{{ value | escape }}">
+											{{- value -}}
+										</span>
+									{%- endunless -%}
+								{%- endfor -%}
+							</div>
+						{%- endunless -%}
+					{%- endfor -%}
+				{%- endcapture -%}
+
+				{%- if quick_add_box != blank -%}
+					<div class="quick-add no-js-hidden">
+						<a href="{{ product.url }}" class="add-to-cart-button quick-add-button">{{- 'products.product.quick_add' | t -}}</a>
+
+						<div class="quick-add-box">
+							{{- quick_add_box -}}
+
+							<button type="submit" name="add" class="hidden add-to-cart-button">{{- 'products.product.quick_add' | t -}}</button>
+						</div>
+					</div>
+
+					<noscript>
+						<a href="{{ product.url }}" class="add-to-cart-button">{{- 'products.product.view_options' | t -}}</a>
+					</noscript>
+				{%- else -%}
+					<button type="submit" name="add" class="button primary-button add-to-cart-button quick-add-button">{{- 'products.product.quick_add' | t -}}</button>
+				{%- endif -%}
+			{%- endif -%}
+		{%- else -%}
+			<button type="submit" name="add" class="add-to-cart-button" disabled>
+				{{- 'products.product.sold_out' | t -}}
+			</button>
+		{%- endif -%}
+
+		{% comment %} Product variant data {% endcomment %}
+		<script data-product-variants>
+			{{ product.variants | json }}
+		</script>
+	{%- endform -%}
+{%- endcapture -%}
+
+<div class="product-card text-{{ alignment | default: 'left' }}"{% if show_product_id %} data-product-id="{{ product.id }}"{% endif %}>
+	<div class="product-media-wrap {{ card_image_ratio }}-media{{ image_effect }}{% if hover_media != nil and settings.card_image_hover_effect != 'none' %} has-second-image{% endif %}{% unless featured_image %} no-media{% endunless %}{% if settings.card_image_overlay %} has-overlay{% endif %}{% if settings.card_padding > 0 %} card-padding{% endif %}{% if scrolling_text != blank and product_sale %} scrolling-wrapper scrolling-{{ settings.card_scrolling_position }} scrolling-{{ settings.card_scrolling_direction }}{% endif %}">
+		{% comment %} Image {% endcomment %}
+		{%- if featured_image != blank -%}
+			<a href="{{ product.url | split: '?' | first }}" class="product-image{% if settings.image_lazy and featured_image != blank %} lazy-image{% endif %}" arial-label="{{ product.title | escape }}">
+				{%- liquid
+					assign image_load = 'eager'
+
+					if card_index > 1
+						assign image_load = 'lazy'
+					endif
+
+					render 'lazy-image', image: featured_image, width: 740, class: 'product-first-image', lazy: image_load
+				-%}
+
+				{%- if hover_media != nil and settings.card_image_hover_effect != 'none' -%}
+					<span class="product-second-image{% if hover_media.media_type contains 'video' %} hover-media-video{% endif %}">
+						{%- capture hover_image -%}
+							<img srcset="{%- if hover_media.width >= 370 -%}{{ hover_media | image_url: width: 370 }} 165w,{%- endif -%}
+								{%- if hover_media.width >= 540 -%}{{ hover_media | image_url: width: 540 }} 360w,{%- endif -%}
+								{%- if hover_media.width >= 740 -%}{{ hover_media | image_url: width: 740 }} 533w,{%- endif -%}
+								{%- if hover_media.width >= 840 -%}{{ hover_media | image_url: width: 840 }} 720w,{%- endif -%}
+								{%- if hover_media.width >= 960 -%}{{ hover_media | image_url: width: 960 }} 940w,{%- endif -%}
+								{%- if hover_media.width >= 1066 -%}{{ hover_media | image_url: width: 1066 }} 1066w{%- endif -%}"
+								src="{{ hover_media | image_url: width: 1066 }}"
+								sizes="(min-width: {{ settings.screen_lg }}px) {{ settings.screen_lg | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+								alt="{{ hover_media.alt | escape }}"
+								loading="lazy"
+								width="{{ hover_media.width }}"
+								height="{{ hover_media.height }}">
+						{%- endcapture -%}
+
+						{%- liquid
+							case hover_media.media_type
+								when 'external_video'
+									assign video_class = 'js-' | append: hover_media.host
+
+									if hover_media.host == 'youtube'
+										echo hover_media | external_video_url: controls: false, loop: true | external_video_tag: class: video_class, loading: 'lazy'
+									else
+										echo hover_media | external_video_url: controls: false, loop: true, background: true, muted: true, transparent: false | external_video_tag: class: video_class, loading: 'lazy'
+									endif
+								when 'video'
+									echo hover_media | video_tag: image_size: '2048x', loop: true, muted: true, controls: false, preload: 'none'
+								else
+									echo hover_image
+							endcase
+
+						-%}
+
+					</span>
+				{%- endif -%}
+			</a>
+		{%- else -%}
+			{%- if settings.card_show_title -%}<h2 class="product-title">{%- endif -%}
+				<a href="{{ product.url | split: '?' | first }}" class="product-link">
+					{%- liquid
+						if settings.card_show_title
+							if highlight
+								echo product.title | highlight: highlight
+							else
+								echo product.title | escape
+							endif
+						endif
+					-%}
+				</a>
+			{%- if settings.card_show_title -%}</h2>{%- endif -%}
+		{%- endif -%}
+
+		{% comment %} Badge {% endcomment %}
+		{%- if product_badge != blank -%}
+			<div class="product-badge">{{- product_badge -}}</div>
+		{%- endif -%}
+
+		{% comment %} Add to cart {% endcomment %}
+		{{- product_add_to_cart -}}
+
+		{% comment %} Scrolling text {% endcomment %}
+		{%- if product_sale and scrolling_text != blank -%}
+			<scrolling-item class="scrolling">
+				<div class="scrolling-inner">
+					<div class="scrolling-text">
+						{%- liquid
+							assign percentage = 0
+							for variant in product.variants
+								assign saving     = variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | round
+								assign percentage = saving | at_least: percentage
+							endfor
+
+							assign scroll_sale = percentage | append: '%'
+
+							if percentage > 0
+								echo scrolling_text | replace: '[percent_number]', scroll_sale
+							else
+								echo scrolling_text | replace: '[percent_number]', ''
+							endif
+
+							render 'icon', code: 'fire'
+						-%}
+					</div>
+				</div>
+			</scrolling-item>
+		{%- endif -%}
+
+		{% comment %} Actions {% endcomment %}
+		{%- if settings.enable_quick_view -%}
+			<div class="product-actions hidden-desktop" data-handle="{{ product.handle }}" data-id="{{ product.id }}">
+				<a class="product-action product-quick-view" href="{{ product.url | split: '?' | first }}" arial-label="{{ 'products.product.quick_view' | t | escape }}">
+					<span class="sr-only">{{- 'products.product.quick_view' | t -}}</span>
+					<span class="icon">{%- render 'icon', code: 'cart' -%}</span>
+				</a>
+			</div>
+		{%- endif -%}
+	</div>
+
+	<div class="product-card-content{% if settings.card_padding > 5 %} no-margin-top{% endif %}">
+		{% comment %} Swatches {% endcomment %}
+		{{- product_swatches -}}
+
+		{% comment %} Collections {% endcomment %}
+		{%- if settings.card_show_collections and product.collections.first -%}
+			<div class="product-collections">
+				{%- for cat in product.collections -%}
+					<a href="{{ cat.url }}">{{ cat.title }}</a>{% unless forloop.last %}, {% endunless %}
+				{%- endfor -%}
+			</div>
+		{%- endif -%}
+
+		{% comment %} Tags {% endcomment %}
+		{%- if settings.card_show_tags and product.tags.first -%}
+			<div class="product-tags">
+				{%- for tag in product.tags -%}
+					{{ tag | link_to_add_tag: tag }}{% unless forloop.last %}, {% endunless %}
+				{%- endfor -%}
+			</div>
+		{%- endif -%}
+
+		{% comment %} Vendor {% endcomment %}
+		{%- if settings.card_show_vendor -%}
+			<div class="product-vendor">
+				<span class="sr-only">{{- 'accessibility.vendor' | t -}}</span>
+				{{ product.vendor | link_to_vendor: class: "product-vendor-link" }}
+			</div>
+		{%- endif -%}
+
+		{% comment %} Title {% endcomment %}
+		{%- if settings.card_show_title and featured_image -%}
+			<h2 class="product-title">
+				<a href="{{ product.url | split: '?' | first }}">{% if highlight %}{{ product.title | highlight: highlight }}{% else %}{{- product.title | escape -}}{% endif %}</a>
+			</h2>
+		{%- endif -%}
+
+		{% comment %} Price {% endcomment %}
+		{%- liquid
+			if settings.card_show_price
+				render 'price', product: product, use_variant: false
+			endif
+		-%}
+
+		{% comment %} Stock {% endcomment %}
+		{{- product_stock -}}
+
+		{% comment %} Rating {% endcomment %}
+		{%- if settings.card_show_rating -%}
+			<div class="product-rating">
+				<span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+			</div>
+		{%- endif -%}
+	</div>
+</div>

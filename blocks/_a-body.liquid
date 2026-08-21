@@ -1,0 +1,137 @@
+{%- style -%}
+  #{{ parent_id }} {
+         --atlas-text-size: {{ block.settings.text_size }}px;
+         --atlas-text-color: {{ block.settings.text_color }};
+       }
+   #{{ parent_id }} .text_block-{{block.id }} {
+     font-size: var(--atlas-text-size) !important;
+     line-height: 100%;
+     color: var(--atlas-text-color) !important;
+     --atlas-color-highlighted-color:  {{ block.settings.bolded_text_color }};
+     margin: 0;
+     padding-top: {{ block.settings.text_padding_top }}px;
+     padding-bottom: {{ block.settings.text_padding_bottom }}px;
+   }
+   @media (max-width: 990px) {
+       #{{ parent_id }} {
+         --atlas-text-size: {{ block.settings.text_mob_size }}px;
+       }
+     }
+     {%- if block.settings.text_use_gradient -%}
+       #{{ parent_id }} .text_block-{{block.id }} strong {
+         background: {% if block.settings.text_gradient_color != blank %}{{ block.settings.text_gradient_color }}{% else %}var(--atlas-color-highlighted-color){% endif %};
+         -webkit-background-clip: text;
+         background-clip: text;
+         color: transparent;
+       }
+     {%- endif -%}
+{%- endstyle -%}
+{%- if block.settings.text != blank -%}
+  <{{ block.settings.text_tag }} class="text_block-{{block.id }} {{ class_list }}" {{ block.shopify_attributes }}>
+    {{- block.settings.text -}}
+  </{{ block.settings.text_tag }}>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Text",
+  "tag": null,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "Text"
+    },
+    {
+      "type": "select",
+      "id": "text_tag",
+      "label": "Text tag",
+      "options": [
+        { "value": "p", "label": "P" },
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" }
+      ],
+      "default": "p"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "text_mob_size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile text size",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bolded_text_color",
+      "label": "Text bolded color",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_use_gradient",
+      "label": "Use gradient for text",
+      "info": "Any text formatted as bold within the text will be converted to a gradient.",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "text_gradient_color",
+      "label": "Text gradient color",
+      "visible_if": "{{ block.settings.text_use_gradient }}",
+      "default": "linear-gradient(180deg, rgba(234, 56, 133, 1), rgba(95, 77, 188, 1) 100%)"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "text_padding_top",
+      "label": "Text padding top",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "text_padding_bottom",
+      "label": "Text padding bottom",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,44 @@
+.atlas-isolation-wrapper .product__xr-button {
+  background: rgba(var(--atlas-color-foreground), 0.08);
+  color: rgb(var(--atlas-color-foreground));
+  margin: 1rem auto;
+  box-shadow: none;
+  display: flex;
+}
+
+.atlas-isolation-wrapper .button.product__xr-button:hover {
+  box-shadow: none;
+}
+
+.atlas-isolation-wrapper .product__xr-button[data-shopify-xr-hidden] {
+  visibility: hidden;
+}
+
+.atlas-isolation-wrapper .shopify-design-mode .product__xr-button[data-shopify-xr-hidden] {
+  display: none;
+}
+
+@media screen and (max-width: 749px) {
+  .atlas-isolation-wrapper slider-component .product__xr-button {
+    display: none;
+  }
+
+  .atlas-isolation-wrapper .active .product__xr-button:not([data-shopify-xr-hidden]) {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .atlas-isolation-wrapper slider-component + .button.product__xr-button {
+    display: none;
+  }
+
+  .atlas-isolation-wrapper .product__xr-button[data-shopify-xr-hidden] {
+    display: none;
+  }
+}
+
+.atlas-isolation-wrapper .product__xr-button .icon {
+  width: 1.4rem;
+  margin-right: 1rem;
+}

@@ -1,0 +1,1145 @@
+{% style %}
+  .reviews-swiper-{{ block.id }} .swiper-slide {
+    height: auto;
+    border-radius: {{ review_card_border_radius }}px;
+    overflow: clip;
+  }
+{% endstyle %}
+{% assign count_reviews = 0 %}
+{% assign default_author_text = 'John Doe' %}
+{% assign default_author_location_text = 'Los Angeles' %}
+{% assign default_review_text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' %}
+
+<reviews-swiper
+  block-class=".reviews-swiper-{{ block.id }}"
+  pagination-id=".reviews-swiper-pagination-{{ block.id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="swiper reviews-swiper-{{ block.id }}">
+    <div class="swiper-wrapper">
+      {% if block.settings.item_image_1 != blank
+        or block.settings.item_author_1 != blank
+        or block.settings.item_author_location_1 != blank
+        or block.settings.item_text_1 != blank
+      %}
+        {% assign count_reviews = count_reviews | plus: 1 %}
+        <div class="swiper-slide" role="group">
+          <div class="review-card">
+            <div class="review-card-content">
+              {% if block.settings.item_image_1 != blank %}
+                <img
+                  class="profile-image"
+                  src="{{ block.settings.item_image_1 | image_url: width: 122, height: 122 }}"
+                  alt="{{ block.settings.item_author_1 }}"
+                  width="61"
+                  height="61"
+                >
+              {% else %}
+                {% render 'a-icon-anonymous-avatar', width: 61, height: 61, class: 'profile-image' %}
+              {% endif %}
+
+              <div class="review-content">
+                <div class="reviewer-info">
+                  <span class="reviewer-name">{{ block.settings.item_author_1 | default: default_author_text }}</span>
+                  {% render 'a-icon-verified-badge' %}
+                </div>
+                {% if block.settings.item_author_location_1 != blank %}
+                  <div class="location">
+                    {{ block.settings.item_author_location_1 | default: default_author_location_text }}
+                  </div>
+                {% endif %}
+                {% assign rating_value = block.settings.item_rating_1 | default: 5 %}
+                {% assign full_stars = rating_value | floor %}
+                {% assign half_star = 0 %}
+                {% assign decimal_part = rating_value | modulo: 1 %}
+                {% if decimal_part >= 0.3 and decimal_part < 0.8 -%}
+                  {%- assign half_star = 1 -%}
+                {%- elsif decimal_part >= 0.8 -%}
+                  {%- assign full_stars = full_stars | plus: 1 -%}
+                {%- endif %}
+                {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+                <div class="stars">
+                  {% for n in (1..full_stars) %}
+                    {% render 'a-icon-star-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                  {% if half_star == 1 %}
+                    {% render 'a-icon-star-half-small', color: mini_review_stars_color, size: star_size %}
+                  {% endif %}
+                  {% for n in (1..empty_stars) %}
+                    {% render 'a-icon-star-empty-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="review-text">{{ block.settings.item_text_1 | default: default_review_text }}</p>
+          </div>
+        </div>
+      {% endif %}
+      {% if block.settings.item_image_2 != blank
+        or block.settings.item_author_2 != blank
+        or block.settings.item_author_location_2 != blank
+        or block.settings.item_text_2 != blank
+      %}
+        {% assign count_reviews = count_reviews | plus: 1 %}
+        <div class="swiper-slide" role="group">
+          <div class="review-card">
+            <div class="review-card-content">
+              {% if block.settings.item_image_2 != blank %}
+                <img
+                  class="profile-image"
+                  src="{{ block.settings.item_image_2 | image_url: width: 122, height: 122 }}"
+                  alt="{{ block.settings.item_author_2 }}"
+                  width="61"
+                  height="61"
+                >
+              {% else %}
+                {% render 'a-icon-anonymous-avatar', width: 61, height: 61, class: 'profile-image' %}
+              {% endif %}
+
+              <div class="review-content">
+                <div class="reviewer-info">
+                  <span class="reviewer-name">{{ block.settings.item_author_2 | default: default_author_text }}</span>
+                  {% render 'a-icon-verified-badge' %}
+                </div>
+                {% if block.settings.item_author_location_2 != blank %}
+                  <div class="location">
+                    {{ block.settings.item_author_location_2 | default: default_author_location_text }}
+                  </div>
+                {% endif %}
+                {% assign rating_value = block.settings.item_rating_2 | default: 5 %}
+                {% assign full_stars = rating_value | floor %}
+                {% assign half_star = 0 %}
+                {% assign decimal_part = rating_value | modulo: 1 %}
+                {% if decimal_part >= 0.3 and decimal_part < 0.8 -%}
+                  {%- assign half_star = 1 -%}
+                {%- elsif decimal_part >= 0.8 -%}
+                  {%- assign full_stars = full_stars | plus: 1 -%}
+                {%- endif %}
+                {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+                <div class="stars">
+                  {% for n in (1..full_stars) %}
+                    {% render 'a-icon-star-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                  {% if half_star == 1 %}
+                    {% render 'a-icon-star-half-small', color: mini_review_stars_color, size: star_size %}
+                  {% endif %}
+                  {% for n in (1..empty_stars) %}
+                    {% render 'a-icon-star-empty-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="review-text">{{ block.settings.item_text_2 | default: default_review_text }}</p>
+          </div>
+        </div>
+      {% endif %}
+      {% if block.settings.item_image_3 != blank
+        or block.settings.item_author_3 != blank
+        or block.settings.item_author_location_3 != blank
+        or block.settings.item_text_3 != blank
+      %}
+        {% assign count_reviews = count_reviews | plus: 1 %}
+        <div class="swiper-slide" role="group">
+          <div class="review-card">
+            <div class="review-card-content">
+              {% if block.settings.item_image_3 != blank %}
+                <img
+                  class="profile-image"
+                  src="{{ block.settings.item_image_3 | image_url: width: 122, height: 122 }}"
+                  alt="{{ block.settings.item_author_3 }}"
+                  width="61"
+                  height="61"
+                >
+              {% else %}
+                {% render 'a-icon-anonymous-avatar', width: 61, height: 61, class: 'profile-image' %}
+              {% endif %}
+
+              <div class="review-content">
+                <div class="reviewer-info">
+                  <span class="reviewer-name">{{ block.settings.item_author_3 | default: default_author_text }}</span>
+                  {% render 'a-icon-verified-badge' %}
+                </div>
+                {% if block.settings.item_author_location_3 != blank %}
+                  <div class="location">
+                    {{ block.settings.item_author_location_3 | default: default_author_location_text }}
+                  </div>
+                {% endif %}
+                {% assign rating_value = block.settings.item_rating_3 | default: 5 %}
+                {% assign full_stars = rating_value | floor %}
+                {% assign half_star = 0 %}
+                {% assign decimal_part = rating_value | modulo: 1 %}
+                {% if decimal_part >= 0.3 and decimal_part < 0.8 -%}
+                  {%- assign half_star = 1 -%}
+                {%- elsif decimal_part >= 0.8 -%}
+                  {%- assign full_stars = full_stars | plus: 1 -%}
+                {%- endif %}
+                {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+                <div class="stars">
+                  {% for n in (1..full_stars) %}
+                    {% render 'a-icon-star-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                  {% if half_star == 1 %}
+                    {% render 'a-icon-star-half-small', color: mini_review_stars_color, size: star_size %}
+                  {% endif %}
+                  {% for n in (1..empty_stars) %}
+                    {% render 'a-icon-star-empty-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="review-text">{{ block.settings.item_text_3 | default: default_review_text }}</p>
+          </div>
+        </div>
+      {% endif %}
+      {% if block.settings.item_image_4 != blank
+        or block.settings.item_author_4 != blank
+        or block.settings.item_author_location_4 != blank
+        or block.settings.item_text_4 != blank
+      %}
+        {% assign count_reviews = count_reviews | plus: 1 %}
+        <div class="swiper-slide" role="group">
+          <div class="review-card">
+            <div class="review-card-content">
+              {% if block.settings.item_image_4 != blank %}
+                <img
+                  class="profile-image"
+                  src="{{ block.settings.item_image_4 | image_url: width: 122, height: 122 }}"
+                  alt="{{ block.settings.item_author_4 }}"
+                  width="61"
+                  height="61"
+                >
+              {% else %}
+                {% render 'a-icon-anonymous-avatar', width: 61, height: 61, class: 'profile-image' %}
+              {% endif %}
+
+              <div class="review-content">
+                <div class="reviewer-info">
+                  <span class="reviewer-name">{{ block.settings.item_author_4 | default: default_author_text }}</span>
+                  {% render 'a-icon-verified-badge' %}
+                </div>
+                {% if block.settings.item_author_location_4 != blank %}
+                  <div class="location">
+                    {{ block.settings.item_author_location_4 | default: default_author_location_text }}
+                  </div>
+                {% endif %}
+                {% assign rating_value = block.settings.item_rating_4 | default: 5 %}
+                {% assign full_stars = rating_value | floor %}
+                {% assign half_star = 0 %}
+                {% assign decimal_part = rating_value | modulo: 1 %}
+                {% if decimal_part >= 0.3 and decimal_part < 0.8 -%}
+                  {%- assign half_star = 1 -%}
+                {%- elsif decimal_part >= 0.8 -%}
+                  {%- assign full_stars = full_stars | plus: 1 -%}
+                {%- endif %}
+                {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+                <div class="stars">
+                  {% for n in (1..full_stars) %}
+                    {% render 'a-icon-star-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                  {% if half_star == 1 %}
+                    {% render 'a-icon-star-half-small', color: mini_review_stars_color, size: star_size %}
+                  {% endif %}
+                  {% for n in (1..empty_stars) %}
+                    {% render 'a-icon-star-empty-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="review-text">{{ block.settings.item_text_4 | default: default_review_text }}</p>
+          </div>
+        </div>
+      {% endif %}
+      {% if block.settings.item_image_5 != blank
+        or block.settings.item_author_5 != blank
+        or block.settings.item_author_location_5 != blank
+        or block.settings.item_text_5 != blank
+      %}
+        {% assign count_reviews = count_reviews | plus: 1 %}
+        <div class="swiper-slide" role="group">
+          <div class="review-card">
+            <div class="review-card-content">
+              {% if block.settings.item_image_5 != blank %}
+                <img
+                  class="profile-image"
+                  src="{{ block.settings.item_image_5 | image_url: width: 122, height: 122 }}"
+                  alt="{{ block.settings.item_author_5 }}"
+                  width="61"
+                  height="61"
+                >
+              {% else %}
+                {% render 'a-icon-anonymous-avatar', width: 61, height: 61, class: 'profile-image' %}
+              {% endif %}
+
+              <div class="review-content">
+                <div class="reviewer-info">
+                  <span class="reviewer-name">{{ block.settings.item_author_5 | default: default_author_text }}</span>
+                  {% render 'a-icon-verified-badge' %}
+                </div>
+                {% if block.settings.item_author_location_5 != blank %}
+                  <div class="location">
+                    {{ block.settings.item_author_location_5 | default: default_author_location_text }}
+                  </div>
+                {% endif %}
+                {% assign rating_value = block.settings.item_rating_5 | default: 5 %}
+                {% assign full_stars = rating_value | floor %}
+                {% assign half_star = 0 %}
+                {% assign decimal_part = rating_value | modulo: 1 %}
+                {% if decimal_part >= 0.3 and decimal_part < 0.8 -%}
+                  {%- assign half_star = 1 -%}
+                {%- elsif decimal_part >= 0.8 -%}
+                  {%- assign full_stars = full_stars | plus: 1 -%}
+                {%- endif %}
+                {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+                <div class="stars">
+                  {% for n in (1..full_stars) %}
+                    {% render 'a-icon-star-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                  {% if half_star == 1 %}
+                    {% render 'a-icon-star-half-small', color: mini_review_stars_color, size: star_size %}
+                  {% endif %}
+                  {% for n in (1..empty_stars) %}
+                    {% render 'a-icon-star-empty-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="review-text">{{ block.settings.item_text_5 | default: default_review_text }}</p>
+          </div>
+        </div>
+      {% endif %}
+      {% if block.settings.item_image_6 != blank
+        or block.settings.item_author_6 != blank
+        or block.settings.item_author_location_6 != blank
+        or block.settings.item_text_6 != blank
+      %}
+        {% assign count_reviews = count_reviews | plus: 1 %}
+        <div class="swiper-slide" role="group">
+          <div class="review-card">
+            <div class="review-card-content">
+              {% if block.settings.item_image_6 != blank %}
+                <img
+                  class="profile-image"
+                  src="{{ block.settings.item_image_6 | image_url: width: 122, height: 122 }}"
+                  alt="{{ block.settings.item_author_6 }}"
+                  width="61"
+                  height="61"
+                >
+              {% else %}
+                {% render 'a-icon-anonymous-avatar', width: 61, height: 61, class: 'profile-image' %}
+              {% endif %}
+
+              <div class="review-content">
+                <div class="reviewer-info">
+                  <span class="reviewer-name">{{ block.settings.item_author_6 | default: default_author_text }}</span>
+                  {% render 'a-icon-verified-badge' %}
+                </div>
+                {% if block.settings.item_author_location_6 != blank %}
+                  <div class="location">
+                    {{ block.settings.item_author_location_6 | default: default_author_location_text }}
+                  </div>
+                {% endif %}
+                {% assign rating_value = block.settings.item_rating_6 | default: 5 %}
+                {% assign full_stars = rating_value | floor %}
+                {% assign half_star = 0 %}
+                {% assign decimal_part = rating_value | modulo: 1 %}
+                {% if decimal_part >= 0.3 and decimal_part < 0.8 -%}
+                  {%- assign half_star = 1 -%}
+                {%- elsif decimal_part >= 0.8 -%}
+                  {%- assign full_stars = full_stars | plus: 1 -%}
+                {%- endif %}
+                {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+                <div class="stars">
+                  {% for n in (1..full_stars) %}
+                    {% render 'a-icon-star-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                  {% if half_star == 1 %}
+                    {% render 'a-icon-star-half-small', color: mini_review_stars_color, size: star_size %}
+                  {% endif %}
+                  {% for n in (1..empty_stars) %}
+                    {% render 'a-icon-star-empty-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="review-text">{{ block.settings.item_text_6 | default: default_review_text }}</p>
+          </div>
+        </div>
+      {% endif %}
+      {% if block.settings.item_image_7 != blank
+        or block.settings.item_author_7 != blank
+        or block.settings.item_author_location_7 != blank
+        or block.settings.item_text_7 != blank
+      %}
+        {% assign count_reviews = count_reviews | plus: 1 %}
+        <div class="swiper-slide" role="group">
+          <div class="review-card">
+            <div class="review-card-content">
+              {% if block.settings.item_image_7 != blank %}
+                <img
+                  class="profile-image"
+                  src="{{ block.settings.item_image_7 | image_url: width: 122, height: 122 }}"
+                  alt="{{ block.settings.item_author_7 }}"
+                  width="61"
+                  height="61"
+                >
+              {% else %}
+                {% render 'a-icon-anonymous-avatar', width: 61, height: 61, class: 'profile-image' %}
+              {% endif %}
+
+              <div class="review-content">
+                <div class="reviewer-info">
+                  <span class="reviewer-name">{{ block.settings.item_author_7 | default: default_author_text }}</span>
+                  {% render 'a-icon-verified-badge' %}
+                </div>
+                {% if block.settings.item_author_location_7 != blank %}
+                  <div class="location">
+                    {{ block.settings.item_author_location_7 | default: default_author_location_text }}
+                  </div>
+                {% endif %}
+                {% assign rating_value = block.settings.item_rating_7 | default: 5 %}
+                {% assign full_stars = rating_value | floor %}
+                {% assign half_star = 0 %}
+                {% assign decimal_part = rating_value | modulo: 1 %}
+                {% if decimal_part >= 0.3 and decimal_part < 0.8 -%}
+                  {%- assign half_star = 1 -%}
+                {%- elsif decimal_part >= 0.8 -%}
+                  {%- assign full_stars = full_stars | plus: 1 -%}
+                {%- endif %}
+                {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+                <div class="stars">
+                  {% for n in (1..full_stars) %}
+                    {% render 'a-icon-star-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                  {% if half_star == 1 %}
+                    {% render 'a-icon-star-half-small', color: mini_review_stars_color, size: star_size %}
+                  {% endif %}
+                  {% for n in (1..empty_stars) %}
+                    {% render 'a-icon-star-empty-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="review-text">{{ block.settings.item_text_7 | default: default_review_text }}</p>
+          </div>
+        </div>
+      {% endif %}
+      {% if block.settings.item_image_8 != blank
+        or block.settings.item_author_8 != blank
+        or block.settings.item_author_location_8 != blank
+        or block.settings.item_text_8 != blank
+      %}
+        {% assign count_reviews = count_reviews | plus: 1 %}
+        <div class="swiper-slide" role="group">
+          <div class="review-card">
+            <div class="review-card-content">
+              {% if block.settings.item_image_8 != blank %}
+                <img
+                  class="profile-image"
+                  src="{{ block.settings.item_image_8 | image_url: width: 122, height: 122 }}"
+                  alt="{{ block.settings.item_author_8 }}"
+                  width="61"
+                  height="61"
+                >
+              {% else %}
+                {% render 'a-icon-anonymous-avatar', width: 61, height: 61, class: 'profile-image' %}
+              {% endif %}
+
+              <div class="review-content">
+                <div class="reviewer-info">
+                  <span class="reviewer-name">{{ block.settings.item_author_8 | default: default_author_text }}</span>
+                  {% render 'a-icon-verified-badge' %}
+                </div>
+                {% if block.settings.item_author_location_8 != blank %}
+                  <div class="location">
+                    {{ block.settings.item_author_location_8 | default: default_author_location_text }}
+                  </div>
+                {% endif %}
+                {% assign rating_value = block.settings.item_rating_8 | default: 5 %}
+                {% assign full_stars = rating_value | floor %}
+                {% assign half_star = 0 %}
+                {% assign decimal_part = rating_value | modulo: 1 %}
+                {% if decimal_part >= 0.3 and decimal_part < 0.8 -%}
+                  {%- assign half_star = 1 -%}
+                {%- elsif decimal_part >= 0.8 -%}
+                  {%- assign full_stars = full_stars | plus: 1 -%}
+                {%- endif %}
+                {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+                <div class="stars">
+                  {% for n in (1..full_stars) %}
+                    {% render 'a-icon-star-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                  {% if half_star == 1 %}
+                    {% render 'a-icon-star-half-small', color: mini_review_stars_color, size: star_size %}
+                  {% endif %}
+                  {% for n in (1..empty_stars) %}
+                    {% render 'a-icon-star-empty-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="review-text">{{ block.settings.item_text_8 | default: default_review_text }}</p>
+          </div>
+        </div>
+      {% endif %}
+      {% if block.settings.item_image_9 != blank
+        or block.settings.item_author_9 != blank
+        or block.settings.item_author_location_9 != blank
+        or block.settings.item_text_9 != blank
+      %}
+        {% assign count_reviews = count_reviews | plus: 1 %}
+        <div class="swiper-slide" role="group">
+          <div class="review-card">
+            <div class="review-card-content">
+              {% if block.settings.item_image_9 != blank %}
+                <img
+                  class="profile-image"
+                  src="{{ block.settings.item_image_9 | image_url: width: 122, height: 122 }}"
+                  alt="{{ block.settings.item_author_9 }}"
+                  width="61"
+                  height="61"
+                >
+              {% else %}
+                {% render 'a-icon-anonymous-avatar', width: 61, height: 61, class: 'profile-image' %}
+              {% endif %}
+
+              <div class="review-content">
+                <div class="reviewer-info">
+                  <span class="reviewer-name">{{ block.settings.item_author_9 | default: default_author_text }}</span>
+                  {% render 'a-icon-verified-badge' %}
+                </div>
+                {% if block.settings.item_author_location_9 != blank %}
+                  <div class="location">
+                    {{ block.settings.item_author_location_9 | default: default_author_location_text }}
+                  </div>
+                {% endif %}
+                {% assign rating_value = block.settings.item_rating_9 | default: 5 %}
+                {% assign full_stars = rating_value | floor %}
+                {% assign half_star = 0 %}
+                {% assign decimal_part = rating_value | modulo: 1 %}
+                {% if decimal_part >= 0.3 and decimal_part < 0.8 -%}
+                  {%- assign half_star = 1 -%}
+                {%- elsif decimal_part >= 0.8 -%}
+                  {%- assign full_stars = full_stars | plus: 1 -%}
+                {%- endif %}
+                {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+                <div class="stars">
+                  {% for n in (1..full_stars) %}
+                    {% render 'a-icon-star-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                  {% if half_star == 1 %}
+                    {% render 'a-icon-star-half-small', color: mini_review_stars_color, size: star_size %}
+                  {% endif %}
+                  {% for n in (1..empty_stars) %}
+                    {% render 'a-icon-star-empty-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="review-text">{{ block.settings.item_text_9 | default: default_review_text }}</p>
+          </div>
+        </div>
+      {% endif %}
+      {% if block.settings.item_image_10 != blank
+        or block.settings.item_author_10 != blank
+        or block.settings.item_author_location_10 != blank
+        or block.settings.item_text_10 != blank
+      %}
+        {% assign count_reviews = count_reviews | plus: 1 %}
+        <div class="swiper-slide" role="group">
+          <div class="review-card">
+            <div class="review-card-content">
+              {% if block.settings.item_image_10 != blank %}
+                <img
+                  class="profile-image"
+                  src="{{ block.settings.item_image_10 | image_url: width: 122, height: 122 }}"
+                  alt="{{ block.settings.item_author_10 }}"
+                  width="61"
+                  height="61"
+                >
+              {% else %}
+                {% render 'a-icon-anonymous-avatar', width: 61, height: 61, class: 'profile-image' %}
+              {% endif %}
+
+              <div class="review-content">
+                <div class="reviewer-info">
+                  <span class="reviewer-name">
+                    {{- block.settings.item_author_10 | default: default_author_text -}}
+                  </span>
+                  {% render 'a-icon-verified-badge' %}
+                </div>
+                {% if block.settings.item_author_location_10 != blank %}
+                  <div class="location">
+                    {{ block.settings.item_author_location_10 | default: default_author_location_text }}
+                  </div>
+                {% endif %}
+                {% assign rating_value = block.settings.item_rating_10 | default: 5 %}
+                {% assign full_stars = rating_value | floor %}
+                {% assign half_star = 0 %}
+                {% assign decimal_part = rating_value | modulo: 1 %}
+                {% if decimal_part >= 0.3 and decimal_part < 0.8 -%}
+                  {%- assign half_star = 1 -%}
+                {%- elsif decimal_part >= 0.8 -%}
+                  {%- assign full_stars = full_stars | plus: 1 -%}
+                {%- endif %}
+                {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+                <div class="stars">
+                  {% for n in (1..full_stars) %}
+                    {% render 'a-icon-star-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                  {% if half_star == 1 %}
+                    {% render 'a-icon-star-half-small', color: mini_review_stars_color, size: star_size %}
+                  {% endif %}
+                  {% for n in (1..empty_stars) %}
+                    {% render 'a-icon-star-empty-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="review-text">{{ block.settings.item_text_10 | default: default_review_text }}</p>
+          </div>
+        </div>
+      {% endif %}
+      {% if block.settings.item_image_11 != blank
+        or block.settings.item_author_11 != blank
+        or block.settings.item_author_location_11 != blank
+        or block.settings.item_text_11 != blank
+      %}
+        {% assign count_reviews = count_reviews | plus: 1 %}
+        <div class="swiper-slide" role="group">
+          <div class="review-card">
+            <div class="review-card-content">
+              {% if block.settings.item_image_11 != blank %}
+                <img
+                  class="profile-image"
+                  src="{{ block.settings.item_image_11 | image_url: width: 122, height: 122 }}"
+                  alt="{{ block.settings.item_author_11 }}"
+                  width="61"
+                  height="61"
+                >
+              {% else %}
+                {% render 'a-icon-anonymous-avatar', width: 61, height: 61, class: 'profile-image' %}
+              {% endif %}
+
+              <div class="review-content">
+                <div class="reviewer-info">
+                  <span class="reviewer-name">
+                    {{- block.settings.item_author_11 | default: default_author_text -}}
+                  </span>
+                  {% render 'a-icon-verified-badge' %}
+                </div>
+                {% if block.settings.item_author_location_11 != blank %}
+                  <div class="location">
+                    {{ block.settings.item_author_location_11 | default: default_author_location_text }}
+                  </div>
+                {% endif %}
+                {% assign rating_value = block.settings.item_rating_11 | default: 5 %}
+                {% assign full_stars = rating_value | floor %}
+                {% assign half_star = 0 %}
+                {% assign decimal_part = rating_value | modulo: 1 %}
+                {% if decimal_part >= 0.3 and decimal_part < 0.8 -%}
+                  {%- assign half_star = 1 -%}
+                {%- elsif decimal_part >= 0.8 -%}
+                  {%- assign full_stars = full_stars | plus: 1 -%}
+                {%- endif %}
+                {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+                <div class="stars">
+                  {% for n in (1..full_stars) %}
+                    {% render 'a-icon-star-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                  {% if half_star == 1 %}
+                    {% render 'a-icon-star-half-small', color: mini_review_stars_color, size: star_size %}
+                  {% endif %}
+                  {% for n in (1..empty_stars) %}
+                    {% render 'a-icon-star-empty-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="review-text">{{ block.settings.item_text_11 | default: default_review_text }}</p>
+          </div>
+        </div>
+      {% endif %}
+      {% if block.settings.item_image_12 != blank
+        or block.settings.item_author_12 != blank
+        or block.settings.item_author_location_12 != blank
+        or block.settings.item_text_12 != blank
+      %}
+        {% assign count_reviews = count_reviews | plus: 1 %}
+        <div class="swiper-slide" role="group">
+          <div class="review-card">
+            <div class="review-card-content">
+              {% if block.settings.item_image_12 != blank %}
+                <img
+                  class="profile-image"
+                  src="{{ block.settings.item_image_12 | image_url: width: 122, height: 122 }}"
+                  alt="{{ block.settings.item_author_12 }}"
+                  width="61"
+                  height="61"
+                >
+              {% else %}
+                {% render 'a-icon-anonymous-avatar', width: 61, height: 61, class: 'profile-image' %}
+              {% endif %}
+
+              <div class="review-content">
+                <div class="reviewer-info">
+                  <span class="reviewer-name">
+                    {{- block.settings.item_author_12 | default: default_author_text -}}
+                  </span>
+                  {% render 'a-icon-verified-badge' %}
+                </div>
+                {% if block.settings.item_author_location_12 != blank %}
+                  <div class="location">
+                    {{ block.settings.item_author_location_12 | default: default_author_location_text }}
+                  </div>
+                {% endif %}
+                {% assign rating_value = block.settings.item_rating_12 | default: 5 %}
+                {% assign full_stars = rating_value | floor %}
+                {% assign half_star = 0 %}
+                {% assign decimal_part = rating_value | modulo: 1 %}
+                {% if decimal_part >= 0.3 and decimal_part < 0.8 -%}
+                  {%- assign half_star = 1 -%}
+                {%- elsif decimal_part >= 0.8 -%}
+                  {%- assign full_stars = full_stars | plus: 1 -%}
+                {%- endif %}
+                {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+                <div class="stars">
+                  {% for n in (1..full_stars) %}
+                    {% render 'a-icon-star-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                  {% if half_star == 1 %}
+                    {% render 'a-icon-star-half-small', color: mini_review_stars_color, size: star_size %}
+                  {% endif %}
+                  {% for n in (1..empty_stars) %}
+                    {% render 'a-icon-star-empty-small', color: mini_review_stars_color, size: star_size %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="review-text">{{ block.settings.item_text_12 | default: default_review_text }}</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="review-footer">
+    {% if show_review_count %}
+      <div class="review-count">
+        <strong>{{ count_reviews }}</strong> New Reviews
+      </div>
+    {% endif %}
+    <div class="review-divider"></div>
+    <!-- pagination dots rendered by swiper -->
+    <div class="swiper-pagination reviews-swiper-pagination-{{ block.id }}"></div>
+  </div>
+</reviews-swiper>
+
+{% schema %}
+{
+  "name": "Reviews item list",
+  "tag": null,
+  "blocks": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Review 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_1",
+      "label": "Item image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_1",
+      "label": "Author"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_location_1",
+      "label": "Author location"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_text_1",
+      "label": "Review text"
+    },
+    {
+      "type": "range",
+      "id": "item_rating_1",
+      "label": "Rating 1 (0-5)",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Review 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_2",
+      "label": "Item image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_2",
+      "label": "Author"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_location_2",
+      "label": "Author location"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_text_2",
+      "label": "Review text"
+    },
+    {
+      "type": "range",
+      "id": "item_rating_2",
+      "label": "Rating 2 (0-5)",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Review 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_3",
+      "label": "Item image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_3",
+      "label": "Author"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_location_3",
+      "label": "Author location"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_text_3",
+      "label": "Review text"
+    },
+    {
+      "type": "range",
+      "id": "item_rating_3",
+      "label": "Rating 3 (0-5)",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Review 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_4",
+      "label": "Item image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_4",
+      "label": "Author"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_location_4",
+      "label": "Author location"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_text_4",
+      "label": "Review text"
+    },
+    {
+      "type": "range",
+      "id": "item_rating_4",
+      "label": "Rating 4 (0-5)",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Review 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_5",
+      "label": "Item image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_5",
+      "label": "Author"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_location_5",
+      "label": "Author location"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_text_5",
+      "label": "Review text"
+    },
+    {
+      "type": "range",
+      "id": "item_rating_5",
+      "label": "Rating 5 (0-5)",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Review 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_6",
+      "label": "Item image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_6",
+      "label": "Author"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_location_6",
+      "label": "Author location"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_text_6",
+      "label": "Review text"
+    },
+    {
+      "type": "range",
+      "id": "item_rating_6",
+      "label": "Rating 6 (0-5)",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Review 7"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_7",
+      "label": "Item image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_7",
+      "label": "Author"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_location_7",
+      "label": "Author location"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_text_7",
+      "label": "Review text"
+    },
+    {
+      "type": "range",
+      "id": "item_rating_7",
+      "label": "Rating 7 (0-5)",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Review 8"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_8",
+      "label": "Item image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_8",
+      "label": "Author"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_location_8",
+      "label": "Author location"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_text_8",
+      "label": "Review text"
+    },
+    {
+      "type": "range",
+      "id": "item_rating_8",
+      "label": "Rating 8 (0-5)",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Review 9"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_9",
+      "label": "Item image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_9",
+      "label": "Author"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_location_9",
+      "label": "Author location"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_text_9",
+      "label": "Review text"
+    },
+    {
+      "type": "range",
+      "id": "item_rating_9",
+      "label": "Rating 9 (0-5)",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Review 10"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_10",
+      "label": "Item image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_10",
+      "label": "Author"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_location_10",
+      "label": "Author location"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_text_10",
+      "label": "Review text"
+    },
+    {
+      "type": "range",
+      "id": "item_rating_10",
+      "label": "Rating 10 (0-5)",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Review 11"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_11",
+      "label": "Item image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_11",
+      "label": "Author"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_location_11",
+      "label": "Author location"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_text_11",
+      "label": "Review text"
+    },
+    {
+      "type": "range",
+      "id": "item_rating_11",
+      "label": "Rating 11 (0-5)",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Review 12"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_12",
+      "label": "Item image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_12",
+      "label": "Author"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_author_location_12",
+      "label": "Author location"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_text_12",
+      "label": "Review text"
+    },
+    {
+      "type": "range",
+      "id": "item_rating_12",
+      "label": "Rating 12 (0-5)",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews item list"
+    }
+  ]
+}
+{% endschema %}

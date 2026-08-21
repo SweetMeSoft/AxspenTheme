@@ -1,0 +1,143 @@
+{%- comment -%} Social Media Icon Block {%- endcomment -%}
+{% style %}
+     .product-block-{{ block.id }}.social-icon .social-custom-image {
+    width: {{ block.settings.icon_image_size | default: 20 }}px;
+    height: {{ block.settings.icon_image_size | default: 20 }}px;
+    object-fit: contain;
+  }
+{% endstyle %}
+{% if block.settings.social_url != blank %}
+  <a
+    href="{{ block.settings.social_url }}"
+    class="social-icon product-block-{{ block.id }}"
+    target="_blank"
+    rel="noopener"
+  >
+    {%- if block.settings.social_custom_image != blank -%}
+      {{
+        block.settings.social_custom_image
+        | image_url: width: 48
+        | image_tag: loading: 'lazy', widths: '16, 20, 24, 32, 48', class: 'social-custom-image', alt: 'Social Media'
+      }}
+    {%- elsif block.settings.social_platform != 'none' -%}
+      {% case block.settings.social_platform %}
+        {% when 'youtube' %}
+          {% render 'a-icon-youtube-social', color: block.settings.social_color, size: block.settings.social_icon_size %}
+        {% when 'instagram' %}
+          {% render 'a-icon-instagram-social',
+            color: block.settings.social_color,
+            size: block.settings.social_icon_size
+          %}
+        {% when 'facebook' %}
+          {% render 'a-icon-facebook-social', color: block.settings.social_color, size: block.settings.social_icon_size %}
+        {% when 'twitter' %}
+          {% render 'a-icon-twitter-social', color: block.settings.social_color, size: block.settings.social_icon_size %}
+        {% when 'tiktok' %}
+          {% render 'a-icon-tiktok-social', color: block.settings.social_color, size: block.settings.social_icon_size %}
+        {% when 'telegram' %}
+          {% render 'a-icon-telegram-social', color: block.settings.social_color, size: block.settings.social_icon_size %}
+        {% when 'pinterest' %}
+          {% render 'a-icon-pinterest-social',
+            color: block.settings.social_color,
+            size: block.settings.social_icon_size
+          %}
+      {% endcase %}
+    {%- endif -%}
+  </a>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Social Media Icon",
+  "tag": null,
+  "blocks": [],
+  "settings": [
+    {
+      "type": "url",
+      "id": "social_url",
+      "label": "Social Media URL"
+    },
+    {
+      "type": "select",
+      "id": "social_platform",
+      "label": "Platform",
+      "options": [
+        {
+          "value": "none",
+          "label": "None (Use custom image)"
+        },
+        {
+          "value": "youtube",
+          "label": "YouTube"
+        },
+        {
+          "value": "instagram",
+          "label": "Instagram"
+        },
+        {
+          "value": "facebook",
+          "label": "Facebook"
+        },
+        {
+          "value": "twitter",
+          "label": "Twitter"
+        },
+        {
+          "value": "tiktok",
+          "label": "TikTok"
+        },
+        {
+          "value": "telegram",
+          "label": "Telegram"
+        },
+        {
+          "value": "pinterest",
+          "label": "Pinterest"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "social_icon_size",
+      "min": 14,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "social_color",
+      "label": "Icon color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Custom Image"
+    },
+    {
+        "type": "image_picker",
+        "id": "social_custom_image",
+        "label": "Custom Image",
+        "info": "Used when platform is set to 'None'"
+      },
+    {
+      "type": "range",
+      "id": "icon_image_size",
+      "min": 14,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon image size",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social Media Icon"
+    }
+  ]
+}
+{% endschema %}

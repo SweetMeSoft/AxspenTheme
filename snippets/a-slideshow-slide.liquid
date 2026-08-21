@@ -1,0 +1,95 @@
+<style>
+  .atlas-isolation-wrapper #Slide-{{ section.id }}-{{ forloop.index }} .banner__media::after {
+    opacity: {{ block.settings.image_overlay_opacity | divided_by: 100.0 }};
+  }
+  .atlas-isolation-wrapper #banner__heading-{{ block.id }} {
+    font-weight: bold;
+    font-size: {% if global_heading_size %}var(--atlas-font-heading-size){% else %}{{ block.settings.heading_size }}px{% endif %};
+    line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-size) + 8px){% else %}{{ block.settings.heading_size | plus: 8 }}px{% endif %};
+    color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ block.settings.heading_color }}{% endif %};
+    --atlas-color-highlighted-color: {{ block.settings.bolded_heading_color }};
+  }
+
+  .atlas-isolation-wrapper #banner__subheading-{{ block.id }} {
+    font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size){% else %}{{ block.settings.subheading_size }}px{% endif %};
+    line-height: {% if global_body_size %}calc(var(--atlas-global-body-text-font-size) + 8px){% else %}{{ block.settings.subheading_size | plus: 8 }}px{% endif %};
+    color: {% if global_color %}rgb(var(--atlas-color-base-text)){% else %}{{ block.settings.subheading_color }}{% endif %};
+    --atlas-color-highlighted-color: {{ block.settings.bolded_subheading_color }};
+    font-weight: 500;
+    letter-spacing: 0em;
+  }
+
+  @media screen and (max-width: 750px) {
+    .atlas-isolation-wrapper #banner__heading-{{ block.id }}{
+      font-size: {% if global_heading_size %}var(--atlas-font-heading-mob-size) !important{% else %}{{ block.settings.heading_mob_font_size }}px!important{% endif %};
+      line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-mob-size) + 8px) !important{% else %}{{ block.settings.heading_mob_font_size | plus: 8 }}px!important{% endif %};
+    }
+  }
+  @media screen and (max-width: 750px) {
+    .atlas-isolation-wrapper #banner__subheading-{{ block.id }}{
+      font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size){% else %}{{ block.settings.subheading_mob_size }}px!important{% endif %};
+      line-height: {% if global_body_size %}calc(var(--atlas-global-body-text-font-size) + 8px){% else %}{{ block.settings.subheading_mob_size | plus: 8 }}px!important{% endif %};
+    }
+  }
+  .atlas-isolation-wrapper #Slide-{{ section.id }}-{{ forloop.index }} {
+    --atlas-color-button: var(--atlas-color-base-accent-3)
+  }
+</style>
+<div
+  class="slideshow__slide grid__item grid--1-col slider__slide"
+  id="Slide-{{ section.id }}-{{ forloop.index }}"
+  {{ block.shopify_attributes }}
+  role="group"
+  aria-roledescription="Slide"
+  aria-label="{{ forloop.index }} of {{ forloop.length }}"
+  tabindex="-1"
+>
+  <div class="slideshow__media banner__media media{% if block.settings.image == blank %} placeholder{% endif %}">
+    {%- if block.settings.image -%}
+      {%- assign height = block.settings.image.width | divided_by: block.settings.image.aspect_ratio | round -%}
+      {{
+        block.settings.image
+        | image_url: width: 3840
+        | image_tag:
+          loading: 'lazy',
+          height: height,
+          sizes: '100vw',
+          widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+      }}
+    {%- else -%}
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+  <div class="slideshow__text-wrapper banner__content  page-width{% if block.settings.show_text_box == false %} banner--desktop-transparent{% endif %}">
+    <div 
+      class="slideshow__text banner__box content-container content-container--full-width-mobile color-{{ block.settings.color_scheme }} gradient slideshow__text--{{ block.settings.text_alignment }} slideshow__text-mobile--{{ block.settings.text_alignment_mobile }}"
+    >
+      {%- if block.settings.heading != blank -%}
+        <h2 class="banner__heading title" id="banner__heading-{{ block.id }}">
+          {{ block.settings.heading }}
+        </h2>
+      {%- endif -%}
+      {%- if block.settings.subheading != blank -%}
+        <div class="banner__text rte body" {{ block.shopify_attributes }} id="banner__subheading-{{ block.id }}">
+          <span>{{ block.settings.subheading }}</span>
+        </div>
+      {%- endif -%}
+      {%- if block.settings.button_label != blank -%}
+        <div class="banner__buttons">
+          <a
+            {% if block.settings.link %}
+              href="{{ block.settings.link }}"
+            {% else %}
+              role="link" aria-disabled="true"
+            {% endif %}
+            class="button button--primary"
+          >
+            <span class="button-text">
+              {{- block.settings.button_label | escape -}}
+            </span>
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div> 

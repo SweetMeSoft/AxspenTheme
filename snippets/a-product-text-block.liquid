@@ -1,0 +1,14 @@
+<div class="image-with-text__text rte body">
+  <p
+    style="
+      font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size) !important{% else %}{{ block.settings.font_size }}px!important{% endif %};
+      line-height: {% if global_body_size %}calc(var(--atlas-global-body-text-font-size) + 12px) !important{% else %}{{ block.settings.font_size | plus: 12 }}px!important{% endif %};
+      color: {% if global_color %}rgb(var(--atlas-color-base-text)) !important{% else %}{{ block.settings.body_colors }} !important{% endif %};
+      --atlas-color-highlighted-color: {{ block.settings.body_highlighted_color }}
+    "
+    class="sw-base-text-color "
+    {{ block.shopify_attributes }}
+  >
+    {{- block.settings.text -}}
+  </p>
+</div> 

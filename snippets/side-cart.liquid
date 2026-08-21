@@ -1,0 +1,180 @@
+<div class="side-cart" tabindex="-1">
+	<div class="side-cart-inner">
+		<div class="side-cart-header">
+			<h2 class="side-cart-title">{{- 'cart.general.title' | t -}}</h2>
+
+			<button type="button" class="side-cart-close close-button">
+				<span class="sr-only">{{- 'cart.general.close_cart' | t -}}</span>
+
+				{%- render 'icon', code: 'close-thin' -%}
+			</button>
+		</div>
+
+		<div class="side-cart-content">
+			{%- if cart == empty -%}
+				<p>{{- 'cart.general.empty' | t -}}</p>
+			{%- else -%}
+				{%- for item in cart.items -%}
+					<div class="product-item" data-id="{{ item.id }}" data-line="{{ forloop.index }}">
+						{%- if item.image -%}
+							<a href="{{ item.url | default: '#' }}" class="product-image{% unless item.image %} no-image{% endunless %}" tabindex="-1">
+								<img src="{{ item.image | image_url: width: 300 }}" alt="{{ item.image.alt | escape }}" loading="lazy" width="150" height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}" />
+							</a>
+						{%- endif -%}
+
+						<div class="product-info">
+							{% comment %} Title {% endcomment %}
+							<h2 class="product-name">
+								<a href="{{ item.url | default: '#' }}" tabindex="-1">
+									{{- item.product.title | escape -}}
+								</a>
+							</h2>
+
+							{% comment %} Variant title {% endcomment %}
+							<div class="product-options">
+								{%- unless item.product.has_only_default_variant -%}
+									{%- for option in item.options_with_values -%}
+										<span class="product-option">{{ option.name }}: <span class="link">{{ option.value }}</span></span>
+									{%- endfor -%}
+								{%- endunless -%}
+
+								{%- for property in item.properties -%}
+									{%- assign property_first_char = property.first | slice: 0 -%}
+
+									{%- if property.last != blank and property_first_char != '_' -%}
+										<span class="product-option">
+											{{ property.first }}:
+
+											{% if property.last contains '/uploads/' -%}
+												<a href="{{ property.last }}" class="link" target="_blank">
+													{{ property.last | split: '/' | last }}
+												</a>
+											{%- else -%}
+												<span class="link">{{ property.last }}</span>
+											{%- endif -%}
+										</span>
+									{%- endif -%}
+								{%- endfor -%}
+							</div>
+
+							{% comment %} Selling plan {% endcomment %}
+							{%- if item.selling_plan_allocation != nil -%}
+								<p class="product-option">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+							{%- endif -%}
+
+							{% comment %} Price {% endcomment %}
+							<div class="hidden-desktop">
+								{%- render 'price', product: item.variant -%}
+
+								{% if item.unit_price_measurement %}
+									<span class="unit-price">
+										{% render 'get-price', price: item.unit_price %}
+										/
+										{% if item.unit_price_measurement.reference_value != 1 -%}
+											{{- item.unit_price_measurement.reference_value -}}
+										{%- endif -%}
+										{{- item.unit_price_measurement.reference_unit -}}
+									</span>
+								{% endif %}
+							</div>
+
+							<div class="product-warning error-message message"></div>
+
+							<div class="bottom-line">
+								{% comment %} Quantity {% endcomment %}
+								<div class="quantity">
+									<button class="quantity-button" name="minus" type="button">
+										<span class="sr-only">{{ 'products.product.quantity.decrease' | t: product: item.product.title | escape }}</span>
+										{% render 'icon', code: 'minus' %}
+									</button>
+
+									<input class="quantity-input"
+										type="number"
+										name="quantity"
+										id="quantity-item-{{ item.index | plus: 1 }}"
+										min="0"
+										step="1"
+										data-qty="{{ item.quantity }}"
+										value="{{ item.quantity }}"
+										aria-label="{{ 'products.product.quantity.input_label' | t: product: item.product.title | escape }}"
+										data-noui>
+
+									<button class="quantity-button" name="plus" type="button">
+										<span class="sr-only">{{ 'products.product.quantity.increase' | t: product: item.product.title | escape }}</span>
+										{% render 'icon', code: 'plus' %}
+									</button>
+								</div>
+
+								<div class="hidden-tablet hidden-mobile">
+									{%- render 'price', product: item.variant -%}
+
+									{% if item.unit_price_measurement %}
+										<span class="unit-price">
+											{%- render 'get-price', price: item.unit_price %}
+											/
+											{% if item.unit_price_measurement.reference_value != 1 -%}
+												{{- item.unit_price_measurement.reference_value -}}
+											{%- endif -%}
+											{{- item.unit_price_measurement.reference_unit -}}
+										</span>
+									{% endif %}
+								</div>
+
+								{% comment %} Remove {% endcomment %}
+								<a href="{{ item.url_to_remove }}" class="product-remove" aria-label="{{ 'sections.cart.remove_title' | t: title: item.title }}">
+									<span class="tooltip">{{- 'products.product.remove' | t -}}</span>
+									<span class="remove-icon">{%- render 'icon', code: 'remove' -%}</span>
+								</a>
+							</div>
+						</div>
+					</div>
+				{%- endfor -%}
+			{%- endif -%}
+		</div>
+
+		{%- if cart != empty -%}
+			<div class="side-cart-footer">
+				{%- if settings.cart_note -%}
+					<details class="order-note">
+						<summary aria-expanded="false">
+							{{- 'sections.cart.note' | t -}}
+							{%- render 'icon', code: 'chevron-down' -%}
+						</summary>
+
+						<div class="details-content">
+							<textarea class="cart-note text-area" name="note">{{- cart.note -}}</textarea>
+						</div>
+					</details>
+				{%- endif -%}
+
+				<div class="sub-total">
+					<p class="total-label">{{- 'cart.general.subtotal' | t }}: <span class="total-price">{%- render 'get-price', price: cart.total_price -%}</span></p>
+
+					{% comment %} Discount {% endcomment %}
+					{%- render 'total-discount', items: cart.items -%}
+
+					{% comment %} Taxe note {% endcomment %}
+					<p class="tax-note">
+						{%- liquid
+							if cart.taxes_included and shop.shipping_policy.body != blank
+								echo 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url
+							elsif cart.taxes_included
+								echo 'sections.cart.taxes_included_but_shipping_at_checkout' | t
+							elsif shop.shipping_policy.body != blank
+								echo 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url
+							else
+								echo 'sections.cart.taxes_and_shipping_at_checkout' | t
+							endif
+						-%}
+					</p>
+				</div>
+
+				<form action="{{ routes.cart_url }}" method="post" class="go-to-checkout">
+					<button class="button primary-button" name="checkout">{{- 'sections.cart.checkout' | t -}}</button>
+				</form>
+
+				<a href="{{ routes.cart_url }}" class="button secondary-button go-to-cart">{{- 'cart.general.cart' | t -}}</a>
+			</div>
+		{%- endif -%}
+	</div>
+</div>

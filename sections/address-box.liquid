@@ -1,0 +1,177 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+-%}
+
+<style>
+	{{ section_id }} {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .address-box {
+			width: {{ section.settings.width }}%;
+		}
+
+		{{ section_id }} {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+	}
+</style>
+
+<div class="container">
+	<div class="address-box">
+		{%- for block in section.blocks -%}
+			{%- assign image = block.settings.image -%}
+
+			<div class="address-box-item">
+				<div class="address-box-image adapt-media">
+					<div class="address-box-image-inner{% if settings.image_lazy and image %} lazy-image{% endif %}">
+						{%- liquid
+							if image != blank
+								render 'lazy-image', image: image, width: 480
+							else
+								render 'icon', code: 'placeholder'
+							endif
+						-%}
+					</div>
+				</div>
+
+				<div class="address-box-content">
+					{%- if block.settings.heading != blank -%}
+						<h3 class="address-heading">{{- block.settings.heading -}}</h3>
+					{%- endif -%}
+
+					{%- if block.settings.address != blank -%}
+						<div class="address-info">{{- block.settings.address -}}</div>
+					{%- endif -%}
+
+					{%- if block.settings.button_label != blank -%}
+						<a class="button primary-button address-button" href="{{ block.settings.button_link | default : '#' }}">{{- block.settings.button_label -}}</a>
+					{%- endif -%}
+				</div>
+			</div>
+		{%- endfor -%}
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.address-box.name",
+	"tag": "section",
+	"class": "address-box-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "range",
+			"id": "width",
+			"min": 40,
+			"max": 100,
+			"step": 1,
+			"default": 64,
+			"unit": "%",
+			"label": "t:general.dimensions.width_px.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 40,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "address",
+			"name": "t:sections.address-box.blocks.address.name",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "t:general.image.label"
+				},
+				{
+					"type": "text",
+					"id": "heading",
+					"default": "Name store",
+					"label": "t:general.typography.heading.label"
+				},
+				{
+					"type": "html",
+					"id": "address",
+					"default": "<div class=\"first-block\"><p class=\"first-line\">Add your store street</p><p>State, city or zipcode</p><p></div>Tel: <span class=\"span\">(xxx) xxx-xxxx</span></p><p>Email: <span class=\"span\">yourstore@mail.com</span></p>",
+					"label": "t:sections.address-box.blocks.address.settings.address.label"
+				},
+				{
+					"type": "text",
+					"id": "button_label",
+					"default": "Button label",
+					"label": "t:sections.address-box.blocks.address.settings.button_label.label"
+				},
+				{
+					"type": "url",
+					"id": "button_link",
+					"label": "t:sections.address-box.blocks.address.settings.button_link.label"
+				}
+			]
+		}
+	],
+	"default": {
+		"blocks": [
+			{
+				"type": "address"
+			},
+			{
+				"type": "address"
+			},
+			{
+				"type": "address"
+			}
+		]
+	}
+}
+{% endschema %}

@@ -1,0 +1,294 @@
+{%- liquid
+	assign section_id  = '#shopify-section-' | append: section.id
+	assign full        = section.settings.full
+	assign space       = section.settings.space
+	assign text_size   = section.settings.text_size
+	assign image_scale = section.settings.image_scale | divided_by: 100.0
+	assign direction   = section.settings.direction
+	assign hover_pause = section.settings.hover_pause
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+		{%- if section.settings.color_background != blank -%}
+			background: {{ section.settings.color_background }};
+		{%- endif -%}
+	}
+
+	{{ section_id }} .scrolling-promotion-content {
+		margin: 0 {{ space | divided_by: 2.0 }}px;
+	}
+
+	{{ section_id }} .scrolling-promotion-element {
+		--scrolling-promotion-speed: {{ section.settings.speed }}s;
+		--scrolling-promotion-text-size: {{ text_size | times: 0.75 | at_least: 10 }}px;
+		--scrolling-promotion-image-scale: 1;
+		--scrolling-promotion-direction: {% if direction == 'ltr' %}reverse{% else %}normal{% endif %};
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{{ section_id }} .scrolling-promotion-element {
+			--scrolling-promotion-text-size: {{ text_size }}px;
+			--scrolling-promotion-image-scale: {{ image_scale }};
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="scrolling-promotion-wrapper{% unless full %} container{% endunless %}">
+		<btf-scrolling-promotion class="scrolling-promotion-element{% if hover_pause %} hover-pause{% endif %}{% if settings.element_animation %} scroll-trigger{% endif %}">
+			<div class="scrolling-promotion-item scrolling-promotion-animation">
+				{%- for block in section.blocks -%}
+					{%- case block.type -%}
+						{%- when 'text' -%}
+							<div class="scrolling-promotion-content scrolling-promotion-text rte" {{ block.shopify_attributes }} style="--font-family: var({{ block.settings.font_family }})">
+								{%- liquid
+									if block.settings.text != blank
+										echo block.settings.text | replace: '[', '<span class="outline-text">' | replace: ']', '</span>'
+									endif
+								-%}
+							</div>
+
+						{%- when 'image' -%}
+							{%- liquid
+								assign image = block.settings.image
+								assign ratio = image.aspect_ratio
+								assign url   = block.settings.url
+								assign tag   = 'div'
+
+								if url != blank
+									assign tag = 'a'
+								endif
+
+								if ratio < 1
+									assign width = 500 | times: image_scale | times: ratio | ceil
+								else
+									assign width = 400 | times: image_scale | times: ratio | ceil
+								endif
+							-%}
+
+							<div class="scrolling-promotion-content scrolling-promotion-image" style="--aspect-ratio: {% if image != blank %}{{ ratio | round: 2 }}{% else %}1{% endif %};" {{ block.shopify_attributes }}>
+								<{{ tag }} class="image{% if settings.image_lazy and image != blank %} lazy-image{% endif %}"{% if url != blank %} href="{{ url }}"{% endif %}>
+									{%- liquid
+										if image != blank
+											render 'lazy-image', image: image, width: width
+										else
+											render 'icon', code: 'placeholder'
+										endif
+									-%}
+								</{{ tag }}>
+							</div>
+					{%- endcase -%}
+				{%- endfor -%}
+			</div>
+		</btf-scrolling-promotion>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.scrolling-promotion.name",
+	"tag": "section",
+	"class": "scrolling-promotion",
+	"settings": [
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "color_background",
+			"id": "color_background",
+			"label": "t:general.background.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": true,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "hover_pause",
+			"default": true,
+			"label": "t:general.slide.hover_pause.label"
+		},
+		{
+			"type": "select",
+			"id": "direction",
+			"options": [
+				{
+					"value": "ltr",
+					"label": "t:sections.scrolling-promotion.settings.direction.option_1.label"
+				},
+				{
+					"value": "rtl",
+					"label": "t:sections.scrolling-promotion.settings.direction.option_2.label"
+				}
+			],
+			"default": "rtl",
+			"label": "t:sections.scrolling-promotion.settings.direction.label"
+		},
+		{
+			"type": "range",
+			"id": "speed",
+			"min": 1,
+			"max": 50,
+			"step": 1,
+			"default": 10,
+			"unit": "s",
+			"label": "t:general.slide.speed.label"
+		},
+		{
+			"type": "range",
+			"id": "space",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 40,
+			"unit": "px",
+			"label": "t:general.dimensions.space.label"
+		},
+		{
+			"type": "range",
+			"id": "text_size",
+			"min": 10,
+			"max": 150,
+			"step": 2,
+			"default": 20,
+			"unit": "px",
+			"label": "t:sections.scrolling-promotion.settings.text_size.label"
+		},
+		{
+			"type": "range",
+			"id": "image_scale",
+			"min": 50,
+			"max": 150,
+			"step": 5,
+			"default": 100,
+			"unit": "%",
+			"label": "t:sections.scrolling-promotion.settings.image_scalse.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "text",
+			"name": "t:general.typography.text.label",
+			"settings": [
+				{
+					"type": "inline_richtext",
+					"id": "text",
+					"default": "Welcome to our store",
+					"label": "t:general.typography.text.label",
+					"info": "t:sections.marquee-text.settings.text.info"
+				},
+				{
+					"type": "select",
+					"id": "font_family",
+					"options": [
+						{
+							"value": "--heading-font-family",
+							"label": "t:general.typography.font_family.option_1.label"
+						},
+						{
+							"value": "--body-font-family",
+							"label": "t:general.typography.font_family.option_2.label"
+						}
+					],
+					"default": "--body-font-family",
+					"label": "t:general.typography.font_family.label"
+				}
+			]
+		},
+		{
+			"type": "image",
+			"name": "t:general.image.label",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "t:general.image.label"
+				},
+				{
+					"type": "url",
+					"id": "url",
+					"label": "t:general.typography.link.label"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.scrolling-promotion.name",
+			"blocks": [
+				{
+					"type": "text"
+				},
+				{
+					"type": "text"
+				},
+				{
+					"type": "text"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

@@ -1,0 +1,134 @@
+{% assign product = closest.product %}
+{% style %}
+  .product-block-{{ block.id }}.sale-badge {
+    {% if block.settings.sale_badge_has_gradient %}
+      background: {{ block.settings.sale_badge_background_gradient }};
+    {% else %}
+      background: {{ block.settings.sale_badge_background_color }};
+    {% endif %}
+    border-radius: {{ block.settings.sale_badge_corner_radius }}px;
+    padding: 0 {{ block.settings.sale_badge_padding | default: 8 }}px;
+    height: {{ block.settings.sale_badge_height | default: 20 }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-block-{{ block.id }} .sale-badge-text {
+    font-family: var(--atlas-font-body-family);
+    font-size: {{ block.settings.sale_badge_font_size | default: 12 }}px;
+    font-weight: 600;
+    color: {{ block.settings.sale_badge_text_color }};
+    text-align: center;
+  }
+{% endstyle %}
+
+{%- assign variant = product.selected_or_first_available_variant -%}
+{%- assign compare_at_price = variant.compare_at_price -%}
+{%- assign price = variant.price -%}
+
+{%- assign original_price = compare_at_price -%}
+{%- assign sale_price = price -%}
+
+{%- if original_price > sale_price -%}
+  {%- assign savings = original_price | minus: sale_price -%}
+  {%- assign savings_percentage = savings | times: 100.0 | divided_by: original_price | round | append: '%' -%}
+  {%- assign savings_amount = savings | money -%}
+  <div class="sale-badge product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+    <span class="sale-badge-text">
+      {% assign text = block.settings.sale_badge_text | replace: '[percentage]', savings_percentage | replace: '[amount]', savings_amount %}
+      {{ text }}
+    </span>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Sale Badge",
+  "tag": null,
+  "blocks": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Sale Badge"
+    },
+    {
+      "type": "text",
+      "id": "sale_badge_text",
+      "label": "Sale badge text",
+      "default": "SAVE [percentage]",
+      "info": "Use [percentage] for discount percent, [amount] for discount amount"
+    },
+    {
+      "type": "color",
+      "id": "sale_badge_text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "sale_badge_background_color",
+      "label": "Background color",
+      "default": "#9b9b9b"
+    },
+    {
+      "type": "checkbox",
+      "id": "sale_badge_has_gradient",
+      "label": "Use gradient for background",
+      "default": true,
+      "info": "Enable to use a gradient instead of solid color"
+    },
+    {
+      "type": "color_background",
+      "id": "sale_badge_background_gradient",
+      "label": "Background gradient",
+      "default": "linear-gradient(135deg, #4a6cf7, #8c6bf7)"
+    },
+    {
+      "type": "range",
+      "id": "sale_badge_corner_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "sale_badge_font_size",
+      "min": 8,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "sale_badge_height",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Height",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "sale_badge_padding",
+      "min": 4,
+      "max": 16,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sale Badge"
+    }
+  ]
+}
+{% endschema %}

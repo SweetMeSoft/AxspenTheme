@@ -1,0 +1,115 @@
+{%- liquid
+	assign container    = 1200
+	assign body_font    = settings.body_font.family | append: ', ' | append: settings.body_font.fallback_families
+	assign heading_font = settings.heading_font.family | append: ', ' | append: settings.heading_font.fallback_families
+
+	if settings.screen_lg > 0
+		assign container = settings.screen_lg
+	endif
+-%}
+
+<style>
+	{{ settings.body_font | font_face: font_display: 'swap' }}
+	{{ settings.heading_font | font_face: font_display: 'swap' }}
+
+	{%- for scheme in settings.color_schemes -%}
+		{% assign scheme_classes = scheme_classes | append: ', .color-' | append: scheme.id %}
+
+		{% if forloop.index == 1 %}:root, {% endif %}.color-{{ scheme.id }} {
+			--gradient-background: {% if scheme.settings.background_gradient != blank %}{{ scheme.settings.background_gradient }}{% else %}{{ scheme.settings.background_color }}{% endif %};
+			--background-color: {{ scheme.settings.background_color.red }}, {{ scheme.settings.background_color.green }}, {{ scheme.settings.background_color.blue }};
+			--text-color: {{ scheme.settings.text_color.red }}, {{ scheme.settings.text_color.green }}, {{ scheme.settings.text_color.blue }};
+			--heading-color: {{ scheme.settings.heading_color.red }}, {{ scheme.settings.heading_color.green }}, {{ scheme.settings.heading_color.blue }};
+			--link-color: {{ scheme.settings.link_color.red }}, {{ scheme.settings.link_color.green }}, {{ scheme.settings.link_color.blue }};
+			--success-color: {{ scheme.settings.success_color.red }}, {{ scheme.settings.success_color.green }}, {{ scheme.settings.success_color.blue }};
+			--error-color: {{ scheme.settings.error_color.red }}, {{ scheme.settings.error_color.green }}, {{ scheme.settings.error_color.blue }};
+			--loading-color: {{ scheme.settings.loading_color.red }}, {{ scheme.settings.loading_color.green }}, {{ scheme.settings.loading_color.blue }};
+
+			--button-bg-color: {{ scheme.settings.button_bg_color.red }}, {{ scheme.settings.button_bg_color.green }}, {{ scheme.settings.button_bg_color.blue }};
+			--button-text-color: {{ scheme.settings.button_text_color.red }}, {{ scheme.settings.button_text_color.green }}, {{ scheme.settings.button_text_color.blue }};
+			--button-outline-color: {{ scheme.settings.button_outline_color.red }}, {{ scheme.settings.button_outline_color.green }}, {{ scheme.settings.button_outline_color.blue }};
+
+			--sale-label-color: {{ scheme.settings.sale_label.red }}, {{ scheme.settings.sale_label.green }}, {{ scheme.settings.sale_label.blue }};
+			--sale-price-color: {{ scheme.settings.sale_price.red }}, {{ scheme.settings.sale_price.green }}, {{ scheme.settings.sale_price.blue }};
+			--in-stock-color: {{ scheme.settings.in_stock.red }}, {{ scheme.settings.in_stock.green }}, {{ scheme.settings.in_stock.blue }};
+			--low-stock-color: {{ scheme.settings.low_stock.red }}, {{ scheme.settings.low_stock.green }}, {{ scheme.settings.low_stock.blue }};
+			--out-stock-color: {{ scheme.settings.out_stock.red }}, {{ scheme.settings.out_stock.green }}, {{ scheme.settings.out_stock.blue }};
+			--rating-star-color: {{ scheme.settings.rating_star.red }}, {{ scheme.settings.rating_star.green }}, {{ scheme.settings.rating_star.blue }};
+
+			--cursor: url("data:image/svg+xml, %3Csvg width='50' height='50' viewBox='0 0 50 50' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='25' cy='25' r='25' fill='{{ scheme.settings.text_color | replace: '#', '%23' }}'/%3E%3Crect x='18' y='13' width='14' height='24' rx='7' stroke='{{ scheme.settings.background_color | replace: '#', '%23' }}' stroke-width='2'/%3E%3Crect x='24' y='17' width='2' height='5' rx='1' fill='{{ scheme.settings.background_color | replace: '#', '%23' }}'/%3E%3Cpath d='M10.5 28L7.5 25L10.5 22' stroke='{{ scheme.settings.background_color | replace: '#', '%23' }}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M39.5 28L42.5 25L39.5 22' stroke='{{ scheme.settings.background_color | replace: '#', '%23' }}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+		}
+
+		{% if forloop.index == 1 %}select, {% endif %}.color-{{ scheme.id }} select {
+			background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6L8 10L12 6' stroke='{{ scheme.settings.text_color | replace: '#', '%23' }}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+		}
+
+		{% if forloop.index == 1 %}[type="checkbox"]:before, {% endif %}.color-{{ scheme.id }} [type="checkbox"]:before {
+			background-image: url("data:image/svg+xml,%3Csvg width='14' height='10' viewBox='0 0 14 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.3334 1L5.00008 8.33333L1.66675 5' stroke='{{ scheme.settings.text_color | replace: '#', '%23' }}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+		}
+	{% endfor %}
+
+	{{ scheme_classes | prepend: 'body' }} {
+		color: rgb(var(--text-color));
+		background: var(--gradient-background, rgb(var(--background-color)));
+	}
+
+	:root {
+		--overlay-color: 0, 0, 0;
+		--button-radius: {{ settings.button_radius }}px;
+		--button-border-opacity: {{ settings.button_border_opacity | divided_by: 100.0 }};
+		--button-border-width: {% if settings.button_border_opacity > 0 and settings.button_border > 0 %}{{ settings.button_border }}{% else %}0{% endif %}px;
+		--button-font-family: var({{ settings.button_font_family }});
+
+		--body-font-family: {{ body_font }};
+		--body-font-style: {{ settings.body_font.style }};
+		--body-font-weight: {{ settings.body_font_weight }};
+
+		--body-font-size: {{ settings.body_font_size }}px;
+		--body-line-height: {{ settings.body_line_height }}px;
+		--body-letter-spacing: {{ settings.body_letter_spacing }}px;
+
+		--heading-font-family: {{ heading_font }};
+		--heading-font-style: {{ settings.heading_font.style }};
+		--heading-font-weight: {{ settings.heading_font_weight }};
+		--heading-line-height: {{ settings.heading_line_height }};
+		--heading-letter-spacing: {{ settings.heading_letter_spacing }}px;
+
+		--h1-font-size: {{ settings.h1_font_size }}px;
+		--h2-font-size: {{ settings.h2_font_size }}px;
+		--h3-font-size: {{ settings.h3_font_size }}px;
+		--h4-font-size: {{ settings.h4_font_size }}px;
+		--h5-font-size: {{ settings.h5_font_size }}px;
+		--h6-font-size: {{ settings.h6_font_size }}px;
+
+		--nav-font-family: var({{ settings.nav_font_family }});
+		--nav-font-size: {{ settings.nav_font_size }}px;
+
+		--container: {{ container }}px;
+		--container-gap: 30px;
+		--grid-gutter: 15px;
+		--product-padding-top: 10rem;
+
+		--product-card-scrolling-speed: {{ settings.card_scrolling_speed }}s;
+		--product-card-content-padding: {{ settings.card_padding }}px;
+
+		--duration-short: 100ms;
+		--duration-default: 300ms;
+		--duration-long: 500ms;
+
+		{% comment %} Tick {% endcomment %}
+		--tick-white: url("data:image/svg+xml, %3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.33332 1.5L3.74999 6.08333L1.66666 4' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+		--tick-black: url("data:image/svg+xml, %3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.33332 1.5L3.74999 6.08333L1.66666 4' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+		{% comment %} Checkbox {% endcomment %}
+		--checkbox-black: url("data:image/svg+xml,%3Csvg width='14' height='10' viewBox='0 0 14 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.3334 1L5.00008 8.33333L1.66675 5' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+		--checkbox-white: url("data:image/svg+xml,%3Csvg width='14' height='10' viewBox='0 0 14 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.3334 1L5.00008 8.33333L1.66675 5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+		{% comment %} Photoswipe {% endcomment %}
+		--pswp-controls: url("data:image/svg+xml, %3Csvg width='264' height='88' viewBox='0 0 264 88' xmlns='http://www.w3.org/2000/svg' %3E%3Cg fill='none' fill-rule='evenodd' %3E%3Cg%3E%3Cpath d='M67.002 59.5v3.768c-6.307.84-9.184 5.75-10.002 9.732 2.22-2.83 5.564-5.098 10.002-5.098V71.5L73 65.585 67.002 59.5z' fill='%23fff'/%3E%3Cg fill='%23fff' %3E%3Cpath d='M13 29v-5h2v3h3v2h-5zM13 15h5v2h-3v3h-2v-5zM31 15v5h-2v-3h-3v-2h5zM31 29h-5v-2h3v-3h2v5z'/%3E%3C/g%3E%3Cg fill='%23fff'%3E%3Cpath d='M62 24v5h-2v-3h-3v-2h5zM62 20h-5v-2h3v-3h2v5zM70 20v-5h2v3h3v2h-5zM70 24h5v2h-3v3h-2v-5z'/%3E%3C/g%3E%3Cpath d='M20.586 66l-5.656-5.656 1.414-1.414L22 64.586l5.656-5.656 1.414 1.414L23.414 66l5.656 5.656-1.414 1.414L22 67.414l-5.656 5.656-1.414-1.414L20.586 66z' fill='%23fff'/%3E%3Cpath d='M111.785 65.03L110 63.5l3-3.5h-10v-2h10l-3-3.5 1.785-1.468L117 59l-5.215 6.03z' fill='%23fff'/%3E%3Cpath d='M152.215 65.03L154 63.5l-3-3.5h10v-2h-10l3-3.5-1.785-1.468L147 59l5.215 6.03z' fill='%23fff'/%3E%3Cg%3E%3Cpath fill='%23fff' d='M160.957 28.543l-3.25-3.25-1.413 1.414 3.25 3.25z'/%3E%3Cpath d='M152.5 27c3.038 0 5.5-2.462 5.5-5.5s-2.462-5.5-5.5-5.5-5.5 2.462-5.5 5.5 2.462 5.5 5.5 5.5z' stroke='%23fff' stroke-width='1.5'/%3E%3Cpath fill='%23fff' d='M150 21h5v1h-5z'/%3E%3C/g%3E%3Cg%3E%3Cpath d='M116.957 28.543l-1.414 1.414-3.25-3.25 1.414-1.414 3.25 3.25z' fill='%23fff'/%3E%3Cpath d='M108.5 27c3.038 0 5.5-2.462 5.5-5.5s-2.462-5.5-5.5-5.5-5.5 2.462-5.5 5.5 2.462 5.5 5.5 5.5z' stroke='%23fff' stroke-width='1.5'/%3E%3Cpath fill='%23fff' d='M106 21h5v1h-5z'/%3E%3Cpath fill='%23fff' d='M109.043 19.008l-.085 5-1-.017.085-5z'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
+	}
+
+	{%- liquid
+		render 'grid'
+		render 'responsive'
+	-%}
+</style>

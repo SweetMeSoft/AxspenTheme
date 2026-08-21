@@ -1,0 +1,88 @@
+{% assign images_count = 0 %}
+<div class="profile-images product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+    {% if block.settings.profile_image_1 != blank %}
+        {% assign images_count = images_count | plus: 1 %}
+        <img
+          src="{{ block.settings.profile_image_1 | image_url: width: 50 }}"
+          class="profile-image"
+          alt="Customer"
+          width="50"
+          height="50"
+          {{ block.shopify_attributes }}
+        >
+    {% endif %}
+    {% if block.settings.profile_image_2 != blank %}
+        {% assign images_count = images_count | plus: 1 %}
+        <img
+          src="{{ block.settings.profile_image_2 | image_url: width: 50 }}"
+          class="profile-image"
+          alt="Customer"
+          width="50"
+          height="50"
+          {{ block.shopify_attributes }}
+        >
+    {% endif %}
+    {% if block.settings.profile_image_3 != blank %}
+        {% assign images_count = images_count | plus: 1 %}
+        <img
+          src="{{ block.settings.profile_image_3 | image_url: width: 50 }}"
+          class="profile-image"
+          alt="Customer"
+          width="50"
+          height="50"
+          {{ block.shopify_attributes }}
+        >
+    {% endif %}
+    {% if block.settings.profile_image_4 != blank %}
+        {% assign images_count = images_count | plus: 1 %}
+        <img
+          src="{{ block.settings.profile_image_4 | image_url: width: 50 }}"
+          class="profile-image"
+          alt="Customer"
+          width="50"
+          height="50"
+          {{ block.shopify_attributes }}
+        >
+    {% endif %}
+</div>
+{% style %}
+  .product-block-{{ block.id }}.profile-images {
+  display: flex;
+  {% if images_count > 0%}
+    margin-right: {{ profile_image_overlap | plus: 7 }}px;
+  {% endif %}
+}
+{% endstyle %}
+{% schema %}
+{
+  "name": "Profile images list",
+  "tag": null,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "profile_image_1",
+      "label": "Profile image 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "profile_image_2",
+      "label": "Profile image 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "profile_image_3",
+      "label": "Profile image 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "profile_image_4",
+      "label": "Profile image 4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Profile images list"
+    }
+  ]
+}
+{% endschema %}

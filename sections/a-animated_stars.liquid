@@ -1,0 +1,255 @@
+{% comment %}
+  Animated Section Divider
+
+  Usage:
+  {% render 'animated_divider_section' %}
+
+  Optional parameters:
+  - animation_class: Additional CSS classes to add
+  - animation_color: Override the theme setting color
+  - animation_intensity: Override the theme setting intensity (subtle, normal, strong)
+  - animation_speed: Override the theme setting animation speed (in seconds)
+{% endcomment %}
+
+<link
+  rel="stylesheet"
+  href="{{ 'a-animated_divider.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'"
+  defer
+>
+
+{% liquid
+  assign animation_divider_size = section.settings.animation_divider_size
+  assign star_animation_color = section.settings.star_animation_color
+
+  assign star_animation_color_red = section.settings.star_animation_color | color_extract: 'red'
+  assign star_animation_color_green = section.settings.star_animation_color | color_extract: 'green'
+  assign star_animation_color_blue = section.settings.star_animation_color | color_extract: 'blue'
+  assign star_animation_hex_color = star_animation_color_red | append: ',' | append: star_animation_color_green | append: ',' | append: star_animation_color_blue
+
+  assign intensity_map = 'subtle:100,normal:300,strong:500'
+  assign star_animation_intensity = intensity_map | split: ',' | where: section.settings.star_animation_intensity | first | split: ':' | last
+
+  assign star_animation_speed = 10 | divided_by: section.settings.star_animation_speed
+%}
+
+{% style %}
+  .atlas-isolation-wrapper #animated-divider-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  @media screen and (max-width: 750px) {
+    .atlas-isolation-wrapper #animated-divider-section-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round }}px;
+    }
+  }
+{% endstyle %}
+
+<div
+  id="animated-divider-section-{{ section.id }}"
+  class="starlight-divider-container"
+  style="{% if section.settings.star_animation_use_gradient_background %}background: {{ section.settings.star_animation_background_gradient }};{% else %}background-color: {{ section.settings.star_animation_background_color }};{% endif %} --atlas-divider-bg-color: var(--atlas-color-background); --atlas-divider-size: {{ animation_divider_size }}; --atlas-star_animation_flip_y: {% if section.settings.star_animation_flip_y %}-1{% else %}1{% endif %}; --atlas-star_animation_flip_x: {% if section.settings.star_animation_flip_x %}-1{% else %}1{% endif %};"
+>
+  <div class="starlight-divider"></div>
+</div>
+
+<script>
+  function cleanupStars() {
+    const container = document.getElementById('animated-divider-section-{{ section.id }}');
+    if (!container) return;
+    const existingStars = container.querySelectorAll('.star');
+    existingStars.forEach(star => star.remove());
+  }
+
+  function generateStars() {
+    setTimeout(() => {
+      cleanupStars();
+
+      const container = document.getElementById('animated-divider-section-{{ section.id }}');
+      if (!container) return;
+
+      const config = {
+        starColor: "{{ star_animation_color }}", 
+        starCount: {{ star_animation_intensity }},
+        minSize: 1,
+        maxSize: 4, 
+        minOpacity: 0.3,
+        maxOpacity: 1, 
+        animationSpeed: {{ star_animation_speed }}
+      };
+
+      for (let i = 0; i < config.starCount; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+
+        const size = config.minSize + Math.random() * (config.maxSize - config.minSize);
+        const opacity = config.minOpacity + Math.random() * (config.maxOpacity - config.minOpacity);
+        const twinkleDuration = config.animationSpeed * (0.8 + Math.random() * 0.4) + 's';
+        const twinkleDelay = Math.random() * config.animationSpeed + 's';
+
+        const glowRandom = Math.random();
+        const twinkleGlow = glowRandom < 0.7 ? '0 0 2px 1px rgba({{ star_animation_hex_color }}, 0.2' : '0 0 3px 1px rgba({{ star_animation_hex_color }}, 0.3)';
+
+        const travelDistance = Math.random() * 10 - 5;
+
+        star.style.setProperty('--star-color', config.starColor);
+        star.style.setProperty('--star-opacity', opacity);
+        star.style.setProperty('--twinkle-duration', twinkleDuration);
+        star.style.setProperty('--twinkle-delay', twinkleDelay);
+        star.style.setProperty('--twinkle-glow', twinkleGlow);
+        star.style.setProperty('--travel-distance', `${travelDistance}px`);
+
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+
+        container.appendChild(star);
+      }
+    }, 1000)
+  }
+
+  document.addEventListener('DOMContentLoaded', generateStars);
+
+  if (Shopify.designMode) {
+    const sectionId = "{{ section.id }}";
+  
+    document.addEventListener('shopify:section:unload', (event) => {
+      if (event.detail.sectionId === sectionId) {
+        cleanupStars();
+      }
+    });
+  
+    document.addEventListener('shopify:section:load', (event) => {
+      if (event.detail.sectionId === sectionId) {
+        generateStars();
+      }
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Animated stars",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "To see the updated results, please click the 'Save' button."
+    },
+    {
+      "type": "select",
+      "id": "animation_divider_size",
+      "label": "Section size",
+      "options": [
+        {
+          "value": "50px",
+          "label": "Small"
+        },
+        {
+          "value": "80px",
+          "label": "Medium"
+        },
+        {
+          "value": "120px",
+          "label": "Large"
+        }
+      ],
+      "default": "80px"
+    },
+    {
+      "type": "color",
+      "id": "star_animation_color",
+      "label": "Stars color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "star_animation_intensity",
+      "label": "Stars intensity",
+      "options": [
+        {
+          "value": "subtle",
+          "label": "Subtle"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "strong",
+          "label": "Strong"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "range",
+      "id": "star_animation_speed",
+      "min": 1,
+      "max": 6,
+      "step": 0.5,
+      "label": "Animation speed",
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "star_animation_flip_y",
+      "label": "Vertical flip",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "star_animation_flip_x",
+      "label": "Horizontal flip",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "star_animation_use_gradient_background",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "star_animation_background_gradient",
+      "label": "Star animation background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.star_animation_use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "star_animation_background_color",
+      "label": "Star animation background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.star_animation_use_gradient_background == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}

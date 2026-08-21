@@ -1,0 +1,272 @@
+{% assign product = closest.product %}
+{% style %}
+  :root {
+    --atlas-pills_background_color: {{ block.settings.pills_background_color }};
+    --atlas-pills_text_color: {{ block.settings.pills_text_color }};
+    --atlas-pills_selected_background_color: {{ block.settings.pills_selected_background_color }};
+    --atlas-pills_selected_text_color: {{ block.settings.pills_selected_text_color }};
+    --atlas-pills_border_radius: {{ block.settings.pills_border_radius }}px;
+  }
+{% endstyle %}
+{%- assign product_form_id = 'product-form-' | append: section.id -%}
+<div class="product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  {% style %}
+    .atlas-isolation-wrapper .product-block-{{ block.id }} {
+      padding-top: {{block.settings.padding_top }}px;
+      padding-bottom: {{block.settings.padding_bottom }}px;
+    }
+    @media screen and (max-width: 768px) {
+      .atlas-isolation-wrapper .product-block-{{ block.id }} {
+        padding-top: {{block.settings.padding_top_mobile }}px;
+        padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+      }
+    }
+    #shopify-section-{{ section.id }} {
+      {% if block.settings.swatch_type == 'circle' %}
+        --atlas-custom-swatch-border-radius: 50%;
+      {% else %}
+        --atlas-custom-swatch-border-radius: 0;
+      {% endif %}
+      --atlas-pills-vertical-spacing: {{ block.settings.pills_vertical_spacing }}px;
+      --atlas-pills-horizontal-spacing: {{ block.settings.pills_horizontal_spacing }}px;
+      --atlas-pills-font-size: {{ block.settings.pills_font_size }}px;
+    }
+    #shopify-section-{{ section.id }} .variant_radio_label_container > label {
+      padding: var(--atlas-pills-vertical-spacing) var(--atlas-pills-horizontal-spacing) !important;
+      font-size: var(--atlas-pills-font-size) !important;
+    }
+  {% endstyle %}
+
+  {% render 'a-product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+</div>
+
+{% schema %}
+{
+  "name": "Variant selector",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Variant options"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_color_swatches",
+      "label": "Enable swatches",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "picker_type",
+      "options": [
+        {
+          "value": "dropdown",
+          "label": "Dropdown"
+        },
+        {
+          "value": "button",
+          "label": "Pills"
+        }
+      ],
+      "default": "button",
+      "label": "Variant display",
+      "info": "Note: Dropdown is not compatible with color swatches"
+    },
+    {
+      "type": "text",
+      "id": "custom_swatch_option_name",
+      "label": "Swatch option",
+      "info": "Note: Defaults to option containing \"color\" if left blank"
+    },
+    {
+      "type": "select",
+      "id": "color_swatch_type",
+      "label": "Swatch type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Variant image"
+        },
+        {
+          "value": "color",
+          "label": "Pure color"
+        }
+      ],
+      "default": "image",
+      "info": "To use pure colors, you need to setup color variant metafields in your product category Shopify settings",
+      "visible_if": "{{ block.settings.enable_color_swatches }}"
+    },
+    {
+      "type": "select",
+      "id": "swatch_size",
+      "label": "Swatch size",
+      "options": [
+        {
+          "value": "4rem",
+          "label": "Small"
+        },
+        {
+          "value": "5rem",
+          "label": "Medium"
+        },
+        {
+          "value": "6rem",
+          "label": "Large"
+        }
+      ],
+      "default": "5rem",
+      "visible_if": "{{ block.settings.enable_color_swatches }}"
+    },
+    {
+      "type": "select",
+      "id": "swatch_type",
+      "label": "Swatch style",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        }
+      ],
+      "default": "circle",
+      "visible_if": "{{ block.settings.enable_color_swatches }}"
+    },
+    {
+      "type": "color",
+      "id": "variants_custom_color",
+      "label": "Variant color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Pills",
+      "visible_if": "{{ block.settings.picker_type == 'button' }}"
+    },
+    {
+      "type": "range",
+      "id": "pills_border_radius",
+      "label": "Pills border radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 70,
+      "visible_if": "{{ block.settings.picker_type == 'button' }}"
+    },
+    {
+      "type": "range",
+      "id": "pills_font_size",
+      "label": "Pills font size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 14,
+      "visible_if": "{{ block.settings.picker_type == 'button' }}"
+    },
+    {
+      "type": "range",
+      "id": "pills_vertical_spacing",
+      "label": "Pills vertical spacing",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 10,
+      "visible_if": "{{ block.settings.picker_type == 'button' }}"
+    },
+    {
+      "type": "range",
+      "id": "pills_horizontal_spacing",
+      "label": "Pills horizontal spacing",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 15,
+      "visible_if": "{{ block.settings.picker_type == 'button' }}"
+    },
+    {
+      "type": "color",
+      "id": "pills_background_color",
+      "label": "Pills background color",
+      "default": "#F6F6F6",
+      "visible_if": "{{ block.settings.picker_type == 'button' }}"
+    },
+    {
+      "type": "color",
+      "id": "pills_selected_background_color",
+      "label": "Pills selected background color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.picker_type == 'button' }}"
+    },
+    {
+      "type": "color",
+      "id": "pills_text_color",
+      "label": "Pills text color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.picker_type == 'button' }}"
+    },
+    {
+      "type": "color",
+      "id": "pills_selected_text_color",
+      "label": "Pills selected text color",
+      "default": "#ffffff",
+      "visible_if": "{{ block.settings.picker_type == 'button' }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Variant Picker",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

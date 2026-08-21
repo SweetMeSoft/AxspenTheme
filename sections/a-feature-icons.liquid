@@ -1,0 +1,626 @@
+{%- liquid
+  assign global_heading_size = settings.enable_global_heading_font_size
+  assign global_body_size = settings.enable_global_body_font_size
+  assign global_color = settings.enable_global_color
+  assign mobile_columns = section.settings.columns_mobile | plus: 0
+  assign swipe_on_mobile = false
+  if section.settings.swipe_on_mobile and section.blocks.size > mobile_columns
+    assign swipe_on_mobile = true
+  endif
+-%}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --atlas-section-padding-top: {{ section.settings.padding_top }}px;
+    --atlas-section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --atlas-section-padding-horizontal: {{ section.settings.padding_horizontal_desktop }}px;
+    --atlas-heading-size: {% if global_heading_size %}var(--atlas-font-heading-size){% else %}{{ section.settings.heading_size }}px{% endif %};
+    --atlas-heading-line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-size) + 8px){% else %}{{ section.settings.heading_size | plus: 8 }}px{% endif %};
+    --atlas-heading-color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ section.settings.heading_color }}{% endif %};
+    --atlas-body-size: {% if global_body_size %}var(--atlas-font-body-size){% else %}{{ section.settings.body_size }}px{% endif %};
+    --atlas-body-line-height: {% if global_body_size %}calc(var(--atlas-font-body-size) + 8px){% else %}{{ section.settings.body_size | plus: 8 }}px{% endif %};
+    --atlas-body-color: {% if global_color %}rgb(var(--atlas-color-base-body)){% else %}{{ section.settings.body_color }}{% endif %};
+    --atlas-bolded-heading-color: {{ section.settings.bolded_heading_color }};
+    --atlas-bolded-body-color: {{ section.settings.bolded_body_color }};
+  }
+
+  .atlas-isolation-wrapper #section__feature_icons-{{ section.id }} {
+    padding: 5px 0;
+    margin: -1px 0;
+  }
+
+  .atlas-isolation-wrapper #section-{{ section.id }} {
+    padding: var(--atlas-section-padding-top) 0 var(--atlas-section-padding-bottom);
+  }
+
+  .atlas-isolation-wrapper #section-{{ section.id }} .feature-icons-padding {
+    padding: 0 var(--atlas-section-padding-horizontal);
+  }
+
+  .atlas-isolation-wrapper #section-{{ section.id }} .title {
+    margin: 0 0 25px;
+    text-align: center;
+    font-size: var(--atlas-heading-size);
+    line-height: var(--atlas-heading-line-height);
+    color: var(--atlas-heading-color);
+    --atlas-color-highlighted-color: var(--atlas-bolded-heading-color);
+  }
+
+  .atlas-isolation-wrapper #section-{{ section.id }} .feature-icons-text {
+    text-align: center;
+    font-size: var(--atlas-body-size);
+    line-height: var(--atlas-body-line-height);
+    color: var(--atlas-body-color);
+    --atlas-color-highlighted-color: var(--atlas-bolded-body-color);
+  }
+
+  .atlas-isolation-wrapper .feature-icon-card {
+    padding: {{ section.settings.icon_card_vertical_padding_desktop }}px {{ section.settings.icon_card_horizontal_padding_desktop }}px;
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .atlas-isolation-wrapper .feature-icon-card {
+      padding: {{ section.settings.icon_card_vertical_padding_mobile }}px {{ section.settings.icon_card_horizontal_padding_mobile }}px;
+    }
+  }
+
+  .atlas-isolation-wrapper #section-{{ section.id }} {
+    --atlas-small-icon-size: 70px;
+    --atlas-medium-icon-size: 100px;
+    --atlas-large-icon-size: 130px;
+  }
+
+  .atlas-isolation-wrapper .feature-icon-card__icon svg,  
+  .atlas-isolation-wrapper .feature-icon-card__icon img {
+    display: inline-block;
+  }
+
+  .atlas-isolation-wrapper .feature-icon-card__icon--small svg:not(.placeholder-svg),
+  .atlas-isolation-wrapper .feature-icon-card__icon--small img {
+    height: var(--atlas-small-icon-size);
+    width: var(--atlas-small-icon-size);
+  }
+
+  .atlas-isolation-wrapper .feature-icon-card__icon--small span {
+    font-size: 28px;
+  }
+
+  .atlas-isolation-wrapper .feature-icon-card__icon--medium svg:not(.placeholder-svg),
+  .atlas-isolation-wrapper .feature-icon-card__icon--medium img {
+    height: var(--atlas-medium-icon-size);
+    width: var(--atlas-medium-icon-size);
+  }
+
+  .atlas-isolation-wrapper .feature-icon-card__icon--medium span {
+    font-size: 34px;
+  }
+
+  .atlas-isolation-wrapper .feature-icon-card__icon--large svg:not(.placeholder-svg),
+  .atlas-isolation-wrapper .feature-icon-card__icon--large img {
+    height: var(--atlas-large-icon-size);
+    width: var(--atlas-large-icon-size);
+  }
+
+  .atlas-isolation-wrapper .feature-icon-card__icon--large span {
+    font-size: 40px;
+  }
+
+  .atlas-isolation-wrapper .feature-icon-card__title {
+    font-weight: 500;
+    line-height: calc(1 + 0.5 / max(1, var(--atlas-font-heading-scale)));
+    margin: 10px 0 0;
+  }
+
+  .atlas-isolation-wrapper .feature-icon-card__text {
+    padding-top: 10px;
+  }
+
+  .atlas-isolation-wrapper .feature-icon-card__text p {
+    margin: 0;
+  }
+
+  .atlas-isolation-wrapper #section-{{ section.id }} .title strong {
+    {%- if section.settings.heading_use_gradient -%}
+      background: {% if section.settings.heading_gradient_color != blank %}{{ section.settings.heading_gradient_color }}{% else %}var(--atlas-gradient-base-background-1){% endif %};
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    {%- endif -%}
+  }
+
+  @media (max-width: 786px) {
+    .atlas-isolation-wrapper #section-{{ section.id }} .title {
+      font-size: {% if global_heading_size %}var(--atlas-font-heading-mob-size){% else %}{{ section.settings.heading_mob_size }}px{% endif %};
+      line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-mob-size) + 8px){% else %}{{ section.settings.heading_mob_size | plus: 8 }}px{% endif %};
+    }
+
+    .atlas-isolation-wrapper #section-{{ section.id }} .feature-icons-padding {
+      padding: 0 15px;
+    }
+  }
+{% endstyle %}
+
+<div
+  id="section__feature_icons-{{ section.id }}"
+  style="{% if section.settings.use_gradient_background %}background: {{ section.settings.section_background_gradient }};{% else %}background-color: {{ section.settings.section_background_color }};{% endif %}"
+>
+  <div id="section-{{ section.id }}" class="gradient">
+    <div class="page-width feature-icons-padding">
+      {%- if section.settings.title != blank -%}
+        <h2 class="title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <div class="feature-icons-text">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      <slider-component class="slider-mobile-gutter">
+        <div
+          id="Slider-{{ section.id }}"
+          role="list"
+          class="feature-icons-container grid grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop{% if swipe_on_mobile %} slider slider--mobile grid--peek{% endif %} fade-in-child"
+        >
+          {%- for block in section.blocks -%}
+            <div
+              aria-roledescription="{{ block.settings.title }}"
+              role="listitem"
+              id="Slide-feature-card-{{ block.id }}-{{ forloop.index }}"
+              class="feature-icon-card content-container grid__item {% if swipe_on_mobile %} slider__slide{% endif %}{% if section.settings.background_style == 'primary' %}{% endif %}"
+              {% if section.settings.background_style == 'primary' %}
+                style="background-color: {{ section.settings.card_background_color }};"
+              {% endif %}
+              {{ block.shopify_attributes }}
+            >
+              <div class="feature-icon-card__icon feature-icon-card__icon--{{ section.settings.icon_size }}">
+                {%- if block.settings.custom_icon_image == blank and block.settings.icon != blank -%}
+                  <span
+                    class="material-icon material-symbols-outlined notranslate"
+                    style="color: {{ block.settings.custom_icon_color }};"
+                  >
+                    <style>
+                      .atlas-isolation-wrapper #Slide-feature-card-{{ block.id }}-{{ forloop.index }} .material-icon svg{
+                        fill: {{ block.settings.custom_icon_color }};
+                      }
+                    </style>
+                    {{ block.settings.icon }}
+                  </span>
+                {%- elsif block.settings.custom_icon_image != blank -%}
+                  <img
+                    src="{{ block.settings.custom_icon_image | image_url }}"
+                    {% if block.settings.custom_icon_image.alt != blank %}
+                      alt="{{ block.settings.custom_icon_image.alt | escape }}"
+                    {% else %}
+                      role="presentation"
+                    {% endif %}
+                    height="auto"
+                    width="auto"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                {%- endif -%}
+              </div>
+
+              <div class="feature-icon-card__content">
+                {% if block.settings.title != blank %}
+                  <h3
+                    class="feature-icon-card__title title"
+                    style="color: {{ block.settings.icon_heading_color }}; font-size: {{ block.settings.icon_heading_font_size }}px; line-height: {{ block.settings.icon_heading_font_size }}px; --atlas-color-highlighted-color: {{ block.settings.icon_bolded_heading_color }};"
+                  >
+                    {{ block.settings.title }}
+                  </h3>
+                {% endif %}
+                {% if block.settings.text != blank %}
+                  <div class="feature-icon-card__text">
+                    {{ block.settings.text }}
+                  </div>
+                {% endif %}
+              </div>
+
+              {% style %}
+                .atlas-isolation-wrapper #Slide-feature-card-{{ block.id }}-{{ forloop.index }} .feature-icon-card__text,
+                .atlas-isolation-wrapper #Slide-feature-card-{{ block.id }}-{{ forloop.index }} .feature-icon-card__text p {
+                  font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size) !important{% else %}{{ block.settings.column_text_size }}px !important{% endif %};
+                  line-height: {% if global_body_size %}calc(var(--atlas-global-body-text-font-size) + 4px)!important{% else %}{{ block.settings.column_text_size | plus: 4 }}px!important{% endif %};
+                  color: {% if global_color %}rgb(var(--atlas-color-base-text)) !important{% else %}{{ block.settings.column_text_color }} !important{% endif %};
+                  --atlas-color-highlighted-color: {{ block.settings.column_text_highlighted_color }};
+                }
+              {% endstyle %}
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if swipe_on_mobile -%}
+          <div class="slider-buttons no-js-hidden medium-hide">
+            <button type="button" class="slider-button slider-button--prev" name="prev" aria-label="Slide left">
+              {% render 'a-icon-caret' %}
+            </button>
+            <div class="slider-counter caption">
+              <span class="slider-counter--current">1</span>
+              <span aria-hidden="true"> / </span>
+              <span class="visually-hidden">of</span>
+              <span class="slider-counter--total">{{ section.blocks.size }}</span>
+            </div>
+            <button type="button" class="slider-button slider-button--next" name="next" aria-label="Slide right">
+              {% render 'a-icon-caret' %}
+            </button>
+          </div>
+        {%- endif -%}
+      </slider-component>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Icon guarantees",
+  "class": "atlas-isolation-wrapper atlas-gradient section animation-section",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Why Choose us?",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "default": "<p>Yourself required no at thoughts delicate landlord it be. Branched dashwood do is whatever it. Farther be chapter at visited married in it pressed.</p>",
+      "label": "Body"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "Desktop column count"
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_desktop",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop horizontal padding",
+      "default": 50
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "2",
+      "label": "Mobile column count"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop heading size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_mob_size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile heading size",
+      "default": 28
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bolded_heading_color",
+      "label": "Bolded heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_use_gradient",
+      "label": "Use gradient for heading",
+      "info": "Any text formatted as bold within the heading will be converted to a gradient.",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "heading_gradient_color",
+      "label": "Heading gradient color",
+      "visible_if": "{{ section.settings.heading_use_gradient }}",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)"
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Body font size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Body color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bolded_body_color",
+      "label": "Bolded body color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Icon card"
+    },
+    {
+      "type": "select",
+      "id": "icon_size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium",
+      "label": "Icon size"
+    },
+    {
+      "type": "range",
+      "id": "icon_card_vertical_padding_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop vertical padding",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "icon_card_horizontal_padding_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop horizontal padding",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "icon_card_vertical_padding_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile vertical padding",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "icon_card_horizontal_padding_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile horizontal padding",
+      "default": 25
+    },
+    {
+      "type": "checkbox",
+      "id": "swipe_on_mobile",
+      "default": false,
+      "label": "Mobile swipe"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "primary",
+          "label": "Show as column background"
+        }
+      ],
+      "default": "primary",
+      "label": "Secondary background"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_background_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.use_gradient_background == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 24
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Icon",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "textarea",
+          "id": "icon",
+          "label": "Icon SVG",
+          "info": "You can get SVG codes from [Google Material Icons](https://material.io/tools/icons)"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon_image",
+          "label": "Custom icon"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "default": "Icon",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Pair text with an icon to focus on your chosen product, collection, or blog post<p>",
+          "label": "Body"
+        },
+        {
+          "type": "header",
+          "content": "Typography"
+        },
+        {
+          "type": "range",
+          "id": "icon_heading_font_size",
+          "min": 16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Heading font size",
+          "default": 24
+        },
+        {
+          "type": "color",
+          "id": "icon_heading_color",
+          "label": "Heading color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "icon_bolded_heading_color",
+          "label": "Bolded heading color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "column_text_size",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Body font size",
+          "default": 16
+        },
+        {
+          "type": "color",
+          "id": "column_text_color",
+          "label": "Body color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "column_text_highlighted_color",
+          "label": "Bolded body color",
+          "default": "#000000"
+        },
+        {
+          "type": "header",
+          "content": "Icon"
+        },
+        {
+          "type": "color",
+          "id": "custom_icon_color",
+          "label": "Icon color",
+          "default": "#000000"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

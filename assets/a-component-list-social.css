@@ -1,0 +1,71 @@
+.atlas-isolation-wrapper .list-social {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+@media only screen and (max-width: 749px) {
+  .atlas-isolation-wrapper .list-social {
+    justify-content: center;
+  }
+}
+
+.atlas-isolation-wrapper .list-social__item .icon {
+  height: 1.8rem;
+  width: 1.8rem;
+}
+
+.atlas-isolation-wrapper .list-social__link {
+  align-items: center;
+  display: flex;
+  padding: 1.3rem;
+  color: rgb(var(--atlas-color-foreground));
+}
+
+.atlas-isolation-wrapper .list-social__link:hover .icon {
+  transform: scale(var(--atlas-animation-scale));
+}
+
+.atlas-isolation-wrapper .list-social__item {
+  transition: transform 200ms ease;
+}
+
+.atlas-isolation-wrapper .list-social__item:hover {
+  transform: translateY(-2px);
+}
+
+.atlas-isolation-wrapper .list-social__item:has(.icon-facebook):hover {
+  background: #3A5A99;
+}
+
+.atlas-isolation-wrapper .list-social__item:has(.icon-youtube):hover {
+  background: #E52D27;
+}
+
+.atlas-isolation-wrapper .list-social__item:has(.icon-twitter):hover {
+  background: #020304;
+}
+
+.atlas-isolation-wrapper .list-social__item:has(.icon-instagram):hover {
+  background: #e1306c;
+}
+
+.atlas-isolation-wrapper .list-social__item:has(.icon-tiktok):hover {
+  background: #010101;
+}
+
+.atlas-isolation-wrapper .list-social__item:has(.icon-pinterest):hover {
+  background: #bd081c;
+}
+
+.atlas-isolation-wrapper .list-social__item:has(.icon-snapchat):hover {
+  background: #fffc00;
+}
+
+.atlas-isolation-wrapper .list-social__item:has(.icon-tumblr):hover {
+  background: #35465d;
+}
+
+.atlas-isolation-wrapper .list-social__item:has(.icon-vimeo):hover {
+  background: #1ab7ea;
+}

@@ -1,0 +1,242 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+	assign full       = section.settings.full
+	assign button     = section.settings.button_label
+	assign image_item = section.settings.image_item
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper{
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		{{ section_id }} .wrapper-content {
+			max-width: {{ section.settings.content_width }}%;
+			margin: 0 auto;
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section stretch-padding{% else %}faq-wrapper container{% endif %}">
+		<div class="wrapper-content">
+			<div class="sumary-total">
+				<div class="summary-item content-left collapsible-tab">
+					<div class="heading-item">
+						{% if section.settings.heading != blank %}
+							<h2 class="left-heading">
+								{{- section.settings.heading -}}
+							</h2>
+						{% endif %}
+
+						<div class="right-heading">
+							{% if section.settings.sub_heading_text != blank %}
+								<h3 class="subheading">{{- section.settings.sub_heading_text -}}</h3>
+							{% endif %}
+
+							{%- if button != blank -%}
+								<a class="button primary-button" href="{{ section.settings.button_url | default: '#' }}">{{- button -}}</a>
+							{%- endif -%}
+						</div>
+					</div>
+
+					{%- if section.blocks.size > 0 -%}
+						{%- for block in section.blocks -%}
+							<details class="faq-accordion">
+								<summary class="accordion-summary" aria-expanded="false">
+									<h4 class="accordion-title">{{- block.settings.heading -}}</h4>
+
+									<span class="accordion-caret">
+										<span class="plus">
+											{%- render 'icon', code: 'plus' -%}
+										</span>
+
+										<span class="minus">
+											{%- render 'icon', code: 'minus' -%}
+										</span>
+									</span>
+								</summary>
+
+								{% if block.settings.content != blank %}
+									<div class="accordion-content details-content rte">
+										<p>{{- block.settings.content -}}</p>
+									</div>
+								{% endif %}
+							</details>
+						{%- endfor -%}
+					{%- endif -%}
+				</div>
+
+				{%- if image_item != blank -%}
+					<div class="summary-item content-right faq-accordion adapt-media">
+						<div class="image{% if settings.image_lazy %} lazy-image{% endif %}">
+							{%- render 'lazy-image', image: image_item, width: 888 -%}
+						</div>
+					</div>
+				{%- endif -%}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.faq.name",
+	"class": "faq-section has-accordion-style",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "range",
+			"id": "content_width",
+			"default": 100,
+			"min": 60,
+			"max": 100,
+			"step": 1,
+			"unit": "%",
+			"label": "t:general.dimensions.content_width.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "image_picker",
+			"id": "image_item",
+			"label": "t:general.image.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.content.label"
+		},
+		{
+			"type": "text",
+			"id": "heading",
+			"default": "Heading",
+			"label": "t:general.typography.heading.label"
+		},
+		{
+			"type": "text",
+			"id": "sub_heading_text",
+  			"default": "Subheading",
+  			"label": "t:general.typography.sub_heading.label"
+		},
+		{
+			"type": "text",
+			"id": "button_label",
+			"label": "t:general.typography.button_label.label",
+			"default": "Button label"
+		},
+		{
+			"type": "url",
+			"id": "button_url",
+			"label": "t:general.typography.button_link.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "item",
+			"name": "t:sections.faq.blocks.item.name",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"default": "Heading",
+					"label": "t:general.typography.heading.label"
+				},
+				{
+					"type": "textarea",
+					"id": "content",
+					"default": "Some content",
+					"label": "t:sections.faq.blocks.item.settings.content.label"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.faq.name",
+			"blocks": [
+				{
+					"type": "item"
+				},
+				{
+					"type": "item"
+				},
+				{
+					"type": "item"
+				},
+				{
+					"type": "item"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

@@ -1,0 +1,92 @@
+{% assign product = closest.product %}
+{% style %}
+  .buy-buttons-container .product-form-button {
+    display: flex !important;
+    align-items: center !important;
+    min-height: 46px !important;
+    height: 46px;
+    padding: 0 !important;
+    text-align: center;
+    border-radius: {{ block.settings.border_radius }}px !important;
+  }
+  .buy-buttons-container .split-slide-button .button-text {
+    font-size: {{ block.settings.button_font_size | default: 14 }}px !important;
+  }
+{% endstyle %}
+<div style="height: {{ block.settings.button_height | default: 46 }}px;flex:1;" {{ block.shopify_attributes }}>
+    {%- render 'a-buy-buttons',
+      block: block,
+      product: product,
+      product_form_id: product_form_id,
+      section_id: section.id,
+      show_pickup_availability: false
+    -%}
+</div>
+{% schema %}
+{
+  "name": "Add to cart",
+  "tag": null,
+  "blocks": [],
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "add_to_cart_text",
+      "label": "Add to cart button text",
+      "default": "Add to cart"
+    },
+    {
+        "type": "header",
+        "content": "Typography"
+    },
+    {
+        "type": "range",
+        "id": "button_font_size",
+        "min": 10,
+        "max": 18,
+        "step": 1,
+        "unit": "px",
+        "label": "Button font size",
+        "default": 14
+      },
+      {
+        "type": "checkbox",
+        "id": "uppercase_text",
+        "label": "Uppercase text",
+        "default": false
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Button text color",
+        "default": "#FFFFFF"
+      },
+    {
+        "type": "header",
+        "content": "Appearance"
+      },
+     
+      {
+        "type": "color",
+        "id": "bg_color",
+        "default": "#000000",
+        "label": "Button Background color"
+      },
+
+      {
+        "type": "range",
+        "id": "border_radius",
+        "min": 0,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Border radius",
+        "default": 6
+      }
+  ],
+  "presets": [
+    {
+      "name": "Add to cart"
+    }
+  ]
+}
+{% endschema %}

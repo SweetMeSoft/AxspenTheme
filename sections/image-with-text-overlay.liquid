@@ -1,0 +1,322 @@
+{%- liquid
+	assign section_id      = '#shopify-section-' | append: section.id
+	assign full            = section.settings.full
+	assign image           = section.settings.image
+	assign mobile_image    = section.settings.mobile_image
+	assign color_overlay   = section.settings.color_overlay
+	assign overlay_opacity = section.settings.overlay_opacity
+	assign sub_heading     = section.settings.sub_heading_text
+	assign heading         = section.settings.heading_text
+	assign button          = section.settings.button_text
+
+	assign alpha = 1
+	if overlay_opacity < 100
+		assign alpha = 0 | append: '.' | append: overlay_opacity | times: 1.0
+	endif
+-%}
+
+<style>
+	{{ section_id }} {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	{%- if color_overlay != blank -%}
+		{{ section_id }} .image-with-text-overlay:before {
+			background-color: {{ color_overlay | color_modify: 'alpha', alpha }};
+		}
+	{%- endif -%}
+
+	@media (min-width: 992px) {
+		{{ section_id }} {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{{ section_id }} .image-with-text-overlay .image {
+			height: {% if section.settings.height == 0 %}auto{% else %}{{ section.settings.height }}px{% endif %};
+		}
+
+		{{ section_id }} .sub-heading {
+			font-size: {{ section.settings.sub_heading_size }}px;
+		}
+
+		{{ section_id }} .heading {
+			font-size: {{ section.settings.heading_font_size }}px;
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section{% else %}container{% endif %}">
+		<div class="image-with-text-overlay">
+			<div class="image adapt-media">
+				<div class="{% if image == blank %}adapt-svg-placeholder {% endif %}{% if mobile_image %}hidden-tablet hidden-mobile{% endif %}{% if settings.image_lazy and image %} lazy-image{% endif %}">
+					{%- liquid
+						if image != blank
+							render 'lazy-image', image: image, width: 1200
+						else
+							render 'icon', code: 'placeholder'
+						endif
+					-%}
+				</div>
+
+				{%- if mobile_image != blank -%}
+					<div class="hidden-desktop{% if settings.image_lazy and mobile_image %} lazy-image{% endif %}">
+						{%- render 'lazy-image', image: mobile_image, width: 900 -%}
+					</div>
+				{%- endif -%}
+			</div>
+
+			{%- if sub_heading != blank or heading != blank or button != blank -%}
+				<div class="content horizontal-{{ section.settings.horizontal }} vertical-{{ section.settings.vertical }}">
+					<div class="content-inner text-{{ section.settings.alignment }}">
+						{%- if sub_heading != blank -%}
+							<div class="sub-heading rte">{{- sub_heading -}}</div>
+						{%- endif -%}
+
+						{%- if heading != blank -%}
+							<div class="heading rte">{{- heading -}}</div>
+						{%- endif -%}
+
+						{%- if button != blank -%}
+							<a class="button primary-button" href="{{ section.settings.button_link | default: '#' }}">{{- button -}}</a>
+						{%- endif -%}
+					</div>
+				</div>
+			{%- endif -%}
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.image-with-text-overlay.name",
+	"tag": "section",
+	"class": "image-with-text-overlay-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "t:general.image.label"
+		},
+		{
+			"type": "image_picker",
+			"id": "mobile_image",
+			"label": "t:sections.image-with-text.settings.mobile_image.label"
+		},
+		{
+			"type": "number",
+			"id": "height",
+			"default": 700,
+			"label": "t:general.dimensions.height_px.label",
+			"info": "t:general.dimensions.height_auto.label"
+		},
+		{
+			"type": "color",
+			"id": "color_overlay",
+			"label": "t:sections.image-with-text-overlay.settings.color_overlay.label",
+			"info": "t:sections.image-with-text-overlay.settings.color_overlay.info"
+		},
+		{
+			"type": "range",
+			"id": "overlay_opacity",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "%",
+			"label": "t:sections.image-with-text-overlay.settings.overlay_opacity.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.image-with-text-overlay.settings.header_content.content"
+		},
+		{
+			"type": "select",
+			"id": "horizontal",
+			"default": "center",
+			"label": "t:general.layout.horizontal.label",
+			"info": "t:general.layout.horizontal.mobile_center.label",
+			"options": [
+				{
+					"value": "left",
+					"label": "t:general.layout.horizontal.option_1.label"
+				},
+				{
+					"value": "center",
+					"label": "t:general.layout.horizontal.option_2.label"
+				},
+				{
+					"value": "right",
+					"label": "t:general.layout.horizontal.option_3.label"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "vertical",
+			"default": "bottom",
+			"label": "t:general.layout.vertical.label",
+			"info": "t:general.layout.vertical.mobile_middle.label",
+			"options": [
+				{
+					"value": "top",
+					"label": "t:general.layout.vertical.option_1.label"
+				},
+				{
+					"value": "middle",
+					"label": "t:general.layout.vertical.option_2.label"
+				},
+				{
+					"value": "bottom",
+					"label": "t:general.layout.vertical.option_3.label"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "alignment",
+			"default": "left",
+			"label": "t:general.layout.alignment.label",
+			"info": "t:general.layout.alignment.mobile_center.label",
+			"options": [
+				{
+					"value": "left",
+					"label": "t:general.layout.alignment.option_1.label"
+				},
+				{
+					"value": "center",
+					"label": "t:general.layout.alignment.option_2.label"
+				},
+				{
+					"value": "right",
+					"label": "t:general.layout.alignment.option_3.label"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.sub_heading.label"
+		},
+		{
+			"type": "richtext",
+			"id": "sub_heading_text",
+			"default": "<p>Subheading</p>",
+			"label": "t:general.typography.text.label"
+		},
+		{
+			"type": "range",
+			"id": "sub_heading_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 13,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.heading.label"
+		},
+		{
+			"type": "richtext",
+			"id": "heading_text",
+			"default": "<p>Heading</p>",
+			"label": "t:general.typography.text.label"
+		},
+		{
+			"type": "range",
+			"id": "heading_font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 56,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.button.label"
+		},
+		{
+			"type": "text",
+			"id": "button_text",
+			"label": "t:general.typography.button_text.label"
+		},
+		{
+			"type": "url",
+			"id": "button_link",
+			"label": "t:general.typography.button_link.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.image-with-text-overlay.presets.name"
+		}
+	]
+}
+{% endschema %}

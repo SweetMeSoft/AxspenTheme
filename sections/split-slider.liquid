@@ -1,0 +1,287 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{%- for block in section.blocks -%}
+			{{ section_id }} [data-{{ block.id }}] .split-body {
+				font-size: {{ block.settings.body_font_size }}px;
+			}
+
+			{{ section_id }} [data-{{ block.id }}] .split-head {
+				font-size: {{ block.settings.heading_font_size }}px;
+			}
+		{%- endfor -%}
+
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="split-slider image-layout">
+		<div class="container full-width-section">
+			<div class="split-content">
+				<div class="text-content">
+					<div class="swiper flex-align-{{ section.settings.position_y }}">
+						<div class="swiper-wrapper">
+							{%- for block in section.blocks -%}
+								<div class="swiper-slide" data-{{ block.id }} class="rte">
+									{%- liquid
+										assign heading     = block.settings.heading
+										assign subheading  = block.settings.subheading
+										assign button      = block.settings.button
+									-%}
+
+									{%- if subheading != blank -%}
+										<div class="split-head">
+											{{- subheading -}}
+										</div>
+									{%- endif -%}
+
+									{%- if heading != blank -%}
+										<div class="split-body">
+											{{- heading -}}
+										</div>
+									{%- endif -%}
+
+									{%- if button != blank -%}
+										<div class="slider-element slider-button">
+											<a class="button primary-button" href="{{ block.settings.button_link | default: '#' }}" data-noui>{{- button -}}</a>
+										</div>
+									{%- endif -%}
+								</div>
+							{%- else -%}
+								{%- for i in (1..3) -%}
+									<div class="swiper-slide" data-id="{{ forloop.index }}">
+										<div class="split-body">{{- 'onboarding.testimonial.body_text' | t -}}</div>
+									</div>
+								{%- endfor -%}
+							{%- endfor -%}
+						</div>
+					</div>
+
+					<div class="fixed-bottom-controls">
+						<div class="swiper-controls">
+							<div class="swiper-scrollbar-wrapper">
+								<div class="swiper-scrollbar" tabindex="-1"></div>
+							</div>
+
+							<button class="swiper-button-prev">{%- render 'icon', code: 'arrow-left-short' -%}</button>
+							<button class="swiper-button-next">{%- render 'icon', code: 'arrow-right-short' -%}</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="image-content">
+					<div class="swiper">
+						<div class="swiper-wrapper">
+							{%- for block in section.blocks -%}
+								<div class="swiper-slide" {{ block.shopify_attributes }}>
+									{%- assign image = block.settings.image -%}
+
+									<div class="adapt-media">
+										<div class="image{% if settings.image_lazy and image %} lazy-image{% endif %}">
+											{%- liquid
+												if image
+													render 'lazy-image', image: image, width: 910
+												else
+													echo 'image' | placeholder_svg_tag: 'placeholder-svg'
+												endif
+											-%}
+										</div>
+									</div>
+								</div>
+							{%- else -%}
+								{%- for i in (1..3) -%}
+									<div class="swiper-slide" {{ block.shopify_attributes }}>
+										{{- 'image' | placeholder_svg_tag: 'placeholder-svg' -}}
+									</div>
+								{%- endfor -%}
+							{%- endfor -%}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.split-slider.name",
+	"tag": "section",
+	"class": "split-slider-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "select",
+			"id": "position_y",
+			"options": [
+				{
+					"value": "start",
+					"label": "t:sections.slider.blocks.slide.settings.position_y.options__1.label"
+				},
+				{
+					"value": "center",
+					"label": "t:sections.slider.blocks.slide.settings.position_y.options__2.label"
+				},
+				{
+					"value": "end",
+					"label": "t:sections.slider.blocks.slide.settings.position_y.options__3.label"
+				}
+			],
+			"default": "start",
+			"label": "t:sections.slider.blocks.slide.settings.position_y.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 100,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 100,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 64,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "slide",
+			"name": "t:general.slide.label",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "t:general.image.label"
+				},
+				{
+					"type": "header",
+					"content": "t:general.typography.sub_heading.label"
+				},
+				{
+					"type": "richtext",
+					"id": "subheading",
+					"default": "<p>Subheading</p>",
+					"label": "t:general.typography.text.label"
+				},
+				{
+					"type": "range",
+					"id": "heading_font_size",
+					"min": 10,
+					"max": 100,
+					"step": 1,
+					"default": 13,
+					"unit": "px",
+					"label": "t:general.typography.font_size.label"
+				},
+				{
+					"type": "header",
+					"content": "t:general.typography.heading.label"
+				},
+				{
+					"type": "richtext",
+					"id": "heading",
+					"default": "<h2>Heading</h2>",
+					"label": "t:general.typography.text.label"
+				},
+				{
+					"type": "range",
+					"id": "body_font_size",
+					"min": 10,
+					"max": 100,
+					"step": 1,
+					"default": 48,
+					"unit": "px",
+					"label": "t:general.typography.font_size.label"
+				},
+				{
+					"type": "header",
+					"content": "t:general.typography.button.label"
+				},
+				{
+					"type": "text",
+					"id": "button",
+					"default": "Button label",
+					"label": "t:general.typography.text.label"
+				},
+				{
+					"type": "url",
+					"id": "button_link",
+					"label": "t:general.typography.link.label"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.split-slider.name",
+			"blocks": [
+				{
+					"type": "slide"
+				},
+				{
+					"type": "slide"
+				},
+				{
+					"type": "slide"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

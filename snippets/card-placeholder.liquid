@@ -1,0 +1,34 @@
+{%- capture placeholder -%}
+	<div class="placeholder-head">
+		<span class="placeholder"></span>
+		<span class="placeholder"></span>
+	</div>
+	<div class="placeholder-content">
+		<div class="placeholder-card">
+			<span class="placeholder-media placeholder"></span>
+			<span class="placeholder-title placeholder"></span>
+			<span class="placeholder-meta placeholder"></span>
+		</div>
+		<div class="placeholder-card">
+			<span class="placeholder-media placeholder"></span>
+			<span class="placeholder-title placeholder"></span>
+			<span class="placeholder-meta placeholder"></span>
+		</div>
+		<div class="placeholder-card">
+			<span class="placeholder-media placeholder"></span>
+			<span class="placeholder-title placeholder"></span>
+			<span class="placeholder-meta placeholder"></span>
+		</div>
+		<div class="placeholder-card">
+			<span class="placeholder-media placeholder"></span>
+			<span class="placeholder-title placeholder"></span>
+			<span class="placeholder-meta placeholder"></span>
+		</div>
+	</div>
+{%- endcapture -%}
+
+{%- liquid
+	assign tabchar = 'CQ==' | base64_decode
+
+	echo placeholder | strip | strip_newlines | remove: tabchar
+-%}

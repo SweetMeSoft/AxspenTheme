@@ -1,0 +1,468 @@
+.atlas-isolation-wrapper slider-component {
+  --atlas-desktop-margin-left-first-item: max(
+    5rem,
+    calc(
+      (
+          100vw - var(--atlas-page-width) + 10rem -
+            var(--atlas-grid-desktop-horizontal-spacing)
+        ) / 2
+    )
+  );
+  position: relative;
+  display: block;
+}
+
+.atlas-isolation-wrapper slider-component.slider-component-full-width {
+  --atlas-desktop-margin-left-first-item: 1.5rem;
+}
+
+@media screen and (max-width: 749px) {
+  .atlas-isolation-wrapper slider-component.page-width {
+    padding: 0 1.5rem;
+  }
+}
+
+@media screen and (min-width: 749px) and (max-width: 990px) {
+  .atlas-isolation-wrapper slider-component.page-width {
+    padding: 0 5rem;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .no-js .atlas-isolation-wrapper slider-component .slider {
+    padding-bottom: 3rem;
+  }
+}
+
+.atlas-isolation-wrapper .slider__slide {
+  --atlas-focus-outline-padding: 0.5rem;
+  --atlas-shadow-padding-top: calc(
+    (var(--atlas-shadow-vertical-offset) * -1 + var(--atlas-shadow-blur-radius)) *
+      var(--atlas-shadow-visible)
+  );
+  --atlas-shadow-padding-bottom: calc(
+    (var(--atlas-shadow-vertical-offset) + var(--atlas-shadow-blur-radius)) *
+      var(--atlas-shadow-visible)
+  );
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  padding-bottom: 0;
+}
+
+@media screen and (max-width: 749px) {
+  .atlas-isolation-wrapper .slider.slider--mobile {
+    position: relative;
+    flex-wrap: inherit;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scroll-padding-left: 0px;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 0rem;
+    overflow-y: hidden;
+    z-index: 2;
+  }
+
+  /* Fix to show some space at the end of our sliders in all browsers */
+  .atlas-isolation-wrapper .slider--mobile:after {
+    content: "";
+    width: 0;
+    padding-left: 1.5rem;
+  }
+
+  .atlas-isolation-wrapper .slider.slider--mobile .slider__slide {
+    scroll-snap-stop: always;
+    margin-bottom: 0;
+    /* padding-top: 0.1rem; */
+    /* padding-bottom: 0.1rem; */
+  }
+
+  .atlas-isolation-wrapper .slider.slider--mobile.contains-card--standard
+    .slider__slide:not(.collection-list__item--no-media) {
+    padding-bottom: var(--atlas-focus-outline-padding);
+  }
+
+  .atlas-isolation-wrapper .slider.slider--mobile.contains-content-container .slider__slide {
+    --atlas-focus-outline-padding: 0rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .slider.slider--tablet-up {
+    position: relative;
+    flex-wrap: inherit;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scroll-padding-left: 1rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .atlas-isolation-wrapper .slider.slider--tablet-up .slider__slide {
+    display: flex;
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .atlas-isolation-wrapper .slider.slider--tablet {
+    position: relative;
+    flex-wrap: inherit;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scroll-padding-left: 1.5rem;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+  }
+
+  /* Fix to show some space at the end of our sliders in all browsers */
+  .atlas-isolation-wrapper .slider--tablet:after {
+    content: "";
+    width: 0;
+    padding-left: 1.5rem;
+    margin-left: calc(-1 * var(--atlas-grid-desktop-horizontal-spacing));
+  }
+
+  .atlas-isolation-wrapper .slider.slider--tablet .slider__slide {
+    margin-bottom: 0;
+    padding-top: max(var(--atlas-focus-outline-padding), var(--atlas-shadow-padding-top));
+    padding-bottom: max(
+      var(--atlas-focus-outline-padding),
+      var(--atlas-shadow-padding-bottom)
+    );
+  }
+
+  .atlas-isolation-wrapper .slider.slider--tablet.contains-card--standard
+    .slider__slide:not(.collection-list__item--no-media) {
+    padding-bottom: var(--atlas-focus-outline-padding);
+  }
+
+  .atlas-isolation-wrapper .slider.slider--tablet.contains-content-container .slider__slide {
+    --atlas-focus-outline-padding: 0rem;
+  }
+}
+
+.atlas-isolation-wrapper .slider--everywhere {
+  position: relative;
+  flex-wrap: inherit;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+}
+
+.atlas-isolation-wrapper .slider.slider--everywhere .slider__slide {
+  margin-bottom: 0;
+  scroll-snap-align: center;
+}
+
+@media screen and (min-width: 990px) {
+  .atlas-isolation-wrapper .slider-component-desktop.page-width {
+    max-width: none;
+  }
+
+  .atlas-isolation-wrapper .slider--desktop {
+    position: relative;
+    flex-wrap: inherit;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+    scroll-padding-left: var(--atlas-desktop-margin-left-first-item);
+  }
+
+  /* Fix to show some space at the end of our sliders in all browsers */
+  .atlas-isolation-wrapper .slider--desktop:after {
+    content: "";
+    width: 0;
+    padding-left: 5rem;
+    margin-left: calc(-1 * var(--atlas-grid-desktop-horizontal-spacing));
+  }
+
+  .atlas-isolation-wrapper .slider.slider--desktop .slider__slide {
+    margin-bottom: 0;
+    padding-top: max(var(--atlas-focus-outline-padding), var(--atlas-shadow-padding-top));
+    padding-bottom: max(
+      var(--atlas-focus-outline-padding),
+      var(--atlas-shadow-padding-bottom)
+    );
+  }
+
+  .atlas-isolation-wrapper .slider--desktop .slider__slide:first-child {
+    margin-left: var(--atlas-desktop-margin-left-first-item);
+    scroll-margin-left: var(--atlas-desktop-margin-left-first-item);
+  }
+
+  .atlas-isolation-wrapper .slider-component-full-width .slider--desktop {
+    scroll-padding-left: 1.5rem;
+  }
+
+  .atlas-isolation-wrapper .slider-component-full-width .slider--desktop .slider__slide:first-child {
+    margin-left: 1.5rem;
+    scroll-margin-left: 1.5rem;
+  }
+
+  /* Fix to show some space at the end of our sliders in all browsers */
+  .atlas-isolation-wrapper .slider-component-full-width .slider--desktop:after {
+    padding-left: 1.5rem;
+  }
+
+  .atlas-isolation-wrapper .slider--desktop.grid--5-col-desktop .grid__item {
+    width: calc(
+      (100% - var(--atlas-desktop-margin-left-first-item)) / 5 -
+        var(--atlas-grid-desktop-horizontal-spacing) * 2
+    );
+  }
+
+  .atlas-isolation-wrapper .slider--desktop.grid--4-col-desktop .grid__item {
+    width: calc(
+      (100% - var(--atlas-desktop-margin-left-first-item)) / 4 -
+        var(--atlas-grid-desktop-horizontal-spacing) * 3
+    );
+  }
+
+  .atlas-isolation-wrapper .slider--desktop.grid--3-col-desktop .grid__item {
+    width: calc(
+      (100% - var(--atlas-desktop-margin-left-first-item)) / 3 -
+        var(--atlas-grid-desktop-horizontal-spacing) * 4
+    );
+  }
+
+  .atlas-isolation-wrapper .slider--desktop.grid--2-col-desktop .grid__item {
+    width: calc(
+      (100% - var(--atlas-desktop-margin-left-first-item)) / 2 -
+        var(--atlas-grid-desktop-horizontal-spacing) * 5
+    );
+  }
+
+  .atlas-isolation-wrapper .slider--desktop.grid--1-col-desktop .grid__item {
+    width: calc(
+      (100% - var(--atlas-desktop-margin-left-first-item)) -
+        var(--atlas-grid-desktop-horizontal-spacing) * 9
+    );
+  }
+
+  .atlas-isolation-wrapper .slider.slider--desktop.contains-card--standard
+    .slider__slide:not(.collection-list__item--no-media) {
+    padding-bottom: var(--atlas-focus-outline-padding);
+  }
+
+  .atlas-isolation-wrapper .slider.slider--desktop.contains-content-container .slider__slide {
+    --atlas-focus-outline-padding: 0rem;
+  }
+}
+
+@media (prefers-reduced-motion) {
+  .atlas-isolation-wrapper .slider {
+    scroll-behavior: auto;
+  }
+}
+
+/* Scrollbar */
+
+.atlas-isolation-wrapper .slider {
+  scrollbar-color: rgb(var(--atlas-color-foreground))
+    rgba(var(--atlas-color-foreground), 0.04);
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.atlas-isolation-wrapper .slider::-webkit-scrollbar {
+  height: 0.4rem;
+  width: 0.4rem;
+  display: none;
+}
+
+.no-js .atlas-isolation-wrapper .slider {
+  -ms-overflow-style: auto;
+  scrollbar-width: auto;
+}
+
+.no-js .atlas-isolation-wrapper .slider::-webkit-scrollbar {
+  display: initial;
+}
+
+.atlas-isolation-wrapper .slider::-webkit-scrollbar-thumb {
+  background-color: rgb(var(--atlas-color-foreground));
+  border-radius: 0.4rem;
+  border: 0;
+}
+
+.atlas-isolation-wrapper .slider::-webkit-scrollbar-track {
+  background: rgba(var(--atlas-color-foreground), 0.04);
+  border-radius: 0.4rem;
+}
+
+.atlas-isolation-wrapper .slider-counter {
+  display: flex;
+  justify-content: center;
+  min-width: 4.4rem;
+}
+
+@media screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .slider-counter--dots {
+    margin: 0 1.2rem;
+  }
+}
+
+.atlas-isolation-wrapper .slider-counter__link {
+  padding: 1rem;
+}
+
+@media screen and (max-width: 749px) {
+  .atlas-isolation-wrapper .slider-counter__link {
+    padding: 0.7rem;
+  }
+}
+
+.atlas-isolation-wrapper .slider-counter__link--dots .dot {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 0.1rem solid rgba(var(--atlas-color-foreground), 0.5);
+  padding: 0;
+  display: block;
+}
+
+.atlas-isolation-wrapper .slider-counter__link--active.slider-counter__link--dots .dot {
+  background-color: rgb(var(--atlas-color-foreground));
+}
+
+@media screen and (forced-colors: active) {
+  .atlas-isolation-wrapper .slider-counter__link--active.slider-counter__link--dots .dot {
+    background-color: CanvasText;
+  }
+}
+
+.atlas-isolation-wrapper .slider-counter__link--dots:not(.slider-counter__link--active):hover .dot {
+  border-color: rgb(var(--atlas-color-foreground));
+}
+
+.atlas-isolation-wrapper .slider-counter__link--dots .dot,
+.atlas-isolation-wrapper .slider-counter__link--numbers {
+  transition: transform 0.2s ease-in-out;
+}
+
+.atlas-isolation-wrapper .slider-counter__link--active.slider-counter__link--numbers,
+.atlas-isolation-wrapper .slider-counter__link--dots:not(.slider-counter__link--active):hover .dot,
+.atlas-isolation-wrapper .slider-counter__link--numbers:hover {
+  transform: scale(1.1);
+}
+
+.atlas-isolation-wrapper .slider-counter__link--numbers {
+  color: rgba(var(--atlas-color-foreground), 0.5);
+  text-decoration: none;
+}
+
+.atlas-isolation-wrapper .slider-counter__link--numbers:hover {
+  color: rgb(var(--atlas-color-foreground));
+}
+
+.atlas-isolation-wrapper .slider-counter__link--active.slider-counter__link--numbers {
+  text-decoration: underline;
+  color: rgb(var(--atlas-color-foreground));
+}
+
+.atlas-isolation-wrapper .slider-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (min-width: 990px) {
+  .atlas-isolation-wrapper .slider:not(.slider--everywhere):not(.slider--desktop) + .slider-buttons {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .atlas-isolation-wrapper .slider--desktop:not(.slider--tablet) + .slider-buttons {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .slider--mobile + .slider-buttons {
+    display: none;
+  }
+}
+
+.atlas-isolation-wrapper .slider-button {
+  color: rgba(var(--atlas-color-foreground), 0.9);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.atlas-isolation-wrapper .slider-button:not([disabled]):hover {
+  color: rgb(var(--atlas-color-foreground));
+}
+
+.atlas-isolation-wrapper .slider-button .icon {
+  height: 0.6rem;
+}
+
+.atlas-isolation-wrapper .slider-button[disabled] .icon {
+  color: rgba(var(--atlas-color-foreground), 0.3);
+  cursor: not-allowed;
+}
+
+.atlas-isolation-wrapper .slider-button--next .icon {
+  transform: rotate(-90deg);
+}
+
+.atlas-isolation-wrapper .slider-button--prev .icon {
+  transform: rotate(90deg);
+}
+
+.atlas-isolation-wrapper .slider-button--next:not([disabled]):hover .icon {
+  transform: rotate(-90deg) scale(1.1);
+}
+
+.atlas-isolation-wrapper .slider-button--prev:not([disabled]):hover .icon {
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* desktop product slider animation fix */
+@media screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .slider.gallery-slider--desktop {
+    position: relative;
+    flex-wrap: inherit;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    overflow-y: hidden;
+    scroll-padding-left: 1.5rem;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 0rem;
+    aspect-ratio: 663/703;
+  }
+  .atlas-isolation-wrapper .slider.gallery-slider--desktop .product__media-item:not(.is-active),
+  .atlas-isolation-wrapper .product--thumbnail_slider .product__media-item:not(.is-active) {
+    display: block;
+  }
+  .atlas-isolation-wrapper .slider.gallery-slider--desktop .grid__item {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Desktop drag cursor for thumbnail sliders */
+  .atlas-isolation-wrapper .thumbnail-slider .slider {
+    cursor: grab;
+  }
+  
+  .atlas-isolation-wrapper .thumbnail-slider .slider:active {
+    cursor: grabbing;
+  }
+}
+

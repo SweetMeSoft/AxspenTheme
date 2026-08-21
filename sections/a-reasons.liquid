@@ -1,0 +1,380 @@
+{% if request.visual_preview_mode %}
+  {% assign section_id_variable = 'id' %}
+  {% assign section_id_selector = '' %}
+{% else %}
+  {% assign section_id_variable = section.id %}
+  {% assign section_id_selector = '#section-' | append: section.id %}
+{% endif %}
+<style>
+  @media screen and (min-width: 1200px) {
+    .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__container {
+      justify-content: center;
+    }
+  }
+
+  .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__content {
+    display: flex;
+    place-items: center;
+    flex-direction: column;
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__image-content {
+    display: flex;
+    height: fit-content;
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__image {
+    display: flex;
+    width: 100%;
+  }
+
+  .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__image img {
+    border-radius: {{ section.settings.image_border_radius }}px;
+    object-fit: cover;
+  }
+
+  .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__points,
+  .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__points p {
+    font-weight: 500;
+    letter-spacing: normal;
+    word-break: normal;
+  }
+
+  .atlas-isolation-wrapper {{ section_id_selector }}   .reasons-to-buy__points {
+    display: flex;
+    align-items: start;
+    gap: 1rem;
+    text-align: left;
+    padding: 2rem;
+  }
+
+  .atlas-isolation-wrapper {{ section_id_selector }} .reasons__text {
+    margin-top: 0px;
+  }
+
+  .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__content-inner {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__button {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media screen and (min-width: 1200px) {
+    .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__content-inner.reasons-to-buy__reasons-first {
+      flex-direction: row-reverse;
+    }
+
+    .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__content-inner {
+      gap: 4rem;
+    }
+  }
+</style>
+
+{% style %}
+    {%- if request.visual_preview_mode -%}
+      {% comment %} don't want fade-in animation in preview mode because it messes up preview {% endcomment %}
+      .atlas-isolation-wrapper {{ section_id_selector }} .animation_section,
+      .atlas-isolation-wrapper {{ section_id_selector }} .animation_section * {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+        will-change: auto !important;
+      }
+    {%- endif -%}
+
+    .atlas-isolation-wrapper {{ section_id_selector }} {
+      --atlas-section-padding-top: {{ section.settings.padding_top }}px;
+      --atlas-section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+
+    .atlas-isolation-wrapper {{ section_id_selector }} .section__reasons_to_buy {
+      padding: 5px 0;
+    }
+
+    .atlas-isolation-wrapper #reasons-to-buy-{{ section_id_variable }} {
+      padding-top: var(--atlas-section-padding-top) !important;
+      padding-bottom: var(--atlas-section-padding-bottom) !important;
+
+    }
+
+
+
+    .atlas-isolation-wrapper #reasons-to-buy-{{ section_id_variable }} .reasons-to-buy__container {
+      padding-top: var(--atlas-section-padding-top) !important;
+      padding-bottom: var(--atlas-section-padding-bottom) !important;
+      display: flex;
+      border-top: 1px solid rgba({{ section.settings.border_color.red }}, {{ section.settings.border_color.green }}, {{ section.settings.border_color.blue }}, {{ section.settings.border_color_opacity | divided_by: 100.0 }});
+      border-bottom: 1px solid rgba({{ section.settings.border_color.red }}, {{ section.settings.border_color.green }}, {{ section.settings.border_color.blue }}, {{ section.settings.border_color_opacity | divided_by: 100.0 }});
+      gap: 48px;
+    }
+    .atlas-isolation-wrapper #reasons-to-buy-{{ section_id_variable }} .reasons-to-buy__container > * {
+      flex:1;
+    }
+    .atlas-isolation-wrapper #reasons-to-buy-{{ section_id_variable }} .reasons-to-buy__main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 37px;
+    }
+
+
+  @media screen and (max-width: 1200px) {
+    .atlas-isolation-wrapper #reasons-to-buy-{{ section_id_variable }} .reasons-to-buy__container {
+      gap: 8px;
+      padding-inline: 12px;
+      flex-wrap: wrap;
+    }
+    .atlas-isolation-wrapper #reasons-to-buy-{{ section_id_variable }} .reasons-to-buy__main-content {
+      gap: 16px;
+    }
+    .atlas-isolation-wrapper #reasons-to-buy-{{ section_id_variable }} .reasons-to-buy__image-content {
+      max-width: 100%;
+    }
+    .atlas-isolation-wrapper #reasons-to-buy-{{ section_id_variable }} .reasons-to-buy__image {
+      width: 100%;
+      max-width: 100%;
+    }
+    .atlas-isolation-wrapper #reasons-to-buy-{{ section_id_variable }} .reasons-to-buy__image img {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__content-inner {
+      flex-direction: column;
+    }
+  }
+  @media screen and (max-width: 1200px) and (min-width: 768px) {
+    .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__container {
+      padding-inline: 0;
+    }
+    .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__image img {
+      aspect-ratio: 1/1;
+    }
+    .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__image-card {
+      width: fit-content !important;
+    }
+    .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__main-content{
+      min-width: 60%;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .atlas-isolation-wrapper {{ section_id_selector }} .reasons-to-buy__container {
+      flex-direction: column;
+    }
+  }
+  .atlas-isolation-wrapper .reasons-to-buy__image-inner {
+    width: 100%;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+  }
+  .atlas-isolation-wrapper .reasons-to-buy__image-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media screen and (min-width: 1200px) {
+    .atlas-isolation-wrapper .reasons-to-buy__image-inner {
+      {% if section.settings.image_height == 'adapt' and section.settings.image != blank %}
+        padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;
+      {% endif %}
+      {% if section.settings.image_height == 'small' and section.settings.image != blank %}
+        min-height: 307px;
+      {% elsif section.settings.image_height == 'medium' and section.settings.image != blank %}
+        min-height: 38rem;
+      {% elsif section.settings.image_height == 'large' and section.settings.image != blank %}
+        min-height: 46rem;
+      {% endif %}
+    }
+    .atlas-isolation-wrapper .reasons-to-buy__image-inner img {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+{% endstyle %}
+
+<div
+  id="section-{{ section.id }}"
+  class="section__reasons_to_buy"
+  style="{% if section.settings.use_gradient_background %}background: {{ section.settings.section_background_gradient }};{% else %}background-color: {{ section.settings.section_background_color }};{% endif %}"
+>
+  <div id="reasons-to-buy-{{ section_id_variable }}" class="reasons-to-buy page-width">
+    <div class="reasons-to-buy__container">
+      {% capture 'reasons_blocks' %}
+        {% content_for 'blocks' %}
+      {% endcapture %}
+      {% if reasons_blocks contains '<!-- start _reasons-to-buy-content.liquid -->' %}
+        {% assign reasons_content = reasons_blocks
+          | split: '<!-- start _reasons-to-buy-content.liquid -->'
+          | last
+          | split: '<!-- end _reasons-to-buy-content.liquid -->'
+          | first
+        %}
+      {% endif %}
+      {% if reasons_blocks contains '<!-- start _reasons-to-buy-product-card.liquid -->' %}
+        {% assign reasons_card = reasons_blocks
+          | split: '<!-- start _reasons-to-buy-product-card.liquid -->'
+          | last
+          | split: '<!-- end _reasons-to-buy-product-card.liquid -->'
+          | first
+        %}
+      {% endif %}
+      {% if reasons_blocks contains '<!-- start _reasons-to-buy-stats.liquid -->' %}
+        {% assign reasons_stats = reasons_blocks
+          | split: '<!-- start _reasons-to-buy-stats.liquid -->'
+          | last
+          | split: '<!-- end _reasons-to-buy-stats.liquid -->'
+          | first
+        %}
+      {% endif %}
+      <div class="reasons-to-buy__main-content">
+        {{ reasons_content }}
+        {{ reasons_card }}
+      </div>
+      {%- if section.settings.image != blank -%}
+        <div class="reasons-to-buy__image-content">
+          <div class="reasons-to-buy__image">
+            <div class="reasons-to-buy__image-inner">
+              {{ section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', width: 400 }}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+      {{ reasons_stats }}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Reasons to buy",
+  "class": "atlas-isolation-wrapper atlas-gradient section animation_section",
+  "blocks": [
+    {
+      "type": "_a-reasons-to-buy-content"
+    },
+    {
+      "type": "_a-reasons-to-buy-product-card"
+    },
+    {
+      "type": "_a-reasons-to-buy-stats"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "small",
+      "label": "Image height"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "label": "Image border radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Section border color",
+      "default": "#000000",
+      "info": "This is the top and bottom border color of the section"
+    },
+    {
+      "type": "range",
+      "id": "border_color_opacity",
+      "label": "Section border color opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_background_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.use_gradient_background == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 24
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

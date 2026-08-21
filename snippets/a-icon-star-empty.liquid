@@ -1,0 +1,15 @@
+<svg 
+  {% if size %} style="width: {{ size }}px; height: {{ size }}px;" {% endif %} 
+  class="star star--empty" 
+  alt="Star" 
+  xmlns="http://www.w3.org/2000/svg" 
+  height="{{ size | default: 24 }}px" 
+  viewBox="0 0 24 24" 
+  width="{{ size | default: 24 }}px" 
+  fill="{{ color | default: '#F2D952' }}"
+>
+  <!-- Background (full star - smaller) -->
+  <path d="M12 16.5 17.5 19.5l-1.5-6.5L21 9.5l-6.5-.5L12 3l-2.5 6L3 9.5l5.5 3.5L7 19.5z" fill="{{ background_color | default: 'white' }}"/>
+  <!-- Empty star (outline) -->
+  <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+</svg>

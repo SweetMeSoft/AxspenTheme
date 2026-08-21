@@ -1,0 +1,313 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+	assign full       = section.settings.full
+	assign image      = section.settings.image
+	assign layout     = section.settings.layout
+-%}
+
+<style>
+	{{ section_id }} {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{{ section_id }} .image-wrapper {
+			max-width: {{ 100 | minus: section.settings.product_width }}%;
+		}
+
+		{{ section_id }} .product-wrapper {
+			max-width: {{ section.settings.product_width }}%;
+			padding-left: {{ section.settings.product_padding }}px;
+			padding-right: {{ section.settings.product_padding }}px;
+		}
+	}
+</style>
+
+<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+	<div class="lookbook {{ layout }}-first">
+		<div class="image-wrapper adapt-media">
+			<div class="image{% if settings.image_lazy and image %} lazy-image{% endif %}">
+				{%- liquid
+					if image != blank
+						render 'lazy-image', image: image, width: 1200
+					else
+						render 'icon', code: 'placeholder'
+					endif
+				-%}
+			</div>
+
+			<div class="item-wrapper">
+				{%- if section.blocks.size > 0 -%}
+					{%- for block in section.blocks -%}
+						{%- liquid
+							assign product       = block.settings.product
+							assign product_image = product.featured_media
+							assign product_title = 'onboarding.products.title' | t
+
+							if product != blank
+								assign product_title = product.title | escape
+							endif
+						-%}
+
+						<div class="item{% if forloop.index == 1 %} active{% endif %}" data-index="{{ forloop.index0 }}" style="--item-color: {{ block.settings.color | color_extract: 'red' }}, {{ block.settings.color | color_extract: 'green' }}, {{ block.settings.color | color_extract: 'blue' }}; --item-x: {{ block.settings.horizontal }}%; --item-y: {{ block.settings.vertical }}%;" {{ block.shopify_attributes }}>
+
+							<span class="product-target">
+								<span class="sr-only">{{- product_title -}}</span>
+							</span>
+
+							<div class="item-inner">
+								<a class="product-link" href="{{ product.url }}">
+									<span class="sr-only">{{- product_title -}}</span>
+								</a>
+
+								<div class="item-summary">
+									<div class="product-image">
+										{%- liquid
+											if product_image != blank
+												echo product_image | image_url: width: 400 | image_tag: loading: 'lazy'
+											else
+												render 'icon', code: 'placeholder'
+											endif
+										-%}
+									</div>
+
+									<div class="summary-inner">
+										<h5 class="product-title">{{- product_title -}}</h5>
+
+										{%- render 'price', product: product -%}
+									</div>
+								</div>
+							</div>
+						</div>
+					{%- endfor -%}
+				{%- endif -%}
+			</div>
+		</div>
+
+		{%- if section.blocks.size > 0 -%}
+			<div class="product-wrapper">
+				<div class="carousel-swiper">
+					<template data-options>
+						{
+							"speed": 600,
+							"slidesPerView": 1,
+							"scrollbar": {
+								"el": "{{ section_id }} .swiper-scrollbar",
+								"draggable": true
+							},
+							"spaceBetween": 20,
+							"navigation": {
+								"nextEl": "{{ section_id }} .swiper-button-next",
+								"prevEl": "{{ section_id }} .swiper-button-prev"
+							}
+						}
+					</template>
+
+					<div class="swiper">
+						<div class="swiper-wrapper">
+							{%- for block in section.blocks -%}
+								{%- liquid
+									assign product = block.settings.product
+								-%}
+
+								<div class="swiper-slide">
+									{%- liquid
+										if product != blank
+											render 'product-card', product: product, index: forloop.index
+										else
+											render 'product-card-placeholder', index: forloop.index
+										endif
+									-%}
+								</div>
+							{%- endfor -%}
+						</div>
+					</div>
+
+					<div class="swiper-controls">
+						<div class="swiper-scrollbar-wrapper">
+							<div class="swiper-scrollbar" tabindex="-1"></div>
+						</div>
+
+						<button class="swiper-button-prev">{%- render 'icon', code: 'arrow-left-short' -%}</button>
+						<button class="swiper-button-next">{%- render 'icon', code: 'arrow-right-short' -%}</button>
+					</div>
+				</div>
+			</div>
+		{%- endif -%}
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.lookbook.name",
+	"tag": "section",
+	"class": "lookbook-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "select",
+			"id": "layout",
+			"options": [
+				{
+					"value": "image",
+					"label": "t:sections.lookbook.settings.layout.option_1.label"
+				},
+				{
+					"value": "product",
+					"label": "t:sections.lookbook.settings.layout.option_2.label"
+				}
+			],
+			"default": "image",
+			"label": "t:sections.lookbook.settings.layout.label",
+			"info": "t:sections.lookbook.settings.layout.info"
+		},
+		{
+			"type": "range",
+			"id": "product_width",
+			"min": 30,
+			"max": 70,
+			"step": 1,
+			"default": 40,
+			"unit": "%",
+			"label": "t:sections.lookbook.settings.width.label"
+		},
+		{
+			"type": "range",
+			"id": "product_padding",
+			"min": 0,
+			"max": 200,
+			"step": 2,
+			"default": 50,
+			"unit": "px",
+			"label": "t:sections.lookbook.settings.padding.label"
+		},
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "t:general.image.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.padding_top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.padding_bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.padding_top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.padding_bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "product",
+			"name": "t:sections.lookbook.blocks.product.name",
+			"settings": [
+				{
+					"type": "product",
+					"id": "product",
+					"label": "t:sections.lookbook.blocks.product.settings.product.label"
+				},
+				{
+					"type": "color",
+					"id": "color",
+					"default": "#222222",
+					"label": "t:general.colors.text.label"
+				},
+				{
+					"type": "range",
+					"id": "horizontal",
+					"min": 5,
+					"max": 95,
+					"step": 1,
+					"default": 30,
+					"unit": "%",
+					"label": "t:sections.lookbook.blocks.product.settings.horizontal.label"
+				},
+				{
+					"type": "range",
+					"id": "vertical",
+					"min": 5,
+					"max": 95,
+					"step": 1,
+					"default": 50,
+					"unit": "%",
+					"label": "t:sections.lookbook.blocks.product.settings.vertical.label"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.lookbook.presets.name",
+			"blocks": [
+				{
+					"type": "product",
+					"settings": {
+						"horizontal": 30,
+						"vertical": 70
+					}
+				},
+				{
+					"type": "product",
+					"settings": {
+						"horizontal": 70,
+						"vertical": 30
+					}
+				}
+			]
+		}
+	]
+}
+{% endschema %}

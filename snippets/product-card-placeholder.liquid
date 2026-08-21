@@ -1,0 +1,23 @@
+{%- liquid
+	if index > 6
+		assign index = 1
+	endif
+-%}
+
+<div class="product-card text-left">
+	<div class="product-media-wrap square-media card-item" tabindex="-1">
+		{{- 'product-' | append: index | placeholder_svg_tag: 'placeholder-svg' -}}
+
+		<div class="form-add-to-cart">
+			<button type="button" class="add-to-cart-button" disabled>{{- 'products.product.sold_out' | t -}}</button>
+		</div>
+	</div>
+
+	<div class="product-card-content{% if settings.card_padding > 5 %} no-margin-top{% endif %}">
+		<h2 class="product-title card-item">
+			<span>{{- 'onboarding.products.title' | t -}}</span>
+		</h2>
+
+		{% render 'price', product: false, price_class: 'card-item' %}
+	</div>
+</div>

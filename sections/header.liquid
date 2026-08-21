@@ -1,0 +1,843 @@
+{%- liquid
+	assign section_id    = '#shopify-section-' | append: section.id
+	assign container     = settings.screen_lg | default: 1200
+	assign full          = section.settings.full
+	assign layout        = section.settings.layout
+	assign logo_width    = section.settings.logo_width
+	assign logo_tag      = 'div'
+	assign sticky_header = section.settings.enable_sticky_header
+	assign desktop_menu  = section.settings.menu
+	assign toggle_menu   = section.settings.mobile_menu | default: desktop_menu
+
+	if section.settings.enable_transparent_header
+		if template.name == 'index' or section.settings.transparent_collection and template.name == 'collection'
+			assign transparent_header = true
+		endif
+
+		if section.settings.transparent_custom
+			for pip in section.settings.transparent_custom.links
+				if pip.current
+					assign transparent_header = true
+				endif
+			endfor
+		endif
+	endif
+
+	unless routes.account_login_url == '/account/login'
+		assign new_customer_account = ' new-customer-accounts'
+	endunless
+
+	if request.page_type == 'index'
+		assign logo_tag = 'h1'
+	endif
+
+	if section.settings.country_selector and localization.available_countries.size > 1
+		assign country_selector = true
+	endif
+
+	if section.settings.language_selector and localization.available_languages.size > 1
+		assign language_selector = true
+	endif
+
+	capture social_media
+		render 'social-media'
+	endcapture
+-%}
+
+{% comment %} Main menu {% endcomment %}
+{%- capture header_navigation -%}
+	{%- if desktop_menu != blank -%}
+		<nav class="site-navigation">
+			{%- render 'main-menu', menu: desktop_menu.links, class: 'header-navigation menu', full: full, scheme: section.settings.menu_color_scheme -%}
+		</nav>
+	{%- endif -%}
+{%- endcapture -%}
+
+{% comment %} Logo {% endcomment %}
+{%- capture header_logo -%}
+	{%- liquid
+		assign logo_image        = section.settings.logo_image
+		assign logo_mobile_image = section.settings.logo_mobile_image
+
+		### Transparent header logo
+		assign transparent_logo_image        = section.settings.transparent_logo_image
+		assign transparent_logo_mobile_image = section.settings.transparent_logo_mobile_image
+	-%}
+
+	<{{ logo_tag }} class="site-branding-wrap h1">
+		<a class="site-branding" href="{{ routes.root_url }}">
+			<span class="site-branding-inner{% if logo_mobile_image != blank or transparent_header and transparent_logo_mobile_image != blank %} hidden-tablet hidden-mobile{% endif %}">
+				{%- liquid
+					if logo_image != blank or transparent_header and transparent_logo_image != blank
+						if transparent_header and transparent_logo_image != blank
+							assign transparent_logo_height = logo_width | divided_by: transparent_logo_image.aspect_ratio | ceil
+
+							echo transparent_logo_image | image_url: width: 800 | image_tag: width: logo_width, height: transparent_logo_height, loading: 'lazy', class: 'transparent-header-branding-image'
+						endif
+
+						if logo_image != blank
+							assign logo_height = logo_width | divided_by: logo_image.aspect_ratio | ceil
+
+							echo logo_image | image_url: width: 800 | image_tag: width: logo_width, height: logo_height, loading: 'lazy', class: 'site-branding-image'
+						endif
+					else
+						echo shop.name
+					endif
+				-%}
+			</span>
+
+			{%- if logo_mobile_image != blank or transparent_header and transparent_logo_mobile_image != blank -%}
+				<span class="hidden-desktop">
+					{%- liquid
+						if transparent_header and transparent_logo_mobile_image != blank
+							echo transparent_logo_mobile_image | image_url: width: 500 | image_tag: width: logo_width, height: transparent_logo_mobile_image.height, loading: 'lazy', class: 'transparent-header-branding-image'
+						endif
+
+						if logo_mobile_image != blank
+							echo logo_mobile_image | image_url: width: 500 | image_tag: width: logo_width, height: logo_mobile_image.height, loading: 'lazy', class: 'site-branding-image'
+						endif
+					-%}
+				</span>
+			{%- endif -%}
+
+			{%- if logo_image != blank -%}
+				<span class="sr-only">{{- shop.name -}}</span>
+			{%- endif -%}
+		</a>
+	</{{ logo_tag }}>
+{%- endcapture -%}
+
+{% comment %} Language/country selector {% endcomment %}
+{%- capture language_country_selector -%}
+	{%- if language_selector or country_selector -%}
+		{%- form 'localization', id: nil, class: 'localization-form' -%}
+			{% comment %} Currency {% endcomment %}
+			{%- if country_selector -%}
+				<div class="toggle-dropdown no-js-hidden">
+					<input type="hidden" name="currency_code" value="{{ form.current_currency.iso_code }}">
+					<span class="sr-only">{{- 'localization.currency_label' | t -}}</span>
+
+					<button class="dropdown-summary" type="button" aria-expanded="false" aria-expanded="false">
+						<span class="country-flag">{{- localization.country | image_url: width: 20 | image_tag -}}</span>
+						{{- localization.country.currency.iso_code -}}
+						<span class="dropdown-icon">{%- render 'icon', code: 'arrow-bold' -%}</span>
+					</button>
+
+					<div class="dropdown-content">
+						<div class="dropdown-content-inner">
+							<header class="dropdown-content-header">
+								<span class="dropdown-content-title">{{- 'localization.currency_label' | t -}}</span>
+								{% render 'icon', code: 'close' %}
+							</header>
+
+							<ul class="content" role="list">
+								{%- for country in localization.available_countries -%}
+									<li>
+										<button type="submit" name="country_code" class="submit" value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} aria-current="true"{% endif %}>
+											<span class="country-flag">{{- country | image_url: width: 20 | image_tag -}}</span>
+											{{- country.currency.iso_code -}}
+										</button>
+									</li>
+								{%- endfor -%}
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<noscript>
+					<select name="country_code" class="select-currency" data-noui>
+						{%- for country in localization.available_countries -%}
+							<option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected aria-current="true"{% endif %}>
+								{{- country.name }} ({{ country.currency.iso_code }}{% if country.currency.symbol %}{{ country.currency.symbol }}{%- endif -%})
+							</option>
+						{%- endfor -%}
+					</select>
+				</noscript>
+			{%- endif -%}
+
+			{% comment %} Language {% endcomment %}
+			{%- if language_selector -%}
+				<div class="toggle-dropdown no-js-hidden">
+					<input type="hidden" name="locale_code" value="{{ form.current_locale.iso_code }}">
+					<span class="sr-only">{{- 'localization.language_label' | t -}}</span>
+
+					<button class="dropdown-summary" type="button" aria-expanded="false">
+						{{- localization.language.endonym_name | capitalize -}}
+						<span class="dropdown-icon">{%- render 'icon', code: 'arrow-bold' -%}</span>
+					</button>
+
+					<div class="dropdown-content">
+						<div class="dropdown-content-inner">
+							<header class="dropdown-content-header">
+								<span class="dropdown-content-title">{{- 'localization.language_label' | t -}}</span>
+								{% render 'icon', code: 'close' %}
+							</header>
+
+							<ul class="content" role="list">
+								{%- for language in localization.available_languages -%}
+									<li>
+										<button type="submit" name="locale_code" class="submit" value="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} aria-current="true"{% endif %}>
+											{{- language.endonym_name | capitalize -}}
+										</button>
+									</li>
+								{%- endfor -%}
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<noscript>
+					<select name="locale_code" class="select-language" data-noui>
+						{%- for language in localization.available_languages -%}
+							<option value="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %}selected aria-current="true"{% endif %}>
+								{{- language.endonym_name | capitalize -}}
+							</option>
+						{%- endfor -%}
+					</select>
+				</noscript>
+			{%- endif -%}
+
+			<noscript>
+				<button type="submit" class="button">{{- 'sections.footer.submit' | t -}}</button>
+			</noscript>
+		{%- endform -%}
+	{%- endif -%}
+{%- endcapture -%}
+
+{% comment %} Icons {% endcomment %}
+{%- capture header_icons -%}
+	<div class="header-icons">
+		{{- language_country_selector -}}
+
+		{% comment %} Icons {% endcomment %}
+		<a href="{{ routes.search_url }}" class="header-icon action-search">
+			<span class="sr-only">{{- 'accessibility.search' | t -}}</span>
+
+			{%- render 'icon', code: 'search' -%}
+		</a>
+
+		{%- if shop.customer_accounts_enabled -%}
+			<a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header-icon action-account{{ new_customer_account }}">
+				<span class="sr-only">
+					{%- liquid
+						if customer
+							echo 'customer.account_fallback' | t
+						else
+							echo 'customer.log_in' | t
+						endif
+					-%}
+				</span>
+
+				{%- render 'icon', code: 'account' -%}
+			</a>
+		{%- endif -%}
+
+		<a href="{{ routes.cart_url }}" class="header-icon action-cart">
+			{%- render 'icon', code: 'cart' -%}
+			<span class="sr-only">{{ 'templates.cart.cart' | t }}:</span>
+			<span class="item-count cart-item-count">{%- if cart != empty -%}{{- cart.item_count -}}{%- endif -%}</span>
+			<span class="sr-only">{%- if cart.item_count == 1 -%}{{ 'sections.header.cart_count.one' | t }}{% else %}{{ 'sections.header.cart_count.other' | t }}{% endif %}</span>
+		</a>
+	</div>
+{%- endcapture -%}
+
+<style>
+	{% comment %} Sub megamenu {% endcomment %}
+	{%- unless full -%}
+		@media (min-width: {{ container | plus: 1 }}px) {
+			{{ section_id }} .header-navigation .mega-item .mega-menu-wrap  {
+				left: calc((100vw + var(--container-gap) - var(--container) - var(--scrollbar-width)) / -2);
+			}
+		}
+	{%- endunless -%}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .header-navigation > .menu-item > .menu-link {
+			padding: {{ section.settings.menu_space }}px 1.5rem;
+
+			{%- if section.settings.uppercase_menu -%}
+				text-transform: uppercase;
+			{%- endif -%}
+		}
+
+		{{ section_id }} .header-navigation > .menu-item:first-of-type > .menu-link {
+			padding-left: 0;
+		}
+
+		{{ section_id }} .site-branding-image {
+			max-width: {{ logo_width }}px;
+		}
+
+		{{ section_id }} .site-branding svg {
+			width: {{ logo_width }}px;
+		}
+	}
+
+	{{ section_id }} {
+		{%- comment -%} Sticky {%- endcomment -%}
+		{%- if sticky_header -%}
+			position: sticky;
+			z-index: 99;
+
+			{%- if template.name == 'product' -%}
+				.product-summary .product-summary-inner.is-sticky{%- comment -%} For Summary {%- endcomment -%},
+				.main-product-section .main-product .product-gallery[data-id=layout-2] .group-image-thumb .group-image-thumb-inner.is-sticky{%- comment -%} For Thumb group image {%- endcomment -%} {
+					top: var(--product-padding-top);
+				}
+			{%- else -%}
+				top: 0;
+			{%- endif -%}
+		{%- endif -%}
+
+		{%- comment -%} Transparent header {%- endcomment -%}
+		{%- if transparent_header -%}
+			--transparent-text-color: {{ section.settings.transparent_color.rgb | replace: ' ', ', ' }};
+		{%- endif -%}
+	}
+
+	{% comment %} Logo width {% endcomment %}
+	@media  (max-width: 991px) {
+		{{ section_id }} .site-branding-image,
+		{{ section_id }} .site-branding svg {
+			width: {{ logo_width | times: 0.8 }}px;
+			max-width: 100%;
+		}
+	}
+</style>
+
+{% comment %} Header {% endcomment %}
+<header class="header color-{{ section.settings.color_scheme }}{% if transparent_header %} transparent-header{% if section.settings.transparent_separator_line %} transparent-separator-line{% endif %}{% endif %}{% if sticky_header %} header-sticky{% endif %}" data-id="{{ layout }}">
+	<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+		<div class="header-inner">
+			{% comment %} Panel content {% endcomment %}
+			<div class="site-panel color-{{ section.settings.menu_color_scheme }}">
+				<div class="site-panel-inner">
+					<button class="site-panel-close close-button">{%- render 'icon', code: 'close' -%}</button>
+
+					<div class="panel-header">
+						{{- header_logo | replace: '<h1 class', '<div class' | replace: '</h1>', '</div>' -}}
+					</div>
+
+					<div class="panel-content">
+						{%- render 'main-menu', menu: linklists[toggle_menu].links, class: 'toggle-navigation' -%}
+					</div>
+
+					<div class="panel-footer{% unless language_selector or country_selector %} single-selector{% endunless %}">
+						{{- social_media -}}
+
+						{%- if shop.customer_accounts_enabled -%}
+							<a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="action-account hidden-desktop{{ new_customer_account }}">
+								{%- render 'icon', code: 'account' -%}
+
+								<span>
+									{%- liquid
+										if customer
+											echo 'customer.account_fallback' | t
+										else
+											echo 'customer.log_in' | t
+										endif
+									-%}
+								</span>
+							</a>
+						{%- endif -%}
+
+						{{- language_country_selector -}}
+					</div>
+				</div>
+			</div>
+
+			<div class="header-nav">
+				{% comment %} Toggle {% endcomment %}
+				<span class="toggle-panel hidden-desktop">
+					{%- render 'icon', code: 'draw' -%}
+				</span>
+
+				{% comment %} Menu {% endcomment %}
+				{{- header_navigation -}}
+			</div>
+
+			{% comment %} Logo {% endcomment %}
+			{{- header_logo -}}
+
+			{% comment %} Header icons {% endcomment %}
+			{{- header_icons -}}
+		</div>
+	</div>
+</header>
+
+<script type="application/ld+json">
+	{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": {{ shop.name | json }},
+		{% if section.settings.logo_image %}
+			"logo": {{ section.settings.logo_image | image_url: width: 1000 | prepend: "https:" | json }},
+		{% endif %}
+		"sameAs": [
+			{{ settings.social_twitter_link | json }},
+			{{ settings.social_facebook_link | json }},
+			{{ settings.social_pinterest_link | json }},
+			{{ settings.social_instagram_link | json }},
+			{{ settings.social_tumblr_link | json }},
+			{{ settings.social_snapchat_link | json }},
+			{{ settings.social_youtube_link | json }},
+			{{ settings.social_vimeo_link | json }}
+		],
+		"url": {{ shop.url | append: page.url | json }}
+	}
+</script>
+
+{%- javascript -%}
+	function btyHeaderSticky( doc = document ) {
+		let hasTopbar = document.querySelector( '.topbar-section ~ .header-section' ),
+			header    = doc.querySelector( '.header.transparent-header' );
+
+		function onShopifyLoaded( callback ) {
+			if ( ! header ) {
+				setTimeout(
+					function() {
+						onShopifyLoaded( callback )
+					}
+				);
+
+				return;
+			}
+
+			callback();
+		}
+
+		onShopifyLoaded(
+			function() {
+				if ( ! header ) {
+					return;
+				}
+
+				const detectScroll = function() {
+					if ( window.scrollY > 50 ) {
+						header.classList.add( 'is-sticky' );
+					} else {
+						header.classList.remove( 'is-sticky' );
+					}
+				}
+
+				if ( Shopify.designMode || ! hasTopbar ) {
+					detectScroll();
+					window.addEventListener( 'scroll', detectScroll );
+				} else {
+					const observer = new IntersectionObserver(
+						([e]) => e.target.classList.toggle( 'is-sticky', e.intersectionRatio < 1 ),
+						{
+							rootMargin: '-1px 0px 0px 0px',
+							threshold: [1]
+						}
+					);
+
+					observer.observe( header );
+				}
+			}
+		)
+	}
+
+	btyHeaderSticky();
+
+	document.addEventListener(
+		'shopify:section:select',
+		function( e ) {
+			let section = e.target;
+			btyHeaderSticky( section );
+		}
+	);
+
+	document.addEventListener(
+		'shopify:block:select',
+		function( e ) {
+			let section = document.getElementById( 'shopify-section-' + e.detail.sectionId );
+			btyHeaderSticky( section );
+		}
+	);
+{%- endjavascript -%}
+
+{%- if request.page_type == 'index' -%}
+	{% assign potential_action_target = shop.url | append: routes.search_url | append: "?q={search_term_string}" %}
+	<script type="application/ld+json">
+		{
+			"@context": "http://schema.org",
+			"@type": "WebSite",
+			"name": {{ shop.name | json }},
+			"potentialAction": {
+				"@type": "SearchAction",
+				"target": {{ potential_action_target | json }},
+				"query-input": "required name=search_term_string"
+			},
+			"url": {{ shop.url | append: page.url | json }}
+		}
+	</script>
+{%- endif -%}
+
+	<script>
+console.log('--- Monitor de Carrito Total v4 (Agregar y Borrar) ---');
+
+// 1. FUNCIÓN REUTILIZABLE PARA SINCRONIZAR EL CARRITO CON EL SERVIDOR
+function sincronizarCarrito(forzarApertura) {
+  console.log('Sincronizando datos frescos desde el controlador /cart...');
+  
+  fetch('/cart?sections=side-cart,cart-count&t=' + Date.now())
+    .then(res => res.json())
+    .then(sections => {
+      const parser = new DOMParser();
+      const cartDrawer = document.querySelector('cart-drawer, #CartDrawer, .cart-drawer, #cart-drawer, .side-cart');
+
+      if (!cartDrawer) return;
+
+      const docCart = parser.parseFromString(sections['side-cart'], 'text/html');
+      const nuevoDrawerRoot = docCart.querySelector('cart-drawer, #CartDrawer, .cart-drawer, #cart-drawer, .side-cart') || docCart.body.firstElementChild || docCart.body;
+
+      if (nuevoDrawerRoot) {
+        const clasesActuales = Array.from(cartDrawer.classList);
+        
+        // Reemplazamos el HTML interno con las cantidades reales del servidor
+        cartDrawer.innerHTML = nuevoDrawerRoot.innerHTML;
+        
+        // Devolvemos las clases para mantenerlo visible
+        clasesActuales.forEach(clase => cartDrawer.classList.add(clase));
+        cartDrawer.classList.add('is-open', 'active');
+
+        // Aseguramos el tiro en las capas de animación internas
+        const capasInternas = cartDrawer.querySelectorAll('.drawer, .drawer__inner, .cart-drawer__inner, .drawer__wrapper');
+        capasInternas.forEach(capa => {
+          capa.classList.add('is-open', 'active', 'active-drawer');
+        });
+      }
+
+      // ACTUALIZACIÓN DEL CONTADOR GLOBAL DE LA CABECERA
+      const nuevoCountHTML = sections['cart-count'];
+      if (nuevoCountHTML) {
+        const cartCountBubble = document.querySelector('.cart-count-bubble, #cart-icon-bubble, .cart-count, .header__cart-count');
+        if (cartCountBubble) {
+          const docCount = parser.parseFromString(nuevoCountHTML, 'text/html');
+          cartCountBubble.innerHTML = docCount.body.innerHTML;
+        }
+      }
+
+      // Avisamos a los listeners globales del tema
+      document.dispatchEvent(new CustomEvent('cart:updated', { bubbles: true }));
+      
+      // Solo forzamos la apertura si viene del botón "Añadir"
+      if (forzarApertura) {
+        setTimeout(() => {
+          if (typeof cartDrawer.open === 'function') {
+            cartDrawer.open();
+          } else {
+            const cartIcon = document.querySelector('.header__cart-icon, #cart-icon-bubble, .cart-toggle, .header__icon--cart, [href="/cart"]');
+            if (cartIcon) cartIcon.click();
+          }
+        }, 100);
+      }
+    })
+    .catch(err => console.error('Error crítico en la sincronización:', err));
+}
+
+// 2. ESCUCHA GLOBAL DE EVENTOS DE CLIC (Fase de captura)
+document.addEventListener('click', function(e) {
+  
+  // CASO A: DETECTAR CLIC EN EL BOTÓN DE COMPRA (Añadir al carrito)
+  const addButton = e.target.closest('button[type="submit"], .add-to-cart-button, [name="add"], .gp-product-button');
+  if (addButton) {
+    console.log('¡Click de compra detectado!');
+    setTimeout(function() {
+      sincronizarCarrito(true); // Sincroniza y fuerza apertura
+    }, 1000);
+    return;
+  }
+
+  // CASO B: DETECTAR CLIC EN EL BOTÓN / ENLACE DE BORRAR PRODUCTO
+  const removeButton = e.target.closest('a[href*="/cart/change"], .cart-item__remove, [data-cart-remove], .cart-remove, [href*="quantity=0"]');
+  if (removeButton) {
+    console.log('¡Click de eliminación detectado! Evitando redirección nativa...');
+    
+    // Frenamos en seco la redirección a la página completa de /cart
+    e.preventDefault(); 
+
+    const urlCambio = removeButton.href; // Obtenemos la URL de borrado de Shopify
+    if (urlCambio) {
+      // Ejecutamos el borrado de forma invisible por debajo
+      fetch(urlCambio)
+        .then(() => {
+          console.log('Producto eliminado en backend. Actualizando interfaz...');
+          // Refrescamos el contenido inmediatamente sin cerrar el menú
+          setTimeout(function() {
+            sincronizarCarrito(false); 
+          }, 300);
+        })
+        .catch(err => console.error('Error al intentar borrar el producto:', err));
+    }
+  }
+}, true);
+	</script>
+{% schema %}
+{
+	"name": "t:sections.header.name",
+	"class": "header-section",
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "select",
+			"id": "layout",
+			"options": [
+				{
+					"value": "layout-1",
+					"label": "t:sections.header.settings.layout.option_1.label"
+				},
+				{
+					"value": "layout-2",
+					"label": "t:sections.header.settings.layout.option_2.label"
+				}
+			],
+			"default": "layout-1",
+			"label": "t:sections.header.settings.layout.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_sticky_header",
+			"default": false,
+			"label": "t:sections.header.settings.enable_sticky_header.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.header.settings.header_logo.content"
+		},
+		{
+			"type": "image_picker",
+			"id": "logo_image",
+			"label": "t:sections.header.settings.logo_image.label"
+		},
+		{
+			"type": "image_picker",
+			"id": "logo_mobile_image",
+			"label": "t:sections.header.settings.logo_mobile_image.label"
+		},
+		{
+			"type": "range",
+			"id": "logo_width",
+			"min": 50,
+			"max": 250,
+			"step": 10,
+			"default": 120,
+			"unit": "px",
+			"label": "t:general.dimensions.width.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.header.settings.main_menu.content"
+		},
+		{
+			"type": "color_scheme",
+			"id": "menu_color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "link_list",
+			"id": "menu",
+			"default": "main-menu",
+			"label": "t:sections.header.settings.menu.label"
+		},
+		{
+			"type": "link_list",
+			"id": "mobile_menu",
+			"label": "t:sections.header.settings.mobile_menu.label",
+			"info": "t:sections.header.settings.mobile_menu.info"
+		},
+		{
+			"type": "checkbox",
+			"id": "uppercase_menu",
+			"default": false,
+			"label": "t:sections.header.settings.uppercase_menu.label"
+		},
+		{
+			"type": "range",
+			"id": "menu_space",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 29,
+			"unit": "px",
+			"label": "t:general.padding.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.header.settings.transparent_header.content"
+		},
+		{
+			"type": "image_picker",
+			"id": "transparent_logo_image",
+			"label": "t:sections.header.settings.logo_image.label"
+		},
+		{
+			"type": "image_picker",
+			"id": "transparent_logo_mobile_image",
+			"label": "t:sections.header.settings.logo_mobile_image.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_transparent_header",
+			"default": false,
+			"label": "t:sections.header.settings.enable_transparent_header.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "transparent_collection",
+			"default": false,
+			"label": "t:sections.header.settings.transparent_collection.label"
+		},
+		{
+			"type": "link_list",
+			"id": "transparent_custom",
+			"label": "t:sections.header.settings.transparent_custom.label",
+			"info": "t:sections.header.settings.transparent_custom.info"
+		},
+		{
+			"type": "checkbox",
+			"id": "transparent_separator_line",
+			"default": false,
+			"label": "t:sections.header.settings.transparent_separator_line.label"
+		},
+		{
+			"type": "color",
+			"id": "transparent_color",
+			"default": "#ffffff",
+			"label": "t:general.colors.text.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.shopify.header_currency.content",
+			"info": "t:general.shopify.header_currency.info"
+		},
+		{
+			"type": "checkbox",
+			"id": "country_selector",
+			"default": false,
+			"label": "t:general.shopify.show_currency.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.shopify.header_language.content",
+			"info": "t:general.shopify.header_language.info"
+		},
+		{
+			"type": "checkbox",
+			"id": "language_selector",
+			"default": false,
+			"label": "t:general.shopify.show_language.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "mega_menu",
+			"name": "Mega menu",
+			"settings": [
+				{
+					"type": "text",
+					"id": "mega_item",
+					"label": "t:sections.header.blocks.mega_menu.settings.mega_item.label",
+					"info": "t:sections.header.blocks.mega_menu.settings.mega_item.info"
+				},
+				{
+					"type": "select",
+					"id": "data",
+					"options": [
+						{
+							"value": "menu",
+							"label": "t:sections.header.blocks.mega_menu.settings.data.option_1.label"
+						},
+						{
+							"value": "collection",
+							"label": "t:sections.header.blocks.mega_menu.settings.data.option_2.label"
+						}
+					],
+					"default": "menu",
+					"label": "t:sections.header.blocks.mega_menu.settings.data.label"
+				},
+				{
+					"type": "select",
+					"id": "image_ratio",
+					"options": [
+						{
+							"value": "adapt",
+							"label": "t:sections.header.blocks.mega_menu.settings.image_ratio.option_1.label"
+						},
+						{
+							"value": "portrait",
+							"label": "t:sections.header.blocks.mega_menu.settings.image_ratio.option_2.label"
+						},
+						{
+							"value": "square",
+							"label": "t:sections.header.blocks.mega_menu.settings.image_ratio.option_3.label"
+						}
+					],
+					"default": "square",
+					"label": "t:sections.header.blocks.mega_menu.settings.image_ratio.label",
+					"info": "t:sections.header.blocks.mega_menu.settings.image_ratio.info"
+				},
+				{
+					"type": "link_list",
+					"id": "data_menu",
+					"label": "t:sections.header.blocks.mega_menu.settings.data_menu.label"
+				},
+				{
+					"type": "collection",
+					"id": "data_collection",
+					"label": "t:sections.header.blocks.mega_menu.settings.data_collection.label"
+				},
+				{
+					"type": "header",
+					"content": "t:sections.header.blocks.mega_menu.settings.header_1.content"
+				},
+				{
+					"type": "image_picker",
+					"id": "image_1",
+					"label": "t:sections.header.blocks.mega_menu.settings.image_1.label"
+				},
+				{
+					"type": "range",
+					"id": "overlay_opacity",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"default": 0,
+					"unit": "%",
+					"label": "t:sections.header.blocks.mega_menu.settings.overlay_opacity.label",
+					"info": "t:sections.header.blocks.mega_menu.settings.overlay_opacity.info"
+				},
+				{
+					"type": "url",
+					"id": "link_1",
+					"label": "t:sections.header.blocks.mega_menu.settings.link_1.label"
+				},
+				{
+					"type": "text",
+					"id": "text_1",
+					"label": "t:sections.header.blocks.mega_menu.settings.text_1.label"
+				},
+				{
+					"type": "checkbox",
+					"id": "arrow_1",
+					"default": false,
+					"label": "t:sections.header.blocks.mega_menu.settings.arrow_1.label"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

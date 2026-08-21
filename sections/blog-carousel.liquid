@@ -1,0 +1,393 @@
+{%- liquid
+	assign section_id  = '#shopify-section-' | append: section.id
+	assign total       = section.settings.total
+	assign full        = section.settings.full
+	assign blog        = section.settings.blog
+	assign mouse_wheel = section.settings.mousewheel
+	assign item_width  = 370
+	assign heading     = section.settings.heading_text
+	assign sub_heading = section.settings.sub_heading_text
+	assign column_gap  = section.settings.column_gap
+
+	assign heading_size     = section.settings.heading_font_size
+	assign sub_heading_size = section.settings.sub_heading_font_size
+
+	if section.settings.width > 0
+		assign item_width = section.settings.width
+	endif
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper {
+		--heading-font-size: {% if heading_size < 30 %}{{ heading_size }}{% else %}{{ heading_size | times: 0.85 | round | at_least: 20 | at_most: 36 }}{% endif %}px;
+		--subheading-font-size: {% if sub_heading_size < 30 %}{{ sub_heading_size }}{% else %}{{ sub_heading_size | times: 0.85 | round | at_least: 20 | at_most: 36 }}{% endif %}px;
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	{{ section_id }} .swiper-slide {
+		width: 26rem;
+	}
+
+	{{ section_id }} .swiper:not(.swiper-initialized) .swiper-slide {
+		padding-right: 15px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{{ section_id }} .swiper:not(.swiper-initialized) .swiper-slide {
+			padding-right: {{ column_gap }}px;
+		}
+
+		{{ section_id }} .swiper-slide {
+			width: {{ item_width }}px;
+		}
+
+		{%- if heading != blank -%}
+			{{ section_id }} .heading {
+				font-size: {{ section.settings.heading_font_size }}px;
+			}
+		{%- endif -%}
+
+		{%- if sub_heading != blank -%}
+			{{ section_id }} .sub-heading {
+				font-size: {{ section.settings.sub_heading_font_size }}px;
+			}
+		{%- endif -%}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+		{%- if heading != blank or sub_heading != blank -%}
+			<div class="title-wrapper text-left">
+				{%- if heading != blank -%}
+					<div class="heading rte">{{- heading -}}</div>
+				{%- endif -%}
+
+				{%- if sub_heading != blank -%}
+					<div class="sub-heading rte">{{- sub_heading -}}</div>
+				{%- endif -%}
+			</div>
+		{%- endif -%}
+
+		<div class="carousel-swiper{% if mouse_wheel %} mousewheel{% endif %}">
+			<template data-options>
+				{
+					{%- if section.settings.autoplay -%}
+						"autoplay": {
+							"delay": {{ section.settings.delay | times: 1000 }},
+							"disableOnInteraction": false,
+							"pauseOnMouseEnter": true
+						},
+					{%- endif -%}
+
+					"speed": 800,
+					"slidesPerView": "auto",
+					"mousewheel": {{ mouse_wheel }},
+					"breakpoints": {
+						"240": {
+							"spaceBetween": 15
+						},
+						"992": {
+							"spaceBetween": {{ column_gap }}
+						}
+					}
+				}
+			</template>
+
+			<div class="swiper">
+				<div class="swiper-wrapper">
+					{%- for article in blog.articles limit: total -%}
+						<div class="swiper-slide" data-{{ forloop.index0 }} {% if request.design_mode %} data-index="{{ forloop.index0 }}"{% endif %}>
+							<article class="article-card">
+								{%- liquid
+									assign article_image = article.image
+								-%}
+
+								<div class="article-media-wrap {{ section.settings.image_ratio }}-media{% unless article_image %} no-media{% endunless %}">
+									{%- if article_image -%}
+										<a href="{{ article.url }}" class="article-image{% if settings.image_lazy and article_image %} lazy-image{% endif %}">
+											{%- liquid
+												assign image_load = 'eager'
+
+												if forloop.index > 1
+													assign image_load = 'lazy'
+												endif
+
+												render 'lazy-image', image: article_image, width: 740, lazy: image_load
+											-%}
+										</a>
+									{%- else -%}
+										<h2 class="article-title h5">
+											<a href="{{ article.url }}" class="article-link link-underline">
+												{{- article.title | escape -}}
+											</a>
+										</h2>
+									{%- endif -%}
+								</div>
+
+								<div class="article-info">
+									{%- if article_image -%}
+										<h2 class="article-title h5">
+											<a href="{{ article.url }}">
+												{{- article.title | escape -}}
+											</a>
+										</h2>
+									{%- endif -%}
+
+									{%- if section.settings.blog_info %}
+										<div class="article-meta">
+											<span class="mitem">
+												<a href="{{ blog.url }}" class="article-blog">
+													{{- blog.title | escape -}}
+												</a>
+											</span>
+
+											<span class="article-date mitem">
+												{{- article.published_at | time_tag: format: 'month_year' -}}
+											</span>
+
+											<a class="article-comment" href="{{ article.comment_post_url }}">{{ 'blogs.article.comments' | t: count: article.comments_count }}</a>
+										</div>
+									{%- endif -%}
+								</div>
+							</article>
+						</div>
+					{%- else -%}
+						{%- for i in (1..total) -%}
+							{%- liquid
+								capture index
+									cycle 1, 2, 3, 4, 5, 6
+								endcapture
+							-%}
+
+							<div class="swiper-slide" data-{{ index }} {% if request.design_mode %} data-index="{{ forloop.index0 }}"{% endif %}>
+								<article class="article-card">
+									<div class="article-image {{ section.settings.image_ratio }}-media">
+										{%- render 'icon', code: 'placeholder' -%}
+									</div>
+
+									<div class="article-info">
+										<h2 class="article-title h5">
+											{{ 'onboarding.blogs.title' | t }}
+										</h2>
+
+										<span class="article-meta">
+											<span class="mitem">{{- 'onboarding.blogs.cate' | t -}}</span>
+											<span class="mitem">{{- 'onboarding.blogs.date' | t -}}</span>
+											<span class="mitem">{{- 'blogs.article.comments' | t: count: 0 -}}</span>
+										</span>
+									</div>
+								</article>
+							</div>
+						{%- endfor -%}
+					{%- endfor -%}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.blog-carousel.name",
+	"tag": "section",
+	"class": "blog-carousel-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "blog",
+			"id": "blog",
+			"label": "t:sections.blog-carousel.settings.blog.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-2"
+		},
+		{
+			"type": "select",
+			"id": "image_ratio",
+			"options": [
+				{
+					"value": "adapt",
+					"label": "t:sections.blog-carousel.settings.image_ratio.option_1.label"
+				},
+				{
+					"value": "portrait",
+					"label": "t:sections.blog-carousel.settings.image_ratio.option_2.label"
+				},
+				{
+					"value": "square",
+					"label": "t:sections.blog-carousel.settings.image_ratio.option_3.label"
+				}
+			],
+			"default": "square",
+			"label": "t:sections.blog-carousel.settings.image_ratio.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "blog_info",
+			"default": true,
+			"label": "t:sections.blog-carousel.settings.blog_info.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.heading.label"
+		},
+		{
+			"type": "richtext",
+			"id": "heading_text",
+			"default": "<h2>Blog posts</h2>",
+			"label": "t:general.typography.text.label"
+		},
+		{
+			"type": "range",
+			"id": "heading_font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 48,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.sub_heading.label"
+		},
+		{
+			"type": "richtext",
+			"id": "sub_heading_text",
+			"label": "t:general.typography.text.label"
+		},
+		{
+			"type": "range",
+			"id": "sub_heading_font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 32,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.slide.carousel_options.content"
+		},
+		{
+			"type": "number",
+			"id": "width",
+			"default": 370,
+			"label": "t:sections.blog-carousel.settings.width.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "mousewheel",
+			"default": false,
+			"label": "t:general.slide.mousewheel.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "autoplay",
+			"default": false,
+			"label": "t:general.slide.autoplay.label"
+		},
+		{
+			"type": "range",
+			"id": "delay",
+			"min": 3,
+			"max": 20,
+			"step": 1,
+			"default": 5,
+			"unit": "s",
+			"label": "t:general.slide.delay.label"
+		},
+		{
+			"type": "range",
+			"id": "column_gap",
+			"min": 0,
+			"max": 50,
+			"step": 1,
+			"default": 30,
+			"unit": "px",
+			"label": "t:general.slide.column_gap.label"
+		},
+		{
+			"type": "range",
+			"id": "total",
+			"min": 2,
+			"max": 20,
+			"step": 1,
+			"default": 10,
+			"label": "t:general.slide.total.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 100,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 100,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.blog-carousel.presets.name"
+		}
+	]
+}
+{% endschema %}

@@ -1,0 +1,19 @@
+<!-- start_rich_text_list_card --><li class="rich-text__card" {{ block.shopify_attributes }}><div style="width: 100%;">{{ block.settings.text }}</div></li><!-- end_rich_text_list_card -->
+{% schema %}
+{
+  "name": "Rich text card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text card"
+    }
+  ]
+}
+{% endschema %}

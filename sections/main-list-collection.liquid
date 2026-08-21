@@ -1,0 +1,227 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+	assign total      = section.settings.rows | times: section.settings.columns
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+	}
+</style>
+
+{{ 'list-collection.css' | asset_url | stylesheet_tag }}
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="container">
+		{%- if section.settings.title != blank -%}
+			<h1 class="title">{{- section.settings.title | escape -}}</h1>
+		{%- endif -%}
+
+		{%- paginate collections by total -%}
+			{%- liquid
+				case section.settings.sort
+					when 'products_high' or 'products_low'
+						assign collections = collections | sort: 'all_products_count'
+					when 'date' or 'date_reversed'
+						assign collections = collections | sort: 'published_at'
+				endcase
+
+				if section.settings.sort == 'products_high' or section.settings.sort == 'date_reversed' or section.settings.sort == 'alphabetical_reversed'
+					assign collections = collections | reverse
+				endif
+			-%}
+
+			<ul class="collection-grid grid grid-{{ section.settings.columns }} grid-tablet-3 grid-mobile-2" role="list">
+				{%- for collection in collections -%}
+					<li class="grid-item">
+						<div class="card">
+							<div class="card-media {{ section.settings.image_ratio }}-media">
+								<a href="{{ collection.url }}" class="card-link"><span class="sr-only">{{- collection.title -}}</span></a>
+
+								<div class="card-media-wrapper{% if settings.image_lazy and collection.featured_image %} lazy-image{% endif %}">
+									{%- liquid
+										if collection.featured_image != blank
+											render 'lazy-image', image: collection.featured_image, width: 768
+										else
+											render 'icon', code: 'placeholder'
+										endif
+									-%}
+								</div>
+							</div>
+
+							<div class="card-meta">
+								<h2 class="card-title">
+									<a href="{{ collection.url }}" class="card-url">
+										{%- liquid
+											echo collection.title
+
+											render 'icon', code: 'arrow-right'
+										-%}
+									</a>
+								</h2>
+
+								{%- if collection.description != blank -%}
+									<p class="card-desc">
+										{{- collection.description | strip_html | truncatewords: 12 -}}
+									</p>
+								{%- endif -%}
+							</div>
+						</div>
+					</li>
+				{%- endfor -%}
+			</ul>
+
+			{%- if paginate.pages > 1 -%}
+				{%- render 'pagination', paginate: paginate, alignment: 'center' -%}
+			{%- endif -%}
+		{%- endpaginate -%}
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.main-list-collection.name",
+	"class": "list-collection-section",
+	"settings": [
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "text",
+			"id": "title",
+			"label": "t:sections.main-list-collection.settings.title.label",
+			"default": "Collections"
+		},
+		{
+			"type": "range",
+			"id": "columns",
+			"min": 1,
+			"max": 12,
+			"step": 1,
+			"default": 3,
+			"label": "t:sections.main-list-collection.settings.columns.label"
+		},
+		{
+			"type": "range",
+			"id": "rows",
+			"min": 1,
+			"max": 12,
+			"step": 1,
+			"default": 3,
+			"label": "t:sections.main-list-collection.settings.rows.label"
+		},
+		{
+			"type": "select",
+			"id": "sort",
+			"options": [
+				{
+					"value": "alphabetical",
+					"label": "t:sections.main-list-collection.settings.sort.options__1.label"
+				},
+				{
+					"value": "alphabetical_reversed",
+					"label": "t:sections.main-list-collection.settings.sort.options__2.label"
+				},
+				{
+					"value": "date_reversed",
+					"label": "t:sections.main-list-collection.settings.sort.options__3.label"
+				},
+				{
+					"value": "date",
+					"label": "t:sections.main-list-collection.settings.sort.options__4.label"
+				},
+				{
+					"value": "products_high",
+					"label": "t:sections.main-list-collection.settings.sort.options__5.label"
+				},
+				{
+					"value": "products_low",
+					"label": "t:sections.main-list-collection.settings.sort.options__6.label"
+				}
+			],
+			"default": "products_high",
+			"label": "t:sections.main-list-collection.settings.sort.label"
+		},
+		{
+			"type": "select",
+			"id": "image_ratio",
+			"options": [
+				{
+					"value": "adapt",
+					"label": "t:sections.main-list-collection.settings.image_ratio.options__1.label"
+				},
+				{
+					"value": "portrait",
+					"label": "t:sections.main-list-collection.settings.image_ratio.options__2.label"
+				},
+				{
+					"value": "square",
+					"label": "t:sections.main-list-collection.settings.image_ratio.options__3.label"
+				}
+			],
+			"default": "square",
+			"label": "t:sections.main-list-collection.settings.image_ratio.label",
+			"info": "t:sections.main-list-collection.settings.image_ratio.info"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 60,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 60,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	]
+}
+{% endschema %}

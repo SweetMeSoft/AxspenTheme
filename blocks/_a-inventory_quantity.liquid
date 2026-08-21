@@ -1,0 +1,152 @@
+{% style %}
+  .block-{{ block.id }} {
+     font-family: var(--atlas-font-body-family);
+     font-size: {{ block.settings.stock_indicator_font_size | default: 12 }}px;
+     font-weight: 400;
+     color: {{ block.settings.inventory_status_color }};
+     line-height: 100%;
+     margin: 0;
+     white-space: nowrap;
+   }
+   @media screen and (max-width: 768px) {
+    .block-{{ block.id }} {
+      flex: 0;
+    }
+   }
+   .block-{{ block.id }} .product-stock-indicator-icon  {
+     width: {{ block.settings.stock_dot_size | default: 14 }}px;
+     height: {{ block.settings.stock_dot_size | default: 14 }}px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+   }
+   .block-{{ block.id }} .product-stock-indicator-icon svg {
+     width: 100%;
+     height: 100%;
+   }
+   .block-{{ block.id }} .product__inventory{
+     font-family: var(--atlas-font-body-family);
+     font-size: {{ block.settings.stock_indicator_font_size | default: 12 }}px;
+     color: {{ block.settings.inventory_status_color }};
+     padding: 0;
+     margin: 0;
+     flex-shrink: 0;
+   }
+{% endstyle %}
+{% assign product = closest.product %}
+<div class="product-info-right block-{{ block.id }}" {{ block.shopify_attributes }}>
+  {%- if product.selected_or_first_available_variant.inventory_management == 'shopify' -%}
+    <p
+      class="product__inventory product-block-{{ block.id }} no-js-hidden"
+      id="Inventory-{{ section.id }}"
+      role="status"
+      style="color: {{ block.settings.inventory_status_color }};"
+    >
+      {%- if product.selected_or_first_available_variant.inventory_quantity > 0 -%}
+        {%- if product.selected_or_first_available_variant.inventory_quantity <= block.settings.inventory_threshold -%}
+          <span class="product-stock-indicator-icon">
+            {% render 'a-icon-inventory-low-stock', color_icon: block.settings.inventory_status_color_low %}
+          </span>
+          {%- if block.settings.show_inventory_quantity -%}
+            Low stock: {{ product.selected_or_first_available_variant.inventory_quantity }} left
+          {%- else -%}
+            Low stock
+          {%- endif -%}
+        {%- else -%}
+          <span class="product-stock-indicator-icon">
+            {% render 'a-icon-inventory-in-stock', color_icon: block.settings.inventory_status_color_in_stock %}
+          </span>
+          {%- if block.settings.show_inventory_quantity -%}
+            {{ product.selected_or_first_available_variant.inventory_quantity }} in stock
+          {%- else -%}
+            In stock
+          {%- endif -%}
+        {%- endif -%}
+      {%- else -%}
+        {%- if product.selected_or_first_available_variant.inventory_policy == 'continue' -%}
+          <span class="product-stock-indicator-icon">
+            {% render 'a-icon-inventory-in-stock', color_icon: block.settings.inventory_status_color_in_stock %}
+          </span>
+          In stock
+        {%- else -%}
+          <span class="product-stock-indicator-icon">
+            {% render 'a-icon-inventory-out-of-stock' %}
+          </span>
+          Out of stock
+        {%- endif -%}
+      {%- endif -%}
+    </p>
+  {%- endif -%}
+</div>
+{% schema %}
+{
+  "name": "Inventory quantity",
+  "tag": null,
+  "blocks": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Inventory Settings"
+    },
+    {
+      "type": "range",
+      "id": "inventory_threshold",
+      "label": "Low inventory threshold",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "show_inventory_quantity",
+      "label": "Show inventory count",
+      "default": true,
+      "info": "Please ensure you have inventory tracking setup in order to display inventory status"
+    },
+    {
+      "type": "color",
+      "id": "inventory_status_color",
+      "label": "Inventory text color",
+      "default": "#1D1A2D"
+    },
+    {
+      "type": "color",
+      "id": "inventory_status_color_low",
+      "label": "Inventory icon color for low stock",
+      "default": "#ee9441"
+    },
+    {
+      "type": "color",
+      "id": "inventory_status_color_in_stock",
+      "label": "Inventory icon color for in stock",
+      "default": "#1B9139"
+    },
+    {
+      "type": "range",
+      "id": "stock_indicator_font_size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Stock indicator font size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "stock_dot_size",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Stock indicator dot size",
+      "default": 14
+    }
+  ],
+  "presets": [
+    {
+      "name": "Inventory quantity"
+    }
+  ]
+}
+{% endschema %}

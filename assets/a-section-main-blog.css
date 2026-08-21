@@ -1,0 +1,61 @@
+.atlas-isolation-wrapper .blog-articles {
+  display: grid;
+  grid-gap: 1rem;
+  column-gap: var(--atlas-grid-mobile-horizontal-spacing);
+  row-gap: var(--atlas-grid-mobile-vertical-spacing);
+}
+
+.atlas-isolation-wrapper .blog-articles .card-wrapper {
+  width: 100%;
+}
+
+@media screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .blog-articles {
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--atlas-grid-desktop-horizontal-spacing);
+    row-gap: var(--atlas-grid-desktop-vertical-spacing); 
+  }
+
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 1),
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 2):last-child {
+    grid-column: span 2;
+    text-align: center;
+  }
+
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 1) .card,
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 2):last-child .card {
+    text-align: center;
+  }
+
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 1) .article-card__image--small .ratio::before,
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 2):last-child .article-card__image--small .ratio::before {
+    padding-bottom: 22rem;
+  }
+
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 1) .article-card__image--medium .ratio::before,
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 2):last-child .article-card__image--medium .ratio::before {
+    padding-bottom: 44rem;
+  }
+
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 1) .article-card__image--large .ratio::before,
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 2):last-child .article-card__image--large .ratio::before {
+    padding-bottom: 66rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 1) .article-card__image--small .ratio .ratio::before,
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 2):last-child .article-card__image--small .ratio .ratio::before {
+    padding-bottom: 27.5rem;
+  }
+
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 1) .article-card__image--medium .ratio::before,
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 2):last-child .article-card__image--medium .ratio::before {
+    padding-bottom: 55rem;
+  }
+
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 1) .article-card__image--large .ratio::before,
+  .atlas-isolation-wrapper .blog-articles--collage > *:nth-child(3n + 2):last-child .article-card__image--large .ratio::before {
+    padding-bottom: 82.5rem;
+  }
+}

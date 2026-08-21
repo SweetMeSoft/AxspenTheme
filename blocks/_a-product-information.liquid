@@ -1,0 +1,240 @@
+{% assign product = closest.product %}
+
+<div
+  class="product__info-wrapper grid__item{% if section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if hide_mobile_slider %} product__info-wrapper--top-padding{% endif %}"
+  {{ block.shopify_attributes }}
+>
+  <product-info
+    id="ProductInfo-{{ section.id }}"
+    data-section="{{ section.id }}"
+    data-url="{{ product.url }}"
+    class="product__info-container fade-in-child"
+  >
+    {% content_for 'blocks' %}
+    <a href="{{ product.url }}" class="link product__view-details animate-arrow">
+      View full details
+      {% render 'a-icon-arrow' %}
+    </a>
+  </product-info>
+</div>
+{% schema %}
+{
+  "name": "Product Details",
+  "tag": null,
+  "blocks": [
+    { "type": "_a-bullet-point-benefits" },
+    { "type": "_a-buy_buttons" },
+    { "type": "_a-buy_now_button" },
+    { "type": "_a-collapsible_tabs" },
+    { "type": "_a-description" },
+    { "type": "_a-divider" },
+    { "type": "_a-estimated_arrival_date" },
+    { "type": "_a-group" },
+    { "type": "_a-heading" },
+    { "type": "_a-icon-with-text" },
+    { "type": "_a-inventory" },
+    { "type": "_a-payment_badges" },
+    { "type": "_a-pickup_availability" },
+    { "type": "_a-price" },
+    { "type": "_a-product_add_ons" },
+    { "type": "_a-quantity_selector" },
+    { "type": "_a-rating" },
+    { "type": "_a-reviews" },
+    { "type": "_a-share" },
+    { "type": "_a-sku" },
+    { "type": "_a-social_proof" },
+    { "type": "_a-sticky_atc" },
+    { "type": "_a-text" },
+    { "type": "_a-title" },
+    { "type": "_a-variant_picker" },
+    { "type": "_a-video_testimonials" },
+    { "type": "@app" },
+    { "type": "@theme" }
+  ],
+  "presets": [
+    {
+      "name": "Product Details",
+      "blocks": {
+        "title": {
+          "type": "_a-title",
+          "settings": {
+            "title_alignment": "left",
+            "mobile_title_alignment": "left",
+            "font_size": 28,
+            "mobile_font_size": 24,
+            "uppercase_title": false,
+            "title_color": "#000000",
+            "padding_top": 0,
+            "padding_bottom": 0
+          }
+        },
+        "rating_HWTnKx": {
+          "type": "_a-rating",
+          "settings": {
+            "padding_top": 0,
+            "padding_bottom": 0
+          }
+        },
+        "description": {
+          "type": "_a-description",
+          "settings": {
+            "show_description": false,
+            "des_color": "#000000",
+            "bolded_des_color": "#000000",
+            "padding_top": 0,
+            "padding_bottom": 0
+          }
+        },
+        "text_ALmAKK": {
+          "type": "_a-text",
+          "settings": {
+            "text": "<em>NEW: 2025’s </em><em><strong>Top-Rated</strong></em><em> \"add main benefit\"</em>",
+            "font_size": 12,
+            "padding_top": 0,
+            "padding_bottom": 0
+          }
+        },
+        "price": {
+          "type": "_a-price",
+          "settings": {
+            "layout": "price_first",
+            "regular_font_size": 22,
+            "main_price_color": "#000000",
+            "compare_price_color": "#8e8e8e",
+            "padding_top": 0,
+            "padding_bottom": 0
+          }
+        },
+        "text_KVYqTW": {
+          "type": "_a-text",
+          "settings": {
+            "text": "A main product benefit, focused on problem solving.",
+            "font_size": 12,
+            "padding_top": 4,
+            "padding_bottom": 0
+          }
+        },
+        "bullet-point-benefits": {
+          "type": "_a-bullet-point-benefits",
+          "settings": {
+            "display_layout": "row",
+            "column_gap": 8,
+            "padding_bottom": 0
+          }
+        },
+        "44f9cdc2-f4bf-466e-87d5-fb765ad4864a": {
+          "type": "_a-variant_picker",
+          "settings": {
+            "enable_color_swatches": true,
+            "picker_type": "dropdown",
+            "custom_swatch_option_name": "Color",
+            "color_swatch_type": "image",
+            "swatch_size": "5rem",
+            "swatch_type": "circle",
+            "variants_custom_color": "#000000",
+            "padding_top": 0,
+            "padding_bottom": 0
+          }
+        },
+        "buy_buttons": {
+          "type": "_a-buy_buttons",
+          "settings": {
+            "add_to_cart_text": "Add to cart",
+            "buy_now_text": "Buy Now",
+            "show_buy_now_button": false,
+            "skip_cart": false,
+            "uppercase_text": false,
+            "bg_color": "#000000",
+            "text_color": "#ffffff",
+            "padding_top": 10,
+            "padding_bottom": 10
+          }
+        },
+        "inventory_ePVkFn": {
+          "type": "_a-inventory",
+          "settings": {
+            "inventory_threshold": 10,
+            "show_inventory_quantity": false,
+            "inventory_status_color": "#000000",
+            "padding_top": 0,
+            "padding_bottom": 0
+          }
+        },
+        "text_QwxdBm": {
+          "type": "_a-text",
+          "settings": {
+            "text": "<em>Note: You Asked, We Restocked (Again). Limited Supply!</em>",
+            "font_size": 10,
+            "padding_top": 0,
+            "padding_bottom": 0
+          }
+        },
+        "estimated_arrival_date": {
+          "type": "_a-estimated_arrival_date",
+          "settings": {
+            "custom_text": "<p>Your order will <em>arrive by [earliest_date] and [latest_date]</em> if you order now. </p>",
+            "num_days_for_earliest_arrival": 7,
+            "num_days_for_latest_arrival": 14,
+            "date_format": "monthName_dayNumber",
+            "day_labels": "Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday",
+            "month_labels": "January, February, March, April, May, June, July, August, September, October, November, December",
+            "display_icon": true,
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#1f1f1f\"><path d=\"M240-160q-50 0-85-35t-35-85H40v-440q0-33 23.5-56.5T120-800h560v160h120l120 160v200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H360q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T280-280q0-17-11.5-28.5T240-320q-17 0-28.5 11.5T200-280q0 17 11.5 28.5T240-240ZM120-360h32q17-18 39-29t49-11q27 0 49 11t39 29h272v-360H120v360Zm600 120q17 0 28.5-11.5T760-280q0-17-11.5-28.5T720-320q-17 0-28.5 11.5T680-280q0 17 11.5 28.5T720-240Zm-40-200h170l-90-120h-80v120ZM360-540Z\"/></svg>",
+            "icon_size": 25,
+            "icon_color": "#000000",
+            "text_color": "#1e1e1e",
+            "font_size": 14,
+            "padding_top": 6,
+            "padding_bottom": 6
+          }
+        },
+        "icon_with_text_CyFfFf": {
+          "type": "_a-icon-with-text",
+          "settings": {
+            "heading_1": "12,319 Five Stars",
+            "icon_1": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#1f1f1f\"><path d=\"M852-212 732-332l56-56 120 120-56 56ZM708-692l-56-56 120-120 56 56-120 120Zm-456 0L132-812l56-56 120 120-56 56ZM108-212l-56-56 120-120 56 56-120 120Zm246-75 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-361Z\"/></svg>",
+            "heading_2": "Easy Returns",
+            "icon_2": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#1f1f1f\"><path d=\"M280-160q-50 0-85-35t-35-85H60l18-80h113q17-19 40-29.5t49-10.5q26 0 49 10.5t40 29.5h167l84-360H262l17-80h441l-37 160h117l120 160-40 200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H400q0 50-35 85t-85 35Zm357-280h193l4-21-74-99h-95l-28 120Zm-17-280-84 360 2-7 82-353ZM140-440v-120H40l140-200v120h100L140-440Zm140 200q17 0 28.5-11.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 17 11.5 28.5T280-240Zm400 0q17 0 28.5-11.5T720-280q0-17-11.5-28.5T680-320q-17 0-28.5 11.5T640-280q0 17 11.5 28.5T680-240Z\"/></svg>",
+            "heading_3": "24/7 VIP Support",
+            "icon_3": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#1f1f1f\"><path d=\"M440-120v-80h320v-284q0-117-81.5-198.5T480-764q-117 0-198.5 81.5T200-484v244h-40q-33 0-56.5-23.5T80-320v-80q0-21 10.5-39.5T120-469l3-53q8-68 39.5-126t79-101q47.5-43 109-67T480-840q68 0 129 24t109 66.5Q766-707 797-649t40 126l3 52q19 9 29.5 27t10.5 38v92q0 20-10.5 38T840-249v49q0 33-23.5 56.5T760-120H440Zm-80-280q-17 0-28.5-11.5T320-440q0-17 11.5-28.5T360-480q17 0 28.5 11.5T400-440q0 17-11.5 28.5T360-400Zm240 0q-17 0-28.5-11.5T560-440q0-17 11.5-28.5T600-480q17 0 28.5 11.5T640-440q0 17-11.5 28.5T600-400Zm-359-62q-7-106 64-182t177-76q89 0 156.5 56.5T720-519q-91-1-167.5-49T435-698\"/></svg>",
+
+            "icon_size": "medium",
+            "font_size": 14,
+            "text_color": "#000000",
+            "custom_icon_color": "#000000",
+            "padding_top": 10,
+            "padding_bottom": 10
+          }
+        },
+        "reviews_NM8tEB": {
+          "type": "_a-reviews",
+          "settings": {
+            "padding_top": 0,
+            "padding_bottom": 0
+          }
+        },
+        "sticky_atc_Uaw4AC": {
+          "type": "_a-sticky_atc",
+          "settings": {
+            "button_label": "Add to cart",
+            "display_when": "after_scroll",
+            "show_price_badge": true,
+            "show_variant_selector": true,
+            "show_price": true,
+            "show_compare_at_price": true,
+            "price_size": 20,
+            "comp_price_size": 18,
+            "bold_sticky_atc_text": false,
+            "price_color": "#000000",
+            "compare_price_color": "#000000",
+            "button_text_color": "#ffffff",
+            "color_scheme": "accent-2",
+            "padding_top": 0,
+            "padding_bottom": 0
+          }
+        }
+      }
+    }
+  ]
+}
+{% endschema %}

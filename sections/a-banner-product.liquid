@@ -1,0 +1,676 @@
+{% comment %}
+  {{ 'a-section-main-product.css' | asset_url | stylesheet_tag }}
+  {{ 'a-section-featured-product.css' | asset_url | stylesheet_tag }}
+
+  {% render 'a-accordion-css' %}
+
+  {%- liquid
+    assign global_heading_size = settings.enable_global_heading_font_size
+    assign global_body_size = settings.enable_global_body_font_size
+    assign global_color = settings.enable_global_color
+    assign product = section.settings.product
+
+    if section.settings.media_size == 'large'
+      assign media_width = 0.65
+    elsif section.settings.media_size == 'medium'
+      assign media_width = 0.55
+    elsif section.settings.media_size == 'small'
+      assign media_width = 0.45
+    endif
+
+    assign first_3d_model = product.media | where: 'media_type', 'model' | first
+  -%}
+
+  {%- style -%}
+    {%- if request.visual_preview_mode -%}
+      {% comment %} don't want fade-in animation in preview mode because it messes up preview {% endcomment %}
+      .animation_section,
+      .animation_section * {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+        will-change: auto !important;
+      }
+    {%- endif -%}
+
+    #shopify-section-{{ section.id }} .main-product-banner {
+      padding: 5px 0;
+    }
+
+    .atlas-isolation-wrapper #banner-product-section-container-{{section.id }} {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    }
+
+    @media screen and (max-width: 1440px) {
+      .atlas-isolation-wrapper #banner-product-section-container-{{section.id }} {
+        max-width: 1070px !important
+      }
+    }
+
+    @media screen and (max-width: 1134px) {
+      .atlas-isolation-wrapper #banner-product-section-container-{{section.id }} {
+        padding-left: 50px;
+        padding-right: 50px;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      .atlas-isolation-wrapper #ProductInfoContainer-{{ section.id }} {
+        padding: 20px 20px 10px 10px !important
+      }
+      .atlas-isolation-wrapper #banner-product-section-container-{{section.id }} {
+        max-width: 500px !important;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 0px;
+        padding-right: 0px;
+      }
+    }
+
+    @media screen and (min-width: 750px) {
+      .atlas-isolation-wrapper #banner-product-section-container-{{section.id }} {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+      .atlas-isolation-wrapper .section-{{ section.id }}-padding {
+        padding-top: 36px;
+        padding-bottom: 36px;
+      }
+    }
+
+    .atlas-isolation-wrapper .banner-product product-info {
+      text-align: {{ section.settings.desktop_alignment }};
+    }
+
+    @media screen and (max-width: 750px) {
+      .atlas-isolation-wrapper .banner-product product-info {
+        text-align: {{ section.settings.mobile_alignment }};
+      }
+    }
+  {%- endstyle -%}
+
+  {%- if first_3d_model -%}
+    {{ 'a-component-product-model.css' | asset_url | stylesheet_tag }}
+    <link id="ModelViewerStyle" rel="stylesheet" href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css" media="print" onload="this.media='all'">
+    <link id="ModelViewerOverride" rel="stylesheet" href="{{ 'a-component-model-viewer-ui.css' | asset_url }}" media="print" onload="this.media='all'">
+  {%- endif -%}
+
+  <div class="main-product-banner" style="{% if section.settings.use_gradient_background_2 %}background: {{ section.settings.section_background_gradient_2 }};{% else %}background-color: {{ section.settings.section_background_color_2 }};{% endif %}">
+    <section id="banner-product-section-container-{{section.id }}" class="gradient" style="{% if section.settings.use_gradient_background %}background: {{ section.settings.section_background_gradient }};{% else %}background-color: {{ section.settings.section_background_color }};{% endif %}">
+      <div class="banner-main">
+        <div class="page-width section-{{ section.id }}-padding">
+          <div class="featured-product product product--{{ section.settings.media_size }} grid grid--1-col gradient product--{{ section.settings.media_position }} isolate {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
+
+            <!-- Left Media Gallery -->
+            <div class="grid__item product__media-wrapper{% if section.settings.media_position == 'right' %} medium-hide large-up-hide{% endif %}">
+              {% render 'a-product-media-gallery',
+                product: product,
+                section: section,
+                media_width: media_width,
+                media_fit: section.settings.media_fit,
+                first_3d_model: first_3d_model,
+                is_single_image: true
+              %}
+            </div>
+
+            <!-- Product Info -->
+            <div id="ProductInfoContainer-{{ section.id }}" class="product__info-wrapper grid__item banner-product">
+              <product-info
+                id="ProductInfo-{{ section.id }}"
+                class="product__info-container fade-in-child"
+                data-section="{{ section.id }}"
+                data-url="{{ product.url }}"
+              >
+                {%- assign product_form_id = 'product-form-' | append: section.id -%}
+
+                {%- for block in section.blocks -%}
+                  {%- case block.type -%}
+                    {%- when '@app' -%}
+                      {% render block %}
+                    {%- when 'text' -%}
+                      {% render 'a-product-text-block', block: block, global_body_size: global_body_size, global_color: global_color %}
+                    {%- when 'title' -%}
+                      {% render 'a-product-title-block', block: block, product: product, global_heading_size: global_heading_size, global_color: global_color %}
+                    {%- when 'price' -%}
+                      {% render 'a-product-price-block', block: block, product: product, section: section %}
+                    {%- when 'sku' -%}
+                      {% render 'a-product-sku-block', block: block, product: product, section: section %}
+                    {%- when 'quantity_selector' -%}
+                      {% render 'a-product-quantity-selector', block: block, product: product, product_form_id: product_form_id %}
+                    {%- when 'share' -%}
+                      {% render 'a-share-button', block: block, share_link: product.selected_variant.url | default: product.url | prepend: request.origin %}
+                    {%- when 'variant_picker' -%}
+                      {% render 'a-product-variant-picker', product: product, block: block, product_form_id: product_form_id, update_url: false %}
+                    {%- when 'buy_buttons' -%}
+                      {% render 'a-buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id %}
+                    {%- when 'buy_button' -%}
+                      {% render 'a-product-buy-button', block: block, product: product, section: section, product_form_id: product_form_id %}
+                    {%- when 'custom_liquid' -%}
+                      {{ block.settings.custom_liquid }}
+                    {%- when 'rating' -%}
+                      {% render 'a-product-rating', product: product %}
+                    {%- when 'icon-with-text' -%}
+                      {% render 'a-icon-with-text', block: block %}
+                  {%- endcase -%}
+                {%- endfor -%}
+
+                <a
+                  {% if product == blank %}
+                    role="link" aria-disabled="true"
+                  {% else %}
+                    href="{{ product.url }}"
+                  {% endif %}
+                  class="link product__view-details animate-arrow"
+                >
+                  View full details
+                  {% render 'a-icon-arrow' %}
+                </a>
+              </product-info>
+            </div>
+
+            <!-- Right Media Gallery -->
+            {%- if section.settings.media_position == 'right' -%}
+              <div class="grid__item product__media-wrapper small-hide">
+                {% render 'a-product-media-gallery',
+                  product: product,
+                  section: section,
+                  is_right: true,
+                  media_width: media_width,
+                  media_fit: section.settings.media_fit,
+                  first_3d_model: first_3d_model,
+                  is_single_image: true
+                %}
+              </div>
+            {%- endif -%}
+          </div>
+          {% render 'a-product-media-modal', product: product, variant_images: media_to_render %}
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Scripts -->
+  {% comment %} <script src="{{ 'a-product-form.js' | asset_url }}" defer="defer"></script> {% endcomment %}
+  {%- if request.design_mode -%}
+    <script src="{{ 'a-theme-editor.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+
+  {%- if first_3d_model -%}
+    <script type="application/json" id="ProductJSON-{{ product.id }}">
+      {{ product.media | where: 'media_type', 'model' | json }}
+    </script>
+    <script src="{{ 'a-product-model.js' | asset_url }}" defer></script>
+  {%- endif -%}
+
+  {%- if product.media.size > 0 -%}
+    <script src="{{ 'a-product-modal.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'a-media-gallery.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+
+  {%- liquid
+    if product.selected_or_first_available_variant.featured_media
+      assign seo_media = product.selected_or_first_available_variant.featured_media
+    else
+      assign seo_media = product.featured_media
+    endif
+  -%}
+
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org/",
+      "@type": "Product",
+      "name": {{ product.title | json }},
+      "url": {{ request.origin | append: product.url | json }},
+      {% if seo_media -%}
+        "image": [
+          {{ seo_media | image_url: width: 1920 | prepend: "https:" | json }}
+        ],
+      {%- endif %}
+      "description": {{ product.description | strip_html | json }},
+      {% if product.selected_or_first_available_variant.sku != blank -%}
+        "sku": {{ product.selected_or_first_available_variant.sku | json }},
+      {%- endif %}
+      "brand": {
+        "@type": "Brand",
+        "name": {{ product.vendor | json }}
+      },
+      "offers": [
+        {%- for variant in product.variants -%}
+          {
+            "@type" : "Offer",
+            {%- if variant.sku != blank -%}
+              "sku": {{ variant.sku | json }},
+            {%- endif -%}
+            {%- if variant.barcode.size == 12 -%}
+                "gtin12": {{ variant.barcode }},
+            {%- endif -%}
+            {%- if variant.barcode.size == 13 -%}
+              "gtin13": {{ variant.barcode }},
+            {%- endif -%}
+            {%- if variant.barcode.size == 14 -%}
+              "gtin14": {{ variant.barcode }},
+            {%- endif -%}
+            "availability" : "http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
+            "price" : {{ variant.price | divided_by: 100.00 | json }},
+            "priceCurrency" : {{ cart.currency.iso_code | json }},
+            "url" : {{ request.origin | append: variant.url | json }}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+
+  <script defer>
+    document.addEventListener('DOMContentLoaded', function () {
+      function isIE() {
+        const ua = window.navigator.userAgent;
+        const msie = ua.indexOf('MSIE ');
+        const trident = ua.indexOf('Trident/');
+        return msie > 0 || trident > 0;
+      }
+
+      if (!isIE()) return;
+      const hiddenInput = document.querySelector('#{{ product_form_id }} input[name="id"]');
+      const noScriptInputWrapper = document.createElement('div');
+      const variantSwitcher =
+        document.querySelector('variant-radios[data-section="{{ section.id }}"]') ||
+        document.querySelector('variant-selects[data-section="{{ section.id }}"]');
+      noScriptInputWrapper.innerHTML = document.querySelector(
+        '.product-form__noscript-wrapper-{{ section.id }}'
+      ).textContent;
+      variantSwitcher.outerHTML = noScriptInputWrapper.outerHTML;
+
+      document.querySelector('#Variants-{{ section.id }}').addEventListener('change', function (event) {
+        hiddenInput.value = event.currentTarget.value;
+      });
+    });
+  </script>
+
+  {% schema %}
+  {
+    "name": "Featured product",
+    "tag": "section",
+    "class": "section animation_section",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "blocks": [
+      {
+        "type": "@app"
+      },
+      {
+        "type": "text",
+        "name": "Body",
+        "settings": [
+          {
+            "type": "inline_richtext",
+            "id": "text",
+            "default": "Text block",
+            "label": "Body"
+          },
+          {
+            "type": "range",
+            "id": "font_size",
+            "label": "Size",
+            "min": 8,
+            "max": 24,
+            "step": 2,
+            "default": 16,
+            "unit": "px"
+          },
+          {
+            "type": "header",
+            "content": "Styling"
+          },
+          {
+            "type": "color",
+            "id": "body_colors",
+            "label": "Body color",
+            "default": "#000000"
+          },
+          {
+            "type": "color",
+            "id": "body_highlighted_color",
+            "label": "Bolded body color",
+            "default": "#000000"
+          }
+        ]
+      },
+      {
+        "type": "title",
+        "name": "Title",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "inline_richtext",
+            "id": "custom_heading_text",
+            "label": "Heading"
+          },
+          {
+            "type": "range",
+            "id": "font_size",
+            "min": 20,
+            "max": 50,
+            "step": 1,
+            "unit": "px",
+            "label": "Desktop heading size",
+            "default": 40
+          },
+          {
+            "type": "range",
+            "id": "mobile_font_size",
+            "min": 10,
+            "max": 40,
+            "step": 1,
+            "unit": "px",
+            "label": "Mobile heading size",
+            "default": 28
+          },
+          {
+            "type": "header",
+            "content": "Styling"
+          },
+          {
+            "type": "color",
+            "id": "heading_color",
+            "label": "Heading color",
+            "default": "#000000"
+          },
+          {
+            "type": "color",
+            "id": "heading_highlighted_color",
+            "label": "Bolded heading Color",
+            "default": "#000000"
+          }
+        ]
+      },
+      {
+        "type": "buy_button",
+        "name": "Button",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "inline_richtext",
+            "id": "button_text",
+            "label": "Button text",
+            "default": "Shop now"
+          },
+          {
+            "type": "url",
+            "id": "button_link",
+            "label": "Button Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "enable_cta",
+            "label": "Enable add to cart",
+            "default": false
+          },
+          {
+            "type": "header",
+            "content": "Styling"
+          },
+          {
+            "type": "color",
+            "id": "button_bg_color",
+            "label": "Button Color"
+          },
+          {
+            "type": "color",
+            "id": "button_text_color",
+            "label": "Button text color",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "block_background_color",
+            "label": "Block background color",
+            "default": "#ffffff"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "product",
+        "id": "product",
+        "label": "Product"
+      },
+      {
+        "type": "header",
+        "content": "Layout"
+      },
+      {
+        "type": "select",
+        "id": "media_position",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "left",
+        "label": "Desktop position",
+        "info": "Position is automatically optimized for mobile."
+      },
+      {
+        "type": "select",
+        "id": "desktop_alignment",
+        "label": "Desktop alignment",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "left"
+      },
+      {
+        "type": "select",
+        "id": "mobile_alignment",
+        "label": "Mobile alignment",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "center"
+      },
+      {
+        "type": "select",
+        "id": "media_size",
+        "options": [
+          {
+            "value": "small",
+            "label": "Small"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "large",
+            "label": "Large"
+          }
+        ],
+        "default": "small",
+        "label": "Image width",
+        "info": "Media is automatically optimized for mobile."
+      },
+      {
+        "type": "select",
+        "id": "media_fit",
+        "options": [
+          {
+            "value": "contain",
+            "label": "Original"
+          },
+          {
+            "value": "cover",
+            "label": "Fill"
+          }
+        ],
+        "default": "contain",
+        "label": "Image fit"
+      },
+      {
+        "type": "select",
+        "id": "mobile_media_height",
+        "label": "Mobile image height",
+        "options": [
+          {
+            "value": "small",
+            "label": "Small"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "large",
+            "label": "Large"
+          }
+        ],
+        "default": "large"
+      },
+      {
+        "type": "select",
+        "id": "mobile_media_ratio",
+        "label": "Mobile image ratio",
+        "options": [
+          {
+            "value": "square",
+            "label": "Square"
+          },
+          {
+            "value": "fill",
+            "label": "Fill screen"
+          }
+        ],
+        "default": "fill"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_video_looping",
+        "default": false,
+        "label": "Video loop"
+      },
+      {
+        "type": "header",
+        "content": "Styling"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_gradient_background_2",
+        "label": "Use gradient background for primary section",
+        "default": false
+      },
+      {
+        "type": "color_background",
+        "id": "section_background_gradient_2",
+        "label": "Primary section background gradient",
+        "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+        "visible_if": "{{ section.settings.use_gradient_background_2 }}"
+      },
+      {
+        "type": "color",
+        "id": "section_background_color_2",
+        "label": "Primary section background color",
+        "default": "#ffffff",
+        "visible_if": "{{ section.settings.use_gradient_background_2 == false }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_gradient_background",
+        "label": "Use gradient background",
+        "default": false
+      },
+      {
+        "type": "color_background",
+        "id": "section_background_gradient",
+        "label": "Section background gradient",
+        "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+        "visible_if": "{{ section.settings.use_gradient_background }}"
+      },
+      {
+        "type": "color",
+        "id": "section_background_color",
+        "label": "Section background color",
+        "default": "#ffffff",
+        "visible_if": "{{ section.settings.use_gradient_background == false }}"
+      },
+      {
+        "type": "header",
+        "content": "Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Top padding",
+        "default": 24
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Bottom padding",
+        "default": 24
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured product",
+        "blocks": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "text",
+            "settings": {
+              "text": "Natural Inner Beauty"
+            }
+          },
+          {
+            "type": "text",
+            "settings": {
+              "text": "Provide deluxe hydration for those with dry or age-relatedskin concerns. They add intense moisture to dehydrated ormature skin, alleviating uneven, sun-damaged textures topromote natural radiance."
+            }
+          },
+          {
+            "type": "buy_button"
+          }
+        ]
+      }
+    ]
+  }
+  {% endschema %}
+{% endcomment %}

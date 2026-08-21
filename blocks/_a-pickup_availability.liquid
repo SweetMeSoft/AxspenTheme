@@ -1,0 +1,301 @@
+{% assign product = closest.product %}
+{% style %}
+  .atlas-isolation-wrapper .product-block-{{ block.id }} {
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+  }
+  @media screen and (max-width: 768px) {
+    .atlas-isolation-wrapper .product-block-{{ block.id }} {
+      padding-top: {{block.settings.padding_top_mobile }}px;
+      padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+    }
+  }
+  .atlas-isolation-wrapper .product-block-{{ block.id }} .pickup-availability-preview {
+    width: 100%;
+    padding: {{ block.settings.container_padding | default: 18 }}px {{ block.settings.container_padding | default: 19 }}px;
+    margin: 0;
+    border: 1px solid {{ block.settings.border_color | default: 'rgba(0, 0, 0, 0.05)' }};
+    background: {{ block.settings.background_color | default: '#E9FFF1' }};
+    border-radius: {{ block.settings.border_radius | default: 8 }}px;
+    display: flex;
+  }
+
+  .atlas-isolation-wrapper .product-block-{{ block.id }} .pickup-availability-info {
+    flex: 1;
+    margin-left: {{ block.settings.icon_text_gap | default: 13 }}px;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .atlas-isolation-wrapper .product-block-{{ block.id }} .pickup-availability-info-content p {
+    margin: 0;
+    font-size: {{ block.settings.text_font_size | default: 14 }}px;
+    font-family: var(--atlas-font-body-family);
+    font-weight: {{ block.settings.text_font_weight | default: 500 }};
+  }
+
+  .product-block-{{ block.id }} .pickup-availability-info-content p.text-pickup {
+    color: {{ block.settings.primary_text_color | default: '#181818' }};
+  }
+
+  .atlas-isolation-wrapper .product-block-{{ block.id }} .pickup-availability-info-content p.text-time-pickup {
+    color: {{ block.settings.secondary_text_color | default: '#666666' }};
+  }
+
+  .product-block-{{ block.id }} .pickup-availability-button {
+    background-color: transparent;
+    color: {{ block.settings.button_text_color | default: '#181818' }};
+    font-size: {{ block.settings.button_font_size | default: 14 }}px;
+    font-weight: {{ block.settings.button_font_weight | default: 500 }};
+    font-family: var(--atlas-font-body-family);
+    text-decoration: underline;
+    margin-left: auto;
+    margin-top: auto;
+    border: none;
+    cursor: pointer;
+  }
+
+  .atlas-isolation-wrapper .product-block-{{ block.id }} .pickup-availability-button:hover {
+    color: {{ block.settings.button_hover_color | default: '#181818' }};
+  }
+
+  .product-block-{{ block.id }} .pickup-availability-preview .icon {
+    flex-shrink: 0;
+    height: {{ block.settings.icon_size | default: 18 }}px;
+    width: {{ block.settings.icon_size | default: 18 }}px;
+  }
+
+  .atlas-isolation-wrapper .product-block-{{ block.id }} .pickup-availability-preview .icon-unavailable {
+    height: {{ block.settings.icon_size | default: 18 | minus: 2 }}px;
+    width: {{ block.settings.icon_size | default: 18 | minus: 2 }}px;
+    margin-top: 0.1rem;
+  }
+
+  .atlas-isolation-wrapper .product-block-{{ block.id }} .pickup-availability-preview .icon path{
+    fill: {{ block.settings.icon_color | default: '#00B04F' }};
+  }
+{% endstyle %}
+<div class="product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  {{ 'a-component-pickup-availability.css' | asset_url | stylesheet_tag }}
+
+  {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities
+    | where: 'pick_up_enabled', true
+  -%}
+
+  <pickup-availability
+    class="product__pickup-availabilities no-js-hidden quick-add-hidden"
+    {% if product.selected_or_first_available_variant.available and pick_up_availabilities.size > 0 %}
+      available
+    {% endif %}
+    data-root-url="{{ routes.root_url }}"
+    data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+    data-has-only-default-variant="{{ product.has_only_default_variant }}"
+  >
+    <template>
+      <pickup-availability-preview class="pickup-availability-preview">
+        {% render 'a-icon-unavailable' %}
+        <div class="pickup-availability-info">
+          <p class="caption-large">Couldn't load pickup availability</p>
+          <button class="pickup-availability-button link link--text underlined-link">Refresh</button>
+        </div>
+      </pickup-availability-preview>
+    </template>
+  </pickup-availability>
+
+  <script src="{{ 'a-pickup-availability.js' | asset_url }}" defer="defer"></script>
+</div>
+
+{% schema %}
+{
+  "name": "Pickup availability",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Container styling"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#E9FFF1"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#E5E5E5"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "container_padding",
+      "min": 10,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Container padding",
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Icon settings"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#00B04F"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 12,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "icon_text_gap",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Icon text gap",
+      "default": 13
+    },
+    {
+      "type": "header",
+      "content": "Text styling"
+    },
+    {
+      "type": "color",
+      "id": "primary_text_color",
+      "label": "Primary text color",
+      "default": "#181818"
+    },
+    {
+      "type": "color",
+      "id": "secondary_text_color",
+      "label": "Secondary text color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "text_font_size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Text font size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "text_font_weight",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "label": "Text font weight",
+      "default": 500
+    },
+    {
+      "type": "header",
+      "content": "Button styling"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#181818"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover color",
+      "default": "#181818"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Button font size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_font_weight",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "label": "Button font weight",
+      "default": 500
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pickup availability",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

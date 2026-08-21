@@ -1,0 +1,62 @@
+{% style %}
+.product-block-{{ block.id }} .profile-image {
+  width: {{ block.settings.profile_image_size | default: 21 }}px;
+  height: {{ block.settings.profile_image_size | default: 21 }}px;
+  border-radius: 50%;
+  border: {{ block.settings.profile_image_border_width | default: 1 }}px solid {{ block.settings.profile_image_border_color | default: '#FFFFFF' }};
+  margin-right: -{{ block.settings.profile_image_overlap | default: 8 }}px;
+  object-fit: cover;
+}
+{% endstyle %}
+<div class="product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  {% content_for 'block', type: '_a-profile_images_list', id: 'profile_images_list', profile_image_overlap: block.settings.profile_image_overlap %}
+</div>
+{% schema %}
+{
+ "name": "Profile images settings",
+  "tag": null,
+  "settings": [
+    {
+      "type": "range",
+      "id": "profile_image_size",
+      "min": 15,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Profile image size",
+      "default": 21
+    },
+    {
+      "type": "range",
+      "id": "profile_image_border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Profile image border width",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "profile_image_overlap",
+      "min": 6,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Profile images overlap",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "profile_image_border_color",
+      "label": "Profile image border color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Profile images settings"
+    }
+  ]
+}
+{% endschema %}

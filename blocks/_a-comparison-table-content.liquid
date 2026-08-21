@@ -1,0 +1,230 @@
+<!--start _comparison-table-content.liquid--><style>
+  {% if request.visual_preview_mode %}
+    {% assign section_id_variable = 'id' %}
+  {% else %}
+    {% assign section_id_variable = section.id %}
+  {% endif %}
+  .atlas-isolation-wrapper #leftSideContainer-{{ section_id_variable }} {
+      text-align: {{ block.settings.content_alignment }};
+    }
+    .atlas-isolation-wrapper #shopify-section-{{ section_id_variable }} .button-container--mobile .button{
+      {% if block.settings.content_alignment == 'left' %}
+        margin-right: auto;
+      {% elsif block.settings.content_alignment == 'right' %}
+        margin-left: auto;
+      {% endif %}
+      {% if block.settings.content_alignment == 'center' %}
+        margin-left: auto;
+        margin-right: auto;
+      {% endif %}
+    }
+    .atlas-isolation-wrapper #heading-{{ section_id_variable }}{
+      font-size: {% if global_heading_size %}var(--atlas-font-heading-size)!important{% else %}{{ block.settings.heading_size }}px!important{% endif %};
+      line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-size) + 8px)!important{% else %}{{ block.settings.heading_size | plus: 8 }}px!important{% endif %};
+      color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ block.settings.heading_color }}{% endif %};
+      --atlas-color-highlighted-color: {{ block.settings.bolded_heading_color }};
+      margin-top: 0;
+    }
+    @media screen and (max-width: 768px) {
+      .atlas-isolation-wrapper #heading-{{ section_id_variable }} {
+        font-size: {{ block.settings.heading_mob_size }}px!important;
+        line-height: {{ block.settings.heading_mob_size | plus: 8 }}px!important;
+      }
+    }
+    .atlas-isolation-wrapper #heading-{{ section_id_variable }} strong {
+      {%- if block.settings.heading_use_gradient -%}
+        background: {% if block.settings.heading_gradient_color != blank %}{{ block.settings.heading_gradient_color }}{% else %}var(--atlas-gradient-base-background-1){% endif %};
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      {%- endif -%}
+    }
+    .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }},
+    .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }} p {
+      font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size){% else %}{{ block.settings.body_size }}px{% endif %} !important;
+      line-height: {% if global_body_size %}calc(var(--atlas-global-body-text-font-size) + 8px){% else %}{{ block.settings.body_size | plus: 8 }}px{% endif %} !important;
+      color: {% if global_color %}rgb(var(--atlas-color-base-text)){% else %}{{ block.settings.body_color }}{% endif %};
+      --atlas-color-highlighted-color: {{ block.settings.bolded_body_color }};
+      margin-bottom: 0;
+    }
+    @media screen and (max-width: 768px) {
+      .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }},
+      .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }} p {
+        font-size: {{ block.settings.body_mob_size }}px!important;
+        line-height: {{ block.settings.body_mob_size | plus: 8 }}px!important;
+      }
+    }
+    .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }} strong {
+      color: {{ block.settings.bolded_body_color }};
+    }
+</style>
+<div style="width: 100%;" {{ block.shopify_attributes }}>
+  {% if block.settings.content_heading != blank %}
+    <h2
+      id="heading-{{ section_id_variable }}"
+      class="title"
+    >
+      {{ block.settings.content_heading }}
+    </h2>
+  {% endif %}
+
+  {% if block.settings.body_content != blank %}
+    <div id="section-body-text-{{ section_id_variable }}">
+      {{ block.settings.body_content }}
+    </div>
+  {% endif %}
+
+  {%- if section.settings.button_label != blank -%}
+    <div class="button-container button-container--desktop">
+      <a
+        {% if section.settings.link %}
+          href="{{ section.settings.link }}"
+        {% else %}
+          aria-disabled="true"
+        {% endif %}
+        class="button button--primary"
+      >
+        <span class="button-text">
+          {{- section.settings.button_label | escape -}}
+        </span>
+      </a>
+    </div>
+  {%- endif -%}
+</div>
+<!--end _comparison-table-content.liquid-->
+{% schema %}
+{
+  "name": "Content",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "content_heading",
+      "default": "What Make Us Different",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "body_content",
+      "default": "<p>Short description of what make brand different</p>",
+      "label": "Body"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop heading size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_mob_size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile heading size",
+      "default": 28
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bolded_heading_color",
+      "label": "Bolded heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_use_gradient",
+      "label": "Use gradient for heading",
+      "info": "Any text formatted as bold within the heading will be converted to a gradient.",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "heading_gradient_color",
+      "label": "Heading gradient color",
+      "visible_if": "{{ block.settings.heading_use_gradient }}",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)"
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "label": "Desktop body font size",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "body_mob_size",
+      "label": "Mobile body font size",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Body color",
+      "default": "#757575"
+    },
+    {
+      "type": "color",
+      "id": "bolded_body_color",
+      "label": "Bolded body color",
+      "default": "#757575"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Content"
+    }
+  ]
+}
+{% endschema %}

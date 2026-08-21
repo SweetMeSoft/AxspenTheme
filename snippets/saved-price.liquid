@@ -1,0 +1,45 @@
+{%- comment -%}
+	Renders a theme svg icons
+
+	Accepts:
+	- product: {Object} Product
+
+	Usage:
+		{% render 'saved-price', product: product %}
+{%- endcomment -%}
+
+{%- liquid
+	if product.available
+		if product.has_only_default_variant
+			if product.compare_at_price_max > product.price
+				assign saved_price       = product.compare_at_price_max | minus: product.price | times: 100.0 | divided_by: product.compare_at_price_max
+				assign saved_price_split = saved_price | split: '.'
+				assign final_saved_price = saved_price | round: 2
+
+				if saved_price_split[1] == '0' or saved_price_split[1] == '00'
+					assign final_saved_price = saved_price_split[0]
+				endif
+
+				if final_saved_price != '0'
+					echo final_saved_price
+				endif
+			endif
+		else
+			assign variant_product = product.selected_or_first_available_variant
+
+			if variant_product.compare_at_price > variant_product.price
+				assign saved_price       = variant_product.compare_at_price | minus: variant_product.price | times: 100.0 | divided_by: variant_product.compare_at_price
+				assign saved_price_split = saved_price | split: '.'
+				assign final_saved_price = saved_price | round: 2
+
+				if saved_price_split[1] == '0' or saved_price_split[1] == '00'
+					assign final_saved_price = saved_price_split[0]
+				endif
+
+				if final_saved_price != '0'
+					echo final_saved_price
+				endif
+			endif
+		endif
+	endif
+-%}

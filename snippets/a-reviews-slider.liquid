@@ -1,0 +1,160 @@
+{{ 'a-component-mini-reviews.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} {
+    width: 100%;
+  }
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-card {
+    background-color: {{ block.settings.review_card_background | default: '#F0FBFF' }};
+    border-radius: {{ block.settings.review_card_border_radius | default: 6 }}px;
+    padding: {{ block.settings.review_card_padding_vertical_desktop | default: 18 }}px {{ block.settings.review_card_padding_horizontal_desktop | default: 18 }}px;
+    display: flex;
+    gap: {{ block.settings.review_card_gap | default: 18 }}px;
+  }
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-card .profile-image {
+    width: {{ block.settings.profile_image_size | default: 60 }}px;
+    height: {{ block.settings.profile_image_size | default: 60 }}px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-content {flex:1;min-width: 90px;}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-card-content {display: flex;gap: 24px;}
+  @media screen and (max-width: 1024px) {
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-card{
+      flex-direction: column;
+      gap: 4px;
+      padding: {{ block.settings.review_card_padding_vertical_mobile | default: 18 }}px {{ block.settings.review_card_padding_horizontal_mobile | default: 18 }}px;
+    }
+  }
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .reviewer-info{display:flex;align-items:center;gap:4px;margin-bottom:2px;}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .reviewer-name{color: rgb(var(--atlas-color-base-text));font-size:{{ block.settings.reviewer_name_font_size | default: 14 }}px;font-weight:600;}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .verified-badge{width:16px;height:16px;flex-shrink:0;}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .location{color: rgb(var(--atlas-color-base-text));font-size:{{ block.settings.location_font_size | default: 12 }}px;font-weight:300;margin-bottom:6px;line-height: {{ block.settings.location_font_size | default: 12 }}px;}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .stars{display:flex;gap:{{ block.settings.stars_gap | default: 1 }}px;margin-bottom:2px;}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .stars .star{width:{{ block.settings.star_size | default: 12 }}px;height:{{ block.settings.star_size | default: 12 }}px;flex-shrink:0;}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-text{color: rgb(var(--atlas-color-base-text));font-size:{{ block.settings.review_text_font_size | default: 12 }}px;line-height:{{ block.settings.review_text_line_height | default: 23 }}px;margin:0; flex:1 ;display: flex;justify-content: flex-end;}
+  @media screen and (max-width: 1024px) {
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-text{justify-content: flex-start;}
+  }
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-footer{margin-top:7px;display:flex;align-items:center;gap:7px;}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-count{color: rgb(var(--atlas-color-base-text));font-size:12px;flex-shrink:0;}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-count strong{font-weight:600;}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-divider{flex:1;height:1px;background:rgba(0,0,0,.05);}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-divider:empty{display:block;}
+  /* Swiper dots */
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .swiper-pagination{display:flex;gap:{{ block.settings.dots_gap | default: 4 }}px;justify-content:flex-end;position: initial;width: fit-content !important;}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .swiper-pagination-bullet{width:{{ block.settings.dot_size | default: 8 }}px;height:{{ block.settings.dot_size | default: 8 }}px;border-radius:50%;background:{{ block.settings.dot_inactive_color | default: '#D9D9D9' }};opacity:1;margin:0!important;}
+  .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .swiper-pagination-bullet-active{background:rgb(var(--atlas-color-base-text));}
+{% endstyle %}
+
+{%- assign reviews_list_string = '' -%}
+{%- assign reviews_count = 0 -%}
+{% for i in (1..3) %}
+  {% capture item_text %}text_{{ i }}{% endcapture %}
+  {% if block.settings[item_text] != blank %}
+    {% assign reviews_list_string = reviews_list_string | append: i | append: ',' %}
+    {% assign reviews_count = reviews_count | plus: 1 %}
+  {% endif %}
+{% endfor %}
+{%- assign reviews_list = reviews_list_string | split: ',' -%}
+
+<div class="reviews-slider-block reviews-slider-block--{{ block.id }} review-container color-{{ block.settings.color_scheme }}">
+  <div class="swiper reviews-swiper-{{ block.id }}">
+    <div class="swiper-wrapper">
+      {% for i in reviews_list %}
+        {% if i != '' %}
+          {% capture item_text %}text_{{ i }}{% endcapture %}
+          {% capture item_image %}image_{{ i }}{% endcapture %}
+          {% capture item_author %}author_{{ i }}{% endcapture %}
+          {% capture item_author_location %}author_location_{{ i }}{% endcapture %}
+          <div class="swiper-slide" role="group">
+            <div class="review-card">
+              <div class="review-card-content">
+                {% if block.settings[item_image] != blank %}
+                  <img
+                    class="profile-image"
+                    src="{{ block.settings[item_image] | image_url: width: 122, height: 122 }}"
+                    alt="{{ block.settings[item_author] }}"
+                    width="61"
+                    height="61"
+                  >
+                {% else %}
+                  {% render 'a-icon-anonymous-avatar', width: 61, height: 61, class: 'profile-image' %}
+                {% endif %}
+
+                <div class="review-content">
+                  <div class="reviewer-info">
+                    <span class="reviewer-name">{{ block.settings[item_author] }}</span>
+                    {% render 'a-icon-verified-badge' %}
+                  </div>
+                  {% if block.settings[item_author_location] != blank %}
+                    <div class="location">{{ block.settings[item_author_location] }}</div>
+                  {% endif %}
+                  {% capture rating_key %}rating_{{ i }}{% endcapture %}
+                  {% assign rating_value = block.settings[rating_key] | default: 5 %}
+                  {% assign full_stars = rating_value | floor %}
+                  {% assign half_star = 0 %}
+                  {% assign decimal_part = rating_value | modulo: 1 %}
+                  {% if decimal_part >= 0.3 and decimal_part < 0.8 -%}
+                    {%- assign half_star = 1 -%}
+                  {%- elsif decimal_part >= 0.8 -%}
+                    {%- assign full_stars = full_stars | plus: 1 -%}
+                  {%- endif %}
+                  {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+                  <div class="stars">
+                    {% for n in (1..full_stars) %}
+                      {% render 'a-icon-star-small',
+                        color: block.settings.mini_review_stars_color,
+                        size: block.settings.star_size
+                      %}
+                    {% endfor %}
+                    {% if half_star == 1 %}
+                      {% render 'a-icon-star-half-small',
+                        color: block.settings.mini_review_stars_color,
+                        size: block.settings.star_size
+                      %}
+                    {% endif %}
+                    {% for n in (1..empty_stars) %}
+                      {% render 'a-icon-star-empty-small',
+                        color: block.settings.mini_review_stars_color,
+                        size: block.settings.star_size
+                      %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              <p class="review-text">{{ block.settings[item_text] }}</p>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  <div class="review-footer">
+    {% if block.settings.show_review_count %}
+      <div class="review-count">
+        <strong>{{ reviews_count }}</strong> New Reviews
+      </div>
+    {% endif %}
+    <div class="review-divider"></div>
+    <!-- pagination dots rendered by swiper -->
+    <div class="swiper-pagination"></div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    new Swiper('.reviews-swiper-{{ block.id }}', {
+      slidesPerView: 1,
+      spaceBetween: 10,
+      loop: false,
+      pagination: {
+        el: '.reviews-slider-block--{{ block.id }} .swiper-pagination',
+        clickable: true,
+        bulletClass: 'swiper-pagination-bullet',
+        bulletActiveClass: 'swiper-pagination-bullet-active',
+      },
+    });
+  });
+</script>

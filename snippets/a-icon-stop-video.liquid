@@ -1,0 +1,22 @@
+{% comment %}
+  Renders stop video icon
+  
+  Accepts:
+  - background_color: {String} Background color for the circle (optional)
+  - border_color: {String} Border color for the circle (optional)
+  - icon_color: {String} Color for the stop square (optional)
+  - size: {String} Size of the icon (optional)
+  
+  Usage:
+  {% render 'a-icon-stop-video', background_color: '#090909', border_color: '#B3B3B3', icon_color: '#FFFFFF', size: '33' %}
+{% endcomment %}
+
+{%- assign bg_color = background_color | default: '#090909' -%}
+{%- assign border_color = border_color | default: '#B3B3B3' -%}
+{%- assign icon_color = icon_color | default: '#FFFFFF' -%}
+{%- assign icon_size = size | default: '33' -%}
+
+<svg class="stop-icon" width="{{ icon_size }}" height="{{ icon_size }}" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <circle cx="16.2747" cy="16.5666" r="15.2747" fill="{{ bg_color }}" fill-opacity="0.9" stroke="{{ border_color }}"/>
+  <rect x="12" y="12" width="9" height="9" fill="{{ icon_color }}"/>
+</svg>

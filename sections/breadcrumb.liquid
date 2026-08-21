@@ -1,0 +1,276 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+	assign show_title = section.settings.show_title
+	assign full       = section.settings.full
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+		{%- if section.settings.background_image != blank -%}
+			background-image: url({{ section.settings.background_image | image_url: width: 1920 }});
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+		{%- endif -%}
+	}
+
+	{{ section_id }} .breadcrumb {
+		align-items: {{ section.settings.alignment }};
+	}
+
+	{%- if show_title -%}
+		{{ section_id }} .page-title {
+			font-size: {{ section.settings.title_size }}px;
+			margin-bottom: {{ section.settings.title_space }}px;
+			font-family: var({{ section.settings.title_font }});
+		}
+	{%- endif -%}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+	}
+</style>
+
+{%- assign t = template | split: '.' | first -%}
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+		<div class="breadcrumb">
+			{%- if show_title -%}
+				<h2 class="page-title">{{- page_title -}}</h2>
+			{%- endif -%}
+
+			<nav class="breadcrumb-inner" aria-label="breadcrumb">
+				<ul class="breadcrumb-list">
+					<li>
+						<a href="{{ routes.root_url }}">{{- 'general.text.home' | t -}}</a>
+					</li>
+
+					{%- case t -%}
+						{%- when 'page' -%}
+							<li aria-current="page">
+								{{- page.title -}}
+							</li>
+						{%- when 'product' -%}
+							{%- assign collect = product.collections.first -%}
+
+							{%- if collect -%}
+								<li>
+									{{- collect.title | link_to: collect.url -}}
+								</li>
+							{%- endif -%}
+
+							<li aria-current="page">
+								{{- product.title -}}
+							</li>
+						{%- when 'collection' -%}
+							{%- if collection.handle -%}
+								{%- if current_tags -%}
+									<li>
+										{{- collection.title | link_to: collection.url -}}
+									</li>
+
+									<li>
+										{%- capture tag_url -%}{{ collection.url }}/{{ current_tags | join: '+' }}{%- endcapture -%}
+										<a href="{{ tag_url }}" aria-current="page">{{- current_tags | join: ' + ' -}}</a>
+									</li>
+								{%- else -%}
+									<li>
+										<a href="{{ routes.collections_url }}" aria-current="page">{{- 'sections.collection_list.collection' | t -}}</a>
+									</li>
+
+									<li aria-current="page">
+										{{- collection.title -}}
+									</li>
+								{%- endif -%}
+							{%- endif -%}
+						{%- when 'cart' -%}
+							<li aria-current="page">
+								{{- 'templates.cart.cart' | t -}}
+							</li>
+						{%- when 'blog' -%}
+							{%- if current_tags -%}
+								<li>
+									{{- blog.title | link_to: blog.url -}}
+								</li>
+
+								<li aria-current="page">
+									{%- capture tag_url -%}{{ blog.url }}/tagged/{{ current_tags | join: '+' }}{%- endcapture -%}
+									{{- current_tags | join: ' + ' -}}
+								</li>
+							{%- else -%}
+								<li aria-current="page">
+									{{- blog.title -}}
+								</li>
+							{%- endif -%}
+						{%- when 'article' -%}
+							<li>
+								{{- blog.title | link_to: blog.url -}}
+							</li>
+
+							<li aria-current="page">
+								{{- article.title -}}
+							</li>
+						{%- else -%}
+							<li aria-current="page">
+								{{- page_title -}}
+							</li>
+					{%- endcase -%}
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.breadcrumb.name",
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:sections.breadcrumb.settings.full.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "image_picker",
+			"id": "background_image",
+			"label": "t:sections.breadcrumb.settings.background_image.label"
+		},
+		{
+			"type": "select",
+			"id": "alignment",
+			"default": "flex-start",
+			"options": [
+				{
+					"value": "flex-start",
+					"label": "t:sections.breadcrumb.settings.alignment.option_1.label"
+				},
+				{
+					"value": "center",
+					"label": "t:sections.breadcrumb.settings.alignment.option_2.label"
+				},
+				{
+					"value": "flex-end",
+					"label": "t:sections.breadcrumb.settings.alignment.option_3.label"
+				}
+			],
+			"label": "t:sections.breadcrumb.settings.alignment.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.breadcrumb.settings.header_title.content"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_title",
+			"default": false,
+			"label": "t:sections.breadcrumb.settings.show_title.label"
+		},
+		{
+			"type": "select",
+			"id": "title_font",
+			"default": "--body-font-family",
+			"options": [
+				{
+					"value": "--body-font-family",
+					"label": "t:sections.breadcrumb.settings.title_font.option_1.label"
+				},
+				{
+					"value": "--heading-font-family",
+					"label": "t:sections.breadcrumb.settings.title_font.option_2.label"
+				}
+			],
+			"label": "t:sections.breadcrumb.settings.title_font.label"
+		},
+		{
+			"type": "range",
+			"id": "title_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 48,
+			"unit": "px",
+			"label": "t:sections.breadcrumb.settings.title_size.label"
+		},
+		{
+			"type": "range",
+			"id": "title_space",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:sections.breadcrumb.settings.title_space.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"presets": [
+		{
+			"name": "t:sections.breadcrumb.presets.name"
+		}
+	]
+}
+{% endschema %}

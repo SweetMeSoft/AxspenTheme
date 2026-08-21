@@ -1,0 +1,270 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+	assign icon_size  = section.settings.icon_size
+-%}
+
+<style>
+	{{ section_id }} .toolbar-inner {
+		padding: {{ section.settings.space }}px 0;
+	}
+
+	{{ section_id }} .item-count {
+		font-size: {{ icon_size | times: 0.5 }}px;
+		width: {{ icon_size | times: 0.7 }}px;
+		height: {{ icon_size | times: 0.7 }}px;
+	}
+
+	{{ section_id }} .toolbar-icon svg {
+		width: {{ icon_size }}px;
+		height: {{ icon_size }}px;
+	}
+
+	{{ section_id }} .label {
+		font-size: {{ section.settings.text_size }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} {
+			display: none;
+		}
+	}
+</style>
+
+<div class="toolbar-outer color-{{ section.settings.color_scheme }}"{% if section.settings.display != 'always' %} data-direction="{{ section.settings.display }}"{% endif %}>
+	<div class="container">
+		<div class="toolbar-inner">
+			{%- for block in section.blocks -%}
+				{%- liquid
+					assign label = block.settings.heading
+					assign svg   = block.settings.svg
+				-%}
+
+				{%- case block.type -%}
+					{%- when '@app' -%}
+						{%- render block -%}
+					{%- when 'link' -%}
+						<a href="{{ block.settings.url }}" class="toolbar-item">
+							{%- if svg != blank -%}
+								<span class="toolbar-icon">{{- svg -}}</span>
+							{%- endif -%}
+
+							<span class="label">{{- label -}}</span>
+						</a>
+					{%- when 'cart' -%}
+						<a href="{{ routes.cart_url }}" class="toolbar-item action-cart">
+							<span class="toolbar-icon">
+								{%- liquid
+									if svg != blank
+										echo svg
+									else
+										render 'icon', code: 'cart'
+									endif
+								-%}
+
+								<span class="item-count cart-item-count">{%- if cart != empty -%}{{- cart.item_count -}}{%- endif -%}</span>
+							</span>
+
+							<span class="label">{{- label -}}</span>
+						</a>
+					{%- when 'account' -%}
+						<a href="{{ routes.account_login_url }}" class="toolbar-item action-account{% unless routes.account_login_url == '/account/login' %} new-customer-accounts{% endunless %}">
+							<span class="toolbar-icon">
+								{%- liquid
+									if svg != blank
+										echo svg
+									else
+										render 'icon', code: 'account'
+									endif
+								-%}
+							</span>
+
+							<span class="label">{{- label -}}</span>
+						</a>
+					{%- when 'search' -%}
+						<a href="{{ routes.search_url }}" class="toolbar-item action-search">
+							<span class="toolbar-icon">
+								{%- liquid
+									if svg != blank
+										echo svg
+									else
+										render 'icon', code: 'search'
+									endif
+								-%}
+							</span>
+
+							<span class="label">{{- label -}}</span>
+						</a>
+				{%- endcase -%}
+			{%- endfor -%}
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.sticky-toolbar-mobile.name",
+	"class": "sticky-toolbar-mobile-section",
+	"settings": [
+		{
+			"type": "paragraph",
+			"content": "t:sections.sticky-toolbar-mobile.settings.paragraph.content"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "select",
+			"id": "display",
+			"options": [
+				{
+					"value": "always",
+					"label": "t:sections.sticky-toolbar-mobile.settings.display.option_1.label"
+				},
+				{
+					"value": "up",
+					"label": "t:sections.sticky-toolbar-mobile.settings.display.option_2.label"
+				},
+				{
+					"value": "down",
+					"label": "t:sections.sticky-toolbar-mobile.settings.display.option_3.label"
+				}
+			],
+			"default": "down",
+			"label": "t:sections.sticky-toolbar-mobile.settings.display.label"
+		},
+		{
+			"type": "range",
+			"id": "space",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 15,
+			"unit": "px",
+			"label": "t:sections.sticky-toolbar-mobile.settings.space.label"
+		},
+		{
+			"type": "range",
+			"id": "icon_size",
+			"min": 5,
+			"max": 50,
+			"step": 1,
+			"default": 18,
+			"unit": "px",
+			"label": "t:sections.sticky-toolbar-mobile.settings.icon_size.label"
+		},
+		{
+			"type": "range",
+			"id": "text_size",
+			"min": 5,
+			"max": 50,
+			"step": 1,
+			"default": 14,
+			"unit": "px",
+			"label": "t:sections.sticky-toolbar-mobile.settings.text_size.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "@app"
+		},
+		{
+			"type": "link",
+			"name": "t:sections.sticky-toolbar-mobile.blocks.link.name",
+			"settings": [
+				{
+					"type": "url",
+					"id": "url",
+					"label": "t:sections.sticky-toolbar-mobile.blocks.link.settings.url.label"
+				},
+				{
+					"type": "text",
+					"id": "heading",
+					"default": "Label",
+					"label": "t:sections.sticky-toolbar-mobile.settings.heading.label"
+				},
+				{
+					"type": "textarea",
+					"id": "svg",
+					"label": "t:sections.sticky-toolbar-mobile.settings.svg.label"
+				}
+			]
+		},
+		{
+			"type": "cart",
+			"name": "t:sections.sticky-toolbar-mobile.blocks.cart.name",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "checkbox",
+					"id": "count",
+					"default": true,
+					"label": "t:sections.sticky-toolbar-mobile.blocks.cart.settings.count.label"
+				},
+				{
+					"type": "text",
+					"id": "heading",
+					"default": "Cart",
+					"label": "t:sections.sticky-toolbar-mobile.settings.heading.label"
+				},
+				{
+					"type": "textarea",
+					"id": "svg",
+					"label": "t:sections.sticky-toolbar-mobile.settings.svg.label"
+				}
+			]
+		},
+		{
+			"type": "account",
+			"name": "t:sections.sticky-toolbar-mobile.blocks.account.name",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"default": "Account",
+					"label": "t:sections.sticky-toolbar-mobile.settings.heading.label"
+				},
+				{
+					"type": "textarea",
+					"id": "svg",
+					"label": "t:sections.sticky-toolbar-mobile.settings.svg.label"
+				}
+			]
+		},
+		{
+			"type": "search",
+			"name": "t:sections.sticky-toolbar-mobile.blocks.search.name",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"default": "Search",
+					"label": "t:sections.sticky-toolbar-mobile.settings.heading.label"
+				},
+				{
+					"type": "textarea",
+					"id": "svg",
+					"label": "t:sections.sticky-toolbar-mobile.settings.svg.label"
+				}
+			]
+		}
+	],
+	"default":  {
+		"blocks": [
+			{
+				"type": "cart"
+			},
+			{
+				"type": "account"
+			},
+			{
+				"type": "search"
+			}
+		]
+	}
+}
+{% endschema %}

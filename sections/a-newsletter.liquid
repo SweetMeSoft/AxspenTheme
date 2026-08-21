@@ -1,0 +1,998 @@
+{% comment %} {{ 'a-component-newsletter.css' | asset_url | stylesheet_tag }} {% endcomment %}
+{% comment %} {{ 'a-newsletter-section.css' | asset_url | stylesheet_tag }} {% endcomment %}
+{% comment %} CSS for the component-newsletter and newsletter-section files {% endcomment %}
+<style>
+  .atlas-isolation-wrapper .newsletter-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .newsletter-form {
+      align-items: flex-start;
+      margin: 0 auto;
+      max-width: 36rem;
+    }
+  }
+
+  .atlas-isolation-wrapper .newsletter-form__field-wrapper {
+    width: 100%;
+  }
+
+  .atlas-isolation-wrapper .newsletter-form__field-wrapper .field__input {
+    padding-right: 5rem;
+  }
+
+  .atlas-isolation-wrapper .newsletter-form__field-wrapper .field {
+    z-index: 0;
+  }
+
+  .atlas-isolation-wrapper .newsletter-form__message {
+    justify-content: center;
+    margin-bottom: 0;
+  }
+
+  .atlas-isolation-wrapper .newsletter-form__message--success {
+    margin-top: 2rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .newsletter-form__message {
+      justify-content: flex-start;
+    }
+  }
+
+  .atlas-isolation-wrapper .newsletter-form__button {
+    width: 4.4rem;
+    margin: 0;
+    right: var(--atlas-inputs-border-width);
+    top: 0;
+    height: 100%;
+    z-index: 2;
+  }
+
+  .atlas-isolation-wrapper .newsletter-form__button:focus-visible {
+    box-shadow: 0 0 0 0.3rem rgb(var(--atlas-color-background)), 0 0 0 0.4rem rgba(var(--atlas-color-foreground));
+    background-color: rgb(var(--atlas-color-background));
+  }
+
+  .atlas-isolation-wrapper .newsletter-form__button:focus {
+    box-shadow: 0 0 0 0.3rem rgb(var(--atlas-color-background)), 0 0 0 0.4rem rgba(var(--atlas-color-foreground));
+    background-color: rgb(var(--atlas-color-background));
+  }
+
+  .atlas-isolation-wrapper .newsletter-form__button:not(:focus-visible):not(.focused) {
+    box-shadow: inherit;
+    background-color: inherit;
+  }
+
+  .atlas-isolation-wrapper .newsletter-form__button .icon {
+    width: 1.5rem;
+  }
+
+  .atlas-isolation-wrapper .newsletter__solid-btn {
+    margin-top: 1rem;
+  }
+
+  .atlas-isolation-wrapper .newsletter__wrapper {
+    padding-right: calc(4rem / var(--atlas-font-body-scale));
+    padding-left: calc(4rem / var(--atlas-font-body-scale));
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .newsletter__wrapper {
+      padding-right: 9rem;
+      padding-left: 9rem;
+    }
+  }
+
+  .atlas-isolation-wrapper .newsletter__wrapper > * {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .atlas-isolation-wrapper .newsletter__wrapper > * + * {
+    margin-top: 2rem;
+  }
+
+  .atlas-isolation-wrapper .newsletter__wrapper > * + .newsletter-form {
+    margin-top: 3rem;
+  }
+
+  .atlas-isolation-wrapper .newsletter__subheading {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .atlas-isolation-wrapper .newsletter-form__field-wrapper .newsletter-form__message {
+    margin-top: 1.5rem;
+  }
+
+  .atlas-isolation-wrapper .newsletter__button {
+    margin-top: 3rem;
+    width: fit-content;
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .newsletter__button {
+      flex-shrink: 0;
+      margin: 0 0 0 1rem;
+    }
+  }
+</style>
+{% if request.visual_preview_mode %}
+  {% render 'a-preview-necessary-assets' %}
+  {% assign section_id_variable = 'id-newsletter' %}
+  {% assign section_id_selector = '' %}
+{% else %}
+  {% assign section_id_variable = section.id %}
+  {% assign section_id_selector = '#newsletter-section-{{ section.id }}' %}
+{% endif %}
+
+{%- style -%}
+  .atlas-isolation-wrapper .section-{{ section_id_variable }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px!important;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px!important;
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .section-{{ section_id_variable }}-padding {
+      padding-top: {{ section.settings.padding_top }}px!important;
+      padding-bottom: {{ section.settings.padding_bottom }}px!important;
+    }
+  }
+  .atlas-isolation-wrapper .newsletter-form__field-wrapper input {
+    max-width: 100% !important;
+  }
+
+
+  .atlas-isolation-wrapper .section-{{ section_id_variable }} .newsletter-form__field-wrapper .field label.field__label {
+    top: 50%;
+    transform: translateY(-50%);
+    line-height: 100%;
+  }
+  .atlas-isolation-wrapper .section-{{ section_id_variable }} .newsletter-form__field-wrapper .field .field__input:not(:placeholder-shown) ~ .field__label ,
+  .atlas-isolation-wrapper .section-{{ section_id_variable }} .newsletter-form__field-wrapper .field .field__input:focus ~ .field__label {
+    top: 12px;
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .newsletter__wrapper {
+    {% if section.settings.image_first_desktop %}
+      flex-direction: row-reverse;
+    {% endif %}
+  }
+  @media screen and (max-width: 1024px) {
+    .atlas-isolation-wrapper {{ section_id_selector }} .newsletter__wrapper {
+      flex-direction: column;
+    }
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .newsletter-form__field-wrapper{
+    flex-direction: column;
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .newsletter__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding-inline: 20px;
+    max-width: 700px;
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .image-block {
+    flex-shrink: 0;
+    display: flex;
+  }
+  @media screen and (max-width: 1024px) {
+    .atlas-isolation-wrapper {{ section_id_selector }} .newsletter__content {
+      padding-inline: 2rem;
+      width: 100%;
+      max-width: 100%;
+    }
+    .atlas-isolation-wrapper {{ section_id_selector }} .image-block {
+        width: 100%;
+    }
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .image-block-inner {
+    width: 100%;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .atlas-isolation-wrapper {{ section_id_selector }} .image-block-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .atlas-isolation-wrapper {{ section_id_selector }} .image-block-inner img.show {
+    opacity: 1;
+    height: 100%;
+  }
+  @media screen and (min-width: 1025px) {
+    .atlas-isolation-wrapper {{ section_id_selector }} .image-block-inner {
+      {% if section.settings.side_block_image != blank and section.settings.image_height == 'adapt' %}
+        padding-bottom: {{ 1 | divided_by: section.settings.side_block_image.aspect_ratio | times: 100 }}%;
+      {% endif %}
+      {% if section.settings.image_height == 'small' and section.settings.side_block_image != blank %}
+        min-height: 489px;
+      {% elsif section.settings.image_height == 'medium' and section.settings.side_block_image != blank %}
+        min-height: 639px;
+      {% elsif section.settings.image_height == 'large' and section.settings.side_block_image != blank %}
+        min-height: 800px;
+      {% endif %}
+    }
+    .atlas-isolation-wrapper {{ section_id_selector }} .image-block-inner img {
+      position: absolute;
+      top: 0;
+      left: 0;
+  }
+  }
+{%- endstyle -%}
+
+<div id="newsletter-section-{{ section.id }}" class="section__newsletter">
+  <div class="newsletter center section-{{ section_id_variable }} section-{{ section_id_variable }}-padding {% if section.settings.full_width == false %}newsletter--narrow page-width{% endif %}">
+    <div
+      class="newsletter__wrapper gradient content-container isolate{% if section.settings.full_width %} content-container--full-width{% endif %} section-{{ section_id_variable }}-padding"
+      style="{% if section.settings.use_gradient_background %}background: {{ section.settings.section_background_gradient }};{% else %}background-color: {{ section.settings.section_background_color }};{% endif %}"
+    >
+      <div class="image-block" style="border: none;">
+        <div class="image-block-inner">
+          <img
+            src="{{ section.settings.side_block_image | img_url: 'master' }}"
+            alt="{{ section.settings.side_block_image.alt }}"
+            width="100%"
+            height="100%"
+          >
+        </div>
+      </div>
+
+      <div class="newsletter__content">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+            {%- when 'heading' -%}
+              {% if block.settings.heading != blank %}
+                {% if request.visual_preview_mode %}
+                  {% assign block_id_heading = 'id-heading' %}
+                {% else %}
+                  {% assign block_id_heading = block.id %}
+                {% endif %}
+                {% style %}
+                  .atlas-isolation-wrapper #block-heading-{{ block_id_heading }}{
+                    font-size: {{ block.settings.font_size }}px !important;
+                    line-height: {{ block.settings.font_size | plus: 8 }}px;
+                    color: {{ block.settings.heading_text }};
+                    font-weight: 600 !important;
+                    padding-top: {{ block.settings.heading_padding_top }}px !important;
+                    padding-bottom: {{ block.settings.heading_padding_bottom }}px !important;
+                    margin: 0 !important;
+                    width: 100%;
+                    text-align: {{ section.settings.content_alignment_desktop }} !important;
+                  }
+                  .atlas-isolation-wrapper #block-heading-{{ block_id_heading }} strong {
+                    {%- if block.settings.heading_use_gradient -%}
+                      background: {% if block.settings.heading_gradient_color != blank %}{{ block.settings.heading_gradient_color }}{% else %}var(--atlas-gradient-base-background-1){% endif %};
+                      -webkit-background-clip: text;
+                      background-clip: text;
+                      color: transparent;
+                    {% else %}
+                      color: {{ block.settings.bolded_heading_text }};
+                    {%- endif -%}
+                  }
+                  @media (max-width: 1024px) {
+                    .atlas-isolation-wrapper #block-heading-{{ block_id_heading }}{
+                      font-size: {{ block.settings.mobile_font_size }}px !important;
+                      line-height: {{ block.settings.mobile_font_size | plus: 8 }}px;
+                      text-align: {{ section.settings.content_alignment_mobile }} !important;
+                      padding-top: {{ block.settings.heading_padding_top_mobile }}px !important;
+                      padding-bottom: {{ block.settings.heading_padding_bottom_mobile }}px !important;
+                    }
+                  }
+                {% endstyle %}
+
+                <h2
+                  id="block-heading-{{ block_id_heading }}"
+                  class="title"
+                  {{ block.shopify_attributes }}
+                >
+                  {{ block.settings.heading }}
+                </h2>
+              {% endif %}
+            {%- when 'paragraph' -%}
+              {% if block.settings.text != blank %}
+                {% if request.visual_preview_mode %}
+                  {% assign block_id_paragraph = 'id-paragraph' %}
+                {% else %}
+                  {% assign block_id_paragraph = block.id %}
+                {% endif %}
+                {% style %}
+                  .atlas-isolation-wrapper .newsletter__subheading-{{ block_id_paragraph }},
+                  .atlas-isolation-wrapper .newsletter__subheading-{{ block_id_paragraph }} p {
+                    color: {{ block.settings.body_text }} !important;
+                    font-size: {{ block.settings.font_size }}px !important;
+                    line-height: {{ block.settings.font_size | plus: 5 }}px !important;
+                    margin: 0 !important;
+                    text-align: {{ section.settings.content_alignment_desktop }} !important;
+                  }
+                  .atlas-isolation-wrapper .newsletter__subheading-{{ block_id_paragraph }} {
+                    padding-top: {{ block.settings.body_padding_top }}px !important;
+                    padding-bottom: {{ block.settings.body_padding_bottom }}px !important;
+                    text-align: {{ section.settings.content_alignment_desktop }} !important;
+                  }
+                  .atlas-isolation-wrapper .newsletter__subheading-{{ block_id_paragraph }} strong {
+                    {%- if block.settings.body_use_gradient -%}
+                      background: {% if block.settings.body_gradient_color != blank %}{{ block.settings.body_gradient_color }}{% else %}var(--atlas-gradient-base-background-1){% endif %};
+                      -webkit-background-clip: text;
+                      background-clip: text;
+                      color: transparent !important;
+                    {% else %}
+                      color: {{ block.settings.bolded_body_text }} !important;
+                    {%- endif -%}
+                  }
+                  @media (max-width: 1024px) {
+                    .atlas-isolation-wrapper .newsletter__subheading-{{ block_id_paragraph }},
+                    .atlas-isolation-wrapper .newsletter__subheading-{{ block_id_paragraph }} p {
+                      font-size: {{ block.settings.mobile_font_size }}px !important;
+                      line-height: {{ block.settings.mobile_font_size | plus: 5 }}px !important;
+                      text-align: {{ section.settings.content_alignment_mobile }} !important;
+                    }
+                    .atlas-isolation-wrapper .newsletter__subheading-{{ block_id_paragraph }} {
+                      text-align: {{ section.settings.content_alignment_mobile }} !important;
+                      padding-top: {{ block.settings.body_padding_top_mobile }}px !important;
+                      padding-bottom: {{ block.settings.body_padding_bottom_mobile }}px !important;
+                    }
+                  }
+                {% endstyle %}
+
+                <div
+                  class="newsletter__subheading newsletter__subheading-{{ block_id_paragraph }} rte"
+                  {{ block.shopify_attributes }}
+                >
+                  {{ block.settings.text }}
+                </div>
+              {% endif %}
+            {%- when 'email_form' -%}
+              {% if request.visual_preview_mode %}
+                {% assign block_id_email_form = 'id-email-form' %}
+              {% else %}
+                {% assign block_id_email_form = block.id %}
+              {% endif %}
+              {% style %}
+                .atlas-isolation-wrapper .newsletter-form-{{ block_id_email_form }} {
+                  padding-top: {{ block.settings.email_form_padding_top }}px !important;
+                  padding-bottom: {{ block.settings.email_form_padding_bottom }}px !important;
+                  margin: 0 !important;
+                  width: 100% !important;
+                }
+                @media (max-width: 1024px) {
+                  .atlas-isolation-wrapper .newsletter-form-{{ block_id_email_form }} {
+                    padding-top: {{ block.settings.email_form_padding_top_mobile }}px !important;
+                    padding-bottom: {{ block.settings.email_form_padding_bottom_mobile }}px !important;
+                  }
+                }
+                .atlas-isolation-wrapper .newsletter-form-{{ block_id_email_form }} .newsletter-form__field-wrapper {
+                  display: flex;
+                  flex-direction: column;
+                  gap: {{ block.settings.email_form_input_gap }}px;
+                }
+                .atlas-isolation-wrapper .newsletter-form-{{ block_id_email_form }} .newsletter-form__field-wrapper .field__input{
+                  padding-top: 21px !important;
+                  border-radius: {{ block.settings.border_radius }}px !important;
+                  border: {{ block.settings.border_width }}px solid {{ block.settings.border_color }} !important;
+                  background-color: {{ block.settings.input_background_color }} !important;
+                  color: {{ block.settings.input_text_color }} !important;
+                }
+                .atlas-isolation-wrapper .newsletter-form-{{ block_id_email_form }} .newsletter-form__field-wrapper label{
+                  color: {{ block.settings.input_placeholder_color }} !important;
+                }
+                .atlas-isolation-wrapper .newsletter-form-{{ block_id_email_form }} .newsletter-form__field-wrapper .field__input:focus{
+                  padding-top: 21px !important;
+                  box-shadow: none !important;
+                  border-radius: {{ block.settings.border_radius }}px !important;
+                }
+                .atlas-isolation-wrapper .newsletter-form-{{ block_id_email_form }} button.button {
+                  font-size: {{ block.settings.button_font_size }}px !important;
+                  color: {{ block.settings.button_text_color }} !important;
+                  background-color: {{ block.settings.button_background_color }} !important;
+                  border-radius: {{ block.settings.button_border_radius }}px !important;
+                }
+              {% endstyle %}
+              <div {{ block.shopify_attributes }} class="newsletter-form-{{ block_id_email_form }}">
+                {% form 'customer', class: 'newsletter-form' %}
+                  <input type="hidden" name="contact[tags]" value="newsletter">
+                  <div class="newsletter-form__field-wrapper section-newsletter-field-wrapper">
+                    <div class="field">
+                      <input
+                        id="NewsletterForm--{{ section_id_variable }}"
+                        type="email"
+                        name="contact[email]"
+                        class="field__input"
+                        value="{{ form.email }}"
+                        aria-required="true"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        autocomplete="email"
+                        {% if form.errors %}
+                          autofocus
+                          aria-invalid="true"
+                          aria-describedby="Newsletter-error--{{ section_id_variable }}"
+                        {% elsif form.posted_successfully? %}
+                          aria-describedby="Newsletter-success--{{ section_id_variable }}"
+                        {% endif %}
+                        placeholder="Email"
+                        required
+                      >
+                      <label class="field__label" for="NewsletterForm--{{ section_id_variable }}"> Email </label>
+                    </div>
+                    <button
+                      type="submit"
+                      class="button newsletter__solid-btn button--full-width "
+                      name="commit"
+                      id="Subscribe"
+                      aria-label="Subscribe"
+                    >
+                      <span class="button-text">
+                        {{ block.settings.button_label }}
+                      </span>
+                    </button>
+                    {%- if form.errors -%}
+                      <small
+                        class="newsletter-form__message form__message"
+                        id="Newsletter-error--{{ section_id_variable }}"
+                      >
+                        {%- render 'a-icon-error' -%}
+                        {{- form.errors.translated_fields.email | capitalize }}
+                        {{ form.errors.messages.email -}}
+                      </small>
+                    {%- endif -%}
+                  </div>
+                  {%- if form.posted_successfully? -%}
+                    <h3
+                      class="newsletter-form__message newsletter-form__message--success form__message"
+                      id="Newsletter-success--{{ section_id_variable }}"
+                      tabindex="-1"
+                      autofocus
+                    >
+                      {% render 'a-icon-success' -%}
+                      Thanks for subscribing
+                    </h3>
+                  {%- endif -%}
+                {% endform %}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Our newsletter",
+  "tag": "section",
+  "class": "atlas-isolation-wrapper atlas-gradient section",
+  "disabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "side_block_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium",
+      "label": "Banner size"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_first_desktop",
+      "label": "Image on the right on desktop",
+      "default": false,
+      "info": "Position the image on the right side of the form on desktop"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment_desktop",
+      "label": "Desktop content alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment_mobile",
+      "label": "Mobile content alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "default": true,
+      "label": "Full width"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_background_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.use_gradient_background == false }}"
+    },
+
+    {
+      "type": "paragraph",
+      "content": "Each email subscription creates a customer account. [Learn more](https://help.shopify.com/manual/customers)"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 24
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Subscribe Newsletter",
+          "label": "Heading"
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 28,
+          "max": 56,
+          "step": 1,
+          "unit": "px",
+          "label": "Heading size",
+          "default": 40
+        },
+        {
+          "type": "range",
+          "id": "mobile_font_size",
+          "min": 28,
+          "max": 56,
+          "step": 1,
+          "unit": "px",
+          "label": "Mobile heading size",
+          "default": 29
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "color",
+          "id": "heading_text",
+          "label": "Heading color",
+          "default": "#383838"
+        },
+        {
+          "type": "color",
+          "id": "bolded_heading_text",
+          "label": "Bolded heading color",
+          "default": "#383838"
+        },
+        {
+          "type": "checkbox",
+          "id": "heading_use_gradient",
+          "label": "Use gradient for heading",
+          "default": false
+        },
+        {
+          "type": "color_background",
+          "id": "heading_gradient_color",
+          "label": "Heading gradient color",
+          "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+          "visible_if": "{{ block.settings.heading_use_gradient }}"
+        },
+        {
+          "type": "header",
+          "content": "Padding"
+        },
+        {
+          "type": "range",
+          "id": "heading_padding_top",
+          "label": "Padding top Desktop",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "heading_padding_top_mobile",
+          "label": "Padding top Mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "heading_padding_bottom",
+          "label": "Padding bottom Desktop",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 20
+        },
+        {
+          "type": "range",
+          "id": "heading_padding_bottom_mobile",
+          "label": "Padding bottom Mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 20
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "name": "Subheading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Enter your email below for daily updates.</p>",
+          "label": "Description"
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 10,
+          "max": 54,
+          "step": 1,
+          "unit": "px",
+          "label": "Text size",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "mobile_font_size",
+          "min": 10,
+          "max": 54,
+          "step": 1,
+          "unit": "px",
+          "label": "Mobile text size",
+          "default": 14
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "color",
+          "id": "body_text",
+          "label": "Text color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "bolded_body_text",
+          "label": "Bolded text color",
+          "default": "#000000"
+        },
+        {
+          "type": "checkbox",
+          "id": "body_use_gradient",
+          "label": "Use gradient for text",
+          "default": false
+        },
+        {
+          "type": "color_background",
+          "id": "body_gradient_color",
+          "label": "Text gradient color",
+          "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+          "visible_if": "{{ block.settings.body_use_gradient }}"
+        },
+        {
+          "type": "header",
+          "content": "Padding"
+        },
+        {
+          "type": "range",
+          "id": "body_padding_top",
+          "label": "Padding top Desktop",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "body_padding_top_mobile",
+          "label": "Padding top Mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "body_padding_bottom",
+          "label": "Padding bottom Desktop",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 20
+        },
+        {
+          "type": "range",
+          "id": "body_padding_bottom_mobile",
+          "label": "Padding bottom Mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 20
+        }
+      ]
+    },
+    {
+      "type": "email_form",
+      "name": "Email form",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Sign up"
+        },
+        {
+          "type": "range",
+          "id": "email_form_input_gap",
+          "label": "Gap between input and button",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 17
+        },
+        {
+          "type": "header",
+          "content": "Input"
+        },
+        {
+          "type": "color",
+          "id": "input_text_color",
+          "label": "Input text color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "input_placeholder_color",
+          "label": "Input placeholder color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "input_background_color",
+          "label": "Input background color",
+          "default": "#F9F9F9"
+        },
+        {
+          "type": "range",
+          "id": "border_radius",
+          "label": "Border radius",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 6
+        },
+        {
+          "type": "range",
+          "id": "border_width",
+          "label": "Border width",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "unit": "px",
+          "default": 1
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border color",
+          "default": "#F2F2F2"
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+          "type": "range",
+          "id": "button_font_size",
+          "label": "Button font size",
+          "min": 10,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": "Button text color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "button_background_color",
+          "label": "Button background color",
+          "default": "#1D1A2D"
+        },
+        {
+          "type": "range",
+          "id": "button_border_radius",
+          "label": "Button border radius",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 6
+        },
+        {
+          "type": "header",
+          "content": "Padding"
+        },
+        {
+          "type": "range",
+          "id": "email_form_padding_top",
+          "label": "Padding top Desktop",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "email_form_padding_top_mobile",
+          "label": "Padding top Mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "email_form_padding_bottom",
+          "label": "Padding bottom Desktop",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "email_form_padding_bottom_mobile",
+          "label": "Padding bottom Mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ]
+}
+{% endschema %}

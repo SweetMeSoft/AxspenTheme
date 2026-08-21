@@ -1,0 +1,374 @@
+<!-- start _reasons-to-buy-content.liquid -->
+<style>
+  {% if request.visual_preview_mode %}
+    {% assign section_id_selector = '#section' %}
+    {% assign section_id_variable = 'id' %}
+  {% else %}
+    {% assign section_id_selector = '#shopify-section-' | append: section.id %}
+    {% assign section_id_variable = section.id %}
+  {% endif %}
+  {{ section_id_selector }} {
+      --atlas-subheading-size: {{ block.settings.subheading_size }}px;
+      --atlas-subheading-color: {{ block.settings.subheading_color }};
+      --atlas-subheading-bold-color: {{ block.settings.bolded_subheading_color }};
+    }
+    {{ section_id_selector }} .reasons-to-buy__text-content {
+      display: flex;
+      flex-direction: column;
+      gap: {{ block.settings.content_gap }}px;
+       text-align: {{ block.settings.content_alignment }};
+     }
+     @media screen and (max-width: 1200px) {
+      {{ section_id_selector }} .reasons-to-buy__text-content {
+        gap: {{ block.settings.content_gap_mobile }}px;
+      }
+     }
+
+    {{ section_id_selector }} .reasons-to-buy__subheading,
+    {{ section_id_selector }} .reasons-to-buy__subheading p {
+      font-size: var(--atlas-subheading-size) !important;
+      color: var(--atlas-subheading-color) !important;
+      --atlas-color-highlighted-color: var(--atlas-subheading-bold-color);
+      margin: 0;
+      line-height: 100%;
+    }
+    {{ section_id_selector }} {
+      --atlas-heading-size: {{ block.settings.heading_size }}px;
+      --atlas-heading-mob-size: {{ block.settings.reasons_mob_heading_size }}px;
+      --atlas-heading-color: {{ block.settings.heading_color }};
+    }
+    {{ section_id_selector }} .heading_block-{{block.id }} {
+      font-size: var(--atlas-heading-size) !important;
+      line-height: 100%;
+      color: var(--atlas-heading-color) !important;
+      margin: 0;
+      padding-top: {{ block.settings.headig_padding_top }}px;
+      padding-bottom: {{ block.settings.headig_padding_bottom }}px;
+    }
+    @media (max-width: 1200px) {
+      {{ section_id_selector }} .heading_block-{{block.id }} {
+          font-size: var(--atlas-heading-mob-size) !important;
+        }
+      }
+      {%- if block.settings.heading_use_gradient -%}
+        {{ section_id_selector }} .heading_block-{{block.id }} strong {
+          background: {% if block.settings.heading_gradient_color != blank %}{{ block.settings.heading_gradient_color }}{% else %}var(--atlas-color-highlighted-color){% endif %};
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+        }
+      {% else %}
+        {{ section_id_selector }} .heading_block-{{block.id }} strong {
+          color: {{ block.settings.bolded_heading_color }};
+        }
+      {%- endif -%}
+      {{ section_id_selector }} {
+        --atlas-text-size: {{ block.settings.text_size }}px;
+        --atlas-text-color: {{ block.settings.text_color }};
+      }
+  {{ section_id_selector }} .text_block-{{block.id }} {
+    font-size: var(--atlas-text-size) !important;
+    line-height: 100%;
+    color: var(--atlas-text-color) !important;
+    --atlas-color-highlighted-color:  {{ block.settings.bolded_text_color }};
+    margin: 0;
+    padding-top: {{ block.settings.text_padding_top }}px;
+    padding-bottom: {{ block.settings.text_padding_bottom }}px;
+  }
+  @media (max-width: 1200px) {
+      {{ section_id_selector }} {
+        --atlas-text-size: {{ block.settings.text_mob_size }}px;
+      }
+    }
+    {%- if block.settings.text_use_gradient -%}
+      {{ section_id_selector }} .text_block-{{block.id }} strong {
+        background: {{ block.settings.text_gradient_color }};
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+    {% else %}
+      {{ section_id_selector }} .text_block-{{block.id }} strong {
+        color: {{ block.settings.bolded_text_color }};
+      }
+    {%- endif -%}
+</style>
+<div class="reasons-to-buy__text-content" {{ block.shopify_attributes }}>
+  {%- if block.settings.heading != blank -%}
+    <{{ block.settings.heading_tag }}
+      class="heading_block-{{block.id }} {{ class_list }}"
+      {{ block.shopify_attributes }}
+    >
+      {{- block.settings.heading -}}
+    </{{ block.settings.heading_tag }}>
+  {%- endif -%}
+  {%- if block.settings.text != blank -%}
+    <{{ block.settings.text_tag }} class="text_block-{{block.id }} {{ class_list }}" {{ block.shopify_attributes }}>
+      {{- block.settings.text -}}
+    </{{ block.settings.text_tag }}>
+  {%- endif -%}
+</div>
+<!-- end _reasons-to-buy-content.liquid -->
+{% schema %}
+{
+  "name": "Text content",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading tag",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" }
+      ],
+      "default": "h3"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop heading size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "reasons_mob_heading_size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile heading size",
+      "default": 28
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bolded_heading_color",
+      "label": "Heading bolded color",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_use_gradient",
+      "label": "Use gradient for heading",
+      "info": "Any text formatted as bold within the heading will be converted to a gradient.",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "heading_gradient_color",
+      "label": "Heading gradient color",
+      "visible_if": "{{ block.settings.heading_use_gradient }}",
+      "default": "linear-gradient(180deg, rgba(234, 56, 133, 1), rgba(95, 77, 188, 1) 100%)"
+    },
+    {
+      "type": "range",
+      "id": "headig_padding_top",
+      "label": "Heading top padding",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "headig_padding_bottom",
+      "label": "Heading bottom padding",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Subheading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "Text"
+    },
+    {
+      "type": "select",
+      "id": "text_tag",
+      "label": "Text tag",
+      "options": [
+        { "value": "p", "label": "P" },
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" }
+      ],
+      "default": "p"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop text size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "text_mob_size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile text size",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bolded_text_color",
+      "label": "Text bolded color",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_use_gradient",
+      "label": "Use gradient for text",
+      "info": "Any text formatted as bold within the text will be converted to a gradient.",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "text_gradient_color",
+      "label": "Text gradient color",
+      "default": "linear-gradient(180deg, rgba(234, 56, 133, 1), rgba(95, 77, 188, 1) 100%)",
+      "visible_if": "{{ block.settings.text_use_gradient }}"
+    },
+    {
+      "type": "range",
+      "id": "text_padding_top",
+      "label": "Text top padding",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "text_padding_bottom",
+      "label": "Text bottom padding",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Text content alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "content_gap",
+      "label": "Desktop content gap",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 21
+    },
+    {
+      "type": "range",
+      "id": "content_gap_mobile",
+      "label": "Mobile content gap",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text content",
+      "settings": {
+        "heading": "The Reason Customers Choose Us <em><strong>Again and Again</strong></em>",
+        "heading_tag": "h3",
+        "heading_size": 40,
+        "reasons_mob_heading_size": 28,
+        "heading_color": "#000000",
+        "bolded_heading_color": "#000000",
+        "heading_use_gradient": true,
+        "heading_gradient_color": "linear-gradient(180deg, rgba(234, 56, 133, 1), rgba(95, 77, 188, 1) 100%)",
+        "headig_padding_top": 0,
+        "headig_padding_bottom": 0,
+        "text": "Delivering quality and consistency that customers rely on.",
+        "text_tag": "p",
+        "text_size": 16,
+        "text_mob_size": 14,
+        "text_color": "#666666",
+        "bolded_text_color": "#000000",
+        "text_use_gradient": false,
+        "text_gradient_color": "",
+        "text_padding_top": 0,
+        "text_padding_bottom": 0,
+        "content_alignment": "left",
+        "content_gap": 21,
+        "content_gap_mobile": 14
+      }
+    }
+  ]
+}
+{% endschema %}

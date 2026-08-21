@@ -1,0 +1,344 @@
+{%- liquid
+	assign section_id    = '#shopify-section-' | append: section.id
+	assign content_width = section.settings.content_width
+	assign show_map      = section.settings.show_map
+	assign content_text  = section.settings.text
+-%}
+
+<style>
+	{{ section_id }} {
+		--contact-form-background: {{ section.settings.background | default: '#232020' }};
+		--contact-form-color: {{ section.settings.color | default: '#ffffff' }};
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	{%- if section.settings.show_border and show_map -%}
+		{{ section_id }} .contact-map {
+			border: 1rem solid rgb(var(--text-color));
+		}
+	{%- endif -%}
+
+	{{ section_id }} .contact-form {
+		padding: {{ section.settings.form_padding }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		{{ section_id }} .contact-wrapper {
+			max-width: {{ content_width }}%;
+			margin: 0 auto;
+		}
+	}
+</style>
+
+{%- capture media -%}
+	{%- if show_map -%}
+		<div class="contact-map">
+			<template data-options>
+				{
+					"coordinates": {{ section.settings.map_coordinates | json }},
+					"zoom": {{ section.settings.map_zoom }}
+				}
+			</template>
+
+			{%- render 'icon', code: 'placeholder' -%}
+		</div>
+	{%- endif -%}
+{%- endcapture -%}
+
+<div class="container">
+	<div class="contact-wrapper{% if show_map == false and content_text == blank %} single-column{% endif %}">
+		{%- if section.settings.heading != blank -%}
+			<h2 class="contact-heading text-{{ section.settings.heading_align }}">
+				{{- section.settings.heading -}}
+			</h2>
+		{%- endif -%}
+
+		<div class="contact-inner">
+			<div class="col-50">
+				{%- if section.settings.description != blank -%}
+					<div class="contact-description">
+						{{- section.settings.description -}}
+					</div>
+				{%- endif -%}
+
+				{%- if media != blank -%}
+					<div class="hidden-desktop">
+						{{- media -}}
+					</div>
+				{%- endif -%}
+
+				{%- form 'contact', id: nil, class: 'contact-form' -%}
+					{%- if form.posted_successfully? -%}
+						<p class="message success-message" tabindex="-1" autofocus>
+							{%- liquid
+								render 'icon', code: 'success'
+								echo 'templates.form.contact_success' | t
+							-%}
+						</p>
+					{%- elsif form.errors -%}
+						<p class="message error-message">
+							{%- liquid
+								render 'icon', code: 'error'
+								echo 'templates.form.error_heading' | t
+							-%}
+						</p>
+
+						<ul class="error-list" role="list">
+							<li>
+								<a href="#form-field-email-error{{ section_id }}" class="link">
+									{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+								</a>
+							</li>
+						</ul>
+					{%- endif -%}
+
+					<div class="form-fields">
+						{% comment %} Name {% endcomment %}
+						<div class="field-form">
+							<label for="form-field-name-{{ section.id }}">{{- 'templates.form.name' | t -}}</label>
+
+							<input autocomplete="name" type="text" id="form-field-name-{{ section.id }}" name="contact[name]" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" required>
+						</div>
+
+						{% comment %} Email {% endcomment %}
+						<div class="field-form">
+							<label for="form-field-email-{{ section.id }}">{{- 'templates.form.email' | t -}}</label>
+							<input autocomplete="email"
+								type="email"
+								id="form-field-email-{{ section.id }}"
+								name="contact[email]"
+								spellcheck="false"
+								autocapitalize="off"
+								value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+								aria-required="true"
+								{% if form.errors contains 'email' %}
+									aria-invalid="true"
+									aria-describedby="form-field-email-error{{ section_id }}"
+								{% endif %}
+								pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
+								required >
+						</div>
+
+						{%- if form.errors contains 'email' -%}
+							<small class="form-field-email-error" id="form-field-email-error{{ section_id }}">
+								<span class="sr-only">{{- 'accessibility.error' | t -}}</span>
+
+								<span class="message error-message">
+									{%- liquid
+										render 'icon', code: 'error'
+										echo form.errors.translated_fields['email'] | capitalize | append: ' ' | append: form.errors.messages['email']
+									 -%}
+								</span>
+							</small>
+						{%- endif -%}
+
+						{% comment %} Textarea {% endcomment %}
+						<div class="field-form text-area">
+							<label for="form-field-body-{{ section.id }}">{{- 'templates.form.message' | t -}}</label>
+
+							<textarea id="form-field-body-{{ section.id }}" name="contact[body]" required>
+								{{- form.body -}}
+							</textarea>
+						</div>
+					</div>
+
+					{% comment %} Submit {% endcomment %}
+					<button type="submit" class="button">
+						{{- 'templates.form.send' | t -}}
+					</button>
+				{%- endform -%}
+
+				{%- if content_text != blank -%}
+					<div class="contact-text hidden-desktop">{{- content_text -}}</div>
+				{%- endif -%}
+			</div>
+
+			{%- if media != blank or content_text != blank -%}
+				<div class="col-50 hidden-mobile hidden-tablet">
+					{{- media -}}
+
+					<div class="contact-text">{{- content_text -}}</div>
+				</div>
+			{%- endif -%}
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.contact.name",
+	"tag": "section",
+	"class": "contact-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "range",
+			"id": "content_width",
+			"default": 100,
+			"min": 60,
+			"max": 100,
+			"step": 1,
+			"unit": "%",
+			"label": "t:general.dimensions.content_width.label"
+		},
+		{
+			"type": "text",
+			"label": "t:general.typography.heading.label",
+			"id": "heading",
+			"default": "Heading"
+		},
+		{
+			"type": "select",
+			"id": "heading_align",
+			"default": "left",
+			"options": [
+				{
+					"value": "left",
+					"label": "t:sections.contact.settings.heading_align.option_1.label"
+				},
+				{
+					"value": "center",
+					"label": "t:sections.contact.settings.heading_align.option_2.label"
+				},
+				{
+					"value": "right",
+					"label": "t:sections.contact.settings.heading_align.option_3.label"
+				}
+			],
+			"label": "t:sections.contact.settings.heading_align.label"
+		},
+		{
+			"type": "richtext",
+			"label": "t:general.typography.description.label",
+			"id": "description"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.contact.settings.header_map.content"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_map",
+			"default": true,
+			"label": "t:sections.contact.settings.show_map.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_border",
+			"default": true,
+			"label": "t:sections.contact.settings.show_border.label"
+		},
+		{
+			"type": "text",
+			"id": "map_coordinates",
+			"label": "t:sections.contact.settings.map_coordinates.label",
+			"info": "t:sections.contact.settings.map_coordinates.info"
+		},
+		{
+			"type": "range",
+			"id": "map_zoom",
+			"default": 15,
+			"min": 1,
+			"max": 100,
+			"label": "t:sections.contact.settings.map_zoom.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.contact.settings.header_form.content"
+		},
+		{
+			"type": "range",
+			"id": "form_padding",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 30,
+			"unit": "px",
+			"label": "t:sections.contact.settings.form_padding.label"
+		},
+		{
+			"type": "color",
+			"id": "background",
+			"label": "t:general.background.color.label"
+		},
+		{
+			"type": "color",
+			"id": "color",
+			"label": "t:general.colors.text.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.contact.settings.custom_content.content"
+		},
+		{
+			"type": "html",
+			"id": "text",
+			"default": "<h2>Heading</h2>",
+			"label": "t:sections.contact.settings.custom_label.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 30,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 60,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 60,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.contact.name"
+		}
+	]
+}
+{% endschema %}

@@ -1,0 +1,156 @@
+.atlas-isolation-wrapper .reasons-to-buy__content {
+  display: flex;
+  place-items: center;
+  flex-direction: column;
+}
+
+.atlas-isolation-wrapper .reasons-to-buy__image {
+  display: flex;
+  margin: 2rem auto;
+}
+
+.atlas-isolation-wrapper .reasons-to-buy__image img {
+  max-width: 100%;
+  border-radius: 18px;
+}
+
+.atlas-isolation-wrapper .reasons-to-buy__points,
+.atlas-isolation-wrapper .reasons-to-buy__points p {
+  font-weight: 500;
+  letter-spacing: normal;
+  word-break: normal;
+}
+
+.atlas-isolation-wrapper .reasons-to-buy__points {
+  display: flex;
+  align-items: start;
+  gap: 1rem;
+  text-align: left;
+  padding: 2rem;
+}
+
+.atlas-isolation-wrapper .reasons__text {
+  margin-top: 0px;
+}
+
+.atlas-isolation-wrapper .reasons-to-buy__content-inner {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  gap: 2rem;
+}
+
+.atlas-isolation-wrapper .reasons-to-buy__caption {
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 0px;
+}
+.atlas-isolation-wrapper .reasons-to-buy__button {
+  display: flex;
+  justify-content: center;
+}
+
+.atlas-isolation-wrapper .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 25px;
+  margin: 2rem auto;
+}
+
+.atlas-isolation-wrapper .stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding-top: .5rem;
+  word-break: break-all;
+}
+
+.atlas-isolation-wrapper .stat-content p {
+  margin: 0;
+}
+
+.atlas-isolation-wrapper .stat-card {
+  background-color: var(--atlas-card-bg-color);
+  border-radius: 10px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.04);
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.atlas-isolation-wrapper .stat-card.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.atlas-isolation-wrapper .meter-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px;
+  width: 100%;
+}
+
+.atlas-isolation-wrapper .meter-track {
+  width: 85%;
+  height: 12px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.atlas-isolation-wrapper .meter-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  border-radius: 6px;
+  background: var(--atlas-progress-bar-bg);
+}
+
+.atlas-isolation-wrapper div.meter-shine {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+  border-radius: 6px 6px 0 0;
+}
+
+.atlas-isolation-wrapper .meter-percentage {
+  margin-left: 12px;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  color: var(--atlas-percentage-text-color);
+}
+
+@media screen and (max-width: 750px) {
+  .atlas-isolation-wrapper .stats-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .atlas-isolation-wrapper .reasons-to-buy__content-inner {
+    flex-direction: column;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .reasons-to-buy__content-inner.reasons-to-buy__reasons-first {
+    flex-direction: row-reverse;
+  }
+
+  .atlas-isolation-wrapper .reasons-to-buy__content-inner {
+    gap: 4rem;
+  }
+}

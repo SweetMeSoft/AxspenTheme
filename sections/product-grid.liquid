@@ -1,0 +1,254 @@
+{%- liquid
+	assign section_id       = '#shopify-section-' | append: section.id
+	assign total            = section.settings.rows | times: section.settings.columns
+	assign full             = section.settings.full
+	assign product_list     = false
+	assign heading          = section.settings.heading_text
+	assign sub_heading      = section.settings.sub_heading_text
+	assign mobile_column    = section.settings.columns_mobile
+	assign heading_size     = section.settings.heading_font_size
+	assign sub_heading_size = section.settings.sub_heading_font_size
+
+	if section.settings.collection != blank and section.settings.collection.all_products_count > 0
+		assign product_list = section.settings.collection.products
+	endif
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper {
+		--heading-font-size: {% if heading_size < 30 %}{{ heading_size }}{% else %}{{ heading_size | times: 0.85 | round | at_least: 20 | at_most: 36 }}{% endif %}px;
+		--subheading-font-size: {% if sub_heading_size < 30 %}{{ sub_heading_size }}{% else %}{{ sub_heading_size | times: 0.85 | round | at_least: 20 | at_most: 36 }}{% endif %}px;
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+		{%- if section.settings.bg_image != blank -%}
+			background-image: url({{ section.settings.bg_image | image_url: width: 1920 }});
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center;
+		{%- endif -%}
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{%- if heading != blank -%}
+			{{ section_id }} .heading {
+				font-size: {{ section.settings.heading_font_size }}px;
+			}
+		{%- endif -%}
+
+		{%- if sub_heading != blank -%}
+			{{ section_id }} .sub-heading {
+				font-size: {{ section.settings.sub_heading_font_size }}px;
+			}
+		{%- endif -%}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section{% else %}container grid-right{% endif %}">
+		{%- if heading != blank and sub_heading != blank -%}
+			<div class="title-wrapper text-left rte">
+				{%- if heading != blank -%}
+					<div class="heading rte">{{- heading -}}</div>
+				{%- endif -%}
+
+				{%- if sub_heading != blank -%}
+					<div class="sub-heading rte">{{- sub_heading -}}</div>
+				{%- endif -%}
+			</div>
+		{%- endif -%}
+
+		<ul class="grid grid-{{ section.settings.columns }}{% unless section.settings.swipe_mobile %} grid-tablet-{{ mobile_column }} grid-mobile-{{ mobile_column }}{% endunless %}" role="list" data-column="{{ mobile_column }}">
+			{%- for product in product_list limit: total -%}
+				<li class="grid-item">
+					{%- render 'product-card', product: product, index: forloop.index -%}
+				</li>
+			{%- else -%}
+				{%- for i in (1..total) -%}
+					{%- liquid
+						capture index
+							cycle 1, 2, 3, 4, 5, 6
+						endcapture
+					-%}
+
+					<li class="grid-item">
+						{%- render 'product-card-placeholder', index: index -%}
+					</li>
+				{%- endfor -%}
+			{%- endfor -%}
+		</ul>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.product-grid.name",
+	"tag": "section",
+	"class": "product-grid-section has-product-card",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "image_picker",
+			"id": "bg_image",
+			"label": "t:general.background.image.label"
+		},
+		{
+			"type": "collection",
+			"id": "collection",
+			"label": "t:sections.product-grid.settings.collection.label"
+		},
+		{
+			"type": "range",
+			"id": "rows",
+			"min": 1,
+			"max": 10,
+			"step": 1,
+			"default": 1,
+			"label": "t:general.grid.rows.label"
+		},
+		{
+			"type": "range",
+			"id": "columns",
+			"min": 1,
+			"max": 12,
+			"step": 1,
+			"default": 4,
+			"label": "t:general.grid.columns.label"
+		},
+		{
+			"type": "select",
+			"id": "columns_mobile",
+			"default": "1",
+			"label": "t:general.grid.columns_mobile.label",
+			"options": [
+				{
+					"value": "1",
+					"label": "1"
+				},
+				{
+					"value": "2",
+					"label": "2"
+				}
+			]
+		},
+		{
+			"type": "checkbox",
+			"id": "swipe_mobile",
+			"default": true,
+			"label": "t:general.slide.swipe_mobile.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.heading.label"
+		},
+		{
+			"type": "richtext",
+			"id": "heading_text",
+			"default": "<p>Heading</p>",
+			"label": "t:general.typography.text.label"
+		},
+		{
+			"type": "range",
+			"id": "heading_font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 48,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.sub_heading.label"
+		},
+		{
+			"type": "richtext",
+			"id": "sub_heading_text",
+			"default": "<p>Subheading</p>",
+			"label": "t:general.typography.text.label"
+		},
+		{
+			"type": "range",
+			"id": "sub_heading_font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 48,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.product-grid.presets.name"
+		}
+	]
+}
+{% endschema %}

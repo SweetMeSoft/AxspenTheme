@@ -1,0 +1,240 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+	assign full       = section.settings.full
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	{{ section_id }} .marquee-text {
+		font-weight: {{ section.settings.font_weight }};
+		font-size: {{ section.settings.font_size_mobile }}px;
+		letter-spacing: {{ section.settings.letter_spacing }}em;
+
+		{%- if section.settings.italic -%}
+			font-style: italic;
+		{%- endif -%}
+	}
+
+	{{ section_id }} .marquee-inner {
+		animation: marquee-{{ section.settings.direction }} {{ section.settings.speed | divided_by: 5 }}s linear infinite;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{{ section_id }} .marquee-text {
+			font-size: {{ section.settings.font_size }}px;
+		}
+
+		{{ section_id }} .marquee-inner {
+			animation: marquee-{{ section.settings.direction }} {{ section.settings.speed }}s linear infinite;
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section{% else %}container{% endif %}">
+		<div class="marquee">
+			<div class="marquee-inner">
+				{%- for i in (1..10) -%}
+					<div class="marquee-text">
+						{{- section.settings.text | replace: '[', '<span class="outline-text">' | replace: ']', '</span>' -}}
+					</div>
+				{%- endfor -%}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.marquee-text.name",
+	"tag": "section",
+	"class": "marquee-text-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "paragraph",
+			"content": "t:sections.marquee-text.settings.warning.content"
+		},
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": true,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "checkbox",
+			"id": "italic",
+			"default": true,
+			"label": "t:sections.marquee-text.settings.italic.label"
+		},
+		{
+			"type": "textarea",
+			"id": "text",
+			"default": "Marquee [text]",
+			"label": "t:general.typography.text.label"
+		},
+		{
+			"type": "range",
+			"id": "speed",
+			"min": 1,
+			"max": 100,
+			"step": 1,
+			"default": 40,
+			"unit": "s",
+			"label": "t:sections.marquee-text.settings.speed.label"
+		},
+		{
+			"type": "range",
+			"id": "letter_spacing",
+			"min": 0,
+			"max": 1,
+			"step": 0.1,
+			"default": 0,
+			"unit": "em",
+			"label": "t:general.typography.letter_spacing.label"
+		},
+		{
+			"type": "number",
+			"id": "font_size",
+			"default": 120,
+			"label": "t:general.typography.font_size_px.label"
+		},
+		{
+			"type": "number",
+			"id": "font_size_mobile",
+			"default": 72,
+			"label": "t:general.typography.font_size_mobile_px.label"
+		},
+		{
+			"type": "select",
+			"id": "direction",
+			"default": "right",
+			"label": "t:general.layout.direction.label",
+			"options": [
+				{
+					"value": "left",
+					"label": "t:general.layout.direction.ltr.label"
+				},
+				{
+					"value": "right",
+					"label": "t:general.layout.direction.rtl.label"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "font_weight",
+			"default": "700",
+			"label": "t:general.typography.font_weight.label",
+			"options": [
+				{
+					"value": "100",
+					"label": "t:general.typography.font_weight.option_1.label"
+				},
+				{
+					"value": "200",
+					"label": "t:general.typography.font_weight.option_2.label"
+				},
+				{
+					"value": "300",
+					"label": "t:general.typography.font_weight.option_3.label"
+				},
+				{
+					"value": "400",
+					"label": "t:general.typography.font_weight.option_4.label"
+				},
+				{
+					"value": "500",
+					"label": "t:general.typography.font_weight.option_5.label"
+				},
+				{
+					"value": "600",
+					"label": "t:general.typography.font_weight.option_6.label"
+				},
+				{
+					"value": "700",
+					"label": "t:general.typography.font_weight.option_7.label"
+				},
+				{
+					"value": "800",
+					"label": "t:general.typography.font_weight.option_8.label"
+				},
+				{
+					"value": "900",
+					"label": "t:general.typography.font_weight.option_9.label"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 100,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 40,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.marquee-text.presets.name"
+		}
+	]
+}
+{% endschema %}

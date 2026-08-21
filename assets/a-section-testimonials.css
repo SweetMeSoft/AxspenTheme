@@ -1,0 +1,88 @@
+.atlas-isolation-wrapper .testimonial-card__stars {
+  font-size: 2.2rem;
+  color: #ffd700;
+}
+.atlas-isolation-wrapper .testimonial-card__author-container {
+  display: flex;
+    align-items: start;
+    flex-direction: column;
+    padding-top: 1rem;
+    margin-top: .5rem;
+    border-top: solid 1px rgba(var(--atlas-color-foreground), .06);
+}
+.atlas-isolation-wrapper .multicolumn-list__item.center .testimonial-card__author-container {
+  justify-content: center;
+}
+.atlas-isolation-wrapper .testimonial-card__avatar {
+  width: 3rem;
+  height: 3rem;
+  margin-right: 1rem;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+}
+.atlas-isolation-wrapper .testimonial-card__avatar img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  object-position: center center;
+}
+.atlas-isolation-wrapper .testimonial-card .multicolumn-card-spacing {
+  padding: 0;
+  margin: 0;
+}
+.atlas-isolation-wrapper .testimonial-card__author {
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1em;
+}
+.atlas-isolation-wrapper .testimonial-card .multicolumn-card__info {
+  padding: 2rem;
+  position: relative;
+  padding-top: 1rem;
+}
+.atlas-isolation-wrapper .testimonial-card__quotes {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: rgb(var(--atlas-color-base-accent-2));
+  transform: translateY(-50%);
+  margin: 0 !important;
+}
+.atlas-isolation-wrapper .testimonial-card__quotes img {
+  width: 60%;
+}
+
+.atlas-isolation-wrapper .testimonial-card__quotes--image-blank {
+  width: 3.5rem;
+  height: 3.5rem;
+  right: 5px;
+  top: 5px;
+  transform: none;
+}
+.atlas-isolation-wrapper .testimonial-card__info--no-image-no-stars h3 {
+  padding: 0 3rem;
+}
+
+.atlas-isolation-wrapper .testimonial-card .testimonial-card__info--image-no-stars {
+  padding-top: 1.25rem;
+}
+.atlas-isolation-wrapper .testimonial-card__info--image-no-stars .testimonial-card__quotes {
+  width: 4rem;
+  height: 4rem;
+}
+
+.atlas-isolation-wrapper .multicolumn .testimonial-card .multicolumn-card__info h3 {
+  margin-top: 0.5rem;
+  font-size: calc(var(--atlas-font-heading-scale) * 1.45rem);
+  margin-bottom: 1rem;
+}

@@ -1,0 +1,317 @@
+{%- liquid
+	assign section_id  = '#shopify-section-' | append: section.id
+	assign full        = section.settings.full
+	assign layout      = section.settings.layout
+	assign columns     = section.settings.columns
+	assign total       = section.settings.rows | times: columns
+	assign mousewheel  = section.settings.mousewheel
+	assign show_arrows = section.settings.show_arrows
+	assign show_dots   = section.settings.show_dots
+	assign column_gap  = 30
+-%}
+
+<script src="{{ 'product-recently-viewed.js' | asset_url }}" defer="defer"></script>
+
+<style>
+	{{ section_id }}.has-products-recently .section-inner {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }}.has-products-recently .section-inner {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{{ section_id }} .carousel-layout .swiper:not(.swiper-initialized) .swiper-slide {
+			width: calc( ( 100% - {{ columns | minus: 1 | times: column_gap }}px ) / {{ columns }} );
+			margin-right: {{ column_gap }}px;
+		}
+	}
+
+	@media (max-width: 991px) {
+		{{ section_id }} .swiper:not(.swiper-initialized) .swiper-slide {
+			margin-right: {{ column_gap }}px;
+		}
+	}
+</style>
+
+{%- if collections.all.products.size > 0 -%}
+	<div class="section-inner{% if layout == 'carousel' %} mousewheel-layout{% elsif layout == 'real-carousel' %} carousel-layout{% endif %} color-{{ section.settings.color_scheme }}">
+		<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+			<div class="product-recently-viewed" data-url="/search?section_id={{ section.id }}&type=product&q=">
+				{%- if search.performed and search.results.size > 0 -%}
+					<div class="wrapper-heading">
+						{%- if section.settings.heading != blank -%}
+							<h2 class="title text-{{ section.settings.text_align }}">{{- section.settings.heading | escape -}}</h2>
+						{%- endif -%}
+
+						{%- if show_arrows and layout == 'real-carousel' -%}
+							<div class="swiper-controls">
+								<button class="swiper-button-prev">{%- render 'icon', code: 'arrow-left-short' -%}</button>
+								<button class="swiper-button-next">{%- render 'icon', code: 'arrow-right-short' -%}</button>
+							</div>
+						{%- endif -%}
+					</div>
+
+					{%- if layout == 'carousel' or layout == 'real-carousel' -%}
+						<div class="carousel-swiper{% if mousewheel %} mousewheel{% endif %}">
+							<template data-options>
+								{
+									{%- if layout == 'real-carousel' -%}
+										{%- if section.settings.loop -%}
+											"loop": true,
+										{%- endif -%}
+
+										{%- if section.settings.autoplay -%}
+											"autoplay": {
+												"delay": {{ section.settings.delay | times: 1000 }},
+												"disableOnInteraction": false,
+												"pauseOnMouseEnter": true
+											},
+										{%- endif -%}
+
+										{%- if show_arrows -%}
+											"navigation": {
+												"nextEl": "{{ section_id }} .swiper-button-next",
+												"prevEl": "{{ section_id }} .swiper-button-prev"
+											},
+										{%- endif -%}
+
+										{%- if show_dots -%}
+											"pagination": {
+												"el": "{{ section_id }} .swiper-pagination",
+												"clickable": true
+											},
+										{%- endif -%}
+									{%- endif -%}
+
+									"spaceBetween": 30,
+									"slidesPerView": {% if layout == 'real-carousel' %}{{ columns }}{% else %}"auto"{% endif %},
+									"mousewheel": {{ mousewheel }},
+									"breakpoints": {
+										"240": {
+											"slidesPerView": "auto"
+										},
+										"992": {
+											"slidesPerView": {% if layout == 'real-carousel' %}{{ columns }}{% else %}"auto"{% endif %}
+										}
+									}
+								}
+							</template>
+
+							<div class="swiper">
+					{%- endif -%}
+
+					<ul class="{% if layout == 'grid' %}grid grid-{{ columns }} grid-tablet-3 grid-mobile-2{% else %}swiper-wrapper{% endif %}" role="list">
+						{%- for product in search.results limit: total -%}
+							<li class="{% if layout == 'grid' %}grid-item{% else %}swiper-slide{% endif %}">
+								{%- render 'product-card', product: product, index: forloop.index -%}
+							</li>
+						{%- endfor -%}
+					</ul>
+
+					{%- if layout == 'carousel' or layout == 'real-carousel' -%}
+						</div>{% comment %} .swiper {% endcomment %}
+
+						{%- if show_dots and layout == 'real-carousel' -%}
+							<div class="swiper-pagination" tabindex="-1"></div>
+						{%- endif -%}
+
+						</div>{% comment %} .carousel-swiper {% endcomment %}
+					{%- endif -%}
+				{%- endif -%}
+			</div>
+		</div>
+	</div>
+{%- endif -%}
+
+{% schema %}
+{
+	"name": "t:sections.product-recently-viewed.name",
+	"tag": "section",
+	"class": "recently-viewed-section has-product-card",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "paragraph",
+			"content": "t:sections.product-recently-viewed.settings.paragraph_1.content"
+		},
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:sections.product-recently-viewed.settings.full.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "text",
+			"id": "heading",
+			"default": "You may also like",
+			"label": "t:sections.product-recently-viewed.settings.heading.label"
+		},
+		{
+			"type": "select",
+			"id": "text_align",
+			"options": [
+				{
+					"value": "left",
+					"label": "t:sections.product-recently-viewed.settings.text_align.options__1.label"
+				},
+				{
+					"value": "center",
+					"label": "t:sections.product-recently-viewed.settings.text_align.options__2.label"
+				},
+				{
+					"value": "right",
+					"label": "t:sections.product-recently-viewed.settings.text_align.options__3.label"
+				}
+			],
+			"default": "left",
+			"label": "t:sections.product-recently-viewed.settings.text_align.label"
+		},
+		{
+			"type": "select",
+			"id": "layout",
+			"options": [
+				{
+					"value": "grid",
+					"label": "t:sections.product-recently-viewed.settings.layout.options__1.label"
+				},
+				{
+					"value": "carousel",
+					"label": "t:sections.product-recently-viewed.settings.layout.options__2.label"
+				},
+				{
+					"value": "real-carousel",
+					"label": "t:sections.product-recommendations.settings.layout.options__3.label"
+				}
+			],
+			"default": "carousel",
+			"label": "t:sections.product-recently-viewed.settings.layout.label"
+		},
+		{
+			"type": "range",
+			"id": "rows",
+			"min": 1,
+			"max": 10,
+			"step": 1,
+			"default": 1,
+			"label": "t:sections.product-recently-viewed.settings.rows.label"
+		},
+		{
+			"type": "range",
+			"id": "columns",
+			"min": 1,
+			"max": 12,
+			"step": 1,
+			"default": 4,
+			"label": "t:sections.product-recently-viewed.settings.columns.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "mousewheel",
+			"default": false,
+			"label": "t:general.slide.mousewheel.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.new-product-carousel.settings.header_carousel.content"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_arrows",
+			"default": true,
+			"label": "t:general.slide.show_arrows.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_dots",
+			"default": false,
+			"label": "t:general.slide.show_dots.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "loop",
+			"default": false,
+			"label": "t:general.slide.loop.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "autoplay",
+			"default": false,
+			"label": "t:general.slide.autoplay.label"
+		},
+		{
+			"type": "range",
+			"id": "delay",
+			"min": 3,
+			"max": 20,
+			"step": 1,
+			"default": 5,
+			"label": "t:general.slide.delay.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.product-recently-viewed.settings.header_1.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:sections.product-recently-viewed.settings.padding_top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:sections.product-recently-viewed.settings.padding_bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.product-recently-viewed.name"
+		}
+	]
+}
+{% endschema %}

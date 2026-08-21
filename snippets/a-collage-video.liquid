@@ -1,0 +1,147 @@
+{% style %}
+  {% if border_radius %}
+    #shopify-section-{{ section.id }} .collage__item--video .collage-card.product-card-wrapper
+    {
+      border-radius: {{ border_radius }}px;
+      overflow: hidden;
+    }
+    #shopify-section-{{ section.id }} .collage__item--video .collage-card.product-card-wrapper .media {
+      border-radius: 0px;
+    }
+    #shopify-section-{{ section.id }} .collage__item--video .collage-card.product-card-wrapper .media .deferred-media {
+      border-radius: {{  border_radius }}px;
+    }
+    #shopify-section-{{ section.id }} .deferred-media__poster-button {
+      width: {{ icon_size }}px;
+      height: {{ icon_size }}px;
+      background-color: {{ icon_background_color }};
+    }
+    #shopify-section-{{ section.id }} .deferred-media__poster-button svg.icon {
+      width: calc({{ icon_size }}px / 4);
+    }
+    #shopify-section-{{ section.id }} .deferred-media__poster-button svg path {
+      fill: {{ icon_color }};
+    }
+  {% endif %}
+{% endstyle %}
+<div class="collage-card {% if card_styles == 'none' %}global-media-settings{% else %}{{ card_styles }}{% endif %}">
+  <noscript>
+    <a href="{{ video_url }}" class="collage-card__link">
+      <div
+        class="media media--transparent ratio"
+        {% if cover_image != blank %}
+          style="--atlas-ratio-percent: {{ 1 | divided_by: cover_image.aspect_ratio | times: 100 }}%"
+        {% else %}
+          style="--atlas-ratio-percent: 100%"
+        {% endif %}
+      >
+        {%- if cover_image != blank -%}
+          {%- capture sizes -%}
+            (min-width: {{ settings.page_width }}px)
+            {% if section.blocks.size == 1 -%}
+              calc({{ settings.page_width }}px - 100px)
+            {%- else -%}
+              {{- settings.page_width | minus: 100 | times: 0.67 | round }}px
+            {%- endif -%}
+            , (min-width: 750px)
+            {%- if section.blocks.size == 1 %} calc(100vw - 100px){% else %} 500px{% endif -%}
+            , calc(100vw - 30px)
+          {%- endcapture -%}
+          {{
+            cover_image
+            | image_url: width: 3000
+            | image_tag: loading: 'lazy', sizes: sizes, widths: '550, 720, 990, 1100, 1500, 2200, 3000'
+          }}
+        {%- else -%}
+          {{ 'collection-2' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+        {%- endif -%}
+      </div>
+    </a>
+  </noscript>
+  <modal-opener data-modal="#PopupModal-{{ block_id }}">
+    <div class="deferred-media">
+      <button
+        class="deferred-media__poster full-unstyled-link"
+        type="button"
+        aria-label="Load video: {{ description | escape }}"
+        aria-haspopup="dialog"
+        data-media-id="{{ video_url.id }}"
+      >
+        <div
+          class="media media--transparent ratio"
+          {% if cover_image != blank %}
+            style="--atlas-ratio-percent: {{ 1 | divided_by: cover_image.aspect_ratio | times: 100 }}%"
+          {% else %}
+            style="--atlas-ratio-percent: 100%"
+          {% endif %}
+        >
+          <span class="deferred-media__poster-button motion-reduce">
+            {%- render 'a-icon-play' -%}
+          </span>
+
+          {%- if cover_image != blank -%}
+            {%- capture sizes -%}
+              (min-width: {{ settings.page_width }}px)
+              {% if section.blocks.size == 1 -%}
+                calc({{ settings.page_width }}px - 100px)
+              {%- else -%}
+                {{- settings.page_width | minus: 100 | times: 0.67 | round }}px
+              {%- endif -%}
+              , (min-width: 750px)
+              {%- if section.blocks.size == 1 %} calc(100vw - 100px){% else %} 500px{% endif -%}
+              , calc(100vw - 30px)
+            {%- endcapture -%}
+            {{
+              cover_image
+              | image_url: width: 3000
+              | image_tag: loading: 'lazy', sizes: sizes, widths: '550, 720, 990, 1100, 1500, 2200, 3000'
+            }}
+          {%- else -%}
+            {{ 'collection-2' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+          {%- endif -%}
+        </div>
+      </button>
+    </div>
+  </modal-opener>
+  <modal-dialog id="PopupModal-{{ block_id }}" class="modal-video media-modal color-accent-1">
+    <div
+      class="modal-video__content"
+      role="dialog"
+      aria-label="{{ description | escape }}"
+      aria-modal="true"
+      tabindex="-1"
+    >
+      <button
+        id="ModalClose-{{ block_id }}"
+        type="button"
+        class="modal-video__toggle"
+        aria-label="Close"
+      >
+        {% render 'a-icon-close' %}
+      </button>
+      <div class="modal-video__content-info">
+        <deferred-media class="modal-video__video template-popup">
+          <template>
+            {%- if video_url.type == 'youtube' -%}
+              <iframe
+                src="https://www.youtube.com/embed/{{ video_url.id }}?enablejsapi=1"
+                class="js-youtube"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+                title="{{ description | escape }}"
+              ></iframe>
+            {%- else -%}
+              <iframe
+                src="https://player.vimeo.com/video/{{ video_url.id }}"
+                class="js-vimeo"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+                title="{{ description | escape }}"
+              ></iframe>
+            {%- endif -%}
+          </template>
+        </deferred-media>
+      </div>
+    </div>
+  </modal-dialog>
+</div>

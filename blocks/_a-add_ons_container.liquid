@@ -1,0 +1,359 @@
+{% style %}
+  .product-block-{{ block.id }} .product-add-ons-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 1px solid {{ block.settings.container_border_color | default: '#E5E5E5' }};
+    border-radius: {{ block.settings.container_border_radius | default: 8 }}px;
+    background-color: {{ block.settings.container_background | default: '#F9F9F9' }};
+  }
+  .product-block-{{ block.id }} .product-add-ons-content-item {
+      border-top: 1px solid {{ block.settings.container_border_color | default: '#E5E5E5' }};
+   }
+    .product-block-{{ block.id }} .product-add-ons-content-item:nth-of-type(1) {
+      border-top: none;
+    }
+
+    .product-block-{{ block.id }} .product-add-ons-content-item__desc-title {
+      font-family: var(--atlas-font-heading-family);
+      font-weight: 500;
+      font-size: {{ block.settings.product_title_font_size | default: 14 }}px;
+      color: {{ block.settings.product_title_color | default: '#000000' }};
+      margin: 0;
+      margin-bottom: 12px;
+      line-height: 100%;
+    }
+    {% if block.settings.layout == 'horizontal' %}
+      @media screen and (max-width: 768px) {
+        .product-block-{{ block.id }} .product-add-ons-content-item__desc-title {
+          height: calc(1* {{ block.settings.product_title_font_size | default: 14 }}px);
+          min-height: calc(1* {{ block.settings.product_title_font_size | default: 14 }}px);
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+        }
+      }
+    {% endif %}
+    .product-add-ons-content-item__desc-text:empty {
+      display: block;
+    }
+    .product-block-{{ block.id }} .product-add-ons-content-item__desc-text {
+      font-family: var(--atlas-font-body-family);
+      font-weight: 300;
+      font-size: {{ block.settings.product_description_font_size | default: 12 }}px;
+      color: {{ block.settings.product_description_color | default: '#666666' }};
+      margin: 0;
+      line-height: calc(100% + 4px);
+
+    }
+    {% if block.settings.layout == 'horizontal' %}
+      @media screen and (max-width: 768px) {
+        .product-block-{{ block.id }} .product-add-ons-content-item__desc-text {
+
+      min-height: calc(2 * {{ block.settings.product_description_font_size | plus: 4 | default: 12 }}px);
+      height: calc(2 * {{ block.settings.product_description_font_size | plus: 4 | default: 12 }}px);
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+      }
+    {% endif %}
+    .product-block-{{ block.id }} .product-add-ons-content-item__price-value {
+      font-family: var(--atlas-font-body-family);
+      font-weight: 600;
+      font-size: {{ block.settings.price_font_size | default: 14 }}px;
+      line-height: 100%;
+      letter-spacing: 0%;
+      color: {{ block.settings.price_color | default: '#000000' }};
+    }
+
+    .product-block-{{ block.id }} .product-add-ons-content-item__compare-price {
+      font-family: var(--atlas-font-body-family);
+      font-weight: 400;
+      font-size: {{ block.settings.price_font_size | default: 14 }}px;
+      line-height: 100%;
+      letter-spacing: 0%;
+      text-decoration: line-through;
+      color: {{ block.settings.compare_price_color | default: '#666666' }};
+    }
+
+    .product-block-{{ block.id }} .product-add-ons-content-item__image {
+      width: {{ block.settings.image_width | default: 52 }}px;
+      height: {{ block.settings.image_height | default: 50 }}px;
+      display: flex;
+      border-radius: {{ block.settings.image_border_radius | default: 6 }}px;
+      overflow: hidden;
+    }
+
+    .product-block-{{ block.id }} .product-add-ons-content-item__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-block-{{ block.id }} .product-add-ons-content-item__quick-view-button {
+      background: none;
+      border: none;
+      width: fit-content;
+      background-color: {{ block.settings.button_background | default: '#000000' }};
+      height: {{ block.settings.button_height | default: 28 }}px;
+      border-radius: {{ block.settings.button_border_radius | default: 6 }}px;
+      color: {{ block.settings.button_text_color | default: '#FFFFFF' }};
+      font-family: var(--atlas-font-body-family);
+      font-weight: 500;
+      font-size: {{ block.settings.button_font_size | default: 14 }}px;
+      line-height: calc(100% + 4px);
+      letter-spacing: unset;
+      padding: 0 12px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: unset;
+      min-height: unset;
+    }
+
+
+  @media screen and (max-width: 768px) {
+    .product-block-{{ block.id }} .product-add-ons-content {
+      {% if block.settings.layout == 'horizontal' %}
+        flex-direction: row;
+        width: 100vw;
+        padding-right: 4rem;
+        gap: 9px;
+        overflow: auto;
+        border: none;
+        border-radius: 0;
+        background-color: transparent;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      {% endif %}
+    }
+
+    {% if block.settings.layout == 'horizontal' %}
+      .product-block-{{ block.id }} .product-add-ons-content::-webkit-scrollbar {
+        display: none;
+      }
+    {% endif %}
+
+    {% if block.settings.layout == 'horizontal' %}
+      .product-block-{{ block.id }} .product-add-ons-content-item {
+        border: 1px solid {{ block.settings.container_border_color | default: '#E5E5E5' }};
+        border-radius: {{ block.settings.container_border_radius | default: 8 }}px;
+        background-color: {{ block.settings.container_background | default: '#F9F9F9' }};
+        flex-shrink: 0;
+        max-width: 342px;
+      }
+
+      .product-block-{{ block.id }} .product-add-ons-content-item:nth-child(1) {
+        border-top: 1px solid {{ block.settings.container_border_color | default: '#E5E5E5' }};
+      }
+    {% endif %}
+  }
+{% endstyle %}
+
+<div class="product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  {% content_for 'block', type: '_add_ons_list', id: 'add_ons_list', button_text: block.settings.button_text %}
+</div>
+
+{% schema %}
+{
+  "name": "Add-ons container",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Mobile layout",
+      "options": [
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        },
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        }
+      ],
+      "default": "vertical"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Quick view"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "product_title_font_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Product title font size",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "product_title_color",
+      "label": "Product title color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "product_description_font_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Product description font size",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "product_description_color",
+      "label": "Product description color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "price_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Price font size",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "compare_price_color",
+      "label": "Compare price color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Background & border"
+    },
+    {
+      "type": "color",
+      "id": "container_background",
+      "label": "Background color",
+      "default": "#F9F9F9"
+    },
+    {
+      "type": "color",
+      "id": "container_border_color",
+      "label": "Border color",
+      "default": "#E5E5E5"
+    },
+    {
+      "type": "range",
+      "id": "container_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner roundness",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Product image"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 40,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Image width",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "min": 40,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Image height",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "unit": "px",
+      "label": "Image border radius",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Button settings"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Button font size",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "button_height",
+      "min": 24,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Button height",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Add-ons settings"
+    }
+  ]
+}
+{% endschema %}

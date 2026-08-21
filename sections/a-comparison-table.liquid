@@ -1,0 +1,590 @@
+{% comment %}
+  {{ 'a-section-comparison-table.css' | asset_url | stylesheet_tag }}
+  {% render 'a-rte-css' %}
+{% endcomment %}
+
+{%- liquid
+  assign global_heading_size = settings.enable_global_heading_font_size
+  assign global_body_size = settings.enable_global_body_font_size
+  assign global_color = settings.enable_global_color
+  assign features_column_background_color = section.settings.features_background_color
+  assign icon_cells_background_color = section.settings.icon_cells_background_color
+  assign table_border_radius = 10
+  assign section_id_variable = section.id
+-%}
+
+{% if request.visual_preview_mode %}
+  {% comment %} For some reason, using actual section id in preview messes up the preview render. Doing this fixes it. {% endcomment %}
+  {% assign section_id_variable = 'id' %}
+{% endif %}
+
+<style>
+  .atlas-isolation-wrapper #section-{{ section_id_variable }} .section__comparison_table {
+    padding: 5px 0;
+  }
+
+  .atlas-isolation-wrapper .section-container-{{ section_id_variable }} {
+    padding-top: {{ section.settings.section_padding_top_desktop }}px !important;
+    padding-bottom: {{ section.settings.section_padding_bottom_desktop }}px !important;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .atlas-isolation-wrapper .section-container-{{ section_id_variable }} {
+      padding-top: {{ section.settings.section_padding_top_desktop | times: 0.75 | round: 0 }}px !important;
+      padding-bottom: {{ section.settings.section_padding_bottom_desktop | times: 0.75 | round: 0 }}px !important;
+    }
+  }
+
+  .atlas-isolation-wrapper #heading-{{ section_id_variable }}{
+    font-size: {% if global_heading_size %}var(--atlas-font-heading-size)!important{% else %}{{ section.settings.heading_size }}px!important{% endif %};
+    line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-size) + 8px)!important{% else %}{{ section.settings.heading_size | plus: 8 }}px!important{% endif %};
+    color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ section.settings.heading_color }}{% endif %};
+    --atlas-color-highlighted-color: {{ section.settings.bolded_heading_color }};
+    margin-top: 0;
+  }
+
+  .atlas-isolation-wrapper #heading-{{ section.id }} strong {
+    {%- if section.settings.heading_use_gradient -%}
+      background: {% if section.settings.heading_gradient_color != blank %}{{ section.settings.heading_gradient_color }}{% else %}var(--atlas-gradient-base-background-1){% endif %};
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    {%- endif -%}
+  }
+
+  @media (max-width: 1024px){
+    .atlas-isolation-wrapper #heading-{{ section_id_variable }}{
+      font-size: {% if global_heading_size %}var(--atlas-font-heading-mob-size) !important{% else %}{{ section.settings.heading_mob_size }}px!important{% endif %};
+      line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-mob-size) + 8px) !important{% else %}{{ section.settings.heading_mob_size | plus: 8 }}px!important{% endif %};
+    }
+  }
+
+  .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }},
+  .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }} p {
+    font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size){% else %}{{ section.settings.body_size }}px{% endif %} !important;
+    line-height: {% if global_body_size %}calc(var(--atlas-global-body-text-font-size) + 8px){% else %}{{ section.settings.body_size | plus: 8 }}px{% endif %} !important;
+    color: {% if global_color %}rgb(var(--atlas-color-base-text)){% else %}{{ section.settings.body_color }}{% endif %};
+    --atlas-color-highlighted-color: {{ section.settings.bolded_body_color }};
+    margin-bottom: 0;
+  }
+
+  .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }} strong {
+    color: {{ section.settings.bolded_body_color }};
+  }
+
+  /* Button Styling */
+  .atlas-isolation-wrapper .section-container-{{ section_id_variable }} .button {
+    font-size: {{ section.settings.button_text_size }}px !important;
+    color: {{ section.settings.button_text_color }} !important;
+    background-color: {{ section.settings.button_background_color }} !important;
+    border-radius: {{ section.settings.button_border_radius }}px !important;
+    border: {{ section.settings.button_border_width }}px solid {{ section.settings.button_border_color }} !important;
+    max-width: {{ section.settings.button_width_increase_desktop }}%;
+    min-width: fit-content;
+    width: 100%;
+    padding: {{ section.settings.button_padding_vertical }}px 12px !important;
+    transition: all 0.3s ease;
+  }
+
+
+  @media (max-width: 1024px) {
+    .atlas-isolation-wrapper .section-container-{{ section_id_variable }} .button {
+      font-size: {{ section.settings.button_text_size | times: 0.9 | round: 0 }}px !important;
+      max-width: {{ section.settings.button_width_increase_mobile }}%;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }} p,
+    .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }} {
+      font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size)!important{% else %}{{ section.settings.body_size }}px !important{% endif %};
+    }
+  }
+
+  .atlas-isolation-wrapper .section-container-{{ section_id_variable }} {
+    display: flex;
+    align-items: stretch;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .atlas-isolation-wrapper .section-container-{{ section_id_variable }} {
+      flex-direction: column;
+    }
+    .atlas-isolation-wrapper .button-container--mobile {
+      display: flex;
+      margin-top: 22px;
+      width: 100%;
+    }
+    .atlas-isolation-wrapper .button-container--desktop{
+      display: none;
+    }
+    .atlas-isolation-wrapper .section-container-{{ section_id_variable }} a.button {
+      width: 100%;
+    }
+  }
+
+  .atlas-isolation-wrapper #leftSideContainer-{{ section_id_variable }} {
+    text-align: {{ section.settings.content_alignment }};
+  }
+
+  .atlas-isolation-wrapper #rightSideContainer-{{ section_id_variable }} {
+    flex-direction: column;
+  }
+
+  @media (min-width: 1024px) {
+    .atlas-isolation-wrapper #leftSideContainer-{{ section_id_variable }} {
+      {% if section.settings.layout_desktop == 'table_first' %}
+        padding-left: 40px;
+      {% else %}
+        padding-right: 40px;
+      {% endif %}
+      max-width: 50%;
+    }
+    .atlas-isolation-wrapper #rightSideContainer-{{ section_id_variable }} {
+        margin-left: auto;
+        max-width: 730px;
+    }
+    .atlas-isolation-wrapper .button-container--desktop {
+      display: block;
+      margin-top: 49px;
+    }
+    .atlas-isolation-wrapper .button-container--mobile{
+      display: none;
+    }
+  }
+
+  .atlas-isolation-wrapper .table-container {
+    width: 100%;
+  }
+
+
+
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} thead th  {
+    text-align: center;
+    font-weight: normal;
+    padding: 15px 10px;
+    overflow-wrap: break-word;
+  }
+
+
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody td {
+    padding: 1rem;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody tr td div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tfoot tr:first-child td:nth-of-type(2) {
+    /* border-radius: 0 0 {{ table_border_radius }}px {{ table_border_radius }}px; */
+    border: var(--atlas-table-border);
+    border-top: none;
+  }
+
+
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody tr:first-child td {
+    /* border-top: 1px solid {{ section.settings.product_column_border_top_color }}; */
+  }
+
+
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody tr:first-child td:nth-child(2) {
+    /* border-top: none; */
+  }
+
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody tr td:nth-child(2) {
+    border-bottom: none;
+  }
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }}  tr td:nth-child(2){
+    {% if section.settings.enable_product_column_border_top_gradient %}
+      position: relative;
+      border-top: none;
+    {% else %}
+      border-top: 1px solid {% if section.settings.product_column_border_top_color != blank %}rgba({{ section.settings.product_column_border_top_color.red }}, {{ section.settings.product_column_border_top_color.green }}, {{ section.settings.product_column_border_top_color.blue }}, {{ section.settings.product_column_border_opacity | divided_by: 100.0 }}){% else %}rgba(0, 0, 0, 0){% endif %};
+    {% endif %}
+  }
+
+  {% if section.settings.enable_product_column_border_top_gradient %}
+    .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody  tr td:nth-child(2)::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: {% if section.settings.product_column_border_top_gradient != blank %}{{ section.settings.product_column_border_top_gradient }}{% else %}linear-gradient(to right, #ff0000, #ffa500){% endif %};
+      z-index: 1;
+    }
+  {% endif %}
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody tr:last-child td:nth-child(2){
+    {% if section.settings.enable_product_column_custom_border %}
+      border-bottom: {{ section.settings.product_column_custom_border_width }}px solid rgba({{ section.settings.product_column_custom_border_color.red }}, {{ section.settings.product_column_custom_border_color.green }}, {{ section.settings.product_column_custom_border_color.blue }}, {{ section.settings.product_column_custom_border_opacity | divided_by: 100.0 }});
+    {% else %}
+      border-bottom: var(--atlas-table-border);
+    {% endif %}
+    {% if section.settings.enable_product_column_shadow %}
+      box-shadow: 0px 10px 10px 0px rgba({{ section.settings.product_column_shadow_color.red }}, {{ section.settings.product_column_shadow_color.green }}, {{ section.settings.product_column_shadow_color.blue }}, {{ section.settings.product_column_shadow_opacity | divided_by: 100.0 }});
+    {% endif %}
+    border-bottom-left-radius: {{ table_border_radius }}px;
+    border-bottom-right-radius: {{ table_border_radius }}px;
+  }
+
+
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody td.other-brands-column {
+    background-color: {{ icon_cells_background_color }};
+  }
+
+  @media (min-width: 1280px) {
+    .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody td.feature-cell {
+      padding-left: 7%;
+    }
+  }
+  @media (max-width: 1280px and min-width: 1024px) {
+    .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody td.feature-cell {
+      font-size: {{ section.settings.benefits_mobile_size }}px;
+    }
+  }
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} .benefit-content {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    justify-content: flex-start;
+  }
+
+  @media (max-width: 1024px) {
+    .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} .benefit-content {
+      gap: 9px;
+    }
+  }
+
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} .benefit-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+
+  .atlas-isolation-wrapper .logo-{{ section_id_variable }} {
+    width: {{ section.settings.logo_width }}px;
+    height: auto;
+  }
+
+  .atlas-isolation-wrapper .other-brands-logo-{{ section_id_variable }} {
+    width: {{ section.settings.other_brands_logo_width }}px;
+    height: auto;
+  }
+
+
+
+
+
+  .atlas-isolation-wrapper .mobile-table-first-heading {
+    display: none;
+  }
+
+  .atlas-isolation-wrapper .mobile-table-first-heading-hidden {
+    display: block;
+  }
+
+  @media (max-width: 1024px) {
+    .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} {
+      padding-block: 2rem;
+    }
+    .atlas-isolation-wrapper .logo-{{ section_id_variable }} {
+      width: {{ section.settings.mobile_logo_width }}px;
+      height: auto;
+    }
+    .atlas-isolation-wrapper .other-brands-logo-{{ section_id_variable }} {
+      width: {{ section.settings.other_brands_mobile_logo_width }}px;
+      height: auto;
+    }
+    .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody td.feature-cell {
+      font-size: {{ section.settings.benefits_mobile_size }}px;
+    }
+    .atlas-isolation-wrapper .mobile-table-first-heading {
+      display: block;
+    }
+    .atlas-isolation-wrapper .mobile-table-first-heading-hidden {
+      display: none;
+    }
+  }
+</style>
+
+{% capture 'blocks_content' %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+{% if blocks_content contains '<!--start _comparison-table-content.liquid-->' %}
+  {% assign comparison_table_content = blocks_content
+    | split: '<!--start _comparison-table-content.liquid-->'
+    | last
+    | split: '<!--end _comparison-table-content.liquid-->'
+    | first
+  %}
+{% endif %}
+{% if blocks_content contains '<!--start _comparison-table.liquid-->' %}
+  {% assign comparison_table = blocks_content
+    | split: '<!--start _comparison-table.liquid-->'
+    | last
+    | split: '<!--end _comparison-table.liquid-->'
+    | first
+  %}
+{% endif %}
+
+
+  <div id="section-{{ section.id }}">
+    <div
+      class="section__comparison_table"
+      style="
+        {% if section.settings.use_gradient_background %}
+         background: {{ section.settings.section_background_gradient }};
+        {% else %}
+         background-color: {{ section.settings.section_background_color }};
+        {% endif %}
+      "
+    >
+      <div class="page-width section-container-{{ section_id_variable }}">
+        <div
+          id="leftSideContainer-{{ section_id_variable }}"
+          style="display:flex; align-items:center;"
+        >
+          {{ comparison_table_content }}
+        </div>
+        <div id="rightSideContainer-{{ section_id_variable }}" class="flex-align-center">
+          <div class="table-container">
+            {{ comparison_table }}
+          </div>
+          {%- if section.settings.button_label != blank -%}
+            <div class="button-container button-container--mobile">
+              <a
+                {% if section.settings.link %}
+                  href="{{ section.settings.link }}"
+                {% else %}
+                  aria-disabled="true"
+                {% endif %}
+                class="button button--primary"
+              >
+                <span class="button-text">
+                  {{- section.settings.button_label | escape -}}
+                </span>
+              </a>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% schema %}
+{
+  "name": "Comparison table",
+  "class": "atlas-isolation-wrapper atlas-gradient",
+  "blocks": [
+    {
+      "type": "_a-comparison-table-content"
+    },
+    {
+      "type": "_a-comparison-table"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "button_label",
+      "label": "Button label",
+      "info": "Leave blank to hide"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "button_text_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Button text size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color"
+    },
+    {
+      "type": "color",
+      "id": "button_background_color",
+      "label": "Button background color"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Button border width",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Button border color"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Button vertical padding",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "button_width_increase_desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "unit": "%",
+      "label": "Desktop button width increase",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "button_width_increase_mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "unit": "%",
+      "label": "Mobile button width increase",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Table Checkmark/X Mark icons settings",
+      "info": "These will be the settings for the icons used for the checkmark and x mark in the table."
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 16,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "checkmark_color",
+      "default": "#ffffff",
+      "label": "Yes/included icon color"
+    },
+    {
+      "type": "color",
+      "id": "x_color",
+      "label": "No/not included icon color",
+      "default": "#DA6262"
+    },
+    {
+      "type": "textarea",
+      "id": "checkmark_icon",
+      "label": "Checkmark Material Icon",
+      "info": "Note: [View all available icons](https://fonts.google.com/icons?icon.set=Material+Symbols&icon.platform=web). You MUST copy the SVG code to display your desired icon. Its all the way at the top right of the page."
+    },
+    {
+      "type": "image_picker",
+      "id": "checkmark_image",
+      "label": "Checkmark Custom Image"
+    },
+    {
+      "type": "textarea",
+      "id": "x_icon",
+      "label": "X Mark Material Icon",
+      "info": "Note: [View all available icons](https://fonts.google.com/icons?icon.set=Material+Symbols&icon.platform=web). You MUST copy the SVG code to display your desired icon. Its all the way at the top right of the page."
+    },
+    {
+      "type": "image_picker",
+      "id": "x_image",
+      "label": "X Mark Custom Image"
+    },
+    {
+      "type": "header",
+      "content": "Color scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_background_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.use_gradient_background == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 24
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

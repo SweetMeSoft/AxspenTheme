@@ -1,0 +1,279 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+-%}
+
+<style>
+	{{ section_id }} .container {
+		justify-content: {{ section.settings.alignment }};
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .collapsible-wrap {
+			width: {{ section.settings.width }}%;
+		}
+
+		{{ section_id }} .collapsible-summary {
+			padding: {{ section.settings.space }}px 0;
+		}
+
+		{{ section_id }} .collapsible-title {
+			font-size: {{ section.settings.font_size }}px;
+		}
+	}
+</style>
+
+<div class="container">
+	<div class="collapsible-wrap">
+		{%- for block in section.blocks -%}
+			{%- case block.type -%}
+				{%- when '@app' -%}
+					<div class="collapsible-item" {{ block.shopify_attributes }}>
+						{%- render block -%}
+					</div>
+				{%- when 'tab' -%}
+					<details class="collapsible-item" {{ block.shopify_attributes }}>
+						<summary class="collapsible-summary" aria-expanded="false">
+							<h2 class="collapsible-title{% if section.settings.strong %} m{%- endif -%}">
+								{%- liquid
+									if block.settings.icon != 'none'
+										render 'icon-accordion', icon: block.settings.icon
+									endif
+
+									echo block.settings.heading | default: block.settings.page.title | replace: '{product_title}', product.title
+								-%}
+							</h2>
+
+							<span class="collapsible-caret">{%- render 'icon', code: 'caret-down' -%}</span>
+						</summary>
+
+						<div class="collapsible-content details-content rte">
+							{{- block.settings.content -}}
+							{{- block.settings.page.content -}}
+						</div>
+					</details>
+			{%- endcase -%}
+		{%- endfor -%}
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.collapsible.name",
+	"class": "collapsible-section",
+	"tag": "section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "range",
+			"id": "width",
+			"min": 40,
+			"max": 100,
+			"step": 1,
+			"default": 100,
+			"unit": "%",
+			"label": "t:sections.collapsible.settings.width.label"
+		},
+		{
+			"type": "select",
+			"id": "alignment",
+			"default": "center",
+			"label": "t:sections.collapsible.settings.alignment.label",
+			"options": [
+				{
+					"value": "flex-start",
+					"label": "t:sections.collapsible.settings.alignment.options__1.label"
+				},
+				{
+					"value": "center",
+					"label": "t:sections.collapsible.settings.alignment.options__2.label"
+				},
+				{
+					"value": "flex-end",
+					"label": "t:sections.collapsible.settings.alignment.options__3.label"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "t:sections.collapsible.settings.header.content"
+		},
+		{
+			"type": "checkbox",
+			"id": "strong",
+			"default": false,
+			"label": "t:sections.collapsible.settings.strong.label"
+		},
+		{
+			"type": "range",
+			"id": "font_size",
+			"min": 14,
+			"max": 100,
+			"step": 1,
+			"default": 18,
+			"unit": "px",
+			"label": "t:sections.collapsible.settings.font_size.label"
+		},
+		{
+			"type": "range",
+			"id": "space",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 21,
+			"unit": "px",
+			"label": "t:sections.collapsible.settings.space.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "@app"
+		},
+		{
+			"type": "tab",
+			"name": "t:sections.collapsible.blocks.tab.name",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"default": "Collapsible tab",
+					"info": "t:sections.collapsible.blocks.tab.settings.heading.info",
+					"label": "t:sections.collapsible.blocks.tab.settings.heading.label"
+				},
+				{
+					"type": "richtext",
+					"id": "content",
+					"default": "<p>Collapsible content text</p>",
+					"label": "t:sections.collapsible.blocks.tab.settings.content.label"
+				},
+				{
+					"type": "page",
+					"id": "page",
+					"label": "t:sections.collapsible.blocks.tab.settings.page.label"
+				},
+				{
+					"type": "select",
+					"id": "icon",
+					"options": [
+						{
+							"value": "none",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__1.label"
+						},
+						{
+							"value": "box",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__2.label"
+						},
+						{
+							"value": "chat_bubble",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__3.label"
+						},
+						{
+							"value": "check_mark",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__4.label"
+						},
+						{
+							"value": "dryer",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__5.label"
+						},
+						{
+							"value": "eye",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__6.label"
+						},
+						{
+							"value": "heart",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__7.label"
+						},
+						{
+							"value": "iron",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__8.label"
+						},
+						{
+							"value": "leaf",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__9.label"
+						},
+						{
+							"value": "leather",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__10.label"
+						},
+						{
+							"value": "lock",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__11.label"
+						},
+						{
+							"value": "map_pin",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__12.label"
+						},
+						{
+							"value": "pants",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__13.label"
+						},
+						{
+							"value": "plane",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__14.label"
+						},
+						{
+							"value": "price_tag",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__15.label"
+						},
+						{
+							"value": "question_mark",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__16.label"
+						},
+						{
+							"value": "return",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__17.label"
+						},
+						{
+							"value": "ruler",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__18.label"
+						},
+						{
+							"value": "shirt",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__19.label"
+						},
+						{
+							"value": "shoe",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__20.label"
+						},
+						{
+							"value": "silhouette",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__21.label"
+						},
+						{
+							"value": "star",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__22.label"
+						},
+						{
+							"value": "truck",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__23.label"
+						},
+						{
+							"value": "washing",
+							"label": "t:sections.collapsible.blocks.tab.settings.icon.options__24.label"
+						}
+					],
+					"default": "none",
+					"label": "t:sections.collapsible.blocks.tab.settings.icon.label"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.collapsible.presets.name",
+			"blocks": [
+				{
+					"type": "tab"
+				},
+				{
+					"type": "tab"
+				},
+				{
+					"type": "tab"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

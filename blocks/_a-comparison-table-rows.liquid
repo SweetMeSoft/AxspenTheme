@@ -1,0 +1,248 @@
+<!-- start _comparison-table-rows.liquid -->
+<style>
+  {% if request.visual_preview_mode %}
+    {% assign section_id_variable = 'id' %}
+  {% else %}
+    {% assign section_id_variable = section.id %}
+  {% endif %}
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody td.other-brands-column {
+     background-color: {{ block.settings.icon_cells_background_color }};
+   }
+   .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }}  tr td:nth-child(2){
+     {% if block.settings.enable_product_column_border_top_gradient %}
+       position: relative;
+       border-top: none;
+     {% else %}
+       border-top: 1px solid {% if block.settings.product_column_border_top_color != blank and block.settings.product_column_border_top_color.alpha != 0 %}rgba({{ block.settings.product_column_border_top_color.red }}, {{ block.settings.product_column_border_top_color.green }}, {{ block.settings.product_column_border_top_color.blue }}, {{ block.settings.product_column_border_opacity | divided_by: 100.0 }}){% else %}rgba(0, 0, 0, 0){% endif %};
+     {% endif %}
+   }
+   {% if block.settings.enable_product_column_border_top_gradient %}
+     .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody  tr td:nth-child(2)::before {
+       content: '';
+       position: absolute;
+       top: 0;
+       left: 0;
+       right: 0;
+       height: 1px;
+       background: {% if block.settings.product_column_border_top_gradient != blank %}{{ block.settings.product_column_border_top_gradient }}{% else %}linear-gradient(to right, #ff0000, #ffa500){% endif %};
+       z-index: 1;
+     }
+   {% endif %}
+   .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody td.feature-cell {
+     background-color: {{ block.settings.features_background_color }};
+     font-size: {{ block.settings.benefits_desktop_size }}px;
+     text-align: left;
+     padding-right: 2rem;
+     padding-left: 2%;
+     {% if block.settings.bold_features_text %}
+       font-weight: bold;
+     {% endif %}
+   }
+   @media (max-width: 1280px and min-width: 1024px) {
+     .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody td.feature-cell {
+       font-size: {{ block.settings.benefits_mobile_size }}px;
+     }
+   }
+   .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} .material-icon svg{
+     width: {{ section.settings.icon_size }}px !important;
+     height: {{ section.settings.icon_size }}px !important;
+     fill: {{ section.settings.checkmark_color }} !important;
+   }
+
+   .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} .other-brands-column .material-icon svg{
+     fill: {{ section.settings.x_color }} !important;
+   }
+</style>
+
+<tbody class="fade-in-child" {{ block.shopify_attributes }}>
+  {% content_for 'blocks' %}
+</tbody>
+<!-- end _comparison-table-rows.liquid -->
+{% schema %}
+{
+  "name": "Table rows",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "benefits_desktop_size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop benefits size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "benefits_mobile_size",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile benefits size",
+      "default": 14
+    },
+
+    {
+      "type": "checkbox",
+      "id": "bold_features_text",
+      "label": "Bold features text",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "icon_cells_background_color",
+      "default": "#FFFFFF",
+      "label": "Competitor column rows background"
+    },
+    {
+      "type": "color",
+      "id": "features_background_color",
+      "label": "Benefit column rows background color",
+      "default": "#D4D4D4"
+    },
+    {
+      "type": "header",
+      "content": "Brand column rows"
+    },
+    {
+      "type": "color",
+      "id": "product_column_border_top_color",
+      "label": "Brand column rows border top color"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_product_column_border_top_gradient",
+      "label": "Enable Brand column rows border top gradient",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "product_column_border_top_gradient",
+      "label": "Brand column rows border top gradient color",
+      "visible_if": "{{ block.settings.enable_product_column_border_top_gradient }}",
+      "default": "linear-gradient(180deg, rgba(234, 56, 133, 1), rgba(95, 77, 188, 1) 100%)"
+    },
+    {
+      "type": "range",
+      "id": "product_column_border_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Brand column rows border top opacity",
+      "default": 100
+    }
+  ],
+  "blocks": [
+    {
+      "type": "_a-comparison-table-row"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Table rows",
+      "settings": {
+        "benefits_desktop_size": 16,
+        "benefits_mobile_size": 14,
+        "bold_features_text": false,
+        "icon_cells_background_color": "rgba(0,0,0,0)",
+        "features_background_color": "rgba(0,0,0,0)",
+        "product_column_border_top_color": "rgba(0,0,0,0)",
+        "enable_product_column_border_top_gradient": false,
+        "product_column_border_top_gradient": "linear-gradient(180deg, rgba(234, 56, 133, 1), rgba(95, 77, 188, 1) 100%)",
+        "product_column_border_opacity": 100
+      },
+      "blocks": [
+        {
+          "type": "_a-comparison-table-row",
+          "settings": {
+            "benefit": "Advanced feature",
+            "us": true,
+            "others": false,
+            "benefit_icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#e3e3e3\"><path d=\"m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm94-278 226-226-56-58-170 170-86-84-56 56 142 142Z\"></path></svg>",
+            "feature_text_color": "#ffffff",
+            "heading_highlighted_color": "#ffffff",
+            "benefit_icon_color": "#4BB82C",
+            "benefit_icon_size": 20
+          }
+        },
+        {
+          "type": "_a-comparison-table-row",
+          "settings": {
+            "benefit": "Advanced feature",
+            "us": true,
+            "others": false,
+            "benefit_icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#e3e3e3\"><path d=\"m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm94-278 226-226-56-58-170 170-86-84-56 56 142 142Z\"></path></svg>",
+            "feature_text_color": "#ffffff",
+            "heading_highlighted_color": "#ffffff",
+            "benefit_icon_color": "#4BB82C",
+            "benefit_icon_size": 20
+          }
+        },
+        {
+          "type": "_a-comparison-table-row",
+          "settings": {
+            "benefit": "Advanced feature",
+            "us": true,
+            "others": false,
+            "benefit_icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#e3e3e3\"><path d=\"m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm94-278 226-226-56-58-170 170-86-84-56 56 142 142Z\"></path></svg>",
+            "feature_text_color": "#ffffff",
+            "heading_highlighted_color": "#ffffff",
+            "benefit_icon_color": "#4BB82C",
+            "benefit_icon_size": 20
+          }
+        },
+        {
+          "type": "_a-comparison-table-row",
+          "settings": {
+            "benefit": "Advanced feature",
+            "us": true,
+            "others": false,
+            "benefit_icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#e3e3e3\"><path d=\"m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm94-278 226-226-56-58-170 170-86-84-56 56 142 142Z\"></path></svg>",
+            "feature_text_color": "#ffffff",
+            "heading_highlighted_color": "#ffffff",
+            "benefit_icon_color": "#4BB82C",
+            "benefit_icon_size": 20
+          }
+        },
+        {
+          "type": "_a-comparison-table-row",
+          "settings": {
+            "benefit": "Advanced feature",
+            "us": true,
+            "others": false,
+            "benefit_icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#e3e3e3\"><path d=\"m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm94-278 226-226-56-58-170 170-86-84-56 56 142 142Z\"></path></svg>",
+            "feature_text_color": "#ffffff",
+            "heading_highlighted_color": "#ffffff",
+            "benefit_icon_color": "#4BB82C",
+            "benefit_icon_size": 20
+          }
+        },
+        {
+          "type": "_a-comparison-table-row",
+          "settings": {
+            "benefit": "Advanced feature",
+            "us": true,
+            "others": false,
+            "benefit_icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#e3e3e3\"><path d=\"m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm94-278 226-226-56-58-170 170-86-84-56 56 142 142Z\"></path></svg>",
+            "feature_text_color": "#ffffff",
+            "heading_highlighted_color": "#ffffff",
+            "benefit_icon_color": "#4BB82C",
+            "benefit_icon_size": 20
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

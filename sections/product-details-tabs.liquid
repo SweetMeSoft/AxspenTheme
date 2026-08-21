@@ -1,0 +1,388 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+	assign full       = section.settings.full
+-%}
+
+<style>
+	{{ section_id }} {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	{{ section_id }} .tabs-head {
+		font-size: {{ section.settings.head_font_size }}px;
+		line-height: {{ section.settings.head_line_height }};
+		margin-bottom: {{ section.settings.head_padding_bottom | times: 0.85 }}px;
+	}
+
+	{{ section_id }} .tab-content {
+		font-size: {{ section.settings.content_font_size }}px;
+		line-height: {{ section.settings.content_line_height }};
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{{ section_id }} .tabs-head {
+			margin-bottom: {{ section.settings.head_padding_bottom }}px;
+		}
+	}
+</style>
+
+<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+	<div class="product-details-tabs tabs">
+		<div class="tabs-head">
+			<div class="tabs-head-desktop">
+				{%- for block in section.blocks -%}
+					<span class="tab-head{% if forloop.index == 1 %} active{% endif %}" data-index="{{ forloop.index }}" {{ block.shopify_attributes }}{% if request.design_mode %} data-id="{{ block.id }}"{% endif %}>
+						{%- liquid
+							if block.settings.heading != blank
+								echo block.settings.heading | escape
+							else
+								echo 'general.text.tab' | t | append: ' ' | append: forloop.index
+							endif
+						-%}
+					</span>
+				{%- endfor -%}
+			</div>
+
+			<div class="toggle-dropdown tabs-head-mobile">
+				<div class="dropdown-summary">
+					<span class="summary-info">
+						{%- liquid
+							for block in section.blocks limit: 1
+								if block.settings.heading != blank
+									echo block.settings.heading | escape
+								else
+									echo 'general.text.tab' | t | append: ' ' | append: forloop.index
+								endif
+							endfor
+						-%}
+					</span>
+
+					{%- render 'icon', code: 'chevron-down' -%}
+				</div>
+
+				<div class="dropdown-content" role="list">
+					<div class="dropdown-content-inner">
+						<header class="dropdown-content-header">
+							<span class="dropdown-content-title">
+								{%- liquid
+									for block in section.blocks limit: 1
+										if block.settings.heading != blank
+											echo block.settings.heading | escape
+										else
+											echo 'general.text.tab' | t | append: ' ' | append: forloop.index
+										endif
+									endfor
+								-%}
+							</span>
+
+							{%- render 'icon', code: 'chevron-down' -%}
+						</header>
+
+						<ul class="content" role="list">
+							{%- for block in section.blocks -%}
+								{%- liquid
+									assign heading = 'general.text.tab' | t | append: ' ' | append: forloop.index
+
+									if block.settings.heading != blank
+										assign heading = block.settings.heading | escape
+									endif
+								-%}
+
+								<li class="dropdown-item" data-value="{{ heading }}" data-index="{{ forloop.index }}">{{- heading -}}</li>
+							{%- endfor -%}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="tabs-content{% if section.settings.animation != 'none' %} animation-{{ section.settings.animation }}{% endif %}">
+			{%- for block in section.blocks -%}
+				<ul class="tab-content rte{% if forloop.index == 1 %} active{% endif %}" role="list" data-index="{{ forloop.index }}">
+					{%- case block.type -%}
+						{%- when 'description' -%}
+							{%- if product.description != blank -%}
+								<div class="product-description">
+									{{- product.description -}}
+								</div>
+							{%- endif -%}
+						{%- when 'liquid' -%}
+							{%- if block.settings.liquid != blank -%}
+								<div class="custom-liquid">
+									{{- block.settings.liquid -}}
+								</div>
+							{%- endif -%}
+						{%- when 'content' -%}
+							<div class="custom-content">
+								{%- if block.settings.page != blank -%}
+									{{- block.settings.page.content -}}
+								{%- elsif block.settings.content != blank -%}
+									{{- block.settings.content -}}
+								{%- endif -%}
+							</div>
+						{%- when 'reviews' -%}
+							<div class="product-reviews">
+								{{- block.settings.content -}}
+							</div>
+					{%- endcase -%}
+				</ul>
+			{%- endfor -%}
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.product-details-tabs.name",
+	"tag": "section",
+	"class": "product-details-tabs-section",
+	"enabled_on": {
+		"templates": ["product"]
+	},
+	"settings": [
+		{
+			"type": "color",
+			"id": "background",
+			"default": "#ffffff",
+			"label": "t:sections.product-details-tabs.settings.background.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:sections.product-details-tabs.settings.full.label"
+		},
+		{
+			"type": "select",
+			"id": "animation",
+			"options": [
+				{
+					"value": "none",
+					"label": "t:sections.product-details-tabs.settings.animation.option_1.label"
+				},
+				{
+					"value": "up",
+					"label": "t:sections.product-details-tabs.settings.animation.option_2.label"
+				},
+				{
+					"value": "down",
+					"label": "t:sections.product-details-tabs.settings.animation.option_3.label"
+				}
+			],
+			"default": "none",
+			"label": "t:sections.product-details-tabs.settings.animation.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.product-details-tabs.settings.header_head.content"
+		},
+		{
+			"type": "range",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 36,
+			"unit": "px",
+			"id": "head_font_size",
+			"label": "t:sections.product-details-tabs.settings.font_size.label"
+		},
+		{
+			"type": "range",
+			"min": 0,
+			"max": 10,
+			"step": 0.1,
+			"default": 1,
+			"id": "head_line_height",
+			"label": "t:sections.product-details-tabs.settings.line_height.label"
+		},
+		{
+			"type": "range",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 47,
+			"unit": "px",
+			"id": "head_padding_bottom",
+			"label": "t:sections.product-details-tabs.settings.head_padding_bottom.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.product-details-tabs.settings.header_content.content"
+		},
+		{
+			"type": "range",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 14,
+			"unit": "px",
+			"id": "content_font_size",
+			"label": "t:sections.product-details-tabs.settings.font_size.label"
+		},
+		{
+			"type": "range",
+			"min": 0,
+			"max": 10,
+			"step": 0.1,
+			"default": 1.7,
+			"id": "content_line_height",
+			"label": "t:sections.product-details-tabs.settings.line_height.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "description",
+			"name": "t:sections.product-details-tabs.blocks.description.name",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "paragraph",
+					"content": "t:sections.product-details-tabs.blocks.description.settings.paragraph.content"
+				},
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "t:sections.product-details-tabs.blocks.description.settings.heading.label"
+				}
+			]
+		},
+		{
+			"type": "liquid",
+			"name": "t:sections.product-details-tabs.blocks.liquid.name",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "t:sections.product-details-tabs.blocks.liquid.settings.heading.label"
+				},
+				{
+					"type": "liquid",
+					"id": "liquid",
+					"label": "t:sections.product-details-tabs.blocks.liquid.settings.content.label"
+				}
+			]
+		},
+		{
+			"type": "content",
+			"name": "t:sections.product-details-tabs.blocks.content.name",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "t:sections.product-details-tabs.blocks.content.settings.heading.label"
+				},
+				{
+					"type": "richtext",
+					"id": "content",
+					"label": "t:sections.product-details-tabs.blocks.content.settings.content.label"
+				},
+				{
+					"type": "page",
+					"id": "page",
+					"label": "t:sections.product-details-tabs.blocks.content.settings.page.label"
+				}
+			]
+		},
+		{
+			"type": "reviews",
+			"limit": 1,
+			"name": "t:sections.product-details-tabs.blocks.reviews.name",
+			"settings": [
+				{
+					"type": "header",
+					"content": "t:sections.product-details-tabs.blocks.reviews.settings.header.content"
+				},
+				{
+					"type": "paragraph",
+					"content": "t:sections.product-details-tabs.blocks.reviews.settings.paragraph.content"
+				},
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "t:sections.product-details-tabs.blocks.reviews.settings.heading.label"
+				},
+				{
+					"type": "liquid",
+					"id": "content",
+					"label": "t:sections.product-details-tabs.blocks.reviews.settings.content.label",
+					"info": "t:sections.product-details-tabs.blocks.reviews.settings.content.info"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.product-details-tabs.presets.name",
+			"blocks": [
+				{
+					"type": "description",
+					"settings": {
+						"heading": "Product description"
+					}
+				},
+				{
+					"type": "content",
+					"settings": {
+						"heading": "Shipping & Return",
+						"content": "<p>Shipping cost is based on weight. Just add products to your cart and use the Shipping Calculator to see the shipping price.<br>We want you to be 100% satisfied with your purchase. Items can be returned or exchanged within 30 days of delivery.</p>"
+					}
+				}
+			]
+		}
+	]
+}
+{% endschema %}

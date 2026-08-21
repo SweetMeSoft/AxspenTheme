@@ -1,0 +1,269 @@
+
+.atlas-isolation-wrapper .sticky-atc .loading-overlay__spinner {
+  display: flex;
+}
+.atlas-isolation-wrapper .sticky-atc-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 10px;
+  padding: 0;
+}
+
+.atlas-isolation-wrapper .sticky-atc__left {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.atlas-isolation-wrapper .sticky-atc__image {
+  display: flex;
+  align-self: flex-start;
+}
+
+
+.atlas-isolation-wrapper .sticky-atc__left-inner{
+  height: 100%;
+  padding: 8px 0;
+}
+.atlas-isolation-wrapper .sticky-atc__right {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.atlas-isolation-wrapper .sticky-atc__button,
+.atlas-isolation-wrapper .sticky-atc__right {
+  flex-shrink: 0;
+}
+
+.atlas-isolation-wrapper .sticky-atc__button {
+  padding-right: 15px;
+}
+
+
+
+.atlas-isolation-wrapper .sticky-atc .price--on-sale .price__sale {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+}
+
+.atlas-isolation-wrapper .sticky-atc .price .price-item,
+.atlas-isolation-wrapper .sticky-atc .price .price-item--sale,
+.atlas-isolation-wrapper .sticky-atc span.price-item.price-item--sale.price-item--last {
+  color: var(--sticky-atc-price-color, #000000) !important;
+}
+
+.atlas-isolation-wrapper .sticky-atc .price .price__compare-price .price-item--regular {
+  color: var(--sticky-atc-compare-price-color, #000000) !important;
+}
+
+.atlas-isolation-wrapper .sticky-atc__title {
+  margin: 0;
+  font-size: var(--atlas-product-title-size);
+  font-weight: bold;
+  color: var(--atlas-product-title-color);
+  line-height: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word;
+  line-clamp: 1;
+}
+
+.atlas-isolation-wrapper .sticky-atc__price {
+  margin-top: 0.5rem;
+}
+
+.atlas-isolation-wrapper .sticky-atc__price .price {
+  column-gap: 8px;
+  row-gap: 8px;
+  margin-bottom: 0;
+}
+
+.atlas-isolation-wrapper .sticky-atc__price .price,
+.atlas-isolation-wrapper .sticky-atc__price .price-item--regular {
+  font-size: 1.3rem;
+}
+
+.atlas-isolation-wrapper .sticky-atc__price .badge {
+  font-size: 0.8rem;
+}
+
+.atlas-isolation-wrapper .sticky-atc .price__regular .price-item--regular {
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.atlas-isolation-wrapper .sticky-atc__right {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.atlas-isolation-wrapper .sticky-atc__dropdowns {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.atlas-isolation-wrapper .sticky-atc__dropdown-wrapper {
+  display: flex;
+  gap: .5rem;
+  flex-direction: column;
+  position: relative;
+  align-items: flex-start;
+}
+
+.atlas-isolation-wrapper .sticky-atc__dropdown-wrapper label {
+  font-size: var(--atlas-product-option-size);
+  bottom: 100%;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--atlas-product-option-color);
+}
+
+
+
+.atlas-isolation-wrapper .sticky-atc__dropdown:focus{
+  outline: none;
+  box-shadow: none;
+}
+.atlas-isolation-wrapper .sticky-atc__dropdown-wrapper .icon-caret {
+  height: 0.6rem;
+  pointer-events: none;
+  position: absolute;
+  top: calc(50% - 0.2rem);
+  right: calc(var(--sticky-atc-input-border-width, 1px) + 5px);
+}
+
+@media screen and (max-width: 990px) {
+  .atlas-isolation-wrapper .sticky-atc__dropdowns {
+    display: none;
+  }
+  .atlas-isolation-wrapper .sticky-atc__right {
+    width: 100%;
+  }
+  .atlas-isolation-wrapper .sticky-atc__button {
+    padding-top: 0;
+    width: 100%;
+    margin: 8px;
+  }
+}
+
+@media screen and (min-width: 400px) {
+  .atlas-isolation-wrapper .sticky-atc__price .price,
+  .atlas-isolation-wrapper .sticky-atc__price .price-item--regular {
+    font-size: 1.6rem;
+  }
+
+  .atlas-isolation-wrapper .sticky-atc__price .badge {
+    font-size: 1rem;
+  }
+
+  .atlas-isolation-wrapper .sticky-atc .button {
+    font-size: 1.7rem;
+    padding: 0 1.1em;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .atlas-isolation-wrapper .sticky-atc__price .price,
+  .atlas-isolation-wrapper .sticky-atc__price .price-item--regular {
+    font-size: 1.8rem;
+  }
+
+  .atlas-isolation-wrapper .sticky-atc .price__regular .price-item--regular {
+    font-size: 2.2rem;
+  }
+
+  .atlas-isolation-wrapper .sticky-atc .button {
+    min-height: 40px;
+  }
+
+
+}
+
+.atlas-isolation-wrapper .sticky-atc--after-scroll.sticky-atc--active {
+  animation: btnAppear 0.15s ease-in-out forwards;
+}
+
+@keyframes btnAppear {
+  from {
+    transform: translateY(200%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.atlas-isolation-wrapper .quick-add-modal__content .sticky-atc {
+  display: none;
+}
+
+
+@media (max-width: 990px) {
+  .atlas-isolation-wrapper .sticky-atc-mobile-button-only.sticky-atc {
+    margin-left: 20px;
+    bottom: 20px;
+  }
+
+
+  .atlas-isolation-wrapper .sticky-atc .sticky-atc__left {
+    justify-content: left;
+    gap: 5px;
+    align-items: flex-start;
+    grid-column: 1;
+    grid-row: 1 / 3;
+    height: 100%;
+  }
+  .atlas-isolation-wrapper .sticky-atc .sticky-atc__left-inner {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    padding: 0;
+  }
+  .atlas-isolation-wrapper .sticky-atc .sticky-atc__button {
+    margin: 0;
+    padding-right: 0;
+  }
+ 
+  .atlas-isolation-wrapper .sticky-atc .sticky-atc__image img {
+    height: 100% !important;
+    width: 100% !important;
+  }
+  .atlas-isolation-wrapper .sticky-atc .sticky-atc__right {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    align-self: end;
+  }
+  .atlas-isolation-wrapper .sticky-atc .sticky-atc__price .price {
+    padding-bottom: 6px; 
+  }
+  .atlas-isolation-wrapper .sticky-atc-mobile-button-only.sticky-atc .sticky-atc__button button.button {
+    min-width: 100%;
+    min-height: 30px; 
+  }
+
+  .atlas-isolation-wrapper .sticky-atc__title {
+    font-size: calc(var(--atlas-product-title-size) - 2px);
+    font-weight: 600;
+    padding-right: 20px;
+
+
+  }
+  
+  .atlas-isolation-wrapper .sticky-atc-container span.price__compare-price {
+    display: none;
+  }
+}

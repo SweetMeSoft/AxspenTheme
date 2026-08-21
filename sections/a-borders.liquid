@@ -1,0 +1,226 @@
+{% capture rotate_y %}
+  {% if section.settings.flip_vertical %}
+    rotateX(180deg)
+  {% endif %}
+{% endcapture %}
+{% capture rotate_x %}
+  {% if section.settings.flip_horizontal %}
+    rotateY(180deg)
+  {% endif %}
+{% endcapture %}
+
+{%- comment -%} Compute background style based on gradient toggle {%- endcomment -%}
+{%- if section.settings.use_section_bg_gradient and section.settings.section_bg_gradient != blank -%}
+  {%- assign bg_style = 'background: ' | append: section.settings.section_bg_gradient | append: ';' -%}
+{%- else -%}
+  {%- assign bg_color_rgb = section.settings.section_bg_color | color_to_rgb -%}
+  {%- assign bg_style = 'background-color: ' | append: bg_color_rgb | append: ';' -%}
+{%- endif -%}
+
+{%- comment -%} Compute shape color RGB {%- endcomment -%}
+{%- assign shape_color_rgb = section.settings.border_shape_color | color_to_rgb -%}
+
+{% style %}
+  .atlas-isolation-wrapper .section-{{ section.id }}-top-padding {
+    height: {{ section.settings.padding_top }}px;
+  }
+  .atlas-isolation-wrapper .section-{{ section.id }}-bottom-padding {
+    height: {{ section.settings.padding_bottom }}px;
+  }
+
+  .atlas-isolation-wrapper #section-border-{{ section.id }} svg{
+    display: block;
+  }
+{% endstyle %}
+
+<div
+  class="section-{{ section.id }}-top-padding"
+  style="
+    {% if section.settings.flip_vertical %}
+      background-color: {{ shape_color_rgb }};
+    {% else %}
+      {{ bg_style }}
+    {% endif %}
+  "
+>
+  &nbsp
+</div>
+<div
+  id="section-border-{{ section.id }}"
+  class="section-border"
+  style="{{ bg_style }} margin: -2px 0;"
+>
+  <div>
+    {% case section.settings.shape %}
+      {% when 'diagonal' %}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 360 32"
+          height="{{ section.settings.border_size }}"
+          width="100%"
+          preserveAspectRatio="none"
+          style="color: {{ shape_color_rgb }}; transform: {{ rotate_y }} {{ rotate_x }}; transition: 0.3s;"
+        >
+          <polygon fill="currentColor" points="0 29.91 0 32 360 32 360 0 0 29.91"/>
+        </svg>
+      {% when 'curved' %}
+        <svg
+          id="curve"
+          width="100%"
+          height="{{ section.settings.border_size }}"
+          style="color: {{ shape_color_rgb }}; transform: {{ rotate_y }} {{ rotate_x }}; transition: 0.3s"
+          viewBox="0 0 1440 290"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"
+        >
+          <path style="transform:translate(0, 0px); opacity:1" fill="currentColor" d="M0,145L34.3,130.5C68.6,116,137,87,206,106.3C274.3,126,343,193,411,188.5C480,184,549,106,617,67.7C685.7,29,754,29,823,53.2C891.4,77,960,126,1029,135.3C1097.1,145,1166,116,1234,96.7C1302.9,77,1371,68,1440,82.2C1508.6,97,1577,135,1646,130.5C1714.3,126,1783,77,1851,91.8C1920,106,1989,184,2057,203C2125.7,222,2194,184,2263,169.2C2331.4,155,2400,164,2469,164.3C2537.1,164,2606,155,2674,149.8C2742.9,145,2811,145,2880,130.5C2948.6,116,3017,87,3086,101.5C3154.3,116,3223,174,3291,207.8C3360,242,3429,251,3497,232C3565.7,213,3634,164,3703,164.3C3771.4,164,3840,213,3909,227.2C3977.1,242,4046,222,4114,188.5C4182.9,155,4251,106,4320,101.5C4388.6,97,4457,135,4526,149.8C4594.3,164,4663,155,4731,125.7C4800,97,4869,48,4903,24.2L4937.1,0L4937.1,290L4902.9,290C4868.6,290,4800,290,4731,290C4662.9,290,4594,290,4526,290C4457.1,290,4389,290,4320,290C4251.4,290,4183,290,4114,290C4045.7,290,3977,290,3909,290C3840,290,3771,290,3703,290C3634.3,290,3566,290,3497,290C3428.6,290,3360,290,3291,290C3222.9,290,3154,290,3086,290C3017.1,290,2949,290,2880,290C2811.4,290,2743,290,2674,290C2605.7,290,2537,290,2469,290C2400,290,2331,290,2263,290C2194.3,290,2126,290,2057,290C1988.6,290,1920,290,1851,290C1782.9,290,1714,290,1646,290C1577.1,290,1509,290,1440,290C1371.4,290,1303,290,1234,290C1165.7,290,1097,290,1029,290C960,290,891,290,823,290C754.3,290,686,290,617,290C548.6,290,480,290,411,290C342.9,290,274,290,206,290C137.1,290,69,290,34,290L0,290Z"></path>
+        </svg>
+      {% when 'waves' %}
+        <svg
+          id="wave"
+          width="100%"
+          height="{{ section.settings.border_size }}"
+          style="color: {{ shape_color_rgb }}; transform: {{ rotate_y }} {{ rotate_x }}; transition: 0.3s"
+          viewBox="0 0 1440 290"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"
+        >
+          <path style="transform:translate(0, 0px); opacity:0.7" fill="currentColor" d="M0,174L34.3,183.7C68.6,193,137,213,206,203C274.3,193,343,155,411,125.7C480,97,549,77,617,87C685.7,97,754,135,823,125.7C891.4,116,960,58,1029,38.7C1097.1,19,1166,39,1234,72.5C1302.9,106,1371,155,1440,159.5C1508.6,164,1577,126,1646,91.8C1714.3,58,1783,29,1851,19.3C1920,10,1989,19,2057,53.2C2125.7,87,2194,145,2263,164.3C2331.4,184,2400,164,2469,159.5C2537.1,155,2606,164,2674,149.8C2742.9,135,2811,97,2880,96.7C2948.6,97,3017,135,3086,130.5C3154.3,126,3223,77,3291,82.2C3360,87,3429,145,3497,140.2C3565.7,135,3634,68,3703,67.7C3771.4,68,3840,135,3909,174C3977.1,213,4046,222,4114,203C4182.9,184,4251,135,4320,116C4388.6,97,4457,106,4526,111.2C4594.3,116,4663,116,4731,96.7C4800,77,4869,39,4903,19.3L4937.1,0L4937.1,290L4902.9,290C4868.6,290,4800,290,4731,290C4662.9,290,4594,290,4526,290C4457.1,290,4389,290,4320,290C4251.4,290,4183,290,4114,290C4045.7,290,3977,290,3909,290C3840,290,3771,290,3703,290C3634.3,290,3566,290,3497,290C3428.6,290,3360,290,3291,290C3222.9,290,3154,290,3086,290C3017.1,290,2949,290,2880,290C2811.4,290,2743,290,2674,290C2605.7,290,2537,290,2469,290C2400,290,2331,290,2263,290C2194.3,290,2126,290,2057,290C1988.6,290,1920,290,1851,290C1782.9,290,1714,290,1646,290C1577.1,290,1509,290,1440,290C1371.4,290,1303,290,1234,290C1165.7,290,1097,290,1029,290C960,290,891,290,823,290C754.3,290,686,290,617,290C548.6,290,480,290,411,290C342.9,290,274,290,206,290C137.1,290,69,290,34,290L0,290Z"></path>
+          <path style="transform:translate(0, 0px); opacity:1" fill="currentColor" d="M0,203L34.3,212.7C68.6,222,137,242,206,251.3C274.3,261,343,261,411,251.3C480,242,549,222,617,188.5C685.7,155,754,106,823,87C891.4,68,960,77,1029,106.3C1097.1,135,1166,184,1234,193.3C1302.9,203,1371,174,1440,149.8C1508.6,126,1577,106,1646,125.7C1714.3,145,1783,203,1851,212.7C1920,222,1989,184,2057,169.2C2125.7,155,2194,164,2263,169.2C2331.4,174,2400,174,2469,145C2537.1,116,2606,58,2674,48.3C2742.9,39,2811,77,2880,82.2C2948.6,87,3017,58,3086,77.3C3154.3,97,3223,164,3291,178.8C3360,193,3429,155,3497,149.8C3565.7,145,3634,174,3703,159.5C3771.4,145,3840,87,3909,58C3977.1,29,4046,29,4114,38.7C4182.9,48,4251,68,4320,106.3C4388.6,145,4457,203,4526,212.7C4594.3,222,4663,184,4731,178.8C4800,174,4869,203,4903,217.5L4937.1,232L4937.1,290L4902.9,290C4868.6,290,4800,290,4731,290C4662.9,290,4594,290,4526,290C4457.1,290,4389,290,4320,290C4251.4,290,4183,290,4114,290C4045.7,290,3977,290,3909,290C3840,290,3771,290,3703,290C3634.3,290,3566,290,3497,290C3428.6,290,3360,290,3291,290C3222.9,290,3154,290,3086,290C3017.1,290,2949,290,2880,290C2811.4,290,2743,290,2674,290C2605.7,290,2537,290,2469,290C2400,290,2331,290,2263,290C2194.3,290,2126,290,2057,290C1988.6,290,1920,290,1851,290C1782.9,290,1714,290,1646,290C1577.1,290,1509,290,1440,290C1371.4,290,1303,290,1234,290C1165.7,290,1097,290,1029,290C960,290,891,290,823,290C754.3,290,686,290,617,290C548.6,290,480,290,411,290C342.9,290,274,290,206,290C137.1,290,69,290,34,290L0,290Z"></path>
+        </svg>
+    {% endcase %}
+  </div>
+</div>
+<div
+  class="section-{{ section.id }}-bottom-padding"
+  style="
+    {% if section.settings.flip_vertical %}
+      {{ bg_style }}
+    {% else %}
+      background-color: {{ shape_color_rgb }};
+    {% endif %}
+  "
+>
+  &nbsp
+</div>
+
+{% schema %}
+{
+  "name": "Section border",
+  "class": "atlas-isolation-wrapper atlas-gradient",
+  "settings": [
+    {
+      "type": "select",
+      "id": "shape",
+      "options": [
+        {
+          "value": "diagonal",
+          "label": "Diagonal"
+        },
+        {
+          "value": "curved",
+          "label": "Curved"
+        },
+        {
+          "value": "waves",
+          "label": "Waves"
+        }
+      ],
+      "label": "Shape type",
+      "default": "curved"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "border_size",
+      "label": "Border size",
+      "options": [
+        {
+          "value": "60",
+          "label": "Small"
+        },
+        {
+          "value": "90",
+          "label": "Medium"
+        },
+        {
+          "value": "120",
+          "label": "Large"
+        }
+      ],
+      "default": "90"
+    },
+    {
+      "type": "checkbox",
+      "id": "flip_horizontal",
+      "label": "Horizontal flip",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "flip_vertical",
+      "label": "Vertical flip",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "color",
+      "id": "border_shape_color",
+      "label": "Border shape color",
+      "default": "#fb33a6"
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_bg_gradient",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_bg_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(262deg, rgba(251, 51, 164, 1) 0%, rgba(96, 77, 188, 1) 100%)"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 10
+    }
+  ]
+}
+{% endschema %}

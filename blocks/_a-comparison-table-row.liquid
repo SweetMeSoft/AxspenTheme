@@ -1,0 +1,189 @@
+{% if block.settings.benefit != blank %}
+  {% style %}
+    .table-element-scoped-{{ section.id }} .benefit-icon-{{ block.id }} .material-icon {
+        font-size: {{ block.settings.benefit_icon_size }}px !important;
+        color: {{ block.settings.benefit_icon_color }} !important;
+        min-width: 32px;
+        justify-content: center;
+        display:flex;
+      }
+
+      .table-element-scoped-{{ section.id }} .benefit-icon-{{ block.id }} .material-icon svg {
+        width: {{ block.settings.benefit_icon_size }}px !important;
+        height: {{ block.settings.benefit_icon_size }}px !important;
+        fill: {{ block.settings.benefit_icon_color }} !important;
+      }
+
+      .table-element-scoped-{{ section.id }} .benefit-icon-{{ block.id }} img {
+        width: {{ block.settings.benefit_icon_size }}px !important;
+        height: {{ block.settings.benefit_icon_size }}px !important;
+      }
+  {% endstyle %}
+  {% capture checkmark_svg %}
+    {%- if section.settings.checkmark_image != blank -%}
+      <img style="width:{{ section.settings.icon_size }}px!important;height:{{ section.settings.icon_size }}px!important" width="{{ section.settings.icon_size }}" height="{{ section.settings.icon_size }}" src="{{ section.settings.checkmark_image | image_url }}">
+    {%- elsif section.settings.checkmark_icon != blank -%}
+      <span style="font-size:{{ section.settings.icon_size }}px!important;color:{{ section.settings.checkmark_color }}!important" class="material-icon material-symbols-outlined notranslate">
+        {{ section.settings.checkmark_icon }}
+      </span>
+    {%- else -%}
+      <svg fill="{{ section.settings.checkmark_color }}" width="{{ section.settings.icon_size }}px" height="{{ section.settings.icon_size }}px" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M4.63 15.638a1.028 1.028 0 0 1-.79-.37L.36 11.09a1.03 1.03 0 1 1 1.58-1.316l2.535 3.043L9.958 3.32a1.029 1.029 0 0 1 1.783 1.03L5.52 15.122a1.03 1.03 0 0 1-.803.511.89.89 0 0 1-.088.004z"></path></g></svg>
+    {%- endif -%}
+  {% endcapture %}
+
+  {% capture x_mark_svg %}
+    {%- if section.settings.x_image != blank -%}
+      <img style="width:{{ section.settings.icon_size }}px!important;height:{{ section.settings.icon_size }}px!important" width="{{ section.settings.icon_size }}" height="{{ section.settings.icon_size }}" src="{{ x_image | image_url }}">
+    {%- elsif section.settings.x_icon != blank -%}
+      <span style="font-size:{{ section.settings.icon_size }}px!important;color:{{ section.settings.x_color }}!important" class="material-icon material-symbols-outlined notranslate">
+        {{ section.settings.x_icon }}
+      </span>
+    {%- else -%}
+      <svg fill="{{ section.settings.x_color }}" width="{{ section.settings.icon_size }}px" height="{{ section.settings.icon_size }}px" viewBox="0 0 32.00 32.00" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="0.00032"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>cancel2</title> <path d="M19.587 16.001l6.096 6.096c0.396 0.396 0.396 1.039 0 1.435l-2.151 2.151c-0.396 0.396-1.038 0.396-1.435 0l-6.097-6.096-6.097 6.096c-0.396 0.396-1.038 0.396-1.434 0l-2.152-2.151c-0.396-0.396-0.396-1.038 0-1.435l6.097-6.096-6.097-6.097c-0.396-0.396-0.396-1.039 0-1.435l2.153-2.151c0.396-0.396 1.038-0.396 1.434 0l6.096 6.097 6.097-6.097c0.396-0.396 1.038-0.396 1.435 0l2.151 2.152c0.396 0.396 0.396 1.038 0 1.435l-6.096 6.096z"></path> </g></svg>
+    {%- endif -%}
+  {% endcapture %}
+  <tr {{ block.shopify_attributes }}>
+    <td class="feature-cell" style="color: {{ block.settings.feature_text_color }};">
+      <div class="benefit-content">
+        {%- if block.settings.benefit_image != blank or block.settings.benefit_icon != blank -%}
+          <div class="benefit-icon benefit-icon-{{ block.id }}">
+            {%- if block.settings.benefit_image != blank -%}
+              <img
+                src="{{ block.settings.benefit_image | image_url }}"
+                alt=""
+                width="{{ block.settings.benefit_icon_size }}"
+                height="{{ block.settings.benefit_icon_size }}"
+              >
+            {%- elsif block.settings.benefit_icon != blank -%}
+              <span class="material-icon material-symbols-outlined notranslate">
+                {{ block.settings.benefit_icon }}
+              </span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        <div class="benefit-text">
+          {{ block.settings.benefit }}
+        </div>
+      </div>
+    </td>
+    <td
+      {% comment %}
+        {% if section.settings.enable_product_column_custom_border %}
+        style="border-right: {{ section.settings.product_column_custom_border_width }}px solid rgba({{ section.settings.product_column_custom_border_color.red }}, {{ section.settings.product_column_custom_border_color.green }}, {{ section.settings.product_column_custom_border_color.blue }}, {{ section.settings.product_column_custom_border_opacity | divided_by: 100.0 }});border-left: {{ section.settings.product_column_custom_border_width }}px solid rgba({{ section.settings.product_column_custom_border_color.red }}, {{ section.settings.product_column_custom_border_color.green }}, {{ section.settings.product_column_custom_border_color.blue }}, {{ section.settings.product_column_custom_border_opacity | divided_by: 100.0 }});"
+        {% else %}
+        style="border-right: var(--atlas-table-border);border-left: var(--atlas-table-border);"
+        {% endif %}
+      {% endcomment %}
+    >
+      <div>
+        {%- if block.settings.us -%}
+          {{ checkmark_svg }}
+        {%- else -%}
+          {{ x_mark_svg }}
+        {%- endif -%}
+      </div>
+    </td>
+    <td class="other-brands-column">
+      <div>
+        {%- if block.settings.others -%}
+          {{ checkmark_svg }}
+        {%- else -%}
+          {{ x_mark_svg }}
+        {%- endif -%}
+      </div>
+    </td>
+  </tr>
+{% endif %}
+{% schema %}
+{
+  "name": "Table row",
+  "tag": null,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "benefit",
+      "label": "Text",
+      "default": "Advanced feature"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "us",
+      "default": true,
+      "label": "Us"
+    },
+    {
+      "type": "checkbox",
+      "id": "others",
+      "default": false,
+      "label": "Others"
+    },
+    {
+      "type": "header",
+      "content": "Benefit column rows"
+    },
+    {
+      "type": "color",
+      "id": "feature_text_color",
+      "label": "Text color",
+      "default": "#383838"
+    },
+    {
+      "type": "color",
+      "id": "heading_highlighted_color",
+      "label": "Bolded text color",
+      "default": "#383838"
+    },
+
+    {
+      "type": "header",
+      "content": "Icon"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_icon",
+      "label": "Material Icon",
+      "info": "Note: [View all available icons](https://fonts.google.com/icons?icon.set=Material+Symbols&icon.platform=web). You MUST copy the SVG code to display your desired icon. Its all the way at the top right of the page."
+    },
+    {
+      "type": "image_picker",
+      "id": "benefit_image",
+      "label": "Custom Image"
+    },
+    {
+      "type": "range",
+      "id": "benefit_icon_size",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "benefit_icon_color",
+      "label": "Icon color",
+      "default": "#4BB82C"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Table row",
+      "settings": {
+        "benefit": "Advanced feature",
+        "us": true,
+        "others": false,
+        "benefit_icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#e3e3e3\"><path d=\"m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm94-278 226-226-56-58-170 170-86-84-56 56 142 142Z\"></path></svg>",
+        "feature_text_color": "#ffffff",
+        "heading_highlighted_color": "#ffffff",
+        "benefit_icon_color": "#4BB82C",
+        "benefit_icon_size": 20
+      }
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,412 @@
+{%- liquid
+	assign section_id     = '#shopify-section-' | append: section.id
+	assign overlay        = section.settings.overlay
+	assign sub_heading    = section.settings.sub_heading_text
+	assign heading        = section.settings.heading_text
+	assign button         = section.settings.button
+	assign shopify_host   = section.settings.native_url
+	assign vimeo_youtube  = section.settings.url
+	assign desktop_height = section.settings.height
+	assign mobile_height  = section.settings.mobile_height
+	assign image_desktop  = section.settings.image
+	assign image_mobile   = section.settings.mobile_image
+-%}
+
+<style>
+	{{ section_id }} {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	{{ section_id }} .section-wrap:before {
+		background: linear-gradient(to bottom,rgba(0,0,0,0),{%- if overlay == 100 -%}rgb(0,0,0){%- else -%}rgba(0,0,0,0.{{ overlay }}){%- endif -%});
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{{ section_id }} .heading {
+			font-size: {{ section.settings.heading_font_size }}px;
+		}
+
+		{{ section_id }} .sub-heading {
+			font-size: {{ section.settings.sub_heading_font_size }}px;
+		}
+	}
+</style>
+
+<div class="stretch-section color-{{ section.settings.color_scheme }}">
+	<div class="section-wrap {{ section.settings.source }}-video video-{{ desktop_height }} video-mobile-{{ mobile_height }}">
+		<div class="content-wrap">
+			<div class="container">
+				<div class="content rte">
+					{%- if heading != blank or sub_heading != blank or button != blank -%}
+						<div class="title-wrapper heading-color">
+							{%- if heading != blank -%}
+								<div class="heading">{{- heading -}}</div>
+							{%- endif -%}
+
+							{%- if sub_heading != blank -%}
+								<div class="sub-heading">{{- sub_heading -}}</div>
+							{%- endif -%}
+
+							{%- if button != blank -%}
+								<a class="slider-element slider-button" href="{{ section.settings.button_link | default: '#' }}">
+									<span class="button primary-button">{{- button -}}</span>
+								</a>
+							{%- endif -%}
+						</div>
+					{%- endif -%}
+
+					{%- if section.settings.show_countdown -%}
+						<div class="box-countdow">
+							{% if section.settings.countdown_text != blank %}
+								<span class="title-countdown">{{ section.settings.countdown_text }}</span>
+							{% endif %}
+
+							<div class="countdown-time-wrap flat-countdown hidden layout-{{ section.settings.style_countdown }}">
+								<div class="countdown-time" data-time="{{ section.settings.countdown_time | escape }}">
+									<div class="time-block">
+										<span class="time-text">{{- 'general.time.days' | t -}}</span>
+										<span class="time-number days"></span>
+									</div>
+
+									<div class="time-block">
+										<span class="time-text">{{- 'general.time.hours' | t -}}</span>
+										<span class="time-number hours"></span>
+									</div>
+
+									<div class="time-block">
+										<span class="time-text">{{- 'general.time.minutes' | t -}}</span>
+										<span class="time-number minutes"></span>
+									</div>
+
+									<div class="time-block">
+										<span class="time-text">{{- 'general.time.seconds' | t -}}</span>
+										<span class="time-number seconds"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					{%- endif -%}
+				</div>
+			</div>
+		</div>
+
+		{%- if vimeo_youtube != blank or shopify_host != blank -%}
+			<div class="background-video-item" tabindex="-1">
+				{%- if section.settings.source == 'host' -%}
+					{% if vimeo_youtube.type == 'youtube' %}
+						<iframe src="//youtube.com/embed/{{ vimeo_youtube.id }}?controls=0&mute=1&showinfo=0&rel=0&autoplay=1&loop=1&playlist={{ vimeo_youtube.id }}" frameborder="0" allowfullscreen allow="autoplay" tabindex="-1"></iframe>
+					{% elsif vimeo_youtube.type == 'vimeo' %}
+						<iframe src="//player.vimeo.com/video/{{ vimeo_youtube.id }}?background=1" allow="autoplay" frameborder="0" tabindex="-1"></iframe>
+					{% endif %}
+				{%- elsif shopify_host != blank -%}
+					{{ shopify_host | video_tag: image_size: '1920x', loop: true, muted: true, controls: false, autoplay: true, preload: 'none' }}
+				{%- else -%}
+					<div class="image{% if image_mobile != blank %} hidden-tablet hidden-mobile{% endif %}{% if settings.image_lazy and image_desktop != blank %} lazy-image{% endif %}">
+						{%- liquid
+							if image_desktop != blank
+								render 'lazy-image', image: image_desktop, width: 1920
+							else
+								render 'icon', code: 'placeholder'
+							endif
+						-%}
+					</div>
+
+					{%- if image_mobile != blank -%}
+						<div class="image hidden-desktop{% if settings.image_lazy %} lazy-image{% endif %}">
+							{%- render 'lazy-image', image: image_mobile, width: 991 -%}
+						</div>
+					{%- endif -%}
+				{%- endif -%}
+			</div>
+
+			<div class="background-video-popup 1" tabindex="-1">
+				<span class="close-button">{%- render 'icon', code: 'close' -%}</span>
+
+				<div class="bg-video-popup-outer">
+					<div class="bg-video-popup-inner">
+						{%- if section.settings.source == 'host' -%}
+							{% if vimeo_youtube.type == 'youtube' %}
+								<iframe class="js-youtube" data-src="//youtube.com/embed/{{ vimeo_youtube.id }}?controls=1&mute=0&showinfo=0&rel=0&autoplay=1&loop=1&playlist={{ vimeo_youtube.id }}" frameborder="0" allowfullscreen tabindex="-1"></iframe>
+							{% elsif vimeo_youtube.type == 'vimeo' %}
+								<iframe class="js-vimeo" data-src="//player.vimeo.com/video/{{ vimeo_youtube.id }}?autoplay=1&loop=1" frameborder="0" tabindex="-1"></iframe>
+							{% endif %}
+						{%- elsif shopify_host != blank -%}
+							{{ shopify_host | video_tag: image_size: '1920x', loop: true, muted: false, controls: true, autoplay: true, preload: 'none' }}
+						{%- endif -%}
+					</div>
+				</div>
+			</div>
+		{%- else -%}
+			<div class="image{% if image_mobile != blank %} hidden-tablet hidden-mobile{% endif %}{% if settings.image_lazy and image_desktop != blank %} lazy-image{% endif %}">
+				{%- liquid
+					if image_desktop != blank
+						render 'lazy-image', image: image_desktop, width: 1920
+					else
+						render 'icon', code: 'placeholder'
+					endif
+				-%}
+			</div>
+
+			{%- if image_mobile != blank -%}
+				<div class="image hidden-desktop{% if settings.image_lazy %} lazy-image{% endif %}">
+					{%- render 'lazy-image', image: image_mobile, width: 991 -%}
+				</div>
+			{%- endif -%}
+		{%- endif -%}
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.count-down.name",
+	"tag": "section",
+	"class": "countdown-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "t:sections.slider.blocks.slide.settings.image.label"
+		},
+		{
+			"type": "image_picker",
+			"id": "mobile_image",
+			"label": "t:sections.slider.blocks.slide.settings.mobile_image.label"
+		},
+		{
+			"type": "select",
+			"id": "source",
+			"default": "host",
+			"label": "t:sections.video-background.settings.source.label",
+			"options": [
+				{
+					"value": "host",
+					"label": "t:sections.video-background.settings.source.options.option_1.label"
+				},
+				{
+					"value": "native",
+					"label": "t:sections.video-background.settings.source.options.option_2.label"
+				}
+			]
+		},
+		{
+			"type": "video_url",
+			"id": "url",
+			"accept": ["vimeo", "youtube"],
+			"label": "t:sections.video-background.settings.url.label",
+			"default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+		},
+		{
+			"type": "video",
+			"id": "native_url",
+			"label": "t:sections.video-background.settings.native_url.label",
+			"info": "t:sections.video-background.settings.native_url.info"
+		},
+		{
+			"type": "range",
+			"id": "overlay",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "%",
+			"label": "t:sections.video-background.settings.overlay.label",
+			"info": "t:sections.video-background.settings.overlay.info"
+		},
+		{
+			"type": "select",
+			"id": "height",
+			"default": "750px",
+			"label": "t:sections.video-background.settings.height.label",
+			"options": [
+				{
+					"value": "16-9",
+					"label": "t:sections.video-background.settings.height.options.option_1.label"
+				},
+				{
+					"value": "450px",
+					"label": "t:sections.video-background.settings.height.options.option_2.label"
+				},
+				{
+					"value": "550px",
+					"label": "t:sections.video-background.settings.height.options.option_3.label"
+				},
+				{
+					"value": "650px",
+					"label": "t:sections.video-background.settings.height.options.option_4.label"
+				},
+				{
+					"value": "750px",
+					"label": "t:sections.video-background.settings.height.options.option_5.label"
+				},
+				{
+					"value": "100vh",
+					"label": "t:sections.video-background.settings.height.options.option_6.label"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "mobile_height",
+			"default": "400px",
+			"label": "t:sections.video-background.settings.mobile_height.label",
+			"options": [
+				{
+					"value": "auto",
+					"label": "t:sections.video-background.settings.mobile_height.options.option_1.label"
+				},
+				{
+					"value": "400px",
+					"label": "t:sections.video-background.settings.mobile_height.options.option_4.label"
+				},
+				{
+					"value": "500px",
+					"label": "t:sections.video-background.settings.mobile_height.options.option_5.label"
+				},
+				{
+					"value": "100vh",
+					"label": "t:sections.video-background.settings.mobile_height.options.option_6.label"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.heading.label"
+		},
+		{
+			"type": "richtext",
+			"id": "heading_text",
+			"default": "<p>Heading</p>",
+			"label": "t:general.typography.text.label"
+		},
+		{
+			"type": "range",
+			"id": "heading_font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 56,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.sub_heading.label"
+		},
+		{
+			"type": "richtext",
+			"id": "sub_heading_text",
+			"default": "<p>Subheading</p>",
+			"label": "t:general.typography.text.label"
+		},
+		{
+			"type": "range",
+			"id": "sub_heading_font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 16,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.button.label"
+		},
+		{
+			"type": "text",
+			"id": "button",
+			"default": "Button label",
+			"label": "t:general.typography.text.label"
+		},
+		{
+			"type": "url",
+			"id": "button_link",
+			"label": "t:general.typography.link.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.count-down.name"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_countdown",
+			"default": true,
+			"label": "t:sections.count-down.settings.show-countdown.label"
+		},
+		{
+			"type": "text",
+			"id": "countdown_time",
+			"default":"11/11/23 9:59:59",
+			"label": "t:sections.count-down.settings.time-countdown.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.count-down.name"
+		}
+	]
+}
+{% endschema %}

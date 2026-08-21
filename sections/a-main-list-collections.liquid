@@ -1,0 +1,150 @@
+{{ 'a-component-card.css' | asset_url | stylesheet_tag }}
+{{ 'a-section-collection-list.css' | asset_url | stylesheet_tag }}
+
+{%- if request.visual_preview_mode -%}
+  {%- style -%}
+    {% comment %} don't want fade-in animation in preview mode because it messes up preview {% endcomment %}
+    .animation_section,
+    .animation_section * {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+      will-change: auto !important;
+    }
+  {%- endstyle -%}
+{%- endif -%}
+
+<div class="page-width">
+  <h1 class="title title--primary">{{ section.settings.title | escape }}</h1>
+  {%- liquid
+    case section.settings.sort
+      when 'products_high', 'products_low'
+        assign collections = collections | sort: 'all_products_count'
+      when 'date', 'date_reversed'
+        assign collections = collections | sort: 'published_at'
+    endcase
+
+    if section.settings.sort == 'products_high' or section.settings.sort == 'date_reversed' or section.settings.sort == 'alphabetical_reversed'
+      assign collections = collections | reverse
+    endif
+
+    assign moduloResult = 28 | modulo: section.settings.columns_desktop
+    assign paginate_by = 30
+    if moduloResult == 0
+      assign paginate_by = 28
+    endif
+  -%}
+  {%- paginate collections by paginate_by -%}
+    <ul
+      class="collection-list grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down"
+      role="list"
+    >
+      {%- for collection in collections -%}
+        <li class="collection-list__item grid__item">
+          {% render 'a-card-collection',
+            card_collection: collection,
+            media_aspect_ratio: section.settings.image_ratio,
+            columns: 3
+          %}
+        </li>
+      {%- endfor -%}
+    </ul>
+    {% render 'a-pagination', paginate: paginate %}
+  {%- endpaginate -%}
+</div>
+{% schema %}
+{
+  "name": "Collections list page",
+  "class": "section animation_section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Collections"
+    },
+    {
+      "type": "select",
+      "id": "sort",
+      "options": [
+        {
+          "value": "alphabetical",
+          "label": "Alphabetically, A-Z"
+        },
+        {
+          "value": "alphabetical_reversed",
+          "label": "Alphabetically, Z-A"
+        },
+        {
+          "value": "date_reversed",
+          "label": "Date, new to old"
+        },
+        {
+          "value": "date",
+          "label": "Date, old to new"
+        },
+        {
+          "value": "products_high",
+          "label": "Product count, high to low"
+        },
+        {
+          "value": "products_low",
+          "label": "Product count, low to high"
+        }
+      ],
+      "default": "alphabetical",
+      "label": "Sort collections by:"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "adapt",
+      "label": "Image ratio",
+      "info": "Add images by editing your collections. [Learn more](https://help.shopify.com/manual/products/collections)"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 3,
+      "label": "Number of columns on desktop"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Layout"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "2",
+      "label": "Number of columns on mobile"
+    }
+  ]
+}
+{% endschema %}

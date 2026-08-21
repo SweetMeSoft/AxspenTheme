@@ -1,0 +1,205 @@
+{% assign product = closest.product %}
+<div
+  class="payment-badges-block product-block-{{ block.id }}"
+  style="display: flex; justify-content: {{ block.settings.image_layout }};"
+  {{ block.shopify_attributes }}
+>
+  {% style %}
+    .product-block-{{ block.id }} {
+      padding-top: {{ block.settings.padding_top }}px;
+      padding-bottom: {{ block.settings.padding_bottom }}px;
+    }
+    .product-block-{{ block.id }} .list-payment__item svg {
+      width: {{ block.settings.payment_icons_image_size }}px;
+      height: auto;
+    }
+    @media screen and (max-width: 768px) {
+      .product-block-{{ block.id }} .list-payment__item svg {
+        width: {{ block.settings.payment_icons_image_size_mobile }}px;
+        height: auto;
+      }
+      .product-block-{{ block.id }} {
+        padding-top: {{block.settings.padding_top_mobile }}px;
+        padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+      }
+    }
+  {% endstyle %}
+
+  {%- if block.settings.use_shopify_dynamic_payment_icons -%}
+    <ul class="list list-payment" role="list">
+      {% assign enabled_payment_types = block.settings.payment_items | remove: ' ' | split: ',' %}
+      {%- for type in enabled_payment_types -%}
+        <li class="list-payment__item">
+          {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- else -%}
+    {% if block.settings.custom_payment_icons_image %}
+      {% style %}
+        .product-block-{{ block.id }} .custom-payment-icons-image {
+          width: {{ block.settings.custom_image_size }}%;
+          display: block;
+          height: auto;
+        }
+        @media screen and (max-width: 768px) {
+          .product-block-{{ block.id }} .custom-payment-icons-image {
+            width: {{ block.settings.custom_image_size_mobile }}%;
+            height: auto;
+          }
+        }
+      {% endstyle %}
+      {{
+        block.settings.custom_payment_icons_image
+        | image_url: width: 1000
+        | image_tag: class: 'custom-payment-icons-image'
+      }}
+    {% endif %}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Trust badges",
+  "tag": null,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "custom_payment_icons_image",
+      "label": "Custom image"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_shopify_dynamic_payment_icons",
+      "label": "Use shopify dynamic payment icons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "payment_items",
+      "label": "Payment types",
+      "default": "american_express,master,paypal,shopify_pay,visa",
+      "info": "Comma-separated list of payment types to display. Available types: visa, master, american_express, paypal, shopify_pay, apple_pay, google_pay, sofort, unionpay, diners_club, discover, jcb, etc.",
+      "visible_if": "{{ block.settings.use_shopify_dynamic_payment_icons == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "image_layout",
+      "label": "Badge layout",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "custom_image_size",
+      "label": "Custom image size",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 80,
+      "visible_if": "{{ block.settings.use_shopify_dynamic_payment_icons == false }}"
+    },
+    {
+      "type": "range",
+      "id": "custom_image_size_mobile",
+      "label": "Custom image size mobile",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 80,
+      "visible_if": "{{ block.settings.use_shopify_dynamic_payment_icons == false }}"
+    },
+    {
+      "type": "range",
+      "id": "payment_icons_image_size",
+      "label": "Payment icons image size",
+      "min": 10,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "default": 24,
+      "visible_if": "{{ block.settings.use_shopify_dynamic_payment_icons == true }}"
+    },
+    {
+      "type": "range",
+      "id": "payment_icons_image_size_mobile",
+      "label": "Payment icons image size mobile",
+      "min": 10,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "default": 24,
+      "visible_if": "{{ block.settings.use_shopify_dynamic_payment_icons == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Desktop top padding",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Desktop bottom padding",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Mobile top padding",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Mobile bottom padding",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Payment Badges",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

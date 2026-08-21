@@ -1,0 +1,168 @@
+
+{% comment %} {{ 'a-component-slideshow.css' | asset_url | stylesheet_tag }} {% endcomment %}
+
+<link rel="stylesheet" href="{{ 'a-component-mini-reviews.css' | asset_url }}" media="print" onload="this.media='all'" defer>
+<link rel="stylesheet" href="{{ 'a-component-slideshow.css' | asset_url }}" media="print" onload="this.media='all'" defer>
+
+{% style %}
+  .atlas-isolation-wrapper .product-block-{{ block.id }} {
+    padding-top: {{ block.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ block.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  .atlas-isolation-wrapper .mini-review-item {
+    align-items: center;
+  }
+  .atlas-isolation-wrapper .mini-reviews-block .swiper-slide div {
+    display: flex;
+    justify-content: space-between;
+  }
+  .atlas-isolation-wrapper .mini-reviews-swiper--{{ block.id }} .mini-review-stars {
+    color: {{ block.settings.mini_review_stars_color }};
+  }
+
+  .atlas-isolation-wrapper .mini-reviews-block .slider-arrow {
+    width: 3rem;
+    height: 3rem;
+    background-color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  .atlas-isolation-wrapper .mini-reviews-block .slider-arrow-prev {
+    left: -1.5rem;
+    z-index: 4;
+  }
+
+  .atlas-isolation-wrapper .mini-reviews-block .slider-arrow-next {
+    right: -1.5rem;
+    z-index: 4;
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .product-block-{{ block.id }} {
+      padding-top: {{ block.settings.padding_top }}px;
+      padding-bottom: {{ block.settings.padding_bottom }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="mini-reviews-block">
+  <div class="mini-reviews-swiper--{{ block.id }} review-sliders color-{{ block.settings.color_scheme}} swiper swiper-prevent-content-shift">
+    <div class="swiper-wrapper">
+      {%- assign reviews_counter = 0 -%}
+      {% for i in (1..3) %}
+        {% capture item_text %}text_{{ i }}{% endcapture %}
+        {% capture item_image %}image_{{ i }}{% endcapture %}
+        {% capture item_author %}author_{{ i }}{% endcapture %}
+        {% capture item_author_location %}author_location_{{ i }}{% endcapture %}
+
+        {% if block.settings[item_text] != blank %}
+          {% assign reviews_counter = reviews_counter | plus: 1 %}
+          <div class="mini-reviews-slide slider__slide slideshow__slide swiper-slide"
+              id="Slide-{{ section.id }}-{{ reviews_counter }}"
+              {{ block.shopify_attributes }}
+              role="group"
+              aria-roledescription="Slide"
+              aria-label="1 of 3"
+              tabindex="-1">
+            <div class="mini-review-item">
+              <div class="mini-review-item__author-info">
+                <div class="mini-review-item__image">
+                  {% if block.settings[item_image] != blank %}
+                    <img src="{{ block.settings[item_image] | image_url }}"
+                        alt="{{ block.settings[item_author] }}"
+                        width="auto"
+                        height="auto"
+                        loading="lazy">
+                  {% else %}
+                    {% render 'a-icon-anonymous-avatar', class: 'profile-image' %}
+                  {% endif %}
+                </div>
+                {%- unless block.settings[item_author] == blank and block.settings.show_stars == false -%}
+                  <div class="mini-review-info">
+                    <div class="author_info">
+                      {%- unless block.settings[item_author] == blank -%}
+                        <span class="mini-review-author">
+                          {{ block.settings[item_author] | truncate: 10 }}
+                        </span>
+                      {%- endunless -%}
+                    </div>
+                    {%- if block.settings.show_stars -%}
+                      <span class="mini-review-stars">★★★★★</span>
+                    {%- endif -%}
+                    <div>
+                      {% unless block.settings[item_author_location] == blank %}
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#777">
+                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
+                        </svg>
+                        <span class="mini-review-author-location">
+                          {{ block.settings[item_author_location] | truncate: 15}}
+                        </span>
+                      {% endunless %}
+                    </div>
+                      <div>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#4CAF50">
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+                        </svg>
+                        <span class="verified_text">Verified purchase</span>
+                      </div>
+                  </div>
+                {%- endunless -%}          
+              </div>
+              <div class="mini-review-content">
+                <div class="mini-review-text">
+                  {{ block.settings[item_text] }}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  <div>
+    <button class="swiper-slider-arrow slider-arrow slider-arrow-prev prev-button-{{ section.id }} ">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path fill="currentColor" d="M8.12 14.71 12 10.83l3.88 3.88c.39.39 1.02.39 1.41 0s.39-1.02 0-1.41L12.7 8.71a.996.996 0 0 0-1.41 0L6.7 13.3c-.39.39-.39 1.02 0 1.41.39.38 1.03.39 1.42 0"></path>
+      </svg>
+    </button>
+    <button class="swiper-slider-arrow slider-arrow slider-arrow-next next-button-{{ section.id }} ">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path fill="currentColor" d="M8.12 14.71 12 10.83l3.88 3.88c.39.39 1.02.39 1.41 0s.39-1.02 0-1.41L12.7 8.71a.996.996 0 0 0-1.41 0L6.7 13.3c-.39.39-.39 1.02 0 1.41.39.38 1.03.39 1.42 0"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script async>
+  let swiper{{ section.id | replace: '-', '' }};
+  function setupSwiperJs{{ section.id | replace: '-', '' }}() {
+    swiper{{ section.id | replace: '-', '' }} = new Swiper(`.mini-reviews-swiper--{{ block.id }}`, {
+      watchSlidesProgress: true,
+      navigation: {
+        nextEl: `.next-button-{{ section.id }}`,
+        prevEl: `.prev-button-{{ section.id }}`
+      },
+      loop: true,
+      centeredSlides: true,
+      slidesPerView: 1,
+      spaceBetween: 25
+    })
+  }
+
+
+  function cleanupSwiper{{ section.id | replace: '-', '' }}() {
+    if (swiper{{ section.id | replace: '-', '' }}) {
+      swiper{{ section.id | replace: '-', '' }}.destroy();
+      swiper{{ section.id | replace: '-', '' }} = null;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    window.requestAnimationFrame(() => setupSwiperJs{{ section.id | replace: '-', '' }}())
+  });
+
+  if (Shopify.designMode) {
+    document.addEventListener('shopify:section:unload', () => cleanupSwiper{{ section.id | replace: '-', '' }}());
+    document.addEventListener('shopify:section:load', () => setupSwiperJs{{ section.id | replace: '-', '' }}());
+  }
+</script>

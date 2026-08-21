@@ -1,0 +1,476 @@
+{%- liquid
+	assign section_id        = '#shopify-section-' | append: section.id
+	assign full              = section.settings.full
+	assign ft_logo           = section.settings.ft_logo
+	assign ft_logo_width     = section.settings.ft_logo_width
+	assign ft_logo_url_width = ft_logo_width | times: 2
+
+	if section.settings.show_currency and localization.available_countries.size > 1
+		assign currency_selector = true
+	endif
+
+	if section.settings.show_language and localization.available_languages.size > 1
+		assign language_selector = true
+	endif
+
+	if shop.features.follow_on_shop? and section.settings.show_follow
+		assign has_follow_shop = true
+	endif
+-%}
+
+{%- if section.settings.show_footer_bar and ft_logo != blank -%}
+<style>
+	@media  (max-width: 991px) {
+		{{ section_id }} .ft-logo {
+			width: {{ ft_logo_width | times: 0.8 | round | at_least: 50 }}px;
+			max-width: 100%;
+		}
+	}
+</style>
+{%- endif -%}
+
+<footer class="footer color-{{ section.settings.color_scheme }}">
+	<div class="ft-blocks">
+		<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+			<div class="ft-blocks-inner">
+				{%- for block in section.blocks -%}
+					<div class="ft-block-item ft-block-{{ block.type }}" {{ block.shopify_attributes }}>
+						{%- liquid
+							capture heading
+								if block.settings.heading != blank
+									echo '<h2 class="ft-block-heading">'
+									echo block.settings.heading | escape
+									render 'icon', code: 'chevron-down'
+									echo '</h2>'
+								endif
+							endcapture
+						-%}
+
+						{{- heading -}}
+
+						<div class="ft-block-content{% if section.settings.accordion == 'yes' %} collapsible-hidden{% endif %}">
+							{%- case block.type -%}
+								{%- when '@app' -%}
+									{%- render block -%}
+
+								{%- when 'menu' -%}
+									<ul class="ft-block-nav">
+										{%- if block.settings.menu != blank -%}
+											{%- for link in block.settings.menu.links -%}
+												<li>
+													<a href="{{ link.url }}" class="link{% if link.active %} current-menu{% endif %}">
+														{{- link.title -}}
+													</a>
+												</li>
+											{%- endfor -%}
+										{%- else -%}
+											{%- for link in (1..5) -%}
+												<li>{{- 'onboarding.nav_menu.item' | t | append: ' #' | append: forloop.index -}}</li>
+											{%- endfor -%}
+										{%- endif -%}
+									</ul>
+
+								{%- when 'html' -%}
+									{% if block.settings.html != blank %}
+										<div class="ft-block-html">
+											{{- block.settings.html -}}
+										</div>
+									{% endif %}
+
+									{%- liquid
+										if block.settings.show_social
+											render 'social-media'
+										endif
+									-%}
+
+								{%- when 'newsletter' -%}
+									{% if block.settings.newsletter_heading != blank %}
+										<h2 class="ft-block-heading">
+											{{- block.settings.newsletter_heading -}}
+										</h2>
+									{% endif %}
+
+									{% if block.settings.text != blank %}
+										<div class="ft-block-text">
+											{{- block.settings.text -}}
+										</div>
+									{% endif %}
+
+									{%- form 'customer', id: nil -%}
+										<input type="hidden" name="contact[tags]" value="newsletter">
+
+										<div class="newsletter-inner">
+											<div class="field-wrapper">
+												<label for="{{ section.id }}-field" class="sr-only">{{ 'templates.form.email' | t }}</label>
+												<input class="field-input"
+													id="{{ section.id }}-field"
+													type="email"
+													name="contact[email]"
+													value="{{ form.email }}"
+													aria-required="true"
+													autocorrect="off"
+													autocapitalize="off"
+													autocomplete="email"
+													{% if form.errors %}
+														autofocus
+														aria-invalid="true"
+														aria-describedby="contact-error"
+													{% elsif form.posted_successfully? %}
+														aria-describedby="contact-success"
+													{% endif %}
+													placeholder="{{ 'templates.form.email_placeholder' | t }}"
+													pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
+													required >
+
+												<button type="submit" class="button primary-button">
+													{%- liquid
+														render 'icon', code: 'email'
+														echo 'templates.form.email_signup' | t
+													-%}
+												</button>
+											</div>
+
+											{%- if form.errors -%}
+												<small class="message error-message" id="contact-error">
+													{%- liquid
+														render 'icon', code: 'error'
+
+														echo form.errors.translated_fields['email'] | capitalize
+														echo form.errors.messages['email']
+													-%}
+												</small>
+											{%- endif -%}
+										</div>
+
+										{%- if form.posted_successfully? -%}
+											<h3 class="message success-message" id="contact-success" tabindex="-1" autofocus>
+												{%- liquid
+													render 'icon', code: 'success'
+													echo 'newsletter.success' | t
+												-%}
+											</h3>
+										{%- endif -%}
+									{%- endform -%}
+							{%- endcase -%}
+						</div>
+					</div>
+				{%- endfor -%}
+			</div>
+
+			{% comment %} Language/currency {% endcomment %}
+			{%- if language_selector or currency_selector or has_follow_shop -%}
+				<div class="ft-block-bar{% unless has_follow_shop %} only-localization-form{% endunless %}">
+					{%- if language_selector or currency_selector -%}
+						{%- form 'localization', id: 'localization_form', class: 'localization-form' -%}
+							{% comment %} Currency {% endcomment %}
+							{%- if currency_selector -%}
+								<div class="toggle-dropdown no-js-hidden">
+									<input type="hidden" name="currency_code" value="{{ form.current_currency.iso_code }}">
+									<span class="sr-only">{{- 'localization.currency_label' | t -}}</span>
+
+									<button class="dropdown-summary" type="button" aria-expanded="false" aria-expanded="false">
+										{{- localization.country.name }} ({{ localization.country.currency.iso_code }} {% if localization.country.currency.symbol %}{{ localization.country.currency.symbol }}{%- endif -%})
+										<span class="dropdown-icon">{%- render 'icon', code: 'chevron-up' -%}</span>
+									</button>
+
+									<div class="dropdown-content">
+										<div class="dropdown-content-inner">
+											<header class="dropdown-content-header">
+												<span class="dropdown-content-title">{{- 'localization.currency_label' | t -}}</span>
+												{% render 'icon', code: 'close' %}
+											</header>
+
+											<ul class="content" role="list">
+												{%- for country in localization.available_countries -%}
+													<li>
+														<button type="submit" name="country_code" class="submit" value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} aria-current="true"{% endif %}>
+															{{- country.name }} ({{ country.currency.iso_code }}{% if country.currency.symbol %}{{ country.currency.symbol }}{%- endif -%})
+														</button>
+													</li>
+												{%- endfor -%}
+											</ul>
+										</div>
+									</div>
+								</div>
+
+								<noscript>
+									<select name="country_code" class="select-currency" data-noui>
+										{%- for country in localization.available_countries -%}
+											<option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected aria-current="true"{% endif %}>
+												{{- country.name }} ({{ country.currency.iso_code }}{% if country.currency.symbol %}{{ country.currency.symbol }}{%- endif -%})
+											</option>
+										{%- endfor -%}
+									</select>
+								</noscript>
+							{%- endif -%}
+
+							{% comment %} Language {% endcomment %}
+							{%- if language_selector -%}
+								<div class="toggle-dropdown no-js-hidden">
+									<input type="hidden" name="locale_code" value="{{ form.current_locale.iso_code }}">
+									<span class="sr-only">{{- 'localization.language_label' | t -}}</span>
+
+									<button class="dropdown-summary" type="button" aria-expanded="false">
+										{{- localization.language.endonym_name | capitalize -}}
+										<span class="dropdown-icon">{%- render 'icon', code: 'chevron-up' -%}</span>
+									</button>
+
+									<div class="dropdown-content">
+										<div class="dropdown-content-inner">
+											<header class="dropdown-content-header">
+												<span class="dropdown-content-title">{{- 'localization.language_label' | t -}}</span>
+												{% render 'icon', code: 'close' %}
+											</header>
+
+											<ul class="content" role="list">
+												{%- for language in localization.available_languages -%}
+													<li>
+														<button type="submit" name="locale_code" class="submit" value="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} aria-current="true"{% endif %}>
+															{{- language.endonym_name | capitalize -}}
+														</button>
+													</li>
+												{%- endfor -%}
+											</ul>
+										</div>
+									</div>
+								</div>
+
+								<noscript>
+									<select name="locale_code" class="select-language" data-noui>
+										{%- for language in localization.available_languages -%}
+											<option value="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %}selected aria-current="true"{% endif %}>
+												{{- language.endonym_name | capitalize -}}
+											</option>
+										{%- endfor -%}
+									</select>
+								</noscript>
+							{%- endif -%}
+
+							<noscript>
+								<button type="submit" class="button">{{- 'sections.footer.submit' | t -}}</button>
+							</noscript>
+						{%- endform -%}
+					{%- endif -%}
+
+					{% comment %} Follow on shop {% endcomment %}
+					{%- if has_follow_shop -%}
+						<div class="footer-follow-on-shop">
+							{{- shop | login_button: action: 'follow' -}}
+						</div>
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+		</div>
+	</div>
+
+	{%- if section.settings.show_footer_bar -%}
+		<div class="ft-bar">
+			<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+				<div class="ft-bar-inner">
+					{%- if ft_logo != blank -%}
+						<a class="ft-logo" href="{{ routes.root_url }}">
+							{{- ft_logo | image_url: width: ft_logo_url_width | image_tag: width: ft_logo_width, loading: 'lazy' -}}
+
+							<span class="sr-only">{{- shop.name -}}</span>
+						</a>
+					{%- endif -%}
+
+					{%- if section.settings.show_copyright -%}
+						<div class="ft-copyright">
+							<p>&copy; {{ 'now' | date: '%Y' }} {{ routes.root_url }}. <a href="https://elmarketeroweb.com/">Creado por elmarketeroweb</a> </p>
+						</div>
+					{%- endif -%}
+
+					{%- if section.settings.show_payments and shop.enabled_payment_types != empty -%}
+						<div class="ft-payments">
+							<span class="sr-only">{{- 'sections.footer.payment' | t -}}</span>
+
+							<ul class="list-payment" role="list">
+								{%- for type in shop.enabled_payment_types -%}
+									<li class="list-item">
+										{{- type | payment_type_svg_tag: class: 'icon-payment' -}}
+									</li>
+								{%- endfor -%}
+							</ul>
+						</div>
+					{%- endif -%}
+				</div>
+			</div>
+		</div>
+	{%- endif -%}
+</footer>
+
+{% schema %}
+{
+	"name": "t:sections.footer.name",
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-2"
+		},
+		{
+			"type": "select",
+			"id": "accordion",
+			"default": "yes",
+			"options": [
+				{
+					"value": "yes",
+					"label": "t:sections.footer.settings.accordion.option_1.label"
+				},
+				{
+					"value": "no",
+					"label": "t:sections.footer.settings.accordion.option_2.label"
+				}
+			],
+			"label": "t:sections.footer.settings.accordion.label",
+			"info": "t:sections.footer.settings.accordion.info"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_currency",
+			"default": true,
+			"label": "t:general.shopify.show_currency.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_language",
+			"default": true,
+			"label": "t:general.shopify.show_language.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_follow",
+			"default": true,
+			"label": "t:sections.footer.settings.show_follow.label",
+			"info": "t:sections.footer.settings.show_follow.info"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.footer.settings.footer_bar.content"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_footer_bar",
+			"default": true,
+			"label": "t:sections.footer.settings.show_footer_bar.label"
+		},
+		{
+			"type": "image_picker",
+			"id": "ft_logo",
+			"label": "t:sections.footer.settings.ft_logo.label"
+		},
+		{
+			"type": "range",
+			"id": "ft_logo_width",
+			"min": 50,
+			"max": 250,
+			"step": 10,
+			"default": 60,
+			"unit": "px",
+			"label": "t:sections.footer.settings.ft_logo_width.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_copyright",
+			"default": true,
+			"label": "t:sections.footer.settings.show_copyright.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_payments",
+			"default": true,
+			"label": "t:sections.footer.settings.show_payments.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "@app"
+		},
+		{
+			"type": "menu",
+			"limit": 4,
+			"name": "t:sections.footer.blocks.menu.name",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"default": "Heading",
+					"label": "t:general.typography.heading.label"
+				},
+				{
+					"type": "link_list",
+					"id": "menu",
+					"default": "footer",
+					"label": "t:sections.footer.blocks.menu.settings.menu.label",
+					"info": "t:sections.footer.blocks.menu.settings.menu.info"
+				}
+			]
+		},
+		{
+			"type": "html",
+			"name": "t:sections.footer.blocks.html.name",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"default": "Heading",
+					"label": "t:general.typography.heading.label"
+				},
+				{
+					"type": "textarea",
+					"id": "html",
+					"default": "Share contact information, store details, and brand content with your customers.",
+					"label": "t:sections.footer.blocks.html.settings.html.label"
+				},
+				{
+					"type": "checkbox",
+					"id": "show_social",
+					"default": true,
+					"label": "t:sections.footer.blocks.html.settings.show_social.label"
+				}
+			]
+		},
+		{
+			"type": "newsletter",
+			"limit": 1,
+			"name": "t:sections.footer.blocks.newsletter.name",
+			"settings": [
+				{
+					"type": "text",
+					"id": "newsletter_heading",
+					"default": "Heading",
+					"label": "t:general.typography.heading.label"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"default": "<p>Apply for our free membership to receive exclusive deals, news, and events.</p>",
+					"label": "t:general.typography.text.label"
+				}
+			]
+		}
+	],
+	"default": {
+		"blocks": [
+			{
+				"type": "html"
+			},
+			{
+				"type": "menu"
+			},
+			{
+				"type": "menu"
+			}
+		]
+	}
+}
+{% endschema %}

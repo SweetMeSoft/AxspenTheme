@@ -1,0 +1,217 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+	assign full       = section.settings.full
+	assign heading    = section.settings.heading
+	assign subheading = section.settings.sub_heading_text
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper{
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+		<div class="image-tab-content">
+			<div class="left-tab-wrapper">
+				{% if heading != blank or subheading != blank %}
+					<div class="title-wrapper heading-color">
+						{% if subheading != blank %}
+							<h5 class="subheading">{{- subheading -}}</h5>
+						{% endif %}
+
+						{% if heading != blank %}
+							<h2 class="left-heading">
+								{{- heading -}}
+							</h2>
+						{% endif %}
+					</div>
+				{% endif %}
+
+				{%- for block in section.blocks -%}
+					{% assign image_right = block.settings.image_right %}
+
+					<details class="menu-map faq-accordion desktop-hover" data-id="{{ section.id }}-{{ block.id }}">
+						<summary class="accordion-summary heading-color" aria-expanded="false">
+							<h4 class="accordion-title">{{- block.settings.heading_accordion -}}</h4>
+
+							<span class="accordion-caret hidden-tablet hidden-mobile">
+								<span class="arrow-down">
+									{%- render 'icon', code: 'arrow-right' -%}
+								</span>
+							</span>
+
+							<span class="accordion-caret hidden-desktop">
+									<span class="plus">
+										{%- render 'icon', code: 'plus' -%}
+									</span>
+
+									<span class="minus">
+										{%- render 'icon', code: 'minus' -%}
+									</span>
+								</span>
+						</summary>
+
+						<div class="accordion-content details-content hidden-desktop rte">
+							<div class="image{% if settings.image_lazy and image_right %} lazy-image{% endif %}">
+								{%- liquid
+									if image_right != blank
+										render 'lazy-image', image: image_right, width: 433
+									else
+										render 'icon', code: 'placeholder', width: 433
+									endif
+								-%}
+							</div>
+						</div>
+					</details>
+				{%- endfor -%}
+			</div>
+
+			<div class="right-tab-wrapper content-container">
+				{%- for block in section.blocks -%}
+					{% assign image_right = block.settings.image_right %}
+
+					<div class="accordion-content details-content hidden-tablet hidden-tablet rte content-map{% if forloop.index == 1 %} active{% endif %}" data-id="{{ section.id }}-{{ block.id }}">
+						<div class="image{% if settings.image_lazy and image_right %} lazy-image{% endif %}">
+							{%- liquid
+								if image_right != blank
+									render 'lazy-image', image: image_right, width: 433
+								else
+									render 'icon', code: 'placeholder', width: 433
+								endif
+							-%}
+						</div>
+					</div>
+				{%- endfor -%}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.image-tab.name",
+	"class": "image-tab-section has-accordion-style",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "text",
+			"id": "heading",
+			"default": "Heading",
+			"label": "t:general.typography.heading.label"
+		},
+		{
+			"type": "text",
+			"id": "sub_heading_text",
+			"default": "Subheading",
+			"label": "t:general.typography.sub_heading.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 100,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 100,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "item",
+			"name": "t:sections.map.blocks.item.name",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading_accordion",
+					"default": "Heading",
+					"label": "t:general.typography.heading.label"
+				},
+				{
+					"type": "image_picker",
+					"id": "image_right",
+					"label": "t:sections.image-tab.blocks.image_item.name"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.image-tab.name",
+			"blocks": [
+				{
+					"type": "item"
+				},
+				{
+					"type": "item"
+				},
+				{
+					"type": "item"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

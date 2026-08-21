@@ -1,0 +1,172 @@
+<style>
+  {% if request.visual_preview_mode %}
+    {% assign block_id_variable = 'id-heading-block' %}
+  {% else %}
+    {% assign block_id_variable = block.id %}
+  {% endif %}
+   .atlas-isolation-wrapper .heading_block-{{block_id_variable }} {
+    --heading-size: {{ block.settings.heading_size }}px;
+    --heading-color: {{ block.settings.heading_color }};
+     font-size: var(--heading-size) !important;
+     line-height: 100%;
+     color: var(--heading-color) !important;
+     --color-highlighted-color:  {{ block.settings.bolded_heading_color }};
+     margin: 0;
+     padding-top: {{ block.settings.heading_padding_top }}px;
+     padding-bottom: {{ block.settings.heading_padding_bottom }}px;
+     {%- if block.settings.heading_use_weight -%}
+       font-weight: 700;
+     {%- else -%}
+       font-weight: 500;
+     {%- endif -%}
+   }
+   @media (max-width: 768px) {
+       .atlas-isolation-wrapper .heading_block-{{block_id_variable }} {
+         --heading-size: {{ block.settings.heading_mob_size }}px;
+         padding-top: {{ block.settings.heading_padding_top_mobile }}px;
+         padding-bottom: {{ block.settings.heading_padding_bottom_mobile }}px;
+       }
+     }
+     {%- if block.settings.heading_use_gradient -%}
+       .atlas-isolation-wrapper .heading_block-{{block_id_variable }}  strong {
+         background: {% if block.settings.heading_gradient_color != blank %}{{ block.settings.heading_gradient_color }}{% else %}var(--color-highlighted-color){% endif %};
+         -webkit-background-clip: text;
+         background-clip: text;
+         color: transparent;
+       }
+     {%- endif -%}
+</style>
+{%- if block.settings.heading != blank -%}
+  <{{ block.settings.heading_tag }} class="heading_block-{{block_id_variable }} {{ class_list }} heading-block" {{ block.shopify_attributes }}>
+    {{- block.settings.heading -}}
+  </{{ block.settings.heading_tag }}>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Heading",
+  "tag": null,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading tag",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" }
+      ],
+      "default": "h3"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_use_weight",
+      "label": "Use bold weight",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 35
+    },
+    {
+      "type": "range",
+      "id": "heading_mob_size",
+      "min": 10,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile heading size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bolded_heading_color",
+      "label": "Heading bolded color",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_use_gradient",
+      "label": "Use gradient for heading",
+      "info": "Any text formatted as bold within the heading will be converted to a gradient.",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "heading_gradient_color",
+      "label": "Heading gradient color",
+      "visible_if": "{{ block.settings.heading_use_gradient }}",
+      "default": "linear-gradient(180deg, rgba(234, 56, 133, 1), rgba(95, 77, 188, 1) 100%)"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_top",
+      "label": "Desktop top padding",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_bottom",
+      "label": "Desktop bottom padding",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_top_mobile",
+      "label": "Mobile top padding",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_bottom_mobile",
+      "label": "Mobile bottom padding",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Heading"
+    }
+  ]
+}
+{% endschema %}

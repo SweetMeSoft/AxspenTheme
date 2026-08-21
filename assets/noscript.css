@@ -1,0 +1,4 @@
+.no-js .template-collection .filter-form [type="submit"] {
+  margin-top: 2rem;
+  min-width: 18rem;
+}

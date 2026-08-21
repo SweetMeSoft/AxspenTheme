@@ -1,0 +1,490 @@
+<link
+  rel="preload"
+  href="{{ 'a-collapsible-content.css' | asset_url }}"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+>
+{% render 'a-accordion-css' %}
+{%- liquid
+  assign global_heading_size = settings.enable_global_heading_font_size
+  assign global_color = settings.enable_global_color
+  assign section_id_variable = section.id
+-%}
+
+{% if request.visual_preview_mode %}
+  {% comment %} For some reason, using actual section id in preview messes up the preview render. Doing this fixes it. {% endcomment %}
+  {% assign section_id_variable = 'id' %}
+{% endif %}
+
+{%- style -%}
+  {%- if request.visual_preview_mode -%}
+    {% comment %} don't want fade-in animation in preview mode because it messes up preview {% endcomment %}
+    .animation_section,
+    .animation_section * {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+      will-change: auto !important;
+    }
+  {%- endif -%}
+  .atlas-isolation-wrapper #section-{{ section_id_variable }} .collapsible-content-wrapper-narrow {
+    max-width: {{ section.settings.content_max_width_desktop }}px;
+  }
+  .atlas-isolation-wrapper #section-{{ section_id_variable }} .section__collapsible_content {
+    padding: 5px 0;
+    /* margin: -1px 0; */
+  }
+
+  .atlas-isolation-wrapper .section-{{ section_id_variable }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .atlas-isolation-wrapper .section-{{ section_id_variable }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+
+  .atlas-isolation-wrapper .accordianTitle-{{ section_id_variable }} {
+    margin: 0px;
+  }
+
+  .atlas-isolation-wrapper .accordianTitle-{{ section_id_variable }} span.material-icon.material-symbols-outlined{
+    display: flex;
+    align-items: center;
+  }
+  .atlas-isolation-wrapper #section-{{ section_id_variable }} .collapsible-content__subheading {
+    font-size: {{ section.settings.subheading_size }}px;
+    color: {{ section.settings.subheading_color }};
+    line-height: 100%;
+  }
+  .atlas-isolation-wrapper #section-{{ section_id_variable }} .collapsible-content__subheading p {
+    margin: 0;
+  }
+  .atlas-isolation-wrapper #section-{{ section_id_variable }} .collapsible-content__subheading strong {
+    {% if section.settings.subheading_use_gradient %}
+      background: {% if section.settings.subheading_gradient_color != blank %}{{ section.settings.subheading_gradient_color }}{% endif %};
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    {% else %}
+      color: {{ section.settings.subheading_highlighted_color }};
+    {% endif %}
+  }
+  @media (max-width: 768px) {
+    .atlas-isolation-wrapper #section-{{ section_id_variable }} .collapsible-content__subheading {
+      font-size: {{ section.settings.subheading_mob_size }}px;
+    }
+  }
+  .atlas-isolation-wrapper #section-{{ section_id_variable }} .collapsible-content__grid {
+    padding-top: {{ section.settings.padding_top_content }}px;
+    padding-bottom: {{ section.settings.padding_bottom_content }}px;
+  }
+{%- endstyle -%}
+
+<div id="section-{{ section.id }}">
+  <div
+    class="gradient section__collapsible_content"
+    style="{% if section.settings.use_gradient_background %}background: {{ section.settings.section_background_gradient }};{% else %}background-color: {{ section.settings.section_background_color }};{% endif %}"
+  >
+    <div class="collapsible-content">
+      <div class="collapsible-content__wrapper section-{{ section_id_variable }}-padding">
+        <div class="{% if section.settings.image == blank %}collapsible-content-wrapper-narrow page-width{% else %}page-width{% endif %}">
+          <div class="collapsible-content__header" style="text-align: {{ section.settings.heading_alignment }};">
+            {%- if section.settings.heading != blank -%}
+              {% style %}
+                .atlas-isolation-wrapper #section-heading-{{ section_id_variable }}{
+                    font-size: {% if global_heading_size %}var(--atlas-font-heading-size) !important{% else %}{{ section.settings.font_size }}px!important{% endif %};
+                    color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ section.settings.heading_color }}{% endif %};
+                    --atlas-color-highlighted-color: {{ section.settings.heading_highlighted_color }};
+                    margin-bottom: {{ section.settings.heading_subheading_gap }}px;
+                }
+                .atlas-isolation-wrapper #section-heading-{{ section_id_variable }} p {
+                  margin: 0;
+                }
+                .atlas-isolation-wrapper #section-heading-{{ section_id_variable }} strong {
+                  {%- if section.settings.heading_use_gradient -%}
+                    background: {% if section.settings.heading_gradient_color != blank %}{{ section.settings.heading_gradient_color }}{% else %}var(--atlas-gradient-base-background-1){% endif %};
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                  {%- endif -%}
+                }
+                @media (max-width: 768px) {
+                  .atlas-isolation-wrapper #section-heading-{{ section_id_variable }}{
+                    font-size: {% if global_heading_size %}var(--atlas-font-heading-mob-size) !important{% else %}{{ section.settings.mob_font_size }}px!important{% endif %};
+                    margin-bottom: {{ section.settings.heading_subheading_gap_mobile }}px;
+                  }
+                }
+              {% endstyle %}
+
+              <h2
+                id="section-heading-{{ section_id_variable }}"
+                class="title collapsible-content__heading {{ section.settings.heading_size }}"
+              >
+                {{ section.settings.heading }}
+              </h2>
+            {%- else -%}
+              <h2 class="visually-hidden">Collapsible content</h2>
+            {% endif %}
+            {%- if section.settings.subheading != blank -%}
+              <div class="collapsible-content__subheading">{{ section.settings.subheading }}</div>
+            {% endif %}
+          </div>
+          <div class="grid grid--1-col grid--2-col-tablet collapsible-content__grid{% if section.settings.desktop_layout == 'image_second' %} collapsible-content__grid--reverse{% endif %}">
+            {%- if section.settings.image != blank -%}
+              <div
+                style="overflow: hidden; border-radius: 10px;"
+                class="grid__item collapsible-content__grid-item"
+              >
+                <div
+                  class="collapsible-content__media collapsible-content__media--{{ section.settings.image_ratio }} media global-media-settings gradient"
+                  {% if section.settings.image_ratio == 'adapt' %}
+                    style="padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;"
+                  {% endif %}
+                >
+                  {%- capture sizes -%}
+                  (min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px,
+                  (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)
+                {%- endcapture -%}
+                  {{
+                    section.settings.image
+                    | image_url: width: 1800
+                    | image_tag: loading: 'lazy', sizes: sizes, widths: '165, 360, 535, 750, 1070, 1250, 1500'
+                  }}
+                </div>
+              </div>
+            {% endif %}
+            <div class="grid__item">
+              {% content_for 'blocks' %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initCollapsibles{{ section.id | replace: '-', '' }}() {
+    const acc = document.getElementsByClassName("accordionButtonStyle-{{ section.id }}");
+    for (let i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        const panel = this.nextElementSibling;
+        panel.style.maxHeight = panel.style.maxHeight ? null : (panel.scrollHeight + 25) + "px";
+      });
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => setTimeout(initCollapsibles{{ section.id | replace: '-', '' }}, 550));
+  document.addEventListener('shopify:section:load', () => setTimeout(initCollapsibles{{ section.id | replace: '-', '' }}, 550));
+  document.addEventListener('shopify:section:unload', () => setTimeout(initCollapsibles{{ section.id | replace: '-', '' }}, 550));
+</script>
+
+{% schema %}
+{
+  "name": "Collapsible content",
+  "tag": "section",
+  "class": "atlas-isolation-wrapper atlas-gradient section animation_section",
+  "blocks": [
+    {
+      "type": "_a-collapsible-content-list"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "Section subheading",
+      "default": "Find quick answers to the most common questions about our product."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Section image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_index",
+      "default": true,
+      "label": "Show row number"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width_desktop",
+      "label": "Desktop content max width",
+      "min": 500,
+      "max": 1200,
+      "step": 100,
+      "unit": "px",
+      "default": 1100
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "options": [
+        {
+          "value": "image_first",
+          "label": "Image first, content second"
+        },
+        {
+          "value": "image_second",
+          "label": "Content first, image second"
+        }
+      ],
+      "default": "image_first",
+      "label": "Desktop layout",
+      "info": "Choose the order of image and content on desktop"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "adapt",
+      "label": "Image size"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "heading_subheading_gap",
+      "label": "Desktop gap between heading and subheading",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "heading_subheading_gap_mobile",
+      "label": "Mobile gap between heading and subheading",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 7
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Desktop heading font size",
+      "min": 20,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 35
+    },
+    {
+      "type": "range",
+      "id": "mob_font_size",
+      "label": "Mobile heading font size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 25
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#383838"
+    },
+    {
+      "type": "color",
+      "id": "heading_highlighted_color",
+      "label": "Bolded heading color",
+      "default": "#383838"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_use_gradient",
+      "label": "Use gradient for heading",
+      "info": "Enable to use a gradient instead of solid color for the heading",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "heading_gradient_color",
+      "label": "Heading gradient color",
+      "visible_if": "{{ section.settings.heading_use_gradient }}",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "label": "Desktop subheading font size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "subheading_mob_size",
+      "label": "Mobile subheading font size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "default": "#383838"
+    },
+    {
+      "type": "color",
+      "id": "subheading_highlighted_color",
+      "label": "Bold subheading text color",
+      "default": "#383838"
+    },
+    {
+      "type": "checkbox",
+      "id": "subheading_use_gradient",
+      "label": "Use gradient for bold text in subheading",
+      "info": "Any text formatted as bold within the subheading will be converted to a gradient.",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "subheading_gradient_color",
+      "label": "Subheading gradient color",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.subheading_use_gradient }}"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_background_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.use_gradient_background == false }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_content",
+      "label": "Section content top padding",
+      "min": 0,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 29
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_content",
+      "label": "Section content bottom padding",
+      "min": 0,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 24
+    }
+  ]
+}
+{% endschema %}

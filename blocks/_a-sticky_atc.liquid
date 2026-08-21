@@ -1,0 +1,433 @@
+{% assign product = closest.product %}
+<div class="sticky-atc-wrapper" style="position: relative;" {{ block.shopify_attributes }}>
+  {% render 'a-sticky-atc', block: block %}
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var closeBtn = document.querySelector(' .product-block-{{ block.id }} .sticky-atc-close');
+    if (!closeBtn) return;
+    closeBtn.addEventListener('click', function() {
+      var container = document.querySelector('.product-block-{{ block.id }}');
+      if (container) container.classList.add("atc-button-x-hide");
+    });
+  });
+  </script>
+
+{% schema %}
+{
+  "name": "Sticky add to cart",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "button_label",
+      "label": "Text",
+      "default": "Add to cart"
+    },
+    {
+      "type": "header",
+      "content": "Display settings"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "close_button_size",
+      "label": "Close button size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ block.settings.show_close_button }}"
+    },
+    {
+      "type": "color",
+      "id": "close_button_color",
+      "label": "Close button color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.show_close_button }}"
+    },
+    {
+      "type": "select",
+      "id": "display_when",
+      "options": [
+        {
+          "value": "always",
+          "label": "Always"
+        },
+        {
+          "value": "after_scroll",
+          "label": "After scrolling past regular ATC button"
+        }
+      ],
+      "label": "Display type",
+      "default": "after_scroll"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_badge",
+      "default": true,
+      "label": "Discount badge",
+    },
+    {
+      "type": "checkbox",
+      "id": "show_variant_selector",
+      "default": true,
+      "label": "Variant selector",
+      "info": "Note: This setting is only available on desktop."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_only_atc_button_on_mobile",
+      "default": false,
+      "label": "Show only Add to Cart button on mobile",
+    },
+    {
+      "type": "checkbox",
+      "id": "show_close_button",
+      "default": true,
+      "label": "Show close (X) button on mobile",
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "default": true,
+      "label": "Show price",
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare_at_price",
+      "default": true,
+      "label": "Show compared price",
+      "info": "Note: This settings is only available on desktop."
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Product title font size",
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "product_title_color",
+      "label": "Product title color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "option_size",
+      "min": 10,
+      "max": 25,
+      "step": 1,
+      "unit": "px",
+      "label": "Product option font size",
+      "default": 13
+    },
+    {
+      "type": "color",
+      "id": "product_option_color",
+      "label": "Product option color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "min": 15,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Price font size",
+      "default": 22,
+      "visible_if": "{{ block.settings.show_price }}"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.show_price }}"
+    },
+    {
+      "type": "range",
+      "id": "comp_price_size",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Compare price font size",
+      "default": 20,
+      "visible_if": "{{ block.settings.show_compare_at_price }}"
+    },
+    {
+      "type": "color",
+      "id": "compare_price_color",
+      "label": "Compare price color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.show_compare_at_price }}"
+    },
+    {
+      "type": "header",
+      "content": "Container styling"
+    },
+    {
+      "type": "color",
+      "id": "container_bg_color",
+      "label": "Container background color",
+      "default": "#9b9a9c"
+    },
+    {
+      "type": "header",
+      "content": "Badge styling"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Button styling"
+    },
+    {
+      "type": "checkbox",
+      "id": "bold_sticky_atc_text",
+      "label": "Bold button text",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button font size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background color",
+      "default": "#1D1A2D"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Input styling"
+    },
+    {
+      "type": "range",
+      "id": "input_font_size",
+      "label": "Input font size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Input text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "input_bg_color",
+      "label": "Input background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "input_bg_color_opacity",
+      "label": "Input background color opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 20
+    },  
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input border color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "input_border_color_opacity",
+      "label": "Input border color opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "input_border_width",
+      "label": "Input border width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "label": "Input border radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Product media"
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "min": 20,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop image height",
+      "default": 66
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 20,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop image width",
+      "default": 64
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_image_on_mobile",
+      "default": false,
+      "label": "Mobile: Hide image",
+    },
+    {
+      "type": "range",
+      "id": "image_height_mobile",
+      "min": 20,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile image height",
+      "default": 32,
+      "visible_if": "{{ block.settings.hide_image_on_mobile == false }}"
+    },
+    {
+      "type": "range",
+      "id": "image_width_mobile",
+      "min": 20,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile image width",
+      "default": 30,
+      "visible_if": "{{ block.settings.hide_image_on_mobile == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sticky Add to Cart",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

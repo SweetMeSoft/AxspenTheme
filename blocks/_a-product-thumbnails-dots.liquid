@@ -1,0 +1,146 @@
+{% style %}
+ .dots-progress-slider {  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+  @media screen and (max-width: 749px) {
+    .dots-progress-slider {
+      position: initial;
+      transform: unset;
+      margin: 0 auto;
+    }
+  }
+  .dots-container  { display: flex; align-items: center;gap: 4px; }
+  
+  /* Window */
+  .dots-mask {
+    overflow: hidden;
+    /* width is calculated via inline style in Liquid template */
+  }
+  
+  /* Long strip that slides using left: xpx */
+  .dots-strip {
+    position: relative;      /* required for left to work */
+    left: var(--strip-left, 0px);  /* JS updates this via CSS custom property */
+    display: inline-block;   /* keep children in one line */
+    white-space: nowrap;     /* don't wrap to next line */
+    transition: left 250ms ease;  /* smooth scroll feel */
+  }
+  
+  /* Dots styling with section settings */
+  .dot {
+    display: inline-block;
+    width: {{ block.settings.dots_size | default: 10 }}px; 
+    height: {{ block.settings.dots_size | default: 10 }}px; 
+    border-radius: 50%;
+    background: {{ block.settings.dots_color | default: '#C9C9C9' }}; 
+    border: 0; 
+    padding: 0; 
+    cursor: pointer;
+    margin: 0 4px;           /* spacing between dots (step uses offsets, so OK) */
+  }
+  .dot.dot--active { 
+    background: {{ block.settings.dots_active_color | default: '#000000' }}; 
+    transition:  background .2s ease; 
+  }
+{% endstyle %}
+{%  assign product = closest.product %}
+{%- assign initial_featured_media = featured_media | default: product.selected_or_first_available_variant.featured_media -%}
+{%- if section.settings.show_main_image_first and product.featured_media -%}
+  {%- assign initial_featured_media = product.featured_media -%}
+{%- endif -%}
+{%- assign initial_media_id = nil -%}
+{%- if initial_featured_media -%}
+  {%- assign initial_media_id = initial_featured_media.id -%}
+{%- endif -%}
+<div class="dots-progress-slider" id="DotsProgress-{{ section.id }}{{ id_append }}" data-max-dots-visible="{{ block.settings.max_dots_visible | default: 7 }}" {{ block.shopify_attributes }}>
+  <div class="dots-container">
+    {%- assign dot_size = block.settings.dots_size | default: 10 -%}
+    {%- assign dot_margin = 8 -%}
+    {%- assign dot_step = dot_size | plus: dot_margin -%}
+    {%- assign max_dots_visible = block.settings.max_dots_visible | default: 7 -%}
+    {% if max_dots_visible > media_count %}
+      {%- assign max_dots_visible = media_count -%}
+    {% endif %}
+    <div class="dots-mask" style="--atlas-dots-visible: {{ max_dots_visible }}; --atlas-dot-step: {{ dot_step }}px; width: calc(var(--atlas-dots-visible) * var(--atlas-dot-step));">
+      <div class="dots-strip" style="--atlas-strip-left: 0px;">
+        {%- assign dot_index = 0 -%}
+        {%- if initial_featured_media != null -%}
+          {%- assign dot_index = dot_index | plus: 1 -%}
+          <button 
+            type="button" 
+            class="dot dot--active" 
+            data-media-id="{{ section.id }}-{{ initial_featured_media.id }}"
+            aria-label="Slide {{ dot_index }} of {{ media_count }}"
+            aria-current="true"
+          ></button>
+        {%- endif -%}
+
+        {%- for media in product.media -%}
+          {%- unless media.id == initial_media_id -%}
+            {%- assign dot_index = dot_index | plus: 1 -%}
+            <button 
+              type="button" 
+              class="dot" 
+              data-media-id="{{ section.id }}-{{ media.id }}"
+              aria-label="Slide {{ dot_index }} of {{ media_count }}"
+              aria-current="false"
+            ></button>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Thumbnails dots",
+  "tag": null,
+  "settings":[
+    {
+      "type": "range",
+      "id": "max_dots_visible",
+      "label": "Maximum dots visible",
+      "info": "Maximum number of dots to display in the gallery navigation.",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "dots_size",
+      "min": 6,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Dots size",
+      "default": 10
+    },
+    {
+      "type": "color",
+      "id": "dots_color",
+      "label": "Dots color",
+      "default": "#C9C9C9"
+    },
+    {
+      "type": "color",
+      "id": "dots_active_color",
+      "label": "Active dot color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Thumbnails dots"
+    }
+  ]
+}
+{% endschema %}

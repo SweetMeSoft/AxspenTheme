@@ -1,0 +1,1107 @@
+{% doc %}
+  @prompt
+    RESEÑAS, QUIERO QUE LAS PERSONAS PUEDAN ESCRIBIR SU PROPIA RESEÑA
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-reviews-container-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: 40px 20px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-reviews-header-{{ ai_gen_id }} {
+    text-align: {{ block.settings.header_alignment }};
+    margin-bottom: 32px;
+  }
+
+  .ai-reviews-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    color: {{ block.settings.title_color }};
+    margin: 0 0 16px;
+    font-weight: {{ block.settings.title_weight }};
+  }
+
+  .ai-reviews-summary-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: {{ block.settings.header_alignment }};
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .ai-reviews-stars-{{ ai_gen_id }} {
+    display: flex;
+    gap: 4px;
+  }
+
+  .ai-reviews-star-{{ ai_gen_id }} {
+    width: {{ block.settings.star_size }}px;
+    height: {{ block.settings.star_size }}px;
+    fill: {{ block.settings.star_color }};
+  }
+
+  .ai-reviews-star-{{ ai_gen_id }}.empty {
+    fill: {{ block.settings.star_empty_color }};
+  }
+
+  .ai-reviews-rating-text-{{ ai_gen_id }} {
+    font-size: 16px;
+    color: {{ block.settings.text_color }};
+    font-weight: 600;
+  }
+
+  .ai-reviews-count-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: {{ block.settings.text_color }};
+    opacity: 0.7;
+  }
+
+  .ai-review-form-section-{{ ai_gen_id }} {
+    background-color: {{ block.settings.form_background }};
+    border: 1px solid {{ block.settings.card_border_color }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    padding: {{ block.settings.card_padding }}px;
+    margin-bottom: 40px;
+  }
+
+  .ai-review-form-title-{{ ai_gen_id }} {
+    font-size: 24px;
+    color: {{ block.settings.title_color }};
+    margin: 0 0 24px;
+    font-weight: 600;
+  }
+
+  .ai-review-form-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .ai-review-form-group-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ai-review-form-label-{{ ai_gen_id }} {
+    font-size: 14px;
+    font-weight: 600;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-review-form-required-{{ ai_gen_id }} {
+    color: {{ block.settings.error_color }};
+  }
+
+  .ai-review-form-input-{{ ai_gen_id }},
+  .ai-review-form-textarea-{{ ai_gen_id }} {
+    padding: 12px 16px;
+    border: 1px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    font-size: 14px;
+    color: {{ block.settings.text_color }};
+    background-color: {{ block.settings.input_background }};
+    font-family: inherit;
+  }
+
+  .ai-review-form-input-{{ ai_gen_id }}:focus,
+  .ai-review-form-textarea-{{ ai_gen_id }}:focus {
+    outline: none;
+    border-color: {{ block.settings.button_bg_color }};
+  }
+
+  .ai-review-form-textarea-{{ ai_gen_id }} {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .ai-review-rating-selector-{{ ai_gen_id }} {
+    display: flex;
+    gap: 8px;
+  }
+
+  .ai-review-rating-star-{{ ai_gen_id }} {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    fill: {{ block.settings.star_empty_color }};
+    transition: fill 0.2s ease;
+  }
+
+  .ai-review-rating-star-{{ ai_gen_id }}.selected,
+  .ai-review-rating-star-{{ ai_gen_id }}:hover {
+    fill: {{ block.settings.star_color }};
+  }
+
+  .ai-review-form-submit-{{ ai_gen_id }} {
+    padding: 14px 32px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    border: 1px solid {{ block.settings.button_bg_color }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+  }
+
+  .ai-review-form-submit-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_bg }};
+    border-color: {{ block.settings.button_hover_bg }};
+    color: {{ block.settings.button_hover_text }};
+  }
+
+  .ai-review-form-message-{{ ai_gen_id }} {
+    padding: 12px 16px;
+    border-radius: {{ block.settings.input_border_radius }}px;
+    font-size: 14px;
+    margin-top: 16px;
+  }
+
+  .ai-review-form-message-{{ ai_gen_id }}.success {
+    background-color: rgba(30, 148, 88, 0.1);
+    color: {{ block.settings.verified_color }};
+    border: 1px solid {{ block.settings.verified_color }};
+  }
+
+  .ai-review-form-message-{{ ai_gen_id }}.error {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: {{ block.settings.error_color }};
+    border: 1px solid {{ block.settings.error_color }};
+  }
+
+  .ai-reviews-list-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
+    gap: {{ block.settings.gap }}px;
+    margin-bottom: 32px;
+  }
+
+  .ai-review-card-{{ ai_gen_id }} {
+    background-color: {{ block.settings.card_background }};
+    border: 1px solid {{ block.settings.card_border_color }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    padding: {{ block.settings.card_padding }}px;
+  }
+
+  .ai-review-header-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .ai-review-author-{{ ai_gen_id }} {
+    font-weight: 600;
+    color: {{ block.settings.text_color }};
+    font-size: 16px;
+    margin: 0 0 4px;
+  }
+
+  .ai-review-date-{{ ai_gen_id }} {
+    font-size: 12px;
+    color: {{ block.settings.text_color }};
+    opacity: 0.6;
+  }
+
+  .ai-review-stars-{{ ai_gen_id }} {
+    display: flex;
+    gap: 2px;
+  }
+
+  .ai-review-star-{{ ai_gen_id }} {
+    width: 16px;
+    height: 16px;
+    fill: {{ block.settings.star_color }};
+  }
+
+  .ai-review-star-{{ ai_gen_id }}.empty {
+    fill: {{ block.settings.star_empty_color }};
+  }
+
+  .ai-review-title-{{ ai_gen_id }} {
+    font-weight: 600;
+    color: {{ block.settings.text_color }};
+    font-size: 14px;
+    margin: 0 0 8px;
+  }
+
+  .ai-review-text-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .ai-review-verified-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: {{ block.settings.verified_color }};
+  }
+
+  .ai-review-verified-icon-{{ ai_gen_id }} {
+    width: 14px;
+    height: 14px;
+    fill: {{ block.settings.verified_color }};
+  }
+
+  .ai-reviews-button-wrapper-{{ ai_gen_id }} {
+    text-align: center;
+  }
+
+  .ai-reviews-button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: 14px 32px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    border: 1px solid {{ block.settings.button_bg_color }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .ai-reviews-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_bg }};
+    border-color: {{ block.settings.button_hover_bg }};
+    color: {{ block.settings.button_hover_text }};
+  }
+
+  .ai-reviews-empty-{{ ai_gen_id }} {
+    text-align: center;
+    padding: 60px 20px;
+    color: {{ block.settings.text_color }};
+    opacity: 0.6;
+  }
+
+  .ai-reviews-empty-icon-{{ ai_gen_id }} {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    opacity: 0.3;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-reviews-list-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_mobile }}, 1fr);
+    }
+
+    .ai-reviews-container-{{ ai_gen_id }} {
+      padding: 32px 16px;
+    }
+
+    .ai-reviews-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.8);
+    }
+
+    .ai-review-form-title-{{ ai_gen_id }} {
+      font-size: 20px;
+    }
+  }
+{% endstyle %}
+
+<product-reviews-{{ ai_gen_id }} class="ai-reviews-container-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-reviews-header-{{ ai_gen_id }}">
+    {% if block.settings.show_title %}
+      <h2 class="ai-reviews-title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+    {% endif %}
+
+    {% if block.settings.show_summary %}
+      <div class="ai-reviews-summary-{{ ai_gen_id }}">
+        <div class="ai-reviews-stars-{{ ai_gen_id }}">
+          {% for i in (1..5) %}
+            {% if i <= block.settings.average_rating %}
+              <svg class="ai-reviews-star-{{ ai_gen_id }}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            {% else %}
+              <svg class="ai-reviews-star-{{ ai_gen_id }} empty" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <span class="ai-reviews-rating-text-{{ ai_gen_id }}">{{ block.settings.average_rating }}.0</span>
+      </div>
+      <p class="ai-reviews-count-{{ ai_gen_id }}">{{ block.settings.review_count }} reseñas</p>
+    {% endif %}
+  </div>
+
+  {% if block.settings.show_form %}
+    <div class="ai-review-form-section-{{ ai_gen_id }}">
+      <h3 class="ai-review-form-title-{{ ai_gen_id }}">{{ block.settings.form_title }}</h3>
+      
+      {%- form 'contact', id: 'review-form-' | append: ai_gen_id -%}
+        <input type="hidden" name="contact[subject]" value="Nueva reseña de producto">
+        <input type="hidden" name="contact[product_id]" value="{{ product.id }}">
+        <input type="hidden" name="contact[product_title]" value="{{ product.title }}">
+        <input type="hidden" name="contact[rating]" value="" id="rating-value-{{ ai_gen_id }}">
+
+        <div class="ai-review-form-{{ ai_gen_id }}">
+          <div class="ai-review-form-group-{{ ai_gen_id }}">
+            <label class="ai-review-form-label-{{ ai_gen_id }}" for="review-name-{{ ai_gen_id }}">
+              Nombre <span class="ai-review-form-required-{{ ai_gen_id }}">*</span>
+            </label>
+            <input
+              type="text"
+              id="review-name-{{ ai_gen_id }}"
+              name="contact[name]"
+              class="ai-review-form-input-{{ ai_gen_id }}"
+              required
+              aria-required="true"
+            >
+          </div>
+
+          <div class="ai-review-form-group-{{ ai_gen_id }}">
+            <label class="ai-review-form-label-{{ ai_gen_id }}" for="review-email-{{ ai_gen_id }}">
+              Correo electrónico <span class="ai-review-form-required-{{ ai_gen_id }}">*</span>
+            </label>
+            <input
+              type="email"
+              id="review-email-{{ ai_gen_id }}"
+              name="contact[email]"
+              class="ai-review-form-input-{{ ai_gen_id }}"
+              required
+              aria-required="true"
+              autocomplete="email"
+            >
+          </div>
+
+          <div class="ai-review-form-group-{{ ai_gen_id }}">
+            <label class="ai-review-form-label-{{ ai_gen_id }}">
+              Calificación <span class="ai-review-form-required-{{ ai_gen_id }}">*</span>
+            </label>
+            <div class="ai-review-rating-selector-{{ ai_gen_id }}" data-rating-selector>
+              {% for i in (1..5) %}
+                <svg
+                  class="ai-review-rating-star-{{ ai_gen_id }}"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  data-rating="{{ i }}"
+                >
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="ai-review-form-group-{{ ai_gen_id }}">
+            <label class="ai-review-form-label-{{ ai_gen_id }}" for="review-title-{{ ai_gen_id }}">
+              Título de la reseña
+            </label>
+            <input
+              type="text"
+              id="review-title-{{ ai_gen_id }}"
+              name="contact[review_title]"
+              class="ai-review-form-input-{{ ai_gen_id }}"
+            >
+          </div>
+
+          <div class="ai-review-form-group-{{ ai_gen_id }}">
+            <label class="ai-review-form-label-{{ ai_gen_id }}" for="review-message-{{ ai_gen_id }}">
+              Tu reseña <span class="ai-review-form-required-{{ ai_gen_id }}">*</span>
+            </label>
+            <textarea
+              id="review-message-{{ ai_gen_id }}"
+              name="contact[body]"
+              class="ai-review-form-textarea-{{ ai_gen_id }}"
+              required
+              aria-required="true"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="ai-review-form-submit-{{ ai_gen_id }}">
+            {{ block.settings.form_button_text }}
+          </button>
+
+          {%- if form.posted_successfully? -%}
+            <div class="ai-review-form-message-{{ ai_gen_id }} success">
+              {{ block.settings.form_success_message }}
+            </div>
+          {%- endif -%}
+
+          {%- if form.errors -%}
+            <div class="ai-review-form-message-{{ ai_gen_id }} error">
+              Por favor completa todos los campos requeridos correctamente.
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endform -%}
+    </div>
+  {% endif %}
+
+  {% if block.settings.review_1_enabled or block.settings.review_2_enabled or block.settings.review_3_enabled or block.settings.review_4_enabled %}
+    <div class="ai-reviews-list-{{ ai_gen_id }}">
+      {% for i in (1..4) %}
+        {% liquid
+          assign enabled_key = 'review_' | append: i | append: '_enabled'
+          assign author_key = 'review_' | append: i | append: '_author'
+          assign rating_key = 'review_' | append: i | append: '_rating'
+          assign title_key = 'review_' | append: i | append: '_title'
+          assign text_key = 'review_' | append: i | append: '_text'
+          assign date_key = 'review_' | append: i | append: '_date'
+          assign verified_key = 'review_' | append: i | append: '_verified'
+
+          assign enabled = block.settings[enabled_key]
+          assign author = block.settings[author_key]
+          assign rating = block.settings[rating_key]
+          assign title = block.settings[title_key]
+          assign text = block.settings[text_key]
+          assign date = block.settings[date_key]
+          assign verified = block.settings[verified_key]
+        %}
+
+        {% if enabled %}
+          <div class="ai-review-card-{{ ai_gen_id }}">
+            <div class="ai-review-header-{{ ai_gen_id }}">
+              <div>
+                <h3 class="ai-review-author-{{ ai_gen_id }}">{{ author }}</h3>
+                <p class="ai-review-date-{{ ai_gen_id }}">{{ date }}</p>
+              </div>
+              <div class="ai-review-stars-{{ ai_gen_id }}">
+                {% for j in (1..5) %}
+                  {% if j <= rating %}
+                    <svg class="ai-review-star-{{ ai_gen_id }}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  {% else %}
+                    <svg class="ai-review-star-{{ ai_gen_id }} empty" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+
+            {% if title != blank %}
+              <h4 class="ai-review-title-{{ ai_gen_id }}">{{ title }}</h4>
+            {% endif %}
+
+            {% if text != blank %}
+              <p class="ai-review-text-{{ ai_gen_id }}">{{ text }}</p>
+            {% endif %}
+
+            {% if verified %}
+              <div class="ai-review-verified-{{ ai_gen_id }}">
+                <svg class="ai-review-verified-icon-{{ ai_gen_id }}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                <span>Compra verificada</span>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if block.settings.show_button %}
+      <div class="ai-reviews-button-wrapper-{{ ai_gen_id }}">
+        <a href="{{ block.settings.button_link }}" class="ai-reviews-button-{{ ai_gen_id }}">
+          {{ block.settings.button_text }}
+        </a>
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="ai-reviews-empty-{{ ai_gen_id }}">
+      <svg class="ai-reviews-empty-icon-{{ ai_gen_id }}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+      <p>Aún no hay reseñas. Sé el primero en dejar una reseña.</p>
+    </div>
+  {% endif %}
+</product-reviews-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductReviews{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.ratingSelector = this.querySelector('[data-rating-selector]');
+        this.ratingInput = this.querySelector('#rating-value-{{ ai_gen_id }}');
+        this.stars = this.querySelectorAll('.ai-review-rating-star-{{ ai_gen_id }}');
+        this.selectedRating = 0;
+
+        if (this.ratingSelector) {
+          this.setupRatingSelector();
+        }
+      }
+
+      setupRatingSelector() {
+        this.stars.forEach((star) => {
+          star.addEventListener('click', (e) => {
+            this.selectedRating = parseInt(e.currentTarget.dataset.rating);
+            this.ratingInput.value = this.selectedRating;
+            this.updateStars();
+          });
+
+          star.addEventListener('mouseenter', (e) => {
+            const hoverRating = parseInt(e.currentTarget.dataset.rating);
+            this.highlightStars(hoverRating);
+          });
+        });
+
+        this.ratingSelector.addEventListener('mouseleave', () => {
+          this.updateStars();
+        });
+      }
+
+      highlightStars(rating) {
+        this.stars.forEach((star, index) => {
+          if (index < rating) {
+            star.classList.add('selected');
+          } else {
+            star.classList.remove('selected');
+          }
+        });
+      }
+
+      updateStars() {
+        this.highlightStars(this.selectedRating);
+      }
+    }
+
+    customElements.define('product-reviews-{{ ai_gen_id }}', ProductReviews{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Reseñas de producto",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Encabezado"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Mostrar título",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "Reseñas de clientes"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Tamaño del título",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Peso del título",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-negrita" },
+        { "value": "700", "label": "Negrita" },
+        { "value": "800", "label": "Extra negrita" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Alineación del encabezado",
+      "options": [
+        { "value": "left", "label": "Izquierda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "right", "label": "Derecha" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Resumen de calificación"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_summary",
+      "label": "Mostrar resumen",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "average_rating",
+      "label": "Calificación promedio",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "review_count",
+      "label": "Número de reseñas",
+      "min": 0,
+      "max": 1000,
+      "step": 10,
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "star_size",
+      "label": "Tamaño de estrellas",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Formulario de reseña"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_form",
+      "label": "Mostrar formulario",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "form_title",
+      "label": "Título del formulario",
+      "default": "Escribe tu reseña"
+    },
+    {
+      "type": "text",
+      "id": "form_button_text",
+      "label": "Texto del botón",
+      "default": "Enviar reseña"
+    },
+    {
+      "type": "text",
+      "id": "form_success_message",
+      "label": "Mensaje de éxito",
+      "default": "¡Gracias por tu reseña! La revisaremos pronto."
+    },
+    {
+      "type": "header",
+      "content": "Reseña 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_1_enabled",
+      "label": "Activar reseña 1",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "review_1_author",
+      "label": "Nombre del autor",
+      "default": "María González"
+    },
+    {
+      "type": "range",
+      "id": "review_1_rating",
+      "label": "Calificación",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "review_1_title",
+      "label": "Título de la reseña",
+      "default": "¡Excelente calidad!"
+    },
+    {
+      "type": "textarea",
+      "id": "review_1_text",
+      "label": "Texto de la reseña",
+      "default": "Me encanta este producto. La calidad es increíble y el ajuste es perfecto. Definitivamente lo recomendaría."
+    },
+    {
+      "type": "text",
+      "id": "review_1_date",
+      "label": "Fecha",
+      "default": "15 de marzo, 2026"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_1_verified",
+      "label": "Compra verificada",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Reseña 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_2_enabled",
+      "label": "Activar reseña 2",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "review_2_author",
+      "label": "Nombre del autor",
+      "default": "Carlos Ramírez"
+    },
+    {
+      "type": "range",
+      "id": "review_2_rating",
+      "label": "Calificación",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "review_2_title",
+      "label": "Título de la reseña",
+      "default": "Muy cómodo"
+    },
+    {
+      "type": "textarea",
+      "id": "review_2_text",
+      "label": "Texto de la reseña",
+      "default": "Súper cómodo y el material es de primera. Llegó rápido y bien empacado."
+    },
+    {
+      "type": "text",
+      "id": "review_2_date",
+      "label": "Fecha",
+      "default": "10 de marzo, 2026"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_2_verified",
+      "label": "Compra verificada",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Reseña 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_3_enabled",
+      "label": "Activar reseña 3",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "review_3_author",
+      "label": "Nombre del autor",
+      "default": "Ana Martínez"
+    },
+    {
+      "type": "range",
+      "id": "review_3_rating",
+      "label": "Calificación",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "review_3_title",
+      "label": "Título de la reseña",
+      "default": "Buena compra"
+    },
+    {
+      "type": "textarea",
+      "id": "review_3_text",
+      "label": "Texto de la reseña",
+      "default": "Muy buena relación calidad-precio. El único detalle es que talla un poco pequeño."
+    },
+    {
+      "type": "text",
+      "id": "review_3_date",
+      "label": "Fecha",
+      "default": "5 de marzo, 2026"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_3_verified",
+      "label": "Compra verificada",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Reseña 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_4_enabled",
+      "label": "Activar reseña 4",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "review_4_author",
+      "label": "Nombre del autor",
+      "default": "Luis Fernández"
+    },
+    {
+      "type": "range",
+      "id": "review_4_rating",
+      "label": "Calificación",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "review_4_title",
+      "label": "Título de la reseña",
+      "default": "Perfecto"
+    },
+    {
+      "type": "textarea",
+      "id": "review_4_text",
+      "label": "Texto de la reseña",
+      "default": "Exactamente lo que esperaba. Calidad premium y diseño moderno."
+    },
+    {
+      "type": "text",
+      "id": "review_4_date",
+      "label": "Fecha",
+      "default": "1 de marzo, 2026"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_4_verified",
+      "label": "Compra verificada",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Diseño"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columnas en escritorio",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columnas en móvil",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Espacio entre tarjetas",
+      "min": 8,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Relleno de tarjeta",
+      "min": 12,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Radio de borde de tarjeta",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Ancho en escritorio",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Botón"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "label": "Mostrar botón",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texto del botón",
+      "default": "Ver todas las reseñas"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Enlace del botón"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Radio de borde del botón",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Colores"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Fondo",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color del título",
+      "default": "#232020"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color del texto",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Fondo de tarjeta",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Borde de tarjeta",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Color de estrella llena",
+      "default": "#fdc643"
+    },
+    {
+      "type": "color",
+      "id": "star_empty_color",
+      "label": "Color de estrella vacía",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "color",
+      "id": "verified_color",
+      "label": "Color de verificación",
+      "default": "#1e9458"
+    },
+    {
+      "type": "color",
+      "id": "error_color",
+      "label": "Color de error",
+      "default": "#ff0000"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Fondo del botón",
+      "default": "#232020"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Texto del botón",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg",
+      "label": "Fondo del botón al pasar",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text",
+      "label": "Texto del botón al pasar",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "form_background",
+      "label": "Fondo del formulario",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "color",
+      "id": "input_background",
+      "label": "Fondo de campos",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Borde de campos",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "label": "Radio de borde de campos",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reseñas de producto"
+    }
+  ],
+  "tag": null
+}
+{% endschema %}

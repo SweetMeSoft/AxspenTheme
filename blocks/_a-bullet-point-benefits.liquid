@@ -1,0 +1,392 @@
+{%- comment -%} Product is accessed via closest.product in the template {%- endcomment -%}
+<div class="emoji-benefits-container product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  {% style %}
+    .product-block-{{ block.id }} {
+      padding-top: {{block.settings.padding_top }}px;
+      padding-bottom: {{block.settings.padding_bottom }}px;
+    }
+    @media screen and (max-width: 768px) {
+      .product-block-{{ block.id }} {
+        padding-top: {{block.settings.padding_top_mobile }}px;
+        padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+      }
+    }
+    .product-block-{{ block.id }} .bullet-point-text {
+      {% if block.settings.display_layout == 'pills_column_1' or block.settings.display_layout == 'pills_column_2' or block.settings.display_layout == 'pills' %}
+        font-size: {{ block.settings.pill_font_size }}px;
+      {% else %}
+        font-size: {{ block.settings.body_font_size }}px;
+      {% endif %}
+      text-wrap: initial;
+      word-break: break-word;
+    }
+    .product-block-{{ block.id }} .material-icon svg,.product-block-{{ block.id }} img{
+      width: {{ block.settings.emoji_size }}px !important;
+      height: {{ block.settings.emoji_size }}px !important; 
+      fill: {% if block.settings.emoji_color %}{{ block.settings.emoji_color }} !important{% else %}{{ settings.colors_accent_3 }}{% endif %};
+    }
+    .product-block-{{ block.id }} .bullet-point-text {
+      {% if block.settings.display_layout == 'pills_column_1' or block.settings.display_layout == 'pills_column_2' or block.settings.display_layout == 'pills' %}
+        color: {{ block.settings.pill_text_color | default: '#136EA2' }};
+      {% else %}
+        color: {{ block.settings.text_color | default: 'rgb(var(--atlas-color-base-text))' }};
+        --atlas-color-highlighted-color: {{ block.settings.text_highlighted_color }};
+      {% endif %}
+    }
+  {% endstyle %}
+  <div style="gap: {{ block.settings.column_gap }}px !important;">
+    {% style %}
+      {% case block.settings.display_layout %}
+        {% when 'row' %}
+          .emoji-benefits-container ul {
+            display: flex;
+            flex-direction: column;
+          }
+        {% when 'column' %}
+          .emoji-benefits-container ul {
+            display: grid;
+            grid-template-columns: auto auto;
+          }
+        {% when 'pills' %}
+          .emoji-benefits-container ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px 9px;
+            align-items: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+          }
+          .emoji-benefits-container ul li {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: {{ block.settings.pill_background | default: '#E4F9FF' }};
+            border-radius: {{ block.settings.pill_border_radius | default: 40 }}px;
+            padding: {{ block.settings.pill_padding_vertical | default: 2 }}px {{ block.settings.pill_padding_horizontal | default: 8 }}px;
+            font-family: var(--atlas-font-body-family);
+            border-width: 1px;
+            border-style: dashed;
+            border-color: {{ block.settings.pill_border_color | default: '#80C1EB' }};
+            font-size: {{ block.settings.pill_font_size | default: 12 }}px;
+            font-weight: {{ block.settings.pill_font_weight | default: 500 }};
+            color: {{ block.settings.pill_text_color | default: '#136EA2' }};
+            white-space: nowrap;
+            letter-spacing: 0;
+            width: fit-content;
+            flex: none;
+            max-width: 100%;
+          }
+          .emoji-benefits-container ul li img,
+          .emoji-benefits-container ul li .material-icon {
+            width: fit-content;
+            height: fit-content;
+            margin-right: 0 !important;
+            display: flex;
+          }
+        {% when 'pills_column_1' %}
+          .emoji-benefits-container ul {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            align-items: flex-start;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+          }
+          .emoji-benefits-container ul li {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: {{ block.settings.pill_background | default: '#E4F9FF' }};
+            border-radius: {{ block.settings.pill_border_radius | default: 40 }}px;
+            padding: {{ block.settings.pill_padding_vertical | default: 2 }}px {{ block.settings.pill_padding_horizontal | default: 8 }}px;
+            font-family: var(--atlas-font-body-family);
+            border-width: 1px;
+            border-style: dashed;
+            border-color: {{ block.settings.pill_border_color | default: '#80C1EB' }};
+            font-size: {{ block.settings.pill_font_size | default: 12 }}px;
+            font-weight: {{ block.settings.pill_font_weight | default: 500 }};
+            line-height: 22px;
+            color: {{ block.settings.pill_text_color | default: '#136EA2' }};
+            white-space: nowrap;
+            letter-spacing: 0;
+            width: fit-content;
+          }
+          .emoji-benefits-container ul li img,
+          .emoji-benefits-container ul li .material-icon {
+            width: fit-content;
+            height: fit-content;
+            margin-right: 0 !important;
+            display: flex;
+          }
+        {% when 'pills_column_2' %}
+          .emoji-benefits-container ul {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: {{ block.settings.column_gap }}px;
+            align-items: start;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+          }
+          .emoji-benefits-container ul li {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: {{ block.settings.pill_background | default: '#E4F9FF' }};
+            border-radius: {{ block.settings.pill_border_radius | default: 40 }}px;
+            padding: {{ block.settings.pill_padding_vertical | default: 2 }}px {{ block.settings.pill_padding_horizontal | default: 8 }}px;
+            font-family: var(--atlas-font-body-family);
+            border-width: 1px;
+            border-style: dashed;
+            border-color: {{ block.settings.pill_border_color | default: '#80C1EB' }};
+            font-size: {{ block.settings.pill_font_size | default: 12 }}px;
+            font-weight: {{ block.settings.pill_font_weight | default: 500 }};
+            line-height: 22px;
+            color: {{ block.settings.pill_text_color | default: '#136EA2' }};
+            white-space: nowrap;
+            letter-spacing: 0;
+            width: fit-content;
+          }
+          .emoji-benefits-container ul li img,
+          .emoji-benefits-container ul li .material-icon {
+            margin-right: 0 !important;
+            display: flex;
+          }
+      {% endcase %}
+    {% endstyle %}
+    {% content_for 'block', type: '_a-bullet-point-benefits-list', id: 'bullet-point-benefits-list',column_gap: block.settings.column_gap %}
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product features",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "display_layout",
+      "label": "Display layout",
+      "options": [
+        {
+          "value": "row",
+          "label": "1 column"
+        },
+        {
+          "value": "column",
+          "label": "2 columns"
+        },
+        {
+          "value": "pills",
+          "label": "Pills"
+        },
+        {
+          "value": "pills_column_1",
+          "label": "Pills column 1"
+        },
+        {
+          "value": "pills_column_2",
+          "label": "Pills column 2"
+        }
+      ],
+      "default": "pills"
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Column space",
+      "unit": "px",
+      "min": 4,
+      "max": 20,
+      "step": 2,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Pills",
+      "visible_if": "{{ block.settings.display_layout == 'pills' or block.settings.display_layout == 'pills_column_1' or block.settings.display_layout == 'pills_column_2' }}"
+    },
+    {
+      "type": "color",
+      "id": "pill_background",
+      "label": "Pill background color",
+      "default": "#E4F9FF",
+      "visible_if": "{{ block.settings.display_layout == 'pills' or block.settings.display_layout == 'pills_column_1' or block.settings.display_layout == 'pills_column_2' }}"
+    },
+    {
+      "type": "color",
+      "id": "pill_text_color",
+      "label": "Pill text color",
+      "default": "#136EA2",
+      "visible_if": "{{ block.settings.display_layout == 'pills' or block.settings.display_layout == 'pills_column_1' or block.settings.display_layout == 'pills_column_2' }}"
+    },
+    {
+      "type": "color",
+      "id": "pill_border_color",
+      "label": "Pill border color",
+      "default": "#80C1EB",
+      "visible_if": "{{ block.settings.display_layout == 'pills' or block.settings.display_layout == 'pills_column_1' or block.settings.display_layout == 'pills_column_2' }}"
+    },
+    {
+      "type": "range",
+      "id": "pill_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Pill border radius",
+      "default": 40,
+      "visible_if": "{{ block.settings.display_layout == 'pills' or block.settings.display_layout == 'pills_column_1' or block.settings.display_layout == 'pills_column_2' }}"
+    },
+    {
+      "type": "range",
+      "id": "pill_font_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Pill font size",
+      "default": 12,
+      "visible_if": "{{ block.settings.display_layout == 'pills' or block.settings.display_layout == 'pills_column_1' or block.settings.display_layout == 'pills_column_2' }}"
+    },
+    {
+      "type": "range",
+      "id": "pill_font_weight",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "label": "Pill font weight",
+      "default": 500,
+      "visible_if": "{{ block.settings.display_layout == 'pills' or block.settings.display_layout == 'pills_column_1' or block.settings.display_layout == 'pills_column_2' }}"
+    },
+    {
+      "type": "range",
+      "id": "pill_padding_horizontal",
+      "min": 4,
+      "max": 16,
+      "step": 2,
+      "unit": "px",
+      "label": "Pill horizontal padding",
+      "default": 8,
+      "visible_if": "{{ block.settings.display_layout == 'pills' or block.settings.display_layout == 'pills_column_1' or block.settings.display_layout == 'pills_column_2' }}"
+    },
+    {
+      "type": "range",
+      "id": "pill_padding_vertical",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "label": "Pill vertical padding",
+      "default": 2,
+      "visible_if": "{{ block.settings.display_layout == 'pills' or block.settings.display_layout == 'pills_column_1' or block.settings.display_layout == 'pills_column_2' }}"
+    },
+    {
+      "type": "header",
+      "content": "Typography",
+      "visible_if": "{{ block.settings.display_layout != 'pills' and block.settings.display_layout != 'pills_column_1' and block.settings.display_layout != 'pills_column_2' }}"
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "label": "Body font size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14,
+      "visible_if": "{{ block.settings.display_layout != 'pills' and block.settings.display_layout != 'pills_column_1' and block.settings.display_layout != 'pills_column_2' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#136EA2",
+      "visible_if": "{{ block.settings.display_layout != 'pills' and block.settings.display_layout != 'pills_column_1' and block.settings.display_layout != 'pills_column_2' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_highlighted_color",
+      "label": "Bolded text color",
+      "default": "#136EA2",
+      "visible_if": "{{ block.settings.display_layout != 'pills' and block.settings.display_layout != 'pills_column_1' and block.settings.display_layout != 'pills_column_2' }}"
+    },
+    {
+      "type": "header",
+      "content": "Icon"
+    },
+    {
+      "type": "range",
+      "id": "emoji_size",
+      "label": "Icon size",
+      "min": 14,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "emoji_color",
+      "label": "Icon color",
+      "default": "#136EA2"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Features",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

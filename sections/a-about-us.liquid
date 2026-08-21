@@ -1,0 +1,670 @@
+{{ 'a-component-image-with-text.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign global_heading_size = settings.enable_global_heading_font_size
+  assign global_body_size = settings.enable_global_body_font_size
+  assign global_color = settings.enable_global_color
+-%}
+
+{%- style -%}
+  {%- if request.visual_preview_mode -%}
+    {% comment %} don't want fade-in animation in preview mode because it messes up preview {% endcomment %}
+    .animation_section,
+    .animation_section * {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+      will-change: auto !important;
+    }
+  {%- endif -%}
+
+  .atlas-isolation-wrapper .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  /* about us new styles*/
+  .atlas-isolation-wrapper #section-{{ section.id }} .image-with-text__grid {
+    position: relative;
+    display: flex;
+  }
+  @media (min-width: 751px) {
+    .atlas-isolation-wrapper #section-{{ section.id }} .image-with-text__grid {
+
+      {% if section.settings.height == "small" %}
+        min-height: 489px;
+      {% elsif section.settings.height == "medium" %}
+        min-height: 639px;
+      {% elsif section.settings.height == "large" %}
+        min-height: 800px;
+      {% else %}
+        aspect-ratio: {{ section.settings.image.aspect_ratio }};
+      {% endif %}
+    }
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .image-with-text__media-item {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .image-with-text__content {
+    max-width: 670px;
+    height: fit-content;
+    position: absolute;
+    {% if section.settings.card_position == 'bottom_right' %}
+      bottom: 20px;
+      right: 20px;
+    {% elsif section.settings.card_position == 'bottom_left' %}
+      bottom: 20px;
+      left: 20px;
+    {% elsif section.settings.card_position == 'top_right' %}
+      top: 20px;
+      right: 20px;
+    {% elsif section.settings.card_position == 'top_left' %}
+      top: 20px;
+      left: 20px;
+    {% endif %}
+    border-radius: {{ section.settings.cards_border_radius }}px;
+    gap: 14px;
+    padding: {{ section.settings.card_padding_vertical_desktop }}px {{ section.settings.card_padding_horizontal_desktop }}px !important;
+    background: transparent;
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .image-with-text__content:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    border-radius: {{ section.settings.cards_border_radius }}px;
+    {% if section.settings.card_background_color_use_gradient %}
+      background: {{ section.settings.card_background_color_gradient }};
+    {% else %}
+      background: {{ section.settings.card_background_color }};
+    {% endif %}
+    {% if section.settings.card_background_color_use_opacity %}
+      opacity: {{ section.settings.card_background_color_opacity | divided_by: 100.0 }};
+    {% endif %}
+  }
+  .atlas-isolation-wrapper #section-{{ section.id }} .image-with-text__text {
+    margin-top: 0;
+  }
+  @media (max-width: 1024px) {
+    .atlas-isolation-wrapper #section-{{ section.id }} .image-with-text__grid {
+      border-radius: {{ section.settings.cards_border_radius }}px;
+      overflow: hidden;
+    }
+    .atlas-isolation-wrapper #section-{{ section.id }} .image-with-text__text-item {
+      height: 100%;
+      width: 100%;
+    }
+    .atlas-isolation-wrapper #section-{{ section.id }} .image-with-text__content {
+      width: 100%;
+      bottom: 0;
+      right: 0;
+      top: unset;
+      left: unset;
+      max-width: 100%;
+      gap: 9px;
+      padding: {{ section.settings.card_padding_vertical_mobile }}px {{ section.settings.card_padding_horizontal_mobile }}px !important;
+    }
+  }
+{%- endstyle -%}
+
+<div id="section-{{ section.id }}" class="about-mains" style="padding: 0;">
+  <div class="about-main">
+    <div class="image-with-text page-width section-{{ section.id }}-padding">
+      <div class="image-with-text__grid grid grid--gapless grid--1-col">
+        <div
+          class="image-with-text__media-item grid__item"
+          {% comment %} style="border: 1px solid {{ section.settings.border_colors }}" {% endcomment %}
+          style="border-radius: {{ section.settings.cards_border_radius }}px;"
+        >
+          <div
+            class="image-with-text__media  gradient global-media-settings {% if section.settings.image != blank %}media{% else %}image-with-text__media--placeholder placeholder{% endif %}"
+          >
+            {%- if section.settings.image != blank -%}
+              {%- capture sizes -%}
+                (min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px,
+                (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)
+              {%- endcapture -%}
+              {{
+                section.settings.image
+                | image_url: width: 1800
+                | image_tag: loading: 'lazy', sizes: sizes, widths: '750, 1070, 1500'
+              }}
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+        </div>
+        <div class="image-with-text__text-item grid__item">
+          <div
+            id="ImageWithText--{{ section.id }}"
+            class="image-with-text__content image-with-text__content--mobile-{{ section.settings.text_alignment }} gradient content-container fade-in-child"
+          >
+            {%- for block in section.blocks -%}
+              {% case block.type %}
+                {%- when 'heading' -%}
+                  {% style %}
+                    .atlas-isolation-wrapper #heading-{{ block.id }}{
+                      font-size: {% if global_heading_size %}var(--atlas-font-heading-size)!important{% else %}{{ block.settings.heading_size }}px!important{% endif %};
+                      line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-size) + 8px)!important{% else %}100% !important{% endif %};
+                      color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ block.settings.heading_color }}{% endif %};
+                      margin-top: 0;
+                    }
+                    .atlas-isolation-wrapper #heading-{{ block.id }} strong {
+                      {%- if block.settings.heading_use_gradient -%}
+                        background: {% if block.settings.heading_gradient_color != blank %}{{ block.settings.heading_gradient_color }}{% else %}var(--atlas-gradient-base-background-1){% endif %};
+                        -webkit-background-clip: text;
+                        background-clip: text;
+                        color: transparent;
+                      {% else %}
+                        color: {{ block.settings.bolded_heading_color }};
+                      {%- endif -%}
+                    }
+                    @media (max-width: 768px) {
+                      .atlas-isolation-wrapper #heading-{{ block.id }}{
+                        font-size: {% if global_heading_size %}var(--atlas-font-heading-mob-size) !important{% else %}{{ block.settings.mobile_font_size }}px !important{% endif %};
+                        line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-mob-size) + 8px) !important{% else %}{{ block.settings.mobile_font_size | plus: 8 }}px{% endif %};
+                      }
+                    }
+                  {% endstyle %}
+                  <h2
+                    id="heading-{{ block.id }}"
+                    class="title image-with-text__heading {{ block.settings.heading_size }}"
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ block.settings.heading }}
+                  </h2>
+                {%- when 'caption' -%}
+                  <p
+                    style="color: {{ block.settings.caption_color }}"
+                    class="sw-base-text-color image-with-text__text image-with-text__text--caption {{ block.settings.text_style }} {{ block.settings.text_style }}--{{ block.settings.text_size }} {{ block.settings.text_style }}"
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ block.settings.caption | escape }}
+                  </p>
+                {%- when 'text' -%}
+                  <style>
+                    .atlas-isolation-wrapper #block-description-text-{{ block.id }} p {
+                      font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size)!important{% else %}{{ block.settings.font_size }}px!important{% endif %};
+                      line-height: {% if global_body_size %}calc(var(--atlas-global-body-text-font-size) + 10px)!important{% else %}{{ block.settings.font_size | plus: 10 }}px!important{% endif %};
+                      color: {% if global_color %}rgb(var(--atlas-color-base-text)){% else %}{{ block.settings.body_color }}{% endif %};
+                      {% comment %} display: contents; {% endcomment %}
+                    }
+                    .atlas-isolation-wrapper #block-description-text-{{ block.id }} a {
+                      font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size)!important{% else %}{{ block.settings.font_size }}px!important{% endif %};
+                      line-height: {% if global_body_size %}calc(var(--atlas-global-body-text-font-size) + 10px)!important{% else %}{{ block.settings.font_size | plus: 10 }}px!important{% endif %};
+                      color: {% if global_color %}rgb(var(--atlas-color-base-text)){% else %}{{ block.settings.body_color }}{% endif %};
+                      font-weight: 600;
+                      text-decoration: underline;
+                    }
+                    @media (max-width: 1024px) {
+                      .atlas-isolation-wrapper #block-description-text-{{ block.id }} p, .atlas-isolation-wrapper #block-description-text-{{ block.id }} a {
+                        font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size)!important{% else %}{{ block.settings.font_size_mobile }}px!important{% endif %};
+                        line-height: {% if global_body_size %}calc(var(--atlas-global-body-text-font-size) + 10px)!important{% else %}{{ block.settings.font_size_mobile | plus: 8 }}px!important{% endif %};
+                      }
+                    }
+                    .atlas-isolation-wrapper #block-description-text-{{ block.id }} p strong {
+                      {%- if block.settings.body_use_gradient -%}
+                        background: {% if block.settings.body_gradient_color != blank %}{{ block.settings.body_gradient_color }}{% else %}var(--atlas-gradient-base-background-1){% endif %};
+                        -webkit-background-clip: text;
+                        background-clip: text;
+                        color: transparent;
+                      {% else %}
+                        color: {{ block.settings.bolded_body_color }};
+                      {%- endif -%}
+                    }
+                  </style>
+                  <div
+                    id="block-description-text-{{ block.id }}"
+                    class="sw-base-text-color image-with-text__text rte body"
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ block.settings.text }}
+                    {% for b in section.blocks %}
+                      {% if b.type == 'button' %}
+                        <a
+                          href="{{ b.settings.button_link }}"
+                          class="block-description-button"
+                          style="color: {{ b.settings.button_text_color }};"
+                          {{ b.shopify_attributes }}
+                        >
+                          {{- b.settings.button_label | escape -}}
+                        </a>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "About us",
+  "class": "atlas-isolation-wrapper atlas-gradient section animation_section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium",
+      "label": "Desktop height"
+    },
+    {
+      "type": "select",
+      "id": "card_position",
+      "label": "Desktop card position",
+      "options": [
+        {
+          "value": "bottom_right",
+          "label": "Bottom right"
+        },
+        {
+          "value": "bottom_left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "top_right",
+          "label": "Top right"
+        },
+        {
+          "value": "top_left",
+          "label": "Top left"
+        }
+      ],
+      "default": "bottom_right",
+      "info": "The position of the card relative to the image. This is only for desktop."
+    },
+    {
+      "type": "range",
+      "id": "cards_border_radius",
+      "label": "Section cards border radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left",
+      "label": "Text alignment"
+    },
+    {
+      "type": "header",
+      "content": "Card"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_background_color_use_gradient",
+      "label": "Use gradient for card background color",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "card_background_color_gradient",
+      "label": "Card background color gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.card_background_color_use_gradient }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_background_color_use_opacity",
+      "label": "Use opacity for card background color",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "card_background_color_opacity",
+      "label": "Card background color opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 70,
+      "visible_if": "{{ section.settings.card_background_color_use_opacity }}"
+    },
+    {
+      "type": "range",
+      "id": "card_padding_vertical_desktop",
+      "label": "Desktop card padding vertical",
+      "min": 10,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "card_padding_horizontal_desktop",
+      "label": "Desktop card padding horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_padding_vertical_mobile",
+      "label": "Mobile card padding vertical",
+      "min": 10,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 19
+    },
+    {
+      "type": "range",
+      "id": "card_padding_horizontal_mobile",
+      "label": "Mobile card padding horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 24
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "About Us",
+          "label": "Heading"
+        },
+        {
+          "type": "range",
+          "id": "heading_size",
+          "min": 20,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Desktop heading size",
+          "default": 40
+        },
+        {
+          "type": "range",
+          "id": "mobile_font_size",
+          "min": 10,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Mobile heading size",
+          "default": 28
+        },
+        {
+          "type": "header",
+          "content": "Styling"
+        },
+        {
+          "type": "color",
+          "id": "heading_color",
+          "label": "Heading Color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "bolded_heading_color",
+          "label": "Bolded heading color",
+          "default": "#000000"
+        },
+        {
+          "type": "checkbox",
+          "id": "heading_use_gradient",
+          "label": "Use gradient for heading",
+          "info": "Any text formatted as bold within the heading will be converted to a gradient.",
+          "default": false
+        },
+        {
+          "type": "color_background",
+          "id": "heading_gradient_color",
+          "label": "Heading gradient color",
+          "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+          "visible_if": "{{ block.settings.heading_use_gradient }}"
+        }
+      ]
+    },
+    {
+      "type": "caption",
+      "name": "Caption",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "caption",
+          "default": "Add a tagline",
+          "label": "Text"
+        },
+        {
+          "type": "color",
+          "id": "caption_color",
+          "label": "caption Color",
+          "default": "#000000"
+        },
+        {
+          "type": "select",
+          "id": "text_style",
+          "options": [
+            {
+              "value": "subtitle",
+              "label": "Subtitle"
+            },
+            {
+              "value": "caption-with-letter-spacing",
+              "label": "Uppercase"
+            }
+          ],
+          "default": "caption-with-letter-spacing",
+          "label": "Text style"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "options": [
+            {
+              "value": "small",
+              "label": "Small"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "large",
+              "label": "Large"
+            }
+          ],
+          "default": "medium",
+          "label": "Text size"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>And produce say the ten moments parties. Simple innatesummer fat appear basket his desire joy. Outward clothespromise at gravity do excited. Sufficient particularimpossible by reasonable oh expression is. Yet preferenceconnection unpleasant yet melancholy but endappearance. And excellence partiality estimatingterminated day everything.</p>",
+          "label": "Body"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "label": "Desktop font size",
+          "min": 8,
+          "max": 24,
+          "step": 2,
+          "default": 16,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "label": "Mobile font size",
+          "min": 8,
+          "max": 24,
+          "step": 2,
+          "default": 16,
+          "unit": "px"
+        },
+        {
+          "type": "header",
+          "content": "Styling"
+        },
+        {
+          "type": "color",
+          "id": "body_color",
+          "label": "Body Color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "bolded_body_color",
+          "label": "Bolded body Color",
+          "default": "#000000"
+        },
+        {
+          "type": "checkbox",
+          "id": "body_use_gradient",
+          "label": "Use gradient for body",
+          "info": "Any text formatted as bold within the body will be converted to a gradient.",
+          "default": false
+        },
+        {
+          "type": "color_background",
+          "id": "body_gradient_color",
+          "label": "Body gradient color",
+          "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+          "visible_if": "{{ block.settings.body_use_gradient }}"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "button_label",
+          "default": "Learn More",
+          "label": "Button label",
+          "info": "Leave the label blank to hide the button."
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": "Button text color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

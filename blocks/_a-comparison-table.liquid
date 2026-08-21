@@ -1,0 +1,332 @@
+<!--start _comparison-table.liquid--><style>
+  {% if request.visual_preview_mode %}
+    {% assign section_id_variable = 'id' %}
+  {% else %}
+    {% assign section_id_variable = section.id %}
+  {% endif %}
+.atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} {
+     width: 100%;
+     border-collapse: separate;
+     border-spacing: 0;
+     overflow: visible;
+     --atlas-table-border: 1px solid {% if block.settings.table_border_color != blank %}rgba({{ block.settings.table_border_color.red }}, {{ block.settings.table_border_color.green }}, {{ block.settings.table_border_color.blue }}, {{ block.settings.table_border_opacity | divided_by: 100.0 }}){% else %}rgba(196, 196, 196, 0.15){% endif %};
+   }
+  .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody tr td {
+     border-top: var(--atlas-table-border);
+   }
+   .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }}  tr td:nth-child(2){
+     background-color: {% if block.settings.self_cells_background_color != blank %}rgba({{ block.settings.self_cells_background_color.red }}, {{ block.settings.self_cells_background_color.green }}, {{ block.settings.self_cells_background_color.blue }}, {{ block.settings.self_cells_background_opacity | divided_by: 100.0 }}){% else %}rgba(255,255,255,0){% endif %};
+   }
+   .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} thead tr th:nth-of-type(2) {
+    {% if block.settings.enable_product_column_custom_border %}
+     border: {{ block.settings.product_column_custom_border_width }}px solid rgba({{ block.settings.product_column_custom_border_color.red }}, {{ block.settings.product_column_custom_border_color.green }}, {{ block.settings.product_column_custom_border_color.blue }}, {{ block.settings.product_column_custom_border_opacity | divided_by: 100.0 }});
+     border-bottom: none;
+     border-left: {{ block.settings.product_column_custom_border_width }}px solid rgba({{ block.settings.product_column_custom_border_color.red }}, {{ block.settings.product_column_custom_border_color.green }}, {{ block.settings.product_column_custom_border_color.blue }}, {{ block.settings.product_column_custom_border_opacity | divided_by: 100.0 }});
+     border-right: {{ block.settings.product_column_custom_border_width }}px solid rgba({{ block.settings.product_column_custom_border_color.red }}, {{ block.settings.product_column_custom_border_color.green }}, {{ block.settings.product_column_custom_border_color.blue }}, {{ block.settings.product_column_custom_border_opacity | divided_by: 100.0 }});
+     {% else %}
+     border: var(--atlas-table-border);
+     border-bottom: none;
+     border-left: var(--atlas-table-border);
+     border-right: var(--atlas-table-border);
+     {% endif %}
+     border-top-left-radius: {{ block.settings.product_column_custom_border_radius}}px;
+     border-top-right-radius: {{ block.settings.product_column_custom_border_radius}}px;
+     background-color: {% if block.settings.self_cells_background_color != blank %}rgba({{ block.settings.self_cells_background_color.red }}, {{ block.settings.self_cells_background_color.green }}, {{ block.settings.self_cells_background_color.blue }}, {{ block.settings.self_cells_background_opacity | divided_by: 100.0 }}){% else %}rgba(255,255,255,0){% endif %};
+     vertical-align: middle;
+    }
+   .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody td.other-brands-column {
+     background-color: {{ block.settings.icon_cells_background_color }};
+   }
+   .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody tr:last-child td:nth-child(2){
+     {% if block.settings.enable_product_column_custom_border %}
+       border-bottom: {{ block.settings.product_column_custom_border_width }}px solid rgba({{ block.settings.product_column_custom_border_color.red }}, {{ block.settings.product_column_custom_border_color.green }}, {{ block.settings.product_column_custom_border_color.blue }}, {{ block.settings.product_column_custom_border_opacity | divided_by: 100.0 }});
+     {% else %}
+       border-bottom: var(--atlas-table-border);
+     {% endif %}
+     {% if block.settings.enable_product_column_shadow %}
+       box-shadow: 0px 10px 10px 0px rgba({{ block.settings.product_column_shadow_color.red }}, {{ block.settings.product_column_shadow_color.green }}, {{ block.settings.product_column_shadow_color.blue }}, {{ block.settings.product_column_shadow_opacity | divided_by: 100.0 }});
+     {% endif %}
+     border-bottom-left-radius: {{ block. settings.product_column_custom_border_radius}}px;
+     border-bottom-right-radius: {{ block. settings.product_column_custom_border_radius}}px;
+   }
+   .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} tbody tr td:nth-child(2) {
+     {% if block.settings.enable_product_column_custom_border %}
+       border-right: {{ block.settings.product_column_custom_border_width }}px solid rgba({{ block.settings.product_column_custom_border_color.red }}, {{ block.settings.product_column_custom_border_color.green }}, {{ block.settings.product_column_custom_border_color.blue }}, {{ block.settings.product_column_custom_border_opacity | divided_by: 100.0 }});
+       border-left: {{ block.settings.product_column_custom_border_width }}px solid rgba({{ block.settings.product_column_custom_border_color.red }}, {{ block.settings.product_column_custom_border_color.green }}, {{ block.settings.product_column_custom_border_color.blue }}, {{ block.settings.product_column_custom_border_opacity | divided_by: 100.0 }});
+     {% else %}
+       border-right: var(--atlas-table-border);
+       border-left: var(--atlas-table-border);
+     {% endif %}
+   }
+</style>
+{% capture 'blocks_content' %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+{% if blocks_content contains '<!--start _comparison-table-header.liquid-->' and blocks_content contains '<!--start _comparison-table-rows.liquid-->' %}
+  {% assign comparison_table_header = blocks_content | split: '<!--start _comparison-table-header.liquid-->' | last | split: '<!--end _comparison-table-header.liquid-->' | first %}
+  {% assign comparison_table_rows = blocks_content | split: '<!--start _comparison-table-rows.liquid-->' | last | split: '<!--end _comparison-table-rows.liquid-->' | first %}
+  <table class="table-element-scoped-{{ section_id_variable }}" {{ block.shopify_attributes }}>
+    {{ comparison_table_header }}
+    {{ comparison_table_rows }}
+  </table>
+{% else %}
+  <table class="table-element-scoped-{{ section_id_variable }}" {{ block.shopify_attributes }}>
+    {{ blocks_content }}
+  </table>
+{% endif %}
+<!--end _comparison-table.liquid-->
+{% schema %}
+{
+  "name": "Table",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_a-comparison-table-header"
+    },
+    {
+      "type": "_a-comparison-table-rows"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Table"
+    },
+    {
+      "type": "color",
+      "id": "table_border_color",
+      "label": "Table grid line color",
+      "default": "#c4c4c4"
+    },
+    {
+      "type": "range",
+      "id": "table_border_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Table grid line opacity",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Brand column"
+    },
+    {
+      "type": "color",
+      "id": "self_cells_background_color",
+      "label": "Brand column background"
+    },
+    {
+        "type": "range",
+        "id": "self_cells_background_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "Brand column background opacity",
+        "default": 27
+      },
+    {
+      "type": "checkbox",
+      "id": "enable_product_column_custom_border",
+      "label": "Enable Brand column custom border",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "product_column_custom_border_color",
+      "label": "Brand column custom border color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.enable_product_column_custom_border }}"
+    },
+    {
+      "type": "range",
+      "id": "product_column_custom_border_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Brand column custom border opacity",
+      "default": 100,
+      "visible_if": "{{ block.settings.enable_product_column_custom_border }}"
+    },
+    {
+      "type": "range",
+      "id": "product_column_custom_border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Brand column custom border width",
+      "default": 1,
+      "visible_if": "{{ block.settings.enable_product_column_custom_border }}"
+    },
+    {
+      "type": "range",
+      "id": "product_column_custom_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Brand column custom border radius",
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_product_column_shadow",
+      "label": "Enable Brand column shadow",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "product_column_shadow_color",
+      "label": "Brand column shadow color",
+      "default": "#C8C8C8",
+      "visible_if": "{{ block.settings.enable_product_column_shadow }}"
+    },
+    {
+      "type": "range",
+      "id": "product_column_shadow_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Brand column shadow opacity",
+      "default": 60,
+      "visible_if": "{{ block.settings.enable_product_column_shadow }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Table",
+      "settings": {
+        "table_border_color": "#c4c4c4",
+        "table_border_opacity": 15,
+        "self_cells_background_color": "#ffffff",
+        "self_cells_background_opacity": 27,
+        "enable_product_column_custom_border": false,
+        "product_column_custom_border_color": "#000000",
+        "product_column_custom_border_opacity": 100,
+        "product_column_custom_border_width": 1,
+        "product_column_custom_border_radius": 10,
+        "enable_product_column_shadow": false,
+        "product_column_shadow_color": "#C8C8C8",
+        "product_column_shadow_opacity": 60
+      },
+      "blocks": [
+        {
+          "type": "_a-comparison-table-header",
+          "settings": {
+            "us_label": "Our Product",
+            "other_brands_label": "",
+            "logo": "shopify://shop_images/raw-removebg-preview_3_1f56b479-a67c-48ce-9f13-7ba15b64bc90.png",
+            "logo_width": 90,
+            "mobile_logo_width": 60,
+            "other_brands_logo": "shopify://shop_images/ChatGPT_Image_Aug_28_2025_07_03_03_PM_5.png",
+            "other_brands_logo_width": 74,
+            "other_brands_mobile_logo_width": 60,
+            "cell_header_brand_text_size": 16,
+            "cell_header_brand_text_color": "#ffffff",
+            "cell_header_competitor_text_size": 16,
+            "cell_header_competitor_text_color": "#000000"
+          }
+        },
+        {
+          "type": "_a-comparison-table-rows",
+          "settings": {
+            "benefits_desktop_size": 16,
+            "benefits_mobile_size": 14,
+            "bold_features_text": false,
+            "features_background_color": "rgba(0,0,0,0)",
+            "product_column_border_top_color": "rgba(0,0,0,0)",
+            "enable_product_column_border_top_gradient": false,
+            "product_column_border_top_gradient": "linear-gradient(180deg, rgba(234, 56, 133, 1), rgba(95, 77, 188, 1) 100%)",
+            "product_column_border_opacity": 100
+          },
+          "blocks": [
+            {
+              "type": "_a-comparison-table-row",
+              "settings": {
+                "benefit": "Advanced feature",
+                "us": true,
+                "others": false,
+                "benefit_icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#e3e3e3\"><path d=\"m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm94-278 226-226-56-58-170 170-86-84-56 56 142 142Z\"></path></svg>",
+                "feature_text_color": "#ffffff",
+                "heading_highlighted_color": "#ffffff",
+                "benefit_icon_color": "#4BB82C",
+                "benefit_icon_size": 20
+              }
+            },
+            {
+              "type": "_a-comparison-table-row",
+              "settings": {
+                "benefit": "Advanced feature",
+                "us": true,
+                "others": false,
+                "benefit_icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#e3e3e3\"><path d=\"m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm94-278 226-226-56-58-170 170-86-84-56 56 142 142Z\"></path></svg>",
+                "feature_text_color": "#ffffff",
+                "heading_highlighted_color": "#ffffff",
+                "benefit_icon_color": "#4BB82C",
+                "benefit_icon_size": 20
+              }
+            },
+            {
+              "type": "_a-comparison-table-row",
+              "settings": {
+                "benefit": "Advanced feature",
+                "us": true,
+                "others": false,
+                "benefit_icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#e3e3e3\"><path d=\"m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm94-278 226-226-56-58-170 170-86-84-56 56 142 142Z\"></path></svg>",
+                "feature_text_color": "#ffffff",
+                "heading_highlighted_color": "#ffffff",
+                "benefit_icon_color": "#4BB82C",
+                "benefit_icon_size": 20
+              }
+            },
+            {
+              "type": "_a-comparison-table-row",
+              "settings": {
+                "benefit": "Advanced feature",
+                "us": true,
+                "others": false,
+                "benefit_icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#e3e3e3\"><path d=\"m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm94-278 226-226-56-58-170 170-86-84-56 56 142 142Z\"></path></svg>",
+                "feature_text_color": "#ffffff",
+                "heading_highlighted_color": "#ffffff",
+                "benefit_icon_color": "#4BB82C",
+                "benefit_icon_size": 20
+              }
+            },
+            {
+              "type": "_a-comparison-table-row",
+              "settings": {
+                "benefit": "Advanced feature",
+                "us": true,
+                "others": false,
+                "benefit_icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#e3e3e3\"><path d=\"m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm94-278 226-226-56-58-170 170-86-84-56 56 142 142Z\"></path></svg>",
+                "feature_text_color": "#ffffff",
+                "heading_highlighted_color": "#ffffff",
+                "benefit_icon_color": "#4BB82C",
+                "benefit_icon_size": 20
+              }
+            },
+            {
+              "type": "_a-comparison-table-row",
+              "settings": {
+                "benefit": "Advanced feature",
+                "us": true,
+                "others": false,
+                "benefit_icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#e3e3e3\"><path d=\"m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm94-278 226-226-56-58-170 170-86-84-56 56 142 142Z\"></path></svg>",
+                "feature_text_color": "#ffffff",
+                "heading_highlighted_color": "#ffffff",
+                "benefit_icon_color": "#4BB82C",
+                "benefit_icon_size": 20
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

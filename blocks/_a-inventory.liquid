@@ -1,0 +1,164 @@
+{% assign product = closest.product %}
+{%- if product.selected_or_first_available_variant.inventory_management == 'shopify' -%}
+                  <p
+                    class="product__inventory product-block-{{ block.id }} no-js-hidden {% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
+                    {{ block.shopify_attributes }}
+                    id="Inventory-{{ section.id }}"
+                    role="status"
+                    style="color: {{ block.settings.inventory_status_color }}; font-size: {{ block.settings.inventory_status_font_size }}px; font-weight: {{ block.settings.inventory_status_font_weight }};"
+                  >
+                    {% style %}
+                      .product-block-{{ block.id }}{
+                        padding-top: {{block.settings.padding_top }}px;
+                        padding-bottom: {{block.settings.padding_bottom }}px;
+                      }
+                      @media screen and (max-width: 768px) {
+                        .product-block-{{ block.id }} {
+                          padding-top: {{block.settings.padding_top_mobile }}px;
+                          padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+                        }
+                      }
+                    {% endstyle %}
+                    {%- if product.selected_or_first_available_variant.inventory_quantity > 0 -%}
+                      {%- if product.selected_or_first_available_variant.inventory_quantity
+                          <= block.settings.inventory_threshold
+                      -%}
+                        {% render 'a-icon-inventory-low-stock' %}
+                        {%- if block.settings.show_inventory_quantity -%}
+                          Low stock: {{ product.selected_or_first_available_variant.inventory_quantity }} left
+                        {%- else -%}
+                          Low stock
+                        {%- endif -%}
+                      {%- else -%}
+                        {% render 'a-icon-inventory-in-stock' %}
+                        {%- if block.settings.show_inventory_quantity -%}
+                          {{ product.selected_or_first_available_variant.inventory_quantity }} {{ block.settings.inventory_status_text }}
+                        {%- else -%}
+                          {{- block.settings.inventory_status_text -}}
+                        {%- endif -%}
+                      {%- endif -%}
+                    {%- else -%}
+                      {%- if product.selected_or_first_available_variant.inventory_policy == 'continue' -%}
+                        {% render 'a-icon-inventory-in-stock' %}
+                        In stock
+                      {%- else -%}
+                        {% render 'a-icon-inventory-out-of-stock' %}
+                        Out of stock
+                      {%- endif -%}
+                    {%- endif -%}
+                  </p>
+                {%- endif -%}
+
+{% schema %}
+{
+  "name": "Inventory status",
+  "tag": null,
+  "settings": [
+    {
+      "type": "range",
+      "id": "inventory_threshold",
+      "label": "Low inventory threshold",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "show_inventory_quantity",
+      "label": "Show inventory count",
+      "default": true,
+      "info": "Please ensure you have inventory tracking setup in order to display inventory status"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "inventory_status_font_size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Inventory status font size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "inventory_status_font_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "label": "Inventory status font weight",
+      "default": 400
+    },
+    {
+      "type": "text",
+      "id": "inventory_status_text",
+      "label": "Inventory status text",
+      "default": "In stock"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "color",
+      "id": "inventory_status_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Inventory Status",
+      "category": "Product Information" 
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,18 @@
+{%- liquid
+  if cart == empty
+    render 'a-icon-cart-empty'
+  else
+    render 'a-icon-cart'
+  endif
+-%}
+<span class="visually-hidden">Cart</span>
+{%- if cart != empty -%}
+  <div class="cart-count-bubble">
+    {%- if cart.item_count < 100 -%}
+      <span aria-hidden="true">{{ cart.item_count }}</span>
+    {%- endif -%}
+    <span class="visually-hidden">
+      {%- if cart.item_count == 1 %}{{ cart.item_count }} item{% else %}{{ cart.item_count }} items{% endif -%}
+    </span>
+  </div>
+{%- endif -%}

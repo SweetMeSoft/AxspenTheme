@@ -1,0 +1,71 @@
+{%- liquid
+	assign screen_lg = 1200
+
+	if settings.screen_lg > 0
+		assign screen_lg = settings.screen_lg
+	endif
+
+	assign screen_lg_min = screen_lg | minus: 1
+-%}
+
+{% comment %} Next and previous arrows are cropped on smaller screens {% endcomment %}
+@media (max-width: {{ screen_lg | plus: 200 }}px) {
+	.template-article .blog-single-section .post-navigation .nav {
+		flex-direction: row;
+	}
+
+	.template-article .blog-single-section .post-navigation .nav-icon {
+		position: static;
+		transform: none;
+	}
+}
+
+{% comment %} Swiper arrows {% endcomment %}
+@media (max-width: {{ screen_lg | plus: 100 }}px) {
+	.swiper-button-prev,
+	.swiper-button-next {
+		background-color: #fff;
+		padding: 1rem;
+	}
+
+	.swiper-button-prev svg,
+	.swiper-button-next svg {
+		height: 2rem;
+		width: 2rem;
+	}
+
+	.swiper-button-prev,
+	.swiper-rtl .swiper-button-next {
+		left: 1.5rem;
+	}
+
+	.swiper-button-next,
+	.swiper-rtl .swiper-button-prev {
+		right: 1.5rem;
+	}
+
+	.main-product .swiper-rtl .swiper-button-next {
+		left: 1.5rem;
+	}
+
+	.main-product .swiper-rtl .swiper-button-prev {
+		right: 1.5rem;
+	}
+}
+
+{% comment %} Cart page {% endcomment %}
+@media (max-width: {{ screen_lg_min }}px) {
+	.template-cart .cart-page-section .cart-table {
+		table-layout: auto;
+	}
+
+	.template-cart .cart-page-section .cart-table th:first-child,
+	.template-cart .cart-page-section .cart-table td:first-child {
+		width: auto;
+	}
+
+	.template-cart .cart-page-section .cart-table th:last-child,
+	.template-cart .cart-page-section .cart-table td:last-child {
+		width: auto;
+	}
+}

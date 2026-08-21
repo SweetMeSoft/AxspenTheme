@@ -1,0 +1,211 @@
+{%- liquid
+	assign section_id    = '#shopify-section-' | append: section.id
+	assign full          = section.settings.full
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+	}
+
+	{{ section_id }} .icon-item {
+		padding: {{ section.settings.item_padding }}px;
+	}
+
+	{%- if section.settings.item_padding > 0 -%}
+		@media (max-width: 991px) {
+			{{ section_id }} .icon-item {
+				padding: 1.5rem;
+			}
+		}
+	{%- endif -%}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .icon-image {
+			width: {{ section.settings.width_icon }}px;
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+		<div class="section-icon-box">
+			<div class="icon-box scrollbar">
+				{%- for block in section.blocks -%}
+					<div class="icon-item">
+						{%- case block.type -%}
+							{%- when '@app' -%}
+								{%- render block -%}
+
+							{%- when 'item' -%}
+								{%- assign image = block.settings.icon_img -%}
+
+								<div class="image-wrap adapt-media">
+									<div class="icon-image{% if settings.image_lazy and image %} lazy-image{% endif %}">
+										{%- liquid
+											if image != blank
+												render 'lazy-image', image: image, width: 294
+											else
+												render 'icon', code: 'placeholder'
+											endif
+										-%}
+									</div>
+								</div>
+
+								{% if block.settings.text != blank %}
+									<div class="text">{{- block.settings.text -}}</div>
+								{% endif %}
+						{%- endcase -%}
+					</div>
+				{%- endfor -%}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.icon-box.name",
+	"class": "icon-box-section",
+	"tag": "section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.icon-box.settings.item.content"
+		},
+		{
+			"type": "range",
+			"id": "item_padding",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 0,
+			"unit": "px",
+			"label": "t:sections.icon-box.settings.item_padding.label"
+		},
+		{
+			"type": "range",
+			"id": "width_icon",
+			"min": 20,
+			"max": 100,
+			"step": 1,
+			"default": 70,
+			"unit": "px",
+			"label": "t:sections.icon-box.settings.icon_width.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "@app"
+		},
+		{
+			"type": "item",
+			"name": "t:sections.icon-box.blocks.item.name",
+			"limit": 4,
+			"settings": [
+				{
+					"type":"image_picker",
+					"id":"icon_img",
+					"label": "t:general.image.label"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"default": "<p>Description for your item</p>",
+					"label": "t:general.typography.text.label"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.icon-box.presets.name",
+			"blocks": [
+				{
+					"type": "item"
+				},
+				{
+					"type": "item"
+				},
+				{
+					"type": "item"
+				},
+				{
+					"type": "item"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

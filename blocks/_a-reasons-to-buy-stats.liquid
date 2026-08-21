@@ -1,0 +1,398 @@
+<!-- start _reasons-to-buy-stats.liquid -->
+<style>
+  {% if request.visual_preview_mode %}
+    {% assign section_id_selector = '' %}
+    {% assign section_id_variable = 'id' %}
+  {% else %}
+    {% assign section_id_selector = '#shopify-section-' | append: section.id %}
+    {% assign section_id_variable = section.id %}
+  {% endif %}
+    {{ section_id_selector }} .reasons-to-buy__stats-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: {{ block.settings.content_alignment }};
+      height: auto;
+      flex: unset;
+      max-width: 30%;
+      min-width: 30%;
+    }
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: {{ block.settings.cards_vertical_spacing }}px 0;
+      border-bottom: 1px solid  rgba({{ block.settings.border_color.red }}, {{ block.settings.border_color.green }}, {{ block.settings.border_color.blue }}, 0.05);
+    }
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item-percentage {
+      font-size: {{ block.settings.percentage_number_font_size }}px;
+      font-weight: 900;
+      line-height: 100%;
+      
+      {% if block.settings.percentage_number_has_gradient %}
+      background-clip: text;
+      color: transparent;
+      background-image: {{ block.settings.percentage_number_bg }};
+      {% else %}
+      color: {{ block.settings.percentage_number_color }};
+      {% endif %}
+      display: flex;
+    }
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    @media screen and (max-width: 768px) {
+      {{ section_id_selector }} .reasons-to-buy__stats-content-item {
+        gap: 6px;
+      }
+    }
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item-heading {
+      font-size: {{ block.settings.block_heading_size }}px;
+      font-weight: 500;
+      color: {{ block.settings.block_heading_color }};
+      line-height: 100%;
+    }
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item-heading strong {
+      color: {{ block.settings.bolded_block_heading_color }};
+    }
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item-heading p {
+      margin: 0;
+    }
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item-text {
+      font-size: {{ block.settings.block_body_size }}px;
+      font-weight: 300;
+      line-height: 100%;
+      color: {{ block.settings.block_body_color }};
+    }
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item-text strong {
+      color: {{ block.settings.bolded_block_body_color }};
+    }
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item-text p {
+      margin: 0;
+    }
+    @media screen and (max-width: 1200px) {
+      {{ section_id_selector }} .reasons-to-buy__stats-content {
+      margin-top: 16px;
+      max-width: 100%;
+      min-width: 100%;
+    }
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item-container {
+      padding: {{ block.settings.cards_vertical_spacing_mobile }}px 0 ;
+    }
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item-percentage {
+      min-width: unset !important;
+      font-size: {{ block.settings.percentage_number_font_size_mobile }}px !important;
+    }
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item-heading{
+      font-size: {{ block.settings.block_heading_size_mobile }}px !important;
+    }
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item-text {
+      font-size: {{ block.settings.block_body_size_mobile }}px !important;
+    }
+  }
+ 
+    {{ section_id_selector }} .reasons-to-buy__stats-content-item-container:last-of-type{
+        border-bottom: none;
+    }
+  </style>
+
+<div class="reasons-to-buy__stats-content" {{ block.shopify_attributes }}>
+  {% content_for 'blocks' %}
+</div>
+<script>
+    function initStatsAnimation{{ section_id_variable | replace: '-', '' }} () {
+      const statsBlocksPercentageValues = this.querySelectorAll("{{ section_id_selector }} .reasons-to-buy__stats-content-item-container");
+      const statsData = []
+      if(statsBlocksPercentageValues.length === 0) return;
+      statsBlocksPercentageValues.forEach(block => {
+        statsData.push({
+          value: parseInt(block.getAttribute("percentage-value"))
+        })
+      });
+      const percentageElements = document.querySelectorAll('{{ section_id_selector }} .reasons-to-buy__stats-content-item-percentage strong');
+      const section = document.querySelector('{{ section_id_selector }} .reasons-to-buy__container'); 
+      let animationTriggered = false; 
+      
+      function animatePercentage(percentElement, targetPercentage) {
+        if (!percentElement) return; 
+  
+        const duration = 1800;
+        const startTime = performance.now();
+  
+        function updatePercentage(currentTime) {
+          const elapsed = currentTime - startTime;
+          const t = Math.min(elapsed / duration, 1);
+          const easeOut = 1 - Math.pow(1 - t, 3);
+          const currentProgress = easeOut * targetPercentage;
+          
+          percentElement.textContent = `${Math.round(currentProgress)}%`;
+  
+          if (elapsed < duration) {
+            requestAnimationFrame(updatePercentage);
+          }
+        }
+  
+        requestAnimationFrame(updatePercentage);
+      }
+  
+      function animateAllPercentages() {
+        if (animationTriggered) return;
+        animationTriggered = true; 
+  
+        percentageElements.forEach((element, index) => {
+          if (statsData[index]) {
+            const delay = index * 150;
+            setTimeout(() => {
+              animatePercentage(element, statsData[index].value);
+            }, delay);
+          }
+        });
+      }
+  
+      if (section) {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              animateAllPercentages();
+              observer.disconnect(); 
+            }
+          });
+        }, { threshold: 0.3 });
+  
+        observer.observe(section);
+      }
+    }
+  
+    document.addEventListener('DOMContentLoaded', initStatsAnimation{{ section_id_variable | replace: '-', '' }});
+  
+    if (Shopify.designMode) {
+      const sectionId = "{{ section_id_variable }}";
+    
+      document.addEventListener('shopify:section:unload', (event) => {
+        if (event.detail.sectionId === sectionId) {
+          initStatsAnimation{{ section_id_variable | replace: '-', '' }}();
+        }
+      });
+    
+      document.addEventListener('shopify:section:load', (event) => {
+        if (event.detail.sectionId === sectionId) {
+          initStatsAnimation{{ section_id_variable | replace: '-', '' }}();
+        }
+      });
+    }
+</script>
+<!-- end _reasons-to-buy-stats.liquid -->
+{% schema %}
+{
+  "name": "Reasons to buy stats",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_a-reasons-to-buy-stat"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Cards content alignment",
+      "options": [
+        { "value": "flex-start", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "Bottom" }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "range",
+      "id": "cards_vertical_spacing",
+      "label": "Desktop cards vertical spacing",
+      "min": 4,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 38
+    },
+    {
+        "type": "range",
+        "id": "cards_vertical_spacing_mobile",
+        "label": "Mobile cards vertical spacing",
+        "min": 4,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "percentage_number_font_size",
+      "label": "Desktop percentage number font size",
+      "min": 32,
+      "max": 70,
+      "step": 1,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "percentage_number_font_size_mobile",
+      "label": "Mobile percentage number font size",
+      "min": 14,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "color",
+      "id": "percentage_number_color",
+      "label": "Percentage number color",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "percentage_number_has_gradient",
+      "label": "Use gradient for percentage number",
+      "default": true,
+      "info": "If enabled, the percentage number will use a gradient instead of a solid color"
+    },
+    {
+      "type": "color_background",
+      "id": "percentage_number_bg",
+      "label": "Percentage number gradient background",
+      "default": "linear-gradient(180deg, #EA3885 0%, #5F4DBC 100%)"
+    },
+    {
+      "type": "range",
+      "id": "block_heading_size",
+      "label": "Desktop heading font size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "block_heading_size_mobile",
+      "label": "Mobile heading font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "block_heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bolded_block_heading_color",
+      "label": "Bolded heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "block_body_size",
+      "label": "Desktop body font size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "block_body_size_mobile",
+      "label": "Mobile body font size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "block_body_color",
+      "label": "Body color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "bolded_block_body_color",
+      "label": "Bolded body color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Cards separator color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reasons to buy stats",
+      "settings": {
+        "content_alignment": "center",
+        "cards_vertical_spacing": 25,
+        "cards_vertical_spacing_mobile": 14,
+        "percentage_number_font_size": 50,
+        "percentage_number_font_size_mobile": 28,
+        "block_heading_size": 24,
+        "block_heading_size_mobile": 14,
+        "block_body_size": 12,
+        "block_body_size_mobile": 14,
+        "percentage_number_bg": "linear-gradient(180deg, rgba(234, 56, 133, 1), rgba(95, 77, 188, 1) 100%)",
+        "block_heading_color": "#000000",
+        "bolded_block_heading_color": "#000000",
+        "block_body_color": "#666666",
+        "bolded_block_body_color": "#666666",
+        "border_color": "#000000"
+      },
+      "blocks": [
+        {
+          "type": "_a-reasons-to-buy-stat",
+          "settings": {
+            "row_heading": "<p>Customers saw <strong>visible improvement</strong></p>",
+            "row_text": "<p>Within the first 2 weeks of use</p>",
+            "percentage": 92
+          }
+        },
+        {
+          "type": "_a-reasons-to-buy-stat",
+          "settings": {
+            "row_heading": "<p>Reported <strong>better skin texture</strong></p>",
+            "row_text": "<p>Smoother and more even tone</p>",
+            "percentage": 87
+          }
+        },
+        {
+          "type": "_a-reasons-to-buy-stat",
+          "settings": {
+            "row_heading": "<p>Felt <strong>more confident</strong></p>",
+            "row_text": "<p>After 4 weeks of consistent use</p>",
+            "percentage": 94
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

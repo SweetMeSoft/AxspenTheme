@@ -1,0 +1,43 @@
+{% if request.visual_preview_mode %}
+  {% assign section_id_selector = '#section' %}
+  {% assign section_id_variable = 'id' %}
+{% else %}
+  {% assign section_id_selector = '#shopify-section-' | append: section.id %}
+  {% assign section_id_variable = section.id %}
+{% endif %}
+{% style %}
+{% endstyle %}
+{% capture blocks %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+{% assign blocks = blocks | split: '<!--@#$%-->' %}
+<div class="scrolling-text-container-{{ section_id_variable }}" {{ block.shopify_attributes }}>
+  <div class="scrolling-text-wrapper-{{ section_id_variable }} fade-in-child">
+    {%- for block in blocks -%}
+      {{ block }}
+    {%- endfor -%}
+    {%- for block in blocks -%}
+      {{ block }}
+    {%- endfor -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Vertical scrolling block",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_a-vertical_scrolling_text"
+    },
+    {
+      "type": "_a-vertical_scrolling_image"
+    }
+  ],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Vertical scrolling block"
+    }
+  ]
+}
+{% endschema %}

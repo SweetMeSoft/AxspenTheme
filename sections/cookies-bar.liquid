@@ -1,0 +1,57 @@
+<div class="cookies-bar color-{{ section.settings.color_scheme }}" data-mode="{{ section.settings.mode }}">
+	<div class="popup-info rte">
+		{{- section.settings.content_cookies -}}
+	</div>
+
+	<div class="button-accept">
+		<button class="button primary-button button-cookies">{{- section.settings.button_name -}}</button>
+	</div>
+</div>
+
+{% schema %}
+	{
+		"name": "t:sections.cookies-bar.name",
+		"class": "cookies-bar-section",
+		"settings": [
+			{
+				"type": "paragraph",
+				"content": "t:sections.cookies-bar.settings.paragraph.content"
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"label": "t:settings_schema.colors.label",
+				"default": "scheme-1"
+			},
+			{
+			"type": "select",
+				"id": "mode",
+				"options": [
+					{
+						"value": "test",
+						"label": "t:general.mode.option_1.label"
+					},
+					{
+						"value": "",
+						"label": "t:general.mode.option_2.label"
+					}
+				],
+				"default": "test",
+				"label": "t:general.mode.label",
+				"info": "t:general.mode.info"
+			},
+			{
+				"type": "richtext",
+				"id": "content_cookies",
+				"default": "<p>We use cookies to improve your experience on our website. By browsing this website, you agree to our use of cookies</p>",
+				"label": "t:sections.cookies-bar.settings.content_cookies.label"
+			},
+			{
+				"type": "text",
+				"id": "button_name",
+				"default": "Accept",
+				"label": "t:sections.cookies-bar.settings.button_name.label"
+			}
+		]
+	}
+{% endschema %}

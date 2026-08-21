@@ -1,0 +1,148 @@
+{% comment %}
+		Renders a product thumbnail with a modal-opener
+
+		Accepts:
+		- media: {Object} Product Media object
+		- image_only: Get media image only, not include template like Play, modal
+		- position: {String} Position of the media. Used for accessible label
+		- loop: {Boolean} Enable video looping (optional)
+		- role: {String} Detect product 'main' or 'thumbnail'
+		- index: {Number} Media position
+{% endcomment %}
+
+{%- if media.media_type == 'model' and role == 'main' -%}
+	<product-model class="product-model" data-media-id="{{ media.id }}">
+		<span class="modal-toggle-button"></span>
+{%- endif -%}
+
+	{% if role == 'main' %}
+		<button id="deferred-poster-button-{{ media.id }}" class="media-preview-wrap{% unless media %} placeholder-media{% endunless %}{% if settings.image_lazy and media != blank %} lazy-image{% endif %}" data-id="{{ media.id }}" data-pos="{{ position }}"
+			{% if media %}
+				{% if media.media_type == 'image' %}
+					data-dimension="{{ media.width | append: 'x' | append: media.height }}"
+					data-key="{{ media | handle | append: '-master' }}"
+
+					{% if section.settings.lightbox %}
+						data-zoom="{{ media | image_url: width: 1500 }}"
+					{% endif %}
+				{% endif %}
+				data-{{ media.media_type | escape }}
+				style="--aspect-ratio: {{ media.aspect_ratio | round: 2 | default: 1 }}"
+			{% endif %}>
+
+			{% if media != blank %}
+				{%- liquid
+					if settings.image_lazy
+						assign image_src     = media | image_url: width: width_url, height: height_url
+						assign image_srcset  = media | image_url: width: width_url, height: height_url | image_tag
+						assign srcset_split  = image_srcset | split: 'srcset="'
+						assign srcset        = srcset_split[1] | split: '"'
+						assign lazy          = 'eager'
+
+						if index > 1
+							assign lazy = 'lazy'
+						endif
+
+						render 'lazy-image', image: media, width: 840, lazy: lazy, class: 'media-preview'
+						echo media | image_url: width: 1, height: 1 | image_tag: loading: 'lazy', class: 'swiper-lazy media-preview', width: width, height: height, srcset: nil, data-src: image_src, data-srcset: srcset.first
+					else
+						echo media | image_url: width: width_url | image_tag: loading: 'lazy', class: 'swiper-lazy media-preview', width: width, height: height
+					endif
+				-%}
+
+				{% if settings.image_lazy %}
+					<noscript>
+						<img src="{{ media | image_url: width: 840, height: 740 }}" alt="{{ media.alt | escape }}" loading="lazy" width="1200" height="960">
+					</noscript>
+				{% endif %}
+
+				{%- unless image_only -%}
+					{%- if media.media_type != 'image' -%}
+						<span class="view-media">
+							{%- if media.media_type == 'model' -%}
+								<span class="sr-only">{{- 'products.product.media.play_model' | t -}}</span>
+								{%- render 'icon', code: '3d-model' -%}
+							{%- else -%}
+								<span class="sr-only">{{- 'products.product.media.play_video' | t -}}</span>
+								{%- render 'icon', code: 'play' -%}
+							{%- endif -%}
+						</span>
+
+						{%- if media.media_type == 'model' -%}
+							<button class="button product-xr-button" type="button" aria-label="{{ 'products.product.xr_button_label' | t }}" data-shopify-xr data-shopify-model3d-id="{{ media.id }}" data-shopify-title="{{ product.title | escape }}" data-shopify-xr-hidden>
+								{%- render 'icon', code: '3d-model' -%}
+								{{- 'products.product.xr_button' | t -}}
+							</button>
+						{%- endif -%}
+
+						<template>
+							{%- liquid
+								case media.media_type
+									when 'external_video'
+										assign video_class = 'js-' | append: media.host
+
+										if media.host == 'youtube'
+											echo media | external_video_url: controls: true, autoplay: true, loop: loop | external_video_tag: class: video_class, loading: 'lazy'
+										else
+											echo media | external_video_url: controls: true, muted: true, background: true, transparent: false, autoplay: true, loop: loop | external_video_tag: class: video_class, loading: 'lazy'
+										endif
+									when 'video'
+										echo media | media_tag: image_size: '2048x', autoplay: true, loop: loop, controls: true, preload: 'none'
+									when 'model'
+										echo media | model_viewer_tag: image_size: '2048x', toggleable: true
+								endcase
+							-%}
+						</template>
+					{%- elsif section.settings.lightbox -%}
+						<span class="open-media-fullscreen">
+							<span class="sr-only">{{- 'products.product.media.open_media' | t: index: position -}}</span>
+							{%- render 'icon', code: 'search' -%}
+						</span>
+					{%- endif -%}
+				{%- endunless -%}
+			{% else %}
+				{{- 'product-1' | placeholder_svg_tag: 'placeholder-svg' -}}
+			{% endif %}
+		</button>
+	{% elsif media %}
+		<button class="media-preview-wrap{% if settings.image_lazy and media %} lazy-image{% endif %}" data-type="{{ media.media_type | escape }}" style="--aspect-ratio: {{ media.aspect_ratio | round: 2 | default: 1 }}">
+			{%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+				<span class="thumb-view">{%- render 'icon', code: 'play' -%}</span>
+			{%- elsif media.media_type == 'model' -%}
+				<span class="thumb-view">{%- render 'icon', code: '3d-model' -%}</span>
+			{%- endif -%}
+
+			{%- liquid
+				if settings.image_lazy
+					assign image_src     = media | image_url: width: 200
+					assign image_srcset  = media | image_url: width: 200 | image_tag | remove: 'amp;'
+					assign srcset_split  = image_srcset | split: 'srcset="'
+					assign srcset        = srcset_split[1] | split: '"'
+					assign lazy          = 'eager'
+
+					if index > 1
+						assign lazy = 'lazy'
+					endif
+
+					render 'lazy-image', image: media, width: 300, lazy: lazy, class: 'media-preview'
+					echo media | image_url: width: 1, height: 1 | image_tag: loading: 'lazy', class: 'swiper-lazy media-preview', width: 300, height: 300, srcset: nil, data-src: image_src, data-srcset: srcset.first
+				else
+					echo media | image_url: width: width_url | image_tag: loading: 'lazy', class: 'swiper-lazy media-preview', width: 300, height: 300
+				endif
+			-%}
+
+			{% if settings.image_lazy and media %}
+				<noscript>
+					<img src="{{ media | image_url: width: 300 }}"
+						alt="{{ media.alt | escape }}"
+						loading="lazy"
+						width="300"
+						height="300">
+				</noscript>
+			{% endif %}
+		</button>
+	{% endif %}
+
+{%- if media.media_type == 'model' and role == 'main' -%}
+	</product-model>
+{%- endif -%}

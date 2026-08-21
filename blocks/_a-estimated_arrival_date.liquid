@@ -1,0 +1,191 @@
+{% assign product = closest.product %}
+<div class="product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  {% style %}
+    .atlas-isolation-wrapper .product-block-{{ block.id }} {
+      padding-top: {{block.settings.padding_top }}px;
+      padding-bottom: {{block.settings.padding_bottom }}px;
+    }
+    @media screen and (max-width: 768px) {
+      .atlas-isolation-wrapper .product-block-{{ block.id }} {
+        padding-top: {{block.settings.padding_top_mobile }}px;
+        padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+      }
+    }
+  {% endstyle %}
+  {% render 'a-estimated-arrival-date', block: block %}
+</div>
+
+{% schema %}
+{
+  "name": "Estimated arrival date",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "custom_text",
+      "label": "Custom text",
+      "default": "<p>Arrives by <strong>[earliest_date]</strong>, if you order today.</p>",
+      "info": "Use [earliest_date] and [latest_date] as placeholders for the arrival dates"
+    },
+    {
+      "type": "header",
+      "content": "Arrival date range"
+    },
+    {
+      "type": "number",
+      "id": "num_days_for_earliest_arrival",
+      "label": "Number of days for earliest arrival",
+      "default": 5
+    },
+    {
+      "type": "number",
+      "id": "num_days_for_latest_arrival",
+      "label": "Number of days for latest arrival",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "date_format",
+      "label": "Date format",
+      "options": [
+        {
+          "value": "dayName_monthName_dayNumber",
+          "label": "Day name, month name, day number"
+        },
+        {
+          "value": "dayName_dayNumber_monthName",
+          "label": "Day name, day number, month name"
+        },
+        {
+          "value": "monthName_dayNumber",
+          "label": "Month name, day number"
+        }
+      ],
+      "default": "monthName_dayNumber"
+    },
+    {
+      "type": "text",
+      "id": "day_labels",
+      "label": "Day labels",
+      "default": "Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday"
+    },
+    {
+      "type": "text",
+      "id": "month_labels",
+      "label": "Month labels",
+      "default": "January, February, March, April, May, June, July, August, September, October, November, December"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_icon",
+      "default": true,
+      "label": "Display icon"
+    },
+    {
+      "type": "textarea",
+      "id": "icon",
+      "label": "Icon",
+      "info": "Paste SVG code for the icon",
+      "visible_if": "{{ block.settings.display_icon }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_icon",
+      "label": "Custom icon",
+      "visible_if": "{{ block.settings.display_icon }}"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 5,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 32,
+      "visible_if": "{{ block.settings.display_icon }}"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.display_icon }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Estimated arrival date",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

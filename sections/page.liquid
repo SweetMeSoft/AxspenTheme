@@ -1,0 +1,44 @@
+<div class="container container--narrow">
+	<h2 class="page-title">
+		{%- liquid
+			if section.settings.page.title != blank
+				echo section.settings.page.title | escape
+			else
+				echo 'sections.page.title' | t
+			endif
+		-%}
+	</h2>
+
+	<div class="rte">
+		{%- if section.settings.page.content != blank -%}
+			{{ section.settings.page.content }}
+		{%- else -%}
+			<div class='page-placeholder-wrapper placeholder'>
+				{{ 'page' | placeholder_svg_tag: 'page-placeholder' }}
+			</div>
+		{%- endif -%}
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.page.name",
+	"tag": "section",
+	"class": "spaced-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "page",
+			"id": "page",
+			"label": "t:sections.page.settings.page.label"
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.page.presets.name"
+		}
+	]
+}
+{% endschema %}

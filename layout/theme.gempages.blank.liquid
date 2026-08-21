@@ -1,0 +1,24 @@
+{%- liquid
+	assign template = template.name
+
+	if template == 'account' or template == 'login' or template == 'register' or template == 'order' or template == 'addresses'
+		assign account_details = ' has-account-details'
+	endif
+-%}
+
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}" data-v="2.0.8">
+	<head>
+		{{- 'style.css' | asset_url | stylesheet_tag -}}
+		{{ content_for_header }}
+
+		{%- liquid
+			render 'stylesheet'
+			render 'meta'
+		-%}
+	</head>
+
+	<body class="template-{{ template }}{{ account_details }}"><main id="main-content" class="content-for-layout" role="main" tabindex="-1">
+			{{ content_for_layout }}
+		</main></body>
+</html>

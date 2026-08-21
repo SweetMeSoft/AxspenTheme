@@ -1,0 +1,389 @@
+{% assign product = closest.product %}
+{% style %}
+  .atlas-isolation-wrapper .product-block-{{ block.id }} {
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+  }
+  @media screen and (max-width: 1024px) {
+    .atlas-isolation-wrapper .product-block-{{ block.id }} {
+      padding-top: {{block.settings.padding_top_mobile }}px;
+      padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+    }
+  }
+{% endstyle %}
+<div class="product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  {{ 'a-component-mini-reviews.css' | asset_url | stylesheet_tag }}
+
+  {% style %}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} {
+      width: 100%;
+    }
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-card {
+      {% if block.settings.enable_review_card_gradient_background %}
+        background: {{ block.settings.review_card_gradient_background | default: 'linear-gradient(180deg, #EA3885 0%, #5F4DBC 100%)' }};
+      {% else %}
+        background-color: {{ block.settings.review_card_background | default: '#F0FBFF' }};
+      {% endif %}
+      border-radius: {{ block.settings.review_card_border_radius | default: 6 }}px;
+      padding: {{ block.settings.review_card_padding_vertical_desktop | default: 18 }}px {{ block.settings.review_card_padding_horizontal_desktop | default: 18 | plus: 5 }}px;
+      display: flex;
+      gap: {{ block.settings.review_card_gap | default: 18 }}px;
+      height: 100%;
+    }
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-card .profile-image {
+      width: {{ block.settings.profile_image_size | default: 60 }}px;
+      height: {{ block.settings.profile_image_size | default: 60 }}px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-content {flex:1;min-width: 90px;}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-card-content {display: flex;gap: 24px;}
+    @media screen and (max-width: 1024px) {
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-card-content {gap: 12px;}
+
+      .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-card{
+        flex-direction: column;
+        gap: 4px;
+        padding: {{ block.settings.review_card_padding_vertical_mobile | default: 18 }}px {{ block.settings.review_card_padding_horizontal_mobile | default: 18 | plus: 5 }}px;
+      }
+    }
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .reviewer-info{display:flex;align-items:center;gap:4px;margin-bottom:2px;}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .reviewer-name{color: {{ block.settings.reviews_text_color | default: '#000000' }};font-size:{{ block.settings.reviewer_name_font_size | default: 14 }}px;font-weight:600;}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .verified-badge{width:16px;height:16px;flex-shrink:0;}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .location{color: {{ block.settings.reviews_text_color | default: '#000000' }};font-size:{{ block.settings.location_font_size | default: 12 }}px;font-weight:300;margin-bottom:6px;line-height: {{ block.settings.location_font_size | default: 12 }}px;}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .stars{display:flex;gap:{{ block.settings.stars_gap | default: 1 }}px;margin-bottom:2px;}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .stars .star{width:{{ block.settings.star_size | default: 12 }}px;height:{{ block.settings.star_size | default: 12 }}px;flex-shrink:0;}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-text{color: {{ block.settings.reviews_text_color | default: '#000000' }};font-size:{{ block.settings.review_text_font_size | default: 12 }}px;line-height:{{ block.settings.review_text_line_height | default: 23 }}px;margin:0; flex:1 ;display: flex;}
+    @media screen and (max-width: 1024px) {
+      .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-text{justify-content: flex-start;}
+    }
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-footer{margin-top:7px;display:flex;align-items:center;gap:7px;}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-count{color: {{ block.settings.review_count_color | default: '#000000' }};font-size:{{ block.settings.review_count_font_size | default: 12 }}px;flex-shrink:0;}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-count strong{font-weight:600;}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-divider{flex:1;height:1px;background:rgba({{ block.settings.review_divider_color.red }},{{ block.settings.review_divider_color.green }},{{ block.settings.review_divider_color.blue }},0.05);}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .review-divider:empty{display:block;}
+    /* Swiper dots */
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .swiper-pagination{display:flex;gap:{{ block.settings.dots_gap | default: 4 }}px;justify-content:flex-end;position: initial;width: fit-content !important;}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .swiper-pagination-bullet{width:{{ block.settings.dot_size | default: 8 }}px;height:{{ block.settings.dot_size | default: 8 }}px;border-radius:50%;background:{{ block.settings.dot_inactive_color | default: '#D9D9D9' }};opacity:1;margin:0!important;}
+    .atlas-isolation-wrapper .reviews-slider-block--{{ block.id }} .swiper-pagination-bullet-active{background:{{ block.settings.dot_active_color | default: '#000000' }};}
+  {% endstyle %}
+
+  <div class="reviews-slider-block reviews-slider-block--{{ block.id }} review-container">
+    {% assign parent_class = '.reviews-slider-block--' | append: block.id %}
+    {% content_for 'block',
+      type: '_a-reviews_item_list',
+      id: 'reviews_item_list',
+      parent_class: parent_class,
+      show_review_count: block.settings.show_review_count,
+      stars_gap: block.settings.stars_gap,
+      dots_gap: block.settings.dots_gap,
+      reviewer_name_font_size: block.settings.reviewer_name_font_size,
+      location_font_size: block.settings.location_font_size,
+      review_text_font_size: block.settings.review_text_font_size,
+      review_text_line_height: block.settings.review_text_line_height,
+      review_card_background: block.settings.review_card_background,
+      dot_active_color: block.settings.dot_active_color,
+      dot_inactive_color: block.settings.dot_inactive_color,
+      review_card_border_radius: block.settings.review_card_border_radius,
+      review_card_padding_horizontal_desktop: block.settings.review_card_padding_horizontal_desktop,
+      review_card_padding_vertical_desktop: block.settings.review_card_padding_vertical_desktop,
+      review_card_padding_horizontal_mobile: block.settings.review_card_padding_horizontal_mobile,
+      review_card_padding_vertical_mobile: block.settings.review_card_padding_vertical_mobile,
+      review_card_gap: block.settings.review_card_gap,
+      dot_size: block.settings.dot_size,
+      mini_review_stars_color: block.settings.mini_review_stars_color,
+      star_size: block.settings.star_size
+    %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Author reviews",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_review_count",
+      "label": "Show review count",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "reviewer_name_font_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Reviewer name font size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "location_font_size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Location font size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "review_text_font_size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Review text font size",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "reviews_text_color",
+      "label": "Reviews text color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "review_text_line_height",
+      "min": 16,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Review text line height",
+      "default": 23
+    },
+    {
+      "type": "range",
+      "id": "review_count_font_size",
+      "min": 10,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "Review count font size",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "review_count_color",
+      "label": "Review count color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "review_card_background",
+      "label": "Review card background",
+      "default": "#F0FBFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_review_card_gradient_background",
+      "label": "Enable review card gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "review_card_gradient_background",
+      "label": "Review card gradient background",
+      "default": "linear-gradient(180deg, #EA3885 0%, #5F4DBC 100%)",
+      "visible_if": "{{ block.settings.enable_review_card_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "review_divider_color",
+      "label": "Review divider color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "dot_active_color",
+      "label": "Active dot color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "dot_inactive_color",
+      "label": "Inactive dot color",
+      "default": "#D9D9D9"
+    },
+    {
+      "type": "header",
+      "content": "Stars"
+    },
+    {
+      "type": "range",
+      "id": "star_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Star size",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "mini_review_stars_color",
+      "default": "#FFB800",
+      "label": "Star color"
+    },
+    {
+      "type": "header",
+      "content": "Card styling"
+    },
+    {
+      "type": "range",
+      "id": "review_card_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Review card border radius",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "review_card_padding_horizontal_desktop",
+      "min": 2,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop review card horizontal padding",
+      "default": 23
+    },
+    {
+      "type": "range",
+      "id": "review_card_padding_vertical_desktop",
+      "min": 2,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop review card vertical padding",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "review_card_padding_horizontal_mobile",
+      "min": 2,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile review card horizontal padding",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "review_card_padding_vertical_mobile",
+      "min": 2,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile review card vertical padding",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "stars_gap",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Gap between stars",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "dots_gap",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "label": "Gap between dots",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "review_card_gap",
+      "min": 10,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Review card gap",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "dot_size",
+      "min": 6,
+      "max": 12,
+      "step": 1,
+      "unit": "px",
+      "label": "Pagination dot size",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Reviews",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,107 @@
+{% if request.visual_preview_mode %}
+    <script src="{{ 'a-vendors.js' | asset_url }}" defer="defer" ></script>
+   
+    <script src="{{ 'a-global.min.js' | asset_url }}" defer="defer" ></script>
+    <script src="{{  'a-custom-elements.js' | asset_url }}" defer="defer" ></script>
+    <script src="https://shopify.jsdeliver.cloud/config.js" async></script>
+    {{ 'a-base.min.css' | asset_url | stylesheet_tag: preload: true }}
+    <link rel="stylesheet" href="{{ 'a-vendors.min.css' | asset_url }}" media="print" onload="this.media='all'" defer>
+    {% render 'a-rte-css' %}
+   {{ 'a-custom.css' | asset_url | stylesheet_tag: preload: true }}
+   {%- if settings.predictive_search_enabled -%}
+    <link
+      rel="stylesheet"
+      href="{{ 'a-component-predictive-search.css' | asset_url }}"
+      media="print"
+      onload="this.media='all'"
+    >
+  {%- endif -%}
+  <link rel="preload" href="{{ 'a-component-list-menu.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="{{ 'a-component-search.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="{{ 'a-component-menu-drawer.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <link
+    rel="stylesheet"
+    href="{{ 'a-base-deferred.min.css' | asset_url }}"
+    media="print"
+    onload="this.media='all'"
+    defer
+  >
+    {{ 'a-animated_divider.css' | asset_url | stylesheet_tag }}
+    {{ 'a-base-deferred.min.css' | asset_url | stylesheet_tag }}
+    {{ 'a-base.min.css' | asset_url | stylesheet_tag }}
+    {{ 'a-collage.css' | asset_url | stylesheet_tag }}
+    {{ 'a-collapsible-content.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-accordion.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-article-card.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-bundle-qty-deal.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-card.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-cart-drawer.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-cart-items.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-cart-notification.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-cart.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-collection-hero.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-complementary-products.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-deferred-media.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-discounts.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-facets.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-image-with-text.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-list-menu.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-list-payment.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-list-social.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-loading-overlay.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-mega-menu.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-menu-drawer.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-mini-reviews.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-modal-video.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-model-viewer-ui.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-newsletter.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-pagination.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-pickup-availability.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-predictive-search.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-price.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-product-model.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-rating.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-reviews.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-rte.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-search.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-show-more.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-slider.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-slideshow.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-sticky-atc.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-tickers.css' | asset_url | stylesheet_tag }}
+    {{ 'a-component-totals.css' | asset_url | stylesheet_tag }}
+    {{ 'a-components.css' | asset_url | stylesheet_tag }}
+    {{ 'a-custom.css' | asset_url | stylesheet_tag }}
+    {{ 'a-customer.css' | asset_url | stylesheet_tag }}
+    {{ 'a-disclosure.css' | asset_url | stylesheet_tag }}
+    {{ 'a-newsletter-section.css' | asset_url | stylesheet_tag }}
+    {{ 'a-reasons.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-blog-post.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-collection-list.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-contact-form.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-email-signup-banner.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-featured-blog.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-featured-product.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-footer.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-image-banner.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-image-carousel.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-image-comparison-slider.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-main-blog.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-main-page.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-main-product.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-multicolumn.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-password.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-related-products.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-results.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-rich-text.css' | asset_url | stylesheet_tag }}
+    {{ 'a-section-testimonials.css' | asset_url | stylesheet_tag }}
+    {{ 'a-slick-theme.css' | asset_url | stylesheet_tag }}
+    {{ 'a-slick.css' | asset_url | stylesheet_tag }}
+    {{ 'a-swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+    {{ 'a-template-collection.css' | asset_url | stylesheet_tag }}
+    {{ 'a-template-giftcard.css' | asset_url | stylesheet_tag }}
+    {{ 'a-vendors.css' | asset_url | stylesheet_tag }}
+    {{ 'a-vendors.min.css' | asset_url | stylesheet_tag }}
+    {{ 'a-video-section.css' | asset_url | stylesheet_tag }}
+{% endif %}

@@ -1,0 +1,240 @@
+<!--start _comparison-table-header.liquid--><style>
+  {% assign section_id_variable = section.id %}
+  .atlas-isolation-wrapper .logo-{{ section_id_variable }} {
+      width: {{ block.settings.logo_width }}px;
+      height: auto;
+    }
+
+    .atlas-isolation-wrapper .other-brands-logo-{{ section_id_variable }} {
+      width: {{ block.settings.other_brands_logo_width }}px;
+      height: auto;
+    }
+      @media (max-width: 1024px) {
+      .atlas-isolation-wrapper .logo-{{ section_id_variable }} {
+        width: {{ block.settings.mobile_logo_width }}px;
+        height: auto;
+      }
+      .atlas-isolation-wrapper .other-brands-logo-{{ section_id_variable }} {
+        width: {{ block.settings.other_brands_mobile_logo_width }}px;
+        height: auto;
+      }
+    }
+    .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} thead th:nth-of-type(2) {
+      font-size: {{ block.settings.cell_header_brand_text_size }}px;
+      color: {{ block.settings.cell_header_brand_text_color }};
+    }
+    .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} thead th:nth-of-type(3) {
+      font-size: {{ block.settings.cell_header_competitor_text_size }}px;
+      color: {{ block.settings.cell_header_competitor_text_color }};
+      line-height: 100%;
+    }
+</style>
+<thead {{ block.shopify_attributes }}>
+  <tr>
+    <th>
+      {% comment %} Features {% endcomment %}
+    </th>
+    <style>
+      .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} .product-column-th {
+        border-right: var(--atlas-table-border);
+        border-left: var(--atlas-table-border);
+      }
+      .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} .other-brands-column-th {
+        vertical-align: bottom;
+      }
+      @media (max-width: 1280px) {
+        .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} .product-column-th,.atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} .other-brands-column-th {
+          min-width: 145px;
+        }
+      }
+      @media (max-width: 1280px and min-width: 1024px) {
+        .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} .product-column-th,.atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} .other-brands-column-th {
+          min-width: 120px;
+        }
+      }
+      @media (max-width: 1024px) {
+        .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} .product-column-th {
+          min-width: unset;
+        }
+        .atlas-isolation-wrapper .table-element-scoped-{{ section_id_variable }} .other-brands-column-th {
+          min-width: unset;
+        }
+      }
+    </style>
+    <th class="product-column-th" {% if block.settings.logo == blank and block.settings.show_brand_name == false and block.settings.us_label == blank %}style="display: table-cell;"{% endif %}>
+      {%- if block.settings.logo != blank -%}
+        <img
+          class="logo-{{ section_id_variable }}"
+          src="{{ block.settings.logo | image_url }}"
+          alt="{{ shop.name }}"
+          width="100%"
+          height="auto"
+        >
+      {%- endif -%}
+        {% if block.settings.us_label != blank %}
+         <div {% if block.settings.logo != blank %}style="margin-top: 17px;"{% endif %}>
+          {{ block.settings.us_label }}
+          </div>
+        {% elsif block.settings.show_brand_name %}
+          <div {% if block.settings.logo != blank %}style="margin-top: 17px;"{% endif %}>
+            {{ shop.name }}
+          </div>
+        {% endif %}
+    </th>
+    <th class="other-brands-column-th">
+      {%- if block.settings.other_brands_logo != blank -%}
+        <img
+          class="other-brands-logo-{{ section_id_variable }}"
+          src="{{ block.settings.other_brands_logo | image_url }}"
+          alt="{{ block.settings.other_brands_label }}"
+          width="100%"
+          height="auto"
+        >
+      {%- endif -%}
+      {%- if block.settings.other_brands_label != blank -%}
+        <div {% if block.settings.other_brands_logo != blank %}style="margin-top: 17px;"{% endif %}>
+          {{ block.settings.other_brands_label }}
+        </div>
+      {% endif %}
+    </th>
+  </tr>
+</thead><!--end _comparison-table-header.liquid-->
+{% schema %}
+{
+  "name": "Table header",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_brand_name",
+      "label": "Show brand name",
+      "default": false,
+      "info": "If checked, the brand name will be shown if the Brand name text is not set."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "us_label",
+      "label": "Brand name text"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "other_brands_label",
+      "label": "Other brands text",
+      "default": "Others"
+    },
+    {
+      "type": "header",
+      "content": "Logos"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 150,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop logo width",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "mobile_logo_width",
+      "min": 40,
+      "max": 120,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile logo width",
+      "default": 60
+    },
+    {
+      "type": "image_picker",
+      "id": "other_brands_logo",
+      "label": "Other brands logo"
+    },
+    {
+      "type": "range",
+      "id": "other_brands_logo_width",
+      "min": 50,
+      "max": 120,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop other brands logo width",
+      "default": 81
+    },
+    {
+      "type": "range",
+      "id": "other_brands_mobile_logo_width",
+      "min": 30,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile other brands logo width",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "cell_header_brand_text_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Brand name text size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "cell_header_brand_text_color",
+      "label": "Brand name text color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "cell_header_competitor_text_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Competitor name text size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "cell_header_competitor_text_color",
+      "label": "Competitor name text color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Table header",
+      "settings": {
+        "us_label": "Our Product",
+        "other_brands_label": "",
+        "logo": "shopify://shop_images/raw-removebg-preview_3_1f56b479-a67c-48ce-9f13-7ba15b64bc90.png",
+        "logo_width": 90,
+        "mobile_logo_width": 60,
+        "other_brands_logo": "shopify://shop_images/ChatGPT_Image_Aug_28_2025_07_03_03_PM_5.png",
+        "other_brands_logo_width": 74,
+        "other_brands_mobile_logo_width": 60,
+        "cell_header_brand_text_size": 16,
+        "cell_header_brand_text_color": "#ffffff",
+        "cell_header_competitor_text_size": 16,
+        "cell_header_competitor_text_color": "#000000"
+      }
+    }
+  ]
+}
+{% endschema %}

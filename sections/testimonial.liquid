@@ -1,0 +1,349 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+	assign image      = section.settings.image
+-%}
+
+<style>
+	{{ section_id }} .testimonial {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	{%- for block in section.blocks -%}
+		@media (min-width: 1400px) {
+			{{ section_id }} [data-{{ block.id }}] {
+				max-width: {{ block.settings.content_width }}%;
+			}
+		}
+
+		@media (min-width: 992px) {
+			{{ section_id }} [data-{{ block.id }}] .testi-head {
+				font-size: {{ block.settings.header_font_size }}px;
+				margin-bottom: {{ block.settings.header_space }}px;
+			}
+
+			{{ section_id }} [data-{{ block.id }}] .testi-body {
+				font-size: {{ block.settings.body_font_size }}px;
+				margin-bottom: {{ block.settings.body_space }}px;
+			}
+
+			{{ section_id }} [data-{{ block.id }}] .testi-footer {
+				font-size: {{ block.settings.footer_font_size }}px;
+				margin-bottom: {{ block.settings.footer_space }}px;
+			}
+		}
+	{%- else -%}
+		@media (min-width: 992px) {
+			{{ section_id }} .testi-head {
+				font-size: 13px;
+				font-weight: 500;
+				margin-bottom: 30px;
+			}
+
+			{{ section_id }} .testi-body {
+				font-size: 48px;
+				font-weight: 900;
+				margin-bottom: 43px;
+			}
+
+			{{ section_id }} .testi-footer {
+				font-size: 20px;
+				font-weight: 500;
+				margin-bottom: 30px;
+			}
+		}
+	{%- endfor -%}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .testimonial {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="container testimonial">
+		<div class="content-left">
+			<div class="image-wrap{% if settings.image_lazy and image %} lazy-image{% endif %}">
+				{%- liquid
+					if image != blank
+						render 'lazy-image', image: image, width: 685
+					else
+						render 'icon', code: 'placeholder'
+					endif
+				-%}
+			</div>
+		</div>
+
+		<div class="content-right carousel-swiper">
+			<template data-options>
+				{
+					"autoplay": {
+						"delay": 5000,
+						"disableOnInteraction": false,
+						"pauseOnMouseEnter": true
+					},
+					"speed": 500,
+					"pagination": {
+						"el": "{{ section_id }} .swiper-pagination",
+						"clickable": true
+					},
+					"autoHeight": true,
+					"slidesPerView": 1,
+					"spaceBetween": 10
+				}
+			</template>
+
+			<div class="swiper">
+				<div class="swiper-wrapper">
+					{%- for block in section.blocks -%}
+						<div class="swiper-slide" data-{{ forloop.index0 }} {% if request.design_mode %} data-index="{{ forloop.index0 }}"{% endif %}>
+							{%- liquid
+								assign header_text = block.settings.header_text
+								assign body_text   = block.settings.body_text
+								assign footer_text = block.settings.footer_text
+							-%}
+
+							<div data-{{ block.id }} class="rte">
+								{%- if header_text != blank -%}
+									<div class="testi-head">
+										{{- header_text -}}
+									</div>
+								{%- endif -%}
+
+								{%- if body_text != blank -%}
+									<div class="testi-body">
+										{{- body_text -}}
+									</div>
+								{%- endif -%}
+
+								{%- if footer_text != blank -%}
+									<div class="testi-footer">
+										{{- footer_text -}}
+									</div>
+								{%- endif -%}
+							</div>
+						</div>
+					{%- else -%}
+						{%- for i in (1..3) -%}
+							<div class="swiper-slide" data-{{ forloop.index0 }} {% if request.design_mode %} data-index="{{ forloop.index0 }}"{% endif %}>
+								<div data-id="{{ forloop.index }}">
+									<div class="testi-head">
+										{{- 'onboarding.testimonial.header_text' | t -}}
+									</div>
+
+									<div class="testi-body">
+										{{- 'onboarding.testimonial.body_text' | t -}}
+									</div>
+
+									<div class="testi-footer">
+										{{- 'onboarding.testimonial.footer_text' | t -}}
+									</div>
+								</div>
+							</div>
+						{%- endfor -%}
+					{%- endfor -%}
+				</div>
+
+				<div class="swiper-pagination"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.testimonial.name",
+	"tag": "section",
+	"class": "testimonial-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "t:general.image.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 100,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 100,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 64,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "slide",
+			"name": "t:general.slide.label",
+			"settings": [
+				{
+					"type": "range",
+					"id": "content_width",
+					"min": 30,
+					"max": 100,
+					"step": 1,
+					"default": 100,
+					"unit": "%",
+					"label": "t:sections.testimonial.settings.content_width.label"
+				},
+				{
+					"type": "header",
+					"content": "t:sections.testimonial.settings.header_text.content"
+				},
+				{
+					"type": "richtext",
+					"id": "header_text",
+					"default": "<p>Heading Testimonial</p>",
+					"label": "t:general.typography.text.label"
+				},
+				{
+					"type": "range",
+					"id": "header_font_size",
+					"min": 10,
+					"max": 100,
+					"step": 1,
+					"default": 13,
+					"unit": "px",
+					"label": "t:general.typography.font_size.label"
+				},
+				{
+					"type": "range",
+					"id": "header_space",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"default": 30,
+					"unit": "px",
+					"label": "t:general.dimensions.space.label"
+				},
+				{
+					"type": "header",
+					"content": "t:sections.testimonial.settings.body_text.content"
+				},
+				{
+					"type": "richtext",
+					"id": "body_text",
+					"default": "<h3>“Description feedback from your buyers”</h3>",
+					"label": "t:general.typography.text.label"
+				},
+				{
+					"type": "range",
+					"id": "body_font_size",
+					"min": 10,
+					"max": 100,
+					"step": 1,
+					"default": 48,
+					"unit": "px",
+					"label": "t:general.typography.font_size.label"
+				},
+				{
+					"type": "range",
+					"id": "body_space",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"default": 43,
+					"unit": "px",
+					"label": "t:general.dimensions.space.label"
+				},
+				{
+					"type": "header",
+					"content": "t:sections.testimonial.settings.footer_text.content"
+				},
+				{
+					"type": "richtext",
+					"id": "footer_text",
+					"default": "<h5><b>— Buyer's name,</b> Buyer's location</h5>",
+					"label": "t:general.typography.text.label"
+				},
+				{
+					"type": "range",
+					"id": "footer_font_size",
+					"min": 10,
+					"max": 100,
+					"step": 1,
+					"default": 20,
+					"unit": "px",
+					"label": "t:general.typography.font_size.label"
+				},
+				{
+					"type": "range",
+					"id": "footer_space",
+					"min": 0,
+					"max": 200,
+					"step": 2,
+					"default": 30,
+					"unit": "px",
+					"label": "t:general.dimensions.space.label"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.testimonial.presets.name",
+			"blocks": [
+				{
+					"type": "slide"
+				},
+				{
+					"type": "slide"
+				},
+				{
+					"type": "slide"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

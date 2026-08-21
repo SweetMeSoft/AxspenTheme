@@ -1,0 +1,89 @@
+<article class="article-card">
+	<div class="{% if in_search_results %}{{ settings.card_image_ratio }}{% else %}{{ section.settings.image_ratio }}{% endif %}-media">
+		<a href="{{ article.url }}" class="card-image{% if settings.image_lazy and article.image %} lazy-image{% endif %}">
+			{%- liquid
+				if article.image
+					render 'lazy-image', image: article.image, width: 740
+				endif
+			-%}
+
+			{% if in_search_results %}
+				<span class="badge">{{- 'blogs.article.blog' | t -}}</span>
+			{% endif %}
+		</a>
+	</div>
+
+	{%- if in_search_results -%}
+		<h2 class="card-title">
+			<a href="{{ article.url }}">
+				{% if highlight %}{{ article.title | highlight: highlight }}{% else %}{{- article.title | escape -}}{% endif %}
+			</a>
+		</h2>
+
+		<div class="card-info">
+			{% comment %} Blog {% endcomment %}
+			<span class="info-item">
+				<a href="{{ blog.url }}">
+					{{- blog.title | escape -}}
+				</a>
+			</span>
+
+			{% comment %} Date {% endcomment %}
+			<span class="info-item">
+				{{- article.published_at | time_tag: format: 'short_month_day_year' -}}
+			</span>
+
+			{% comment %} Comment {% endcomment %}
+			{%- if blog.comments_enabled? -%}
+				<span class="info-item">{{- 'blogs.article.comments' | t: count: article.comments_count -}}</span>
+			{%- endif -%}
+		</div>
+	{%- else -%}
+		{% comment %} Title {% endcomment %}
+		{%- if section.settings.show_title -%}
+			<h2 class="card-title">
+				<a href="{{ article.url }}">
+					{{- article.title | escape -}}
+				</a>
+			</h2>
+		{%- endif -%}
+
+		{%- if section.settings.show_blog or section.settings.show_date or section.settings.show_comment -%}
+			<div class="card-info">
+				{% comment %} Blog {% endcomment %}
+				{%- if section.settings.show_blog -%}
+					<span class="info-item">
+						<a href="{{ blog.url }}">
+							{{- blog.title | escape -}}
+						</a>
+					</span>
+				{%- endif -%}
+
+				{% comment %} Date {% endcomment %}
+				{%- if section.settings.show_date -%}
+					<span class="info-item">
+						{{- article.published_at | time_tag: format: 'short_month_day_year' -}}
+					</span>
+				{%- endif -%}
+
+				{% comment %} Comment {% endcomment %}
+				{%- if section.settings.show_comment and blog.comments_enabled? -%}
+					<span class="info-item">{{- 'blogs.article.comments' | t: count: article.comments_count -}}</span>
+				{%- endif -%}
+			</div>
+		{%- endif -%}
+
+		{% comment %} Description {% endcomment %}
+		{%- if section.settings.show_excerpt and article.excerpt.size > 0 or article.content.size > 0 -%}
+			<p class="card-excerpt">
+				{%- liquid
+					if article.excerpt.size > 0
+						echo article.excerpt | strip_html | truncatewords: 20
+					else
+						echo article.content | strip_html | truncatewords: 20
+					endif
+				-%}
+			</p>
+		{%- endif -%}
+	{%- endif -%}
+</article>

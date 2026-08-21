@@ -1,0 +1,142 @@
+{% comment %}
+  Accepts:
+  - id: {String} Section or block id
+  - title: {String} Collapsibnle title content
+  - row_title_color: {String} title text color
+  - text_content: {String} Collapsibnle drawer content
+  - row_text_content_color: {String}
+
+  - override_collapsible_font_size: {Boolean}
+  - collapsible_font_size: {Number}
+
+  - collapsible_background_color_scheme_open: {String}
+
+  - collapsible_use_custom_bg_colors: {String}
+  - open_background_color: {String}
+  - closed_background_color: {String}
+  - border_radius: {Number}
+  - padding_top: {Number}
+  - padding_bottom: {Number}
+{% endcomment %}
+
+{%- liquid
+   assign global_body_size = settings.enable_global_body_font_size
+   assign global_color = settings.enable_global_color
+-%}
+
+{%- style -%}
+  .atlas-isolation-wrapper .rowTitleColor-{{ id }},
+  .atlas-isolation-wrapper .rowTitleColor-{{ id }}:after {
+    color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ row_title_color }}{% endif %};
+  }
+
+  .atlas-isolation-wrapper .rowTitleColor-{{ id }} strong {
+    color: {{ row_title_highlighted_color }};
+  }
+
+  .atlas-isolation-wrapper svg.rowTitleColor-{{ id }} {
+    fill: none;
+    stroke: {{ row_title_color }};
+    stroke-width: 1;
+  }
+
+  .atlas-isolation-wrapper .singleAccordianContainer-{{ id }} {
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: {{ border_radius }}px;
+    overflow: hidden;
+  }
+
+
+
+  .atlas-isolation-wrapper .accordionButtonStyle-{{ id }} {
+    border: none;
+    display: block;
+    background-color: transparent;
+    color: rgb(var(--atlas-color-base-text)); 
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    padding-top: 0;
+    padding-bottom: 0; 
+  }
+
+  .atlas-isolation-wrapper .accordionButtonStyle-{{ id }}.active {
+    border-bottom-color: rgba(0,0,0,0.1);
+  }
+
+  .atlas-isolation-wrapper .panelStyle-{{ id }} {
+    padding: 0 6px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: {% if global_color %}rgb(var(--atlas-color-base-text)){% else %}{{ row_text_content_color }}{% endif %};
+  }
+  
+  .atlas-isolation-wrapper .panelStyle-{{ id }} strong {
+    color: {{ row_text_content_highlighted_color }};
+  }
+
+  .atlas-isolation-wrapper .panelStyle-{{ id }} p {
+    font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size){% else %}{{ collapsible_font_size }}px{% endif %};
+    line-height: 1.4em;
+    margin: .5rem 0;
+  }
+
+  .atlas-isolation-wrapper .accordionButtonStyle-{{ id }} svg {
+    display:block;
+  }
+  .atlas-isolation-wrapper .icon-minus-{{ id }} { display:none !important; }
+  .atlas-isolation-wrapper .accordionButtonStyle-{{ id }}.active .icon-plus-{{ id }} { display:none; }
+  .atlas-isolation-wrapper .accordionButtonStyle-{{ id }}.active .icon-minus-{{ id }} { display:inline-block !important; }
+
+  .atlas-isolation-wrapper .accordianTitle-{{ id }} span {
+    font-size: {% if collapsible_font_heading_size != blank %}{{ collapsible_font_heading_size }}px{% else %}var(--atlas-global-body-text-font-size){% endif %};
+  }
+
+  .atlas-isolation-wrapper .accordionButtonStyle-{{ id }}.active svg {
+    transform: rotate(180deg);
+  }
+
+  .atlas-isolation-wrapper .accordianTitle-{{ id }} {
+    font-size: {% if collapsible_font_heading_size != blank %}{{ collapsible_font_heading_size }}px{% else %}1.4em{% endif %};
+    margin: 0;
+    line-height: 1;
+  }
+
+  @media (max-width: 767px) {
+    .atlas-isolation-wrapper .panelStyle-{{ id }} p {
+      font-size: {% if collapsible_font_size != blank %}{{ collapsible_font_size }}px{% else %}var(--atlas-global-body-text-font-size){% endif %};
+    }
+  }
+{%- endstyle -%}
+<accordeon-button id-section="{{ id }}">
+<div style="padding-top: {{ padding_top }}px; padding-bottom: {{ padding_bottom }}px;border-bottom: 1px solid rgba(0,0,0,0.05);" >
+  <div class="singleAccordianContainer-{{ id }}">
+    <button class="accordionButtonStyle-{{ id }}">
+      <div style="display: flex; justify-content: space-between; align-items: center;margin-bottom: 7px;margin-top: 7px;">
+        <h3 class="accordianTitle-{{ id }} rowTitleColor-{{ id }}" style="text-transform: none;">
+          <span class="collapsibleTitleSpan-{{ id }}">
+              {{ title }}
+          </span> 
+        </h3>
+        <div style="display:flex;align-items:center;">
+          <svg class="icon-plus-{{ id }}" width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5.15625 10.3125C4.673 10.3125 4.28125 9.92075 4.28125 9.4375V0.875C4.28125 0.391751 4.673 0 5.15625 0C5.6395 0 6.03125 0.391751 6.03125 0.875V9.4375C6.03125 9.92075 5.6395 10.3125 5.15625 10.3125ZM0.875 6.03125C0.391751 6.03125 0 5.6395 0 5.15625C0 4.673 0.391751 4.28125 0.875 4.28125H9.4375C9.92075 4.28125 10.3125 4.673 10.3125 5.15625C10.3125 5.6395 9.92075 6.03125 9.4375 6.03125H0.875Z" fill="#181818"/>
+          </svg>
+          <svg class="icon-minus-{{ id }}" width="11" height="3" viewBox="0 0 11 3" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.875 2.03125C0.391751 2.03125 0 1.6395 0 1.15625C0 0.673001 0.391751 0.28125 0.875 0.28125H9.4375C9.92075 0.28125 10.3125 0.673001 10.3125 1.15625C10.3125 1.6395 9.92075 2.03125 9.4375 2.03125H0.875Z" fill="#181818"/>
+          </svg>
+        </div>
+      </div>
+    </button>
+    <div class="panelStyle-{{ id }}">
+      {{ text_content }}
+    </div>
+  </div>
+</div>
+</accordeon-button>

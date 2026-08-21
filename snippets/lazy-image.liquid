@@ -1,0 +1,65 @@
+{% comment %}
+	Renders lazy image
+
+	Accepts:
+	- image: {Object} Image
+	- width: {Number} Image width
+	- lazy: {String} Image lazy load (optional)
+	- class: {String} Image class (optional)
+	- width: {Number} Image tag width (optional)
+	- height: {Number} Image tag height (optional)
+	- width_url: {Number} Image url width (optional)
+	- height_url: {Number} Image url height (optional)
+
+	Usage:
+	{%- render 'lazy-image', image: image, class: '', width: 500, height: 500, width_url: 700, height_url: 700 -%}
+{% endcomment %}
+
+{%- liquid
+	assign image_lazy  = settings.image_lazy
+
+	if image_lazy
+		assign image_class = 'no-js-hidden ' | append: class | strip
+	else
+		assign image_class = class | strip
+	endif
+
+	unless lazy
+		assign lazy = 'lazy'
+	endunless
+
+	unless height
+		assign height = width | divided_by: image.aspect_ratio | ceil
+	endunless
+
+	unless width_url
+		assign width_url = width | times: 1.4 | ceil
+	endunless
+
+	unless height_url
+		assign height_url = width_url | divided_by: image.aspect_ratio | ceil
+	endunless
+
+	if image_lazy
+		assign image_src    = image | image_url: width: width_url, height: height_url
+		assign image_srcset = image | image_url: width: width_url, height: height_url | image_tag | remove: 'amp;'
+		assign srcset_split = image_srcset | split: 'srcset="'
+		assign srcset       = srcset_split[1] | split: '"'
+
+		echo image | image_url: width: 1, height: 1 | image_tag: loading: 'lazy', class: image_class, width: width, height: height, srcset: nil, data-src: image_src, data-srcset: srcset.first
+	else
+		echo image | image_url: width: width_url | image_tag: loading: lazy, class: image_class, width: width, height: height
+	endif
+-%}
+
+{%- if image_lazy -%}
+	<noscript>
+		<img src="{{ image | image_url: width: width, height: height }}"
+			{% if image.alt != blank %}alt="{{ image.alt | escape }}"{% endif %}
+			loading="{{ lazy }}"
+			{% if class %}class="{{ class | strip }}"{% endif %}
+			style="object-position: {{ image.presentation.focal_point | default: '50% 50%' }}"
+			width="{{ width }}"
+			height="{{ height }}">
+	</noscript>
+{%- endif -%}

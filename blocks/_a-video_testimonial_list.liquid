@@ -1,0 +1,896 @@
+<div class="swiper-wrapper" {{ block.shopify_attributes }}>
+    {%- liquid
+      assign video_1_type = 'local'
+      if block.settings.video_1 != blank
+        assign video_1_type = 'local'
+      elsif block.settings.video_1_url != blank
+        if block.settings.video_1_url.type == 'youtube'
+          assign video_1_type = 'youtube'
+          assign video_1_id = block.settings.video_1_url.id
+        elsif block.settings.video_1_url.type == 'vimeo'
+          assign video_1_type = 'vimeo'
+          assign video_1_id = block.settings.video_1_url.id
+        endif
+      elsif block.settings.video_1_direct_url != blank
+        assign video_1_type = 'url'
+        assign video_1_src = block.settings.video_1_direct_url
+      endif
+    -%}
+    {% if block.settings.video_1 != blank or block.settings.video_1_url != blank or block.settings.video_1_direct_url != blank %}
+        <div class="swiper-slide product-block-{{ block.id }}">
+          <div class="video-card" data-video-url="{% if block.settings.video_1 %}{{ block.settings.video_1 }}{% elsif block.settings.video_1_direct_url %}{{ block.settings.video_1_direct_url }}{% endif %}">
+            {%- case video_1_type -%}
+              {%- when 'youtube' -%}
+                <iframe src="https://www.youtube.com/embed/{{ video_1_id }}?enablejsapi=1&rel=0&showinfo=0&modestbranding=1" class="js-youtube" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ video_1_id }}?title=0&byline=0&portrait=0" class="js-vimeo" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'url' -%}
+                {%- if block.settings.video_1_image -%}
+                  {%- assign poster_1 = block.settings.video_1_image | image_url -%}
+                {%- endif -%}
+                <video class="video-card__video" src="{{ video_1_src }}" {% if poster_1 %}poster="{{ poster_1 }}"{% endif %} ></video>
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+              {%- else -%}
+                {%- assign poster_1 = block.settings.video_1_image | image_url -%}
+                {{ block.settings.video_1 | video_tag: image_size: '1100x',poster: poster_1, autoplay: false, loop: false, controls: false, muted: false }}
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+            {%- endcase -%}
+          </div>
+        </div>
+      {% endif %}
+    {%- liquid
+      assign video_2_type = 'local'
+      if block.settings.video_2 != blank
+        assign video_2_type = 'local'
+      elsif block.settings.video_2_url != blank
+        if block.settings.video_2_url.type == 'youtube'
+          assign video_2_type = 'youtube'
+          assign video_2_id = block.settings.video_2_url.id
+        elsif block.settings.video_2_url.type == 'vimeo'
+          assign video_2_type = 'vimeo'
+          assign video_2_id = block.settings.video_2_url.id
+        endif
+      elsif block.settings.video_2_direct_url != blank
+        assign video_2_type = 'url'
+        assign video_2_src = block.settings.video_2_direct_url
+      endif
+    -%}
+    {% if block.settings.video_2 != blank or block.settings.video_2_url != blank or block.settings.video_2_direct_url != blank %}
+        <div class="swiper-slide product-block-{{ block.id }}">
+          <div class="video-card" data-video-url="{% if block.settings.video_2 %}{{ block.settings.video_2 }}{% elsif block.settings.video_2_direct_url %}{{ block.settings.video_2_direct_url }}{% endif %}">
+            {%- case video_2_type -%}
+              {%- when 'youtube' -%}
+                <iframe src="https://www.youtube.com/embed/{{ video_2_id }}?enablejsapi=1&rel=0&showinfo=0&modestbranding=1" class="js-youtube" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ video_2_id }}?title=0&byline=0&portrait=0" class="js-vimeo" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'url' -%}
+                {%- if block.settings.video_2_image -%}
+                  {%- assign poster_2 = block.settings.video_2_image | image_url -%}
+                {%- endif -%}
+                <video class="video-card__video" src="{{ video_2_src }}" {% if poster_2 %}poster="{{ poster_2 }}"{% endif %} ></video>
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+              {%- else -%}
+                {%- assign poster_2 = block.settings.video_2_image | image_url -%}
+                {{ block.settings.video_2 | video_tag: image_size: '1100x',poster: poster_2, autoplay: false, loop: false, controls: false, muted: false }}
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+            {%- endcase -%}
+          </div>
+        </div>
+      {% endif %}
+      
+    {%- liquid
+      assign video_3_type = 'local'
+      if block.settings.video_3 != blank
+        assign video_3_type = 'local'
+      elsif block.settings.video_3_url != blank
+        if block.settings.video_3_url.type == 'youtube'
+          assign video_3_type = 'youtube'
+          assign video_3_id = block.settings.video_3_url.id
+        elsif block.settings.video_3_url.type == 'vimeo'
+          assign video_3_type = 'vimeo'
+          assign video_3_id = block.settings.video_3_url.id
+        endif
+      elsif block.settings.video_3_direct_url != blank
+        assign video_3_type = 'url'
+        assign video_3_src = block.settings.video_3_direct_url
+      endif
+    -%}
+    {% if block.settings.video_3 != blank or block.settings.video_3_url != blank or block.settings.video_3_direct_url != blank %}
+        <div class="swiper-slide product-block-{{ block.id }}">
+          <div class="video-card" data-video-url="{% if block.settings.video_3 %}{{ block.settings.video_3 }}{% elsif block.settings.video_3_direct_url %}{{ block.settings.video_3_direct_url }}{% endif %}">
+            {%- case video_3_type -%}
+              {%- when 'youtube' -%}
+                <iframe src="https://www.youtube.com/embed/{{ video_3_id }}?enablejsapi=1&rel=0&showinfo=0&modestbranding=1" class="js-youtube" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ video_3_id }}?title=0&byline=0&portrait=0" class="js-vimeo" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'url' -%}
+                {%- if block.settings.video_3_image -%}
+                  {%- assign poster_3 = block.settings.video_3_image | image_url -%}
+                {%- endif -%}
+                <video class="video-card__video" src="{{ video_3_src }}" {% if poster_3 %}poster="{{ poster_3 }}"{% endif %} ></video>
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+              {%- else -%}
+                {%- assign poster_3 = block.settings.video_3_image | image_url -%}
+                {{ block.settings.video_3 | video_tag: image_size: '1100x',poster: poster_3, autoplay: false, loop: false, controls: false, muted: false }}
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+            {%- endcase -%}
+          </div>
+        </div>
+      {% endif %}
+      
+    {%- liquid
+      assign video_4_type = 'local'
+      if block.settings.video_4 != blank
+        assign video_4_type = 'local'
+      elsif block.settings.video_4_url != blank
+        if block.settings.video_4_url.type == 'youtube'
+          assign video_4_type = 'youtube'
+          assign video_4_id = block.settings.video_4_url.id
+        elsif block.settings.video_4_url.type == 'vimeo'
+          assign video_4_type = 'vimeo'
+          assign video_4_id = block.settings.video_4_url.id
+        endif
+      elsif block.settings.video_4_direct_url != blank
+        assign video_4_type = 'url'
+        assign video_4_src = block.settings.video_4_direct_url
+      endif
+    -%}
+    {% if block.settings.video_4 != blank or block.settings.video_4_url != blank or block.settings.video_4_direct_url != blank %}
+        <div class="swiper-slide product-block-{{ block.id }}">
+          <div class="video-card" data-video-url="{% if block.settings.video_4 %}{{ block.settings.video_4 }}{% elsif block.settings.video_4_direct_url %}{{ block.settings.video_4_direct_url }}{% endif %}">
+            {%- case video_4_type -%}
+              {%- when 'youtube' -%}
+                <iframe src="https://www.youtube.com/embed/{{ video_4_id }}?enablejsapi=1&rel=0&showinfo=0&modestbranding=1" class="js-youtube" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ video_4_id }}?title=0&byline=0&portrait=0" class="js-vimeo" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'url' -%}
+                {%- if block.settings.video_4_image -%}
+                  {%- assign poster_4 = block.settings.video_4_image | image_url -%}
+                {%- endif -%}
+                <video class="video-card__video" src="{{ video_4_src }}" {% if poster_4 %}poster="{{ poster_4 }}"{% endif %} ></video>
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+              {%- else -%}
+                {%- assign poster_4 = block.settings.video_4_image | image_url -%}
+                {{ block.settings.video_4 | video_tag: image_size: '1100x',poster: poster_4, autoplay: false, loop: false, controls: false, muted: false }}
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+            {%- endcase -%}
+          </div>
+        </div>
+      {% endif %}
+      
+    {%- liquid
+      assign video_5_type = 'local'
+      if block.settings.video_5 != blank
+        assign video_5_type = 'local'
+      elsif block.settings.video_5_url != blank
+        if block.settings.video_5_url.type == 'youtube'
+          assign video_5_type = 'youtube'
+          assign video_5_id = block.settings.video_5_url.id
+        elsif block.settings.video_5_url.type == 'vimeo'
+          assign video_5_type = 'vimeo'
+          assign video_5_id = block.settings.video_5_url.id
+        endif
+      elsif block.settings.video_5_direct_url != blank
+        assign video_5_type = 'url'
+        assign video_5_src = block.settings.video_5_direct_url
+      endif
+    -%}
+    {% if block.settings.video_5 != blank or block.settings.video_5_url != blank or block.settings.video_5_direct_url != blank %}
+        <div class="swiper-slide product-block-{{ block.id }}">
+          <div class="video-card" data-video-url="{% if block.settings.video_5 %}{{ block.settings.video_5 }}{% elsif block.settings.video_5_direct_url %}{{ block.settings.video_5_direct_url }}{% endif %}">
+            {%- case video_5_type -%}
+              {%- when 'youtube' -%}
+                <iframe src="https://www.youtube.com/embed/{{ video_5_id }}?enablejsapi=1&rel=0&showinfo=0&modestbranding=1" class="js-youtube" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ video_5_id }}?title=0&byline=0&portrait=0" class="js-vimeo" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'url' -%}
+                {%- if block.settings.video_5_image -%}
+                  {%- assign poster_5 = block.settings.video_5_image | image_url -%}
+                {%- endif -%}
+                <video class="video-card__video" src="{{ video_5_src }}" {% if poster_5 %}poster="{{ poster_5 }}"{% endif %} ></video>
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+              {%- else -%}
+                {%- assign poster_5 = block.settings.video_5_image | image_url -%}
+                {{ block.settings.video_5 | video_tag: image_size: '1100x',poster: poster_5, autoplay: false, loop: false, controls: false, muted: false }}
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+            {%- endcase -%}
+          </div>
+        </div>
+      {% endif %}
+      
+    {%- liquid
+      assign video_6_type = 'local'
+      if block.settings.video_6 != blank
+        assign video_6_type = 'local'
+      elsif block.settings.video_6_url != blank
+        if block.settings.video_6_url.type == 'youtube'
+          assign video_6_type = 'youtube'
+          assign video_6_id = block.settings.video_6_url.id
+        elsif block.settings.video_6_url.type == 'vimeo'
+          assign video_6_type = 'vimeo'
+          assign video_6_id = block.settings.video_6_url.id
+        endif
+      elsif block.settings.video_6_direct_url != blank
+        assign video_6_type = 'url'
+        assign video_6_src = block.settings.video_6_direct_url
+      endif
+    -%}
+    {% if block.settings.video_6 != blank or block.settings.video_6_url != blank or block.settings.video_6_direct_url != blank %}
+        <div class="swiper-slide product-block-{{ block.id }}">
+          <div class="video-card" data-video-url="{% if block.settings.video_6 %}{{ block.settings.video_6 }}{% elsif block.settings.video_6_direct_url %}{{ block.settings.video_6_direct_url }}{% endif %}">
+            {%- case video_6_type -%}
+              {%- when 'youtube' -%}
+                <iframe src="https://www.youtube.com/embed/{{ video_6_id }}?enablejsapi=1&rel=0&showinfo=0&modestbranding=1" class="js-youtube" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ video_6_id }}?title=0&byline=0&portrait=0" class="js-vimeo" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'url' -%}
+                {%- if block.settings.video_6_image -%}
+                  {%- assign poster_6 = block.settings.video_6_image | image_url -%}
+                {%- endif -%}
+                <video class="video-card__video" src="{{ video_6_src }}" {% if poster_6 %}poster="{{ poster_6 }}"{% endif %} ></video>
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+              {%- else -%}
+                {%- assign poster_6 = block.settings.video_6_image | image_url -%}
+                {{ block.settings.video_6 | video_tag: image_size: '1100x',poster: poster_6, autoplay: false, loop: false, controls: false, muted: false }}
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+            {%- endcase -%}
+          </div>
+        </div>
+      {% endif %}
+      
+    {%- liquid
+      assign video_7_type = 'local'
+      if block.settings.video_7 != blank
+        assign video_7_type = 'local'
+      elsif block.settings.video_7_url != blank
+        if block.settings.video_7_url.type == 'youtube'
+          assign video_7_type = 'youtube'
+          assign video_7_id = block.settings.video_7_url.id
+        elsif block.settings.video_7_url.type == 'vimeo'
+          assign video_7_type = 'vimeo'
+          assign video_7_id = block.settings.video_7_url.id
+        endif
+      elsif block.settings.video_7_direct_url != blank
+        assign video_7_type = 'url'
+        assign video_7_src = block.settings.video_7_direct_url
+      endif
+    -%}
+    {% if block.settings.video_7 != blank or block.settings.video_7_url != blank or block.settings.video_7_direct_url != blank %}
+        <div class="swiper-slide product-block-{{ block.id }}">
+          <div class="video-card" data-video-url="{% if block.settings.video_7 %}{{ block.settings.video_7 }}{% elsif block.settings.video_7_direct_url %}{{ block.settings.video_7_direct_url }}{% endif %}">
+            {%- case video_7_type -%}
+              {%- when 'youtube' -%}
+                <iframe src="https://www.youtube.com/embed/{{ video_7_id }}?enablejsapi=1&rel=0&showinfo=0&modestbranding=1" class="js-youtube" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ video_7_id }}?title=0&byline=0&portrait=0" class="js-vimeo" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'url' -%}
+                {%- if block.settings.video_7_image -%}
+                  {%- assign poster_7 = block.settings.video_7_image | image_url -%}
+                {%- endif -%}
+                <video class="video-card__video" src="{{ video_7_src }}" {% if poster_7 %}poster="{{ poster_7 }}"{% endif %} ></video>
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+              {%- else -%}
+                {%- assign poster_7 = block.settings.video_7_image | image_url -%}
+                {{ block.settings.video_7 | video_tag: image_size: '1100x',poster: poster_7, autoplay: false, loop: false, controls: false, muted: false }}
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+            {%- endcase -%}
+          </div>
+        </div>
+      {% endif %}
+      
+    {%- liquid
+      assign video_8_type = 'local'
+      if block.settings.video_8 != blank
+        assign video_8_type = 'local'
+      elsif block.settings.video_8_url != blank
+        if block.settings.video_8_url.type == 'youtube'
+          assign video_8_type = 'youtube'
+          assign video_8_id = block.settings.video_8_url.id
+        elsif block.settings.video_8_url.type == 'vimeo'
+          assign video_8_type = 'vimeo'
+          assign video_8_id = block.settings.video_8_url.id
+        endif
+      elsif block.settings.video_8_direct_url != blank
+        assign video_8_type = 'url'
+        assign video_8_src = block.settings.video_8_direct_url
+      endif
+    -%}
+    {% if block.settings.video_8 != blank or block.settings.video_8_url != blank or block.settings.video_8_direct_url != blank %}
+        <div class="swiper-slide product-block-{{ block.id }}">
+          <div class="video-card" data-video-url="{% if block.settings.video_8 %}{{ block.settings.video_8 }}{% elsif block.settings.video_8_direct_url %}{{ block.settings.video_8_direct_url }}{% endif %}">
+            {%- case video_8_type -%}
+              {%- when 'youtube' -%}
+                <iframe src="https://www.youtube.com/embed/{{ video_8_id }}?enablejsapi=1&rel=0&showinfo=0&modestbranding=1" class="js-youtube" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ video_8_id }}?title=0&byline=0&portrait=0" class="js-vimeo" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'url' -%}
+                {%- if block.settings.video_8_image -%}
+                  {%- assign poster_8 = block.settings.video_8_image | image_url -%}
+                {%- endif -%}
+                <video class="video-card__video" src="{{ video_8_src }}" {% if poster_8 %}poster="{{ poster_8 }}"{% endif %} ></video>
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+              {%- else -%}
+                {%- assign poster_8 = block.settings.video_8_image | image_url -%}
+                {{ block.settings.video_8 | video_tag: image_size: '1100x',poster: poster_8, autoplay: false, loop: false, controls: false, muted: false }}
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+            {%- endcase -%}
+          </div>
+        </div>
+      {% endif %}
+      
+    {%- liquid
+      assign video_9_type = 'local'
+      if block.settings.video_9 != blank
+        assign video_9_type = 'local'
+      elsif block.settings.video_9_url != blank
+        if block.settings.video_9_url.type == 'youtube'
+          assign video_9_type = 'youtube'
+          assign video_9_id = block.settings.video_9_url.id
+        elsif block.settings.video_9_url.type == 'vimeo'
+          assign video_9_type = 'vimeo'
+          assign video_9_id = block.settings.video_9_url.id
+        endif
+      elsif block.settings.video_9_direct_url != blank
+        assign video_9_type = 'url'
+        assign video_9_src = block.settings.video_9_direct_url
+      endif
+    -%}
+    {% if block.settings.video_9 != blank or block.settings.video_9_url != blank or block.settings.video_9_direct_url != blank %}
+        <div class="swiper-slide product-block-{{ block.id }}">
+          <div class="video-card" data-video-url="{% if block.settings.video_9 %}{{ block.settings.video_9 }}{% elsif block.settings.video_9_direct_url %}{{ block.settings.video_9_direct_url }}{% endif %}">
+            {%- case video_9_type -%}
+              {%- when 'youtube' -%}
+                <iframe src="https://www.youtube.com/embed/{{ video_9_id }}?enablejsapi=1&rel=0&showinfo=0&modestbranding=1" class="js-youtube" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ video_9_id }}?title=0&byline=0&portrait=0" class="js-vimeo" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'url' -%}
+                {%- if block.settings.video_9_image -%}
+                  {%- assign poster_9 = block.settings.video_9_image | image_url -%}
+                {%- endif -%}
+                <video class="video-card__video" src="{{ video_9_src }}" {% if poster_9 %}poster="{{ poster_9 }}"{% endif %} ></video>
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+              {%- else -%}
+                {%- assign poster_9 = block.settings.video_9_image | image_url -%}
+                {{ block.settings.video_9 | video_tag: image_size: '1100x',poster: poster_9, autoplay: false, loop: false, controls: false, muted: false }}
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+            {%- endcase -%}
+          </div>
+        </div>
+      {% endif %}
+      
+    {%- liquid
+      assign video_10_type = 'local'
+      if block.settings.video_10 != blank
+        assign video_10_type = 'local'
+      elsif block.settings.video_10_url != blank
+        if block.settings.video_10_url.type == 'youtube'
+          assign video_10_type = 'youtube'
+          assign video_10_id = block.settings.video_10_url.id
+        elsif block.settings.video_10_url.type == 'vimeo'
+          assign video_10_type = 'vimeo'
+          assign video_10_id = block.settings.video_10_url.id
+        endif
+      elsif block.settings.video_10_direct_url != blank
+        assign video_10_type = 'url'
+        assign video_10_src = block.settings.video_10_direct_url
+      endif
+    -%}
+    {% if block.settings.video_10 != blank or block.settings.video_10_url != blank or block.settings.video_10_direct_url != blank %}
+        <div class="swiper-slide product-block-{{ block.id }}">
+          <div class="video-card" data-video-url="{% if block.settings.video_10 %}{{ block.settings.video_10 }}{% elsif block.settings.video_10_direct_url %}{{ block.settings.video_10_direct_url }}{% endif %}">
+            {%- case video_10_type -%}
+              {%- when 'youtube' -%}
+                <iframe src="https://www.youtube.com/embed/{{ video_10_id }}?enablejsapi=1&rel=0&showinfo=0&modestbranding=1" class="js-youtube" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ video_10_id }}?title=0&byline=0&portrait=0" class="js-vimeo" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'url' -%}
+                {%- if block.settings.video_10_image -%}
+                  {%- assign poster_10 = block.settings.video_10_image | image_url -%}
+                {%- endif -%}
+                <video class="video-card__video" src="{{ video_10_src }}" {% if poster_10 %}poster="{{ poster_10 }}"{% endif %} ></video>
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+              {%- else -%}
+                {%- assign poster_10 = block.settings.video_10_image | image_url -%}
+                {{ block.settings.video_10 | video_tag: image_size: '1100x',poster: poster_10, autoplay: false, loop: false, controls: false, muted: false }}
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+            {%- endcase -%}
+          </div>
+        </div>
+      {% endif %}
+      
+    {%- liquid
+      assign video_11_type = 'local'
+      if block.settings.video_11 != blank
+        assign video_11_type = 'local'
+      elsif block.settings.video_11_url != blank
+        if block.settings.video_11_url.type == 'youtube'
+          assign video_11_type = 'youtube'
+          assign video_11_id = block.settings.video_11_url.id
+        elsif block.settings.video_11_url.type == 'vimeo'
+          assign video_11_type = 'vimeo'
+          assign video_11_id = block.settings.video_11_url.id
+        endif
+      elsif block.settings.video_11_direct_url != blank
+        assign video_11_type = 'url'
+        assign video_11_src = block.settings.video_11_direct_url
+      endif
+    -%}
+    {% if block.settings.video_11 != blank or block.settings.video_11_url != blank or block.settings.video_11_direct_url != blank %}
+        <div class="swiper-slide product-block-{{ block.id }}">
+          <div class="video-card" data-video-url="{% if block.settings.video_11 %}{{ block.settings.video_11 }}{% elsif block.settings.video_11_direct_url %}{{ block.settings.video_11_direct_url }}{% endif %}">
+            {%- case video_11_type -%}
+              {%- when 'youtube' -%}
+                <iframe src="https://www.youtube.com/embed/{{ video_11_id }}?enablejsapi=1&rel=0&showinfo=0&modestbranding=1" class="js-youtube" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ video_11_id }}?title=0&byline=0&portrait=0" class="js-vimeo" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'url' -%}
+                {%- if block.settings.video_11_image -%}
+                  {%- assign poster_11 = block.settings.video_11_image | image_url -%}
+                {%- endif -%}
+                <video class="video-card__video" src="{{ video_11_src }}" {% if poster_11 %}poster="{{ poster_11 }}"{% endif %} ></video>
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+              {%- else -%}
+                {%- assign poster_11 = block.settings.video_11_image | image_url -%}
+                {{ block.settings.video_11 | video_tag: image_size: '1100x',poster: poster_11, autoplay: false, loop: false, controls: false, muted: false }}
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+            {%- endcase -%}
+          </div>
+        </div>
+      {% endif %}
+      
+    {%- liquid
+      assign video_12_type = 'local'
+      if block.settings.video_12 != blank
+        assign video_12_type = 'local'
+      elsif block.settings.video_12_url != blank
+        if block.settings.video_12_url.type == 'youtube'
+          assign video_12_type = 'youtube'
+          assign video_12_id = block.settings.video_12_url.id
+        elsif block.settings.video_12_url.type == 'vimeo'
+          assign video_12_type = 'vimeo'
+          assign video_12_id = block.settings.video_12_url.id
+        endif
+      elsif block.settings.video_12_direct_url != blank
+        assign video_12_type = 'url'
+        assign video_12_src = block.settings.video_12_direct_url
+      endif
+    -%}
+    {% if block.settings.video_12 != blank or block.settings.video_12_url != blank or block.settings.video_12_direct_url != blank %}
+        <div class="swiper-slide product-block-{{ block.id }}">
+          <div class="video-card" data-video-url="{% if block.settings.video_12 %}{{ block.settings.video_12 }}{% elsif block.settings.video_12_direct_url %}{{ block.settings.video_12_direct_url }}{% endif %}">
+            {%- case video_12_type -%}
+              {%- when 'youtube' -%}
+                <iframe src="https://www.youtube.com/embed/{{ video_12_id }}?enablejsapi=1&rel=0&showinfo=0&modestbranding=1" class="js-youtube" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ video_12_id }}?title=0&byline=0&portrait=0" class="js-vimeo" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Video" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; object-fit: cover;"></iframe>
+              {%- when 'url' -%}
+                {%- if block.settings.video_12_image -%}
+                  {%- assign poster_12 = block.settings.video_12_image | image_url -%}
+                {%- endif -%}
+                <video class="video-card__video" src="{{ video_12_src }}" {% if poster_12 %}poster="{{ poster_12 }}"{% endif %} ></video>
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+              {%- else -%}
+                {%- assign poster_12 = block.settings.video_12_image | image_url -%}
+                {{ block.settings.video_12 | video_tag: image_size: '1100x',poster: poster_12, autoplay: false, loop: false, controls: false, muted: false }}
+                <div class="play-button">
+                  {% render 'a-icon-play-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                  {% render 'a-icon-stop-video', background_color: play_button_background, border_color: play_button_border, icon_color: play_button_icon, size: play_button_size %}
+                </div>
+            {%- endcase -%}
+          </div>
+        </div>
+      {% endif %}
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var videoElements = document.querySelectorAll('.video-card video');
+    
+      videoElements.forEach(function (videoElement) {
+        // Force inline playback in Safari/iOS
+        videoElement.setAttribute('playsinline', '');
+        videoElement.setAttribute('webkit-playsinline', '');
+        videoElement.setAttribute('x5-playsinline', '');
+        videoElement.disablePictureInPicture = true;
+        videoElement.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
+    
+        videoElement.controls = false;
+        videoElement.addEventListener('play', function () { videoElement.controls = false; });
+        videoElement.addEventListener('pause', function () { videoElement.controls = false; });
+      });
+    });
+    </script>
+{% schema %}
+{
+  "name": "Video testimonial list",
+  "tag": null,
+  "blocks": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Video 1"
+    },
+    {
+      "type": "video",
+      "id": "video_1",
+      "label": "Video 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_1_image",
+      "label": "Video 1 thumbnail"
+    },
+    {
+      "type": "video_url",
+      "id": "video_1_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video 1 YouTube/Vimeo URL"
+    },
+    {
+      "type": "url",
+      "id": "video_1_direct_url",
+      "label": "Video 1 direct URL",
+      "info": "Direct video file URL (e.g., https://example.com/video.mp4)"
+    },
+    {
+      "type": "header",
+      "content": "Video 2"
+    },
+    {
+      "type": "video",
+      "id": "video_2",
+      "label": "Video 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_2_image",
+      "label": "Video 2 thumbnail"
+    },
+    {
+      "type": "video_url",
+      "id": "video_2_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video 2 YouTube/Vimeo URL"
+    },
+    {
+      "type": "url",
+      "id": "video_2_direct_url",
+      "label": "Video 2 direct URL",
+      "info": "Direct video file URL (e.g., https://example.com/video.mp4)"
+    },
+    {
+      "type": "header",
+      "content": "Video 3"
+    },
+    {
+      "type": "video",
+      "id": "video_3",
+      "label": "Video 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_3_image",
+      "label": "Video 3 thumbnail"
+    },
+    {
+      "type": "video_url",
+      "id": "video_3_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video 3 YouTube/Vimeo URL"
+    },
+    {
+      "type": "url",
+      "id": "video_3_direct_url",
+      "label": "Video 3 direct URL",
+      "info": "Direct video file URL (e.g., https://example.com/video.mp4)"
+    },
+    {
+      "type": "header",
+      "content": "Video 4"
+    },
+    {
+      "type": "video",
+      "id": "video_4",
+      "label": "Video 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_4_image",
+      "label": "Video 4 thumbnail"
+    },
+    {
+      "type": "video_url",
+      "id": "video_4_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video 4 YouTube/Vimeo URL"
+    },
+    {
+      "type": "url",
+      "id": "video_4_direct_url",
+      "label": "Video 4 direct URL",
+      "info": "Direct video file URL (e.g., https://example.com/video.mp4)"
+    },
+    {
+      "type": "header",
+      "content": "Video 5"
+    },
+    {
+      "type": "video",
+      "id": "video_5",
+      "label": "Video 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_5_image",
+      "label": "Video 5 thumbnail"
+    },
+    {
+      "type": "video_url",
+      "id": "video_5_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video 5 YouTube/Vimeo URL"
+    },
+    {
+      "type": "url",
+      "id": "video_5_direct_url",
+      "label": "Video 5 direct URL",
+      "info": "Direct video file URL (e.g., https://example.com/video.mp4)"
+    },
+    {
+      "type": "header",
+      "content": "Video 6"
+    },
+    {
+      "type": "video",
+      "id": "video_6",
+      "label": "Video 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_6_image",
+      "label": "Video 6 thumbnail"
+    },
+    {
+      "type": "video_url",
+      "id": "video_6_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video 6 YouTube/Vimeo URL"
+    },
+    {
+      "type": "url",
+      "id": "video_6_direct_url",
+      "label": "Video 6 direct URL",
+      "info": "Direct video file URL (e.g., https://example.com/video.mp4)"
+    },
+    {
+      "type": "header",
+      "content": "Video 7"
+    },
+    {
+      "type": "video",
+      "id": "video_7",
+      "label": "Video 7"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_7_image",
+      "label": "Video 7 thumbnail"
+    },
+    {
+      "type": "video_url",
+      "id": "video_7_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video 7 YouTube/Vimeo URL"
+    },
+    {
+      "type": "url",
+      "id": "video_7_direct_url",
+      "label": "Video 7 direct URL",
+      "info": "Direct video file URL (e.g., https://example.com/video.mp4)"
+    },
+    {
+      "type": "header",
+      "content": "Video 8"
+    },
+    {
+      "type": "video",
+      "id": "video_8",
+      "label": "Video 8"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_8_image",
+      "label": "Video 8 thumbnail"
+    },
+    {
+      "type": "video_url",
+      "id": "video_8_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video 8 YouTube/Vimeo URL"
+    },
+    {
+      "type": "url",
+      "id": "video_8_direct_url",
+      "label": "Video 8 direct URL",
+      "info": "Direct video file URL (e.g., https://example.com/video.mp4)"
+    },
+    {
+      "type": "header",
+      "content": "Video 9"
+    },
+    {
+      "type": "video",
+      "id": "video_9",
+      "label": "Video 9"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_9_image",
+      "label": "Video 9 thumbnail"
+    },
+    {
+      "type": "video_url",
+      "id": "video_9_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video 9 YouTube/Vimeo URL"
+    },
+    {
+      "type": "url",
+      "id": "video_9_direct_url",
+      "label": "Video 9 direct URL",
+      "info": "Direct video file URL (e.g., https://example.com/video.mp4)"
+    },
+    {
+      "type": "header",
+      "content": "Video 10"
+    },
+    {
+      "type": "video",
+      "id": "video_10",
+      "label": "Video 10"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_10_image",
+      "label": "Video 10 thumbnail"
+    },
+    {
+      "type": "video_url",
+      "id": "video_10_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video 10 YouTube/Vimeo URL"
+    },
+    {
+      "type": "url",
+      "id": "video_10_direct_url",
+      "label": "Video 10 direct URL",
+      "info": "Direct video file URL (e.g., https://example.com/video.mp4)"
+    },
+    {
+      "type": "header",
+      "content": "Video 11"
+    },
+    {
+      "type": "video",
+      "id": "video_11",
+      "label": "Video 11"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_11_image",
+      "label": "Video 11 thumbnail"
+    },
+    {
+      "type": "video_url",
+      "id": "video_11_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video 11 YouTube/Vimeo URL"
+    },
+    {
+      "type": "url",
+      "id": "video_11_direct_url",
+      "label": "Video 11 direct URL",
+      "info": "Direct video file URL (e.g., https://example.com/video.mp4)"
+    },
+    {
+      "type": "header",
+      "content": "Video 12"
+    },
+    {
+      "type": "video",
+      "id": "video_12",
+      "label": "Video 12"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_12_image",
+      "label": "Video 12 thumbnail"
+    },
+    {
+      "type": "video_url",
+      "id": "video_12_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video 12 YouTube/Vimeo URL"
+    },
+    {
+      "type": "url",
+      "id": "video_12_direct_url",
+      "label": "Video 12 direct URL",
+      "info": "Direct video file URL (e.g., https://example.com/video.mp4)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video testimonial list"
+    }
+  ]
+}
+{% endschema %}

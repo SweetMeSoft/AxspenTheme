@@ -1,0 +1,171 @@
+.atlas-isolation-wrapper pickup-availability {
+  display: block;
+}
+
+.atlas-isolation-wrapper pickup-availability[available] {
+  min-height: 8rem;
+}
+
+/* Base pickup availability preview styles - styling is now handled by block settings in main-product.liquid */
+.atlas-isolation-wrapper .pickup-availability-preview {
+  align-items: flex-start;
+  display: flex;
+}
+
+/* Base icon styles - sizing and colors are now handled by block settings */
+.atlas-isolation-wrapper .pickup-availability-preview .icon {
+  flex-shrink: 0;
+}
+
+.atlas-isolation-wrapper .pickup-availability-preview .icon-unavailable {
+  margin-top: 0.1rem;
+}
+
+/* Base button styles - colors and fonts are now handled by block settings */
+.atlas-isolation-wrapper .pickup-availability-button {
+  background-color: transparent;
+  text-decoration: underline;
+  border: none;
+  cursor: pointer;
+}
+
+/* Base info content styles - colors and fonts are now handled by block settings */
+.atlas-isolation-wrapper .pickup-availability-info-content p {
+  margin: 0;
+  font-family: var(--atlas-font-body-family);
+}
+.atlas-isolation-wrapper pickup-availability-drawer {
+  background-color: rgb(var(--atlas-color-background));
+  height: 100%;
+  opacity: 0;
+  overflow-y: auto;
+  padding: 2rem;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 4;
+  transition: opacity var(--atlas-duration-default) ease,
+    transform var(--atlas-duration-default) ease;
+  transform: translateX(100%);
+  width: 100%;
+  border-width: 0 0 0 var(--atlas-drawer-border-width);
+  border-color: rgba(var(--atlas-color-foreground), var(--atlas-drawer-border-opacity));
+  border-style: solid;
+  filter: drop-shadow(
+    var(--atlas-drawer-shadow-horizontal-offset) var(--atlas-drawer-shadow-vertical-offset)
+      var(--atlas-drawer-shadow-blur-radius)
+      rgba(var(--atlas-color-shadow), var(--atlas-drawer-shadow-opacity))
+  );
+}
+
+.atlas-isolation-wrapper pickup-availability-drawer[open] {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+@media screen and (min-width: 750px) {
+  .atlas-isolation-wrapper pickup-availability-drawer {
+    transform: translateX(100%);
+    width: 37.5rem;
+  }
+
+  .atlas-isolation-wrapper pickup-availability-drawer[open] {
+    opacity: 1;
+    transform: translateX(0);
+    animation: animateDrawerOpen var(--atlas-duration-default) ease;
+  }
+}
+
+.atlas-isolation-wrapper .pickup-availability-header {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+
+.atlas-isolation-wrapper .pickup-availability-drawer-title {
+  margin: 0.5rem 0 0;
+}
+
+.atlas-isolation-wrapper .pickup-availability-header .icon {
+  width: 2rem;
+}
+
+.atlas-isolation-wrapper .pickup-availability-drawer-button {
+  background-color: transparent;
+  border: none;
+  color: rgb(var(--atlas-color-foreground));
+  cursor: pointer;
+  display: block;
+  height: 4.4rem;
+  padding: 1.2rem;
+  width: 4.4rem;
+}
+
+.atlas-isolation-wrapper .pickup-availability-drawer-button:hover {
+  color: rgba(var(--atlas-color-foreground), 0.9);
+}
+
+.atlas-isolation-wrapper .pickup-availability-variant {
+  font-size: 1.3rem;
+  line-height: calc(1 + 0.2 / var(--atlas-font-body-scale));
+  margin: 0 0 1.2rem;
+  text-transform: capitalize;
+}
+
+.atlas-isolation-wrapper .pickup-availability-variant > * + strong {
+  margin-left: 1rem;
+}
+
+.atlas-isolation-wrapper .pickup-availability-list__item {
+  border-bottom: 0.1rem solid rgba(var(--atlas-color-foreground), 0.08);
+  padding: 2rem 0;
+}
+
+.atlas-isolation-wrapper .pickup-availability-list__item:first-child {
+  border-top: 0.1rem solid rgba(var(--atlas-color-foreground), 0.08);
+}
+
+.atlas-isolation-wrapper .pickup-availability-list__item > * {
+  margin: 0;
+}
+
+.atlas-isolation-wrapper .pickup-availability-list__item > * + * {
+  margin-top: 1rem;
+}
+
+.atlas-isolation-wrapper .pickup-availability-address {
+  font-style: normal;
+  font-size: 1.2rem;
+  line-height: calc(1 + 0.5 / var(--atlas-font-body-scale));
+}
+
+.atlas-isolation-wrapper .pickup-availability-address p {
+  margin: 0;
+}
+
+@keyframes animateDrawerOpen {
+  @media screen and (max-width: 749px) {
+    .atlas-isolation-wrapper 0% {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+
+    .atlas-isolation-wrapper 100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .atlas-isolation-wrapper 0% {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+
+    .atlas-isolation-wrapper 100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}

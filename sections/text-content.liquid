@@ -1,0 +1,228 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+-%}
+
+<style>
+	{{ section_id }} {
+		margin-top: {{ section.settings.margin_top_mobile }}px;
+		margin-bottom: {{ section.settings.margin_bottom_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .text-content {
+			max-width: {{ section.settings.width }}%;
+		}
+
+		{{ section_id }} {
+			margin-top: {{ section.settings.margin_top }}px;
+			margin-bottom: {{ section.settings.margin_bottom }}px;
+		}
+	}
+
+	{%- for block in section.blocks -%}
+		.list-item[data-{{ block.id }}] {
+			font-size: {{ block.settings.font_size }}px;
+			line-height: {{ block.settings.line_height }}px;
+			margin-bottom: {{ block.settings.space }}px;
+
+			{%- if block.settings.color != blank -%}
+				color: {{ block.settings.color }};
+			{%- endif -%}
+		}
+	{%- endfor -%}
+</style>
+
+<div class="container">
+	<div class="text-content">
+		{%- if section.settings.heading != blank -%}
+			<h2 class="heading">{{- section.settings.heading -}}</h2>
+		{%- endif -%}
+
+		{%- for block in section.blocks -%}
+			{%- assign modulo = forloop.index | modulo: 2 -%}
+
+			{%- capture image -%}
+				{%- if block.settings.image != blank -%}
+					<div class="image">{{- block.settings.image | image_url: width: 840 | image_tag: width: 370, loading: 'lazy' -}}</div>
+				{%- endif -%}
+			{%- endcapture -%}
+
+			<div class="list-item" data-{{ block.id }}>
+				{%- liquid
+					if modulo == 0
+						echo image
+					endif
+				-%}
+
+				{%- if block.settings.text != blank -%}
+					<div class="content rte">
+						{{- block.settings.text -}}
+					</div>
+				{%- endif -%}
+
+				{%- liquid
+					unless modulo == 0
+						echo image
+					endunless
+				-%}
+			</div>
+		{%- endfor -%}
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.text-content.name",
+	"tag": "section",
+	"class": "text-content-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "range",
+			"id": "width",
+			"default": 64,
+			"min": 30,
+			"max": 100,
+			"step": 1,
+			"unit": "%",
+			"label": "t:general.dimensions.width.label"
+		},
+		{
+			"type": "text",
+			"id": "heading",
+			"default": "Some heading",
+			"label": "t:general.typography.heading.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.margin.header_margin.content"
+		},
+		{
+			"type": "range",
+			"id": "margin_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 30,
+			"unit": "px",
+			"label": "t:general.margin.top.label"
+		},
+		{
+			"type": "range",
+			"id": "margin_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 80,
+			"unit": "px",
+			"label": "t:general.margin.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.margin.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "margin_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 10,
+			"unit": "px",
+			"label": "t:general.margin.top.label"
+		},
+		{
+			"type": "range",
+			"id": "margin_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.margin.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "text",
+			"name": "t:general.typography.content.label",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "t:general.image.label"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
+					"label": "t:general.typography.text.label"
+				},
+				{
+					"type": "color",
+					"id": "color",
+					"default": "#505050",
+					"label": "t:general.colors.text.label"
+				},
+				{
+					"type": "range",
+					"id": "font_size",
+					"min": 10,
+					"max": 100,
+					"step": 1,
+					"default": 16,
+					"unit": "px",
+					"label": "t:general.typography.font_size.label"
+				},
+				{
+					"type": "range",
+					"id": "line_height",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"default": 27,
+					"unit": "px",
+					"label": "t:general.typography.line_height.label"
+				},
+				{
+					"type": "range",
+					"id": "space",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"default": 0,
+					"unit": "px",
+					"label": "t:general.dimensions.space.label"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.text-content.presets.name",
+			"blocks": [
+				{
+					"type": "text",
+					"settings": {
+						"text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+					}
+				},
+				{
+					"type": "text",
+					"settings": {
+						"text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+					}
+				},
+				{
+					"type": "text",
+					"settings": {
+						"text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+					}
+				}
+			]
+		}
+	]
+}
+{% endschema %}

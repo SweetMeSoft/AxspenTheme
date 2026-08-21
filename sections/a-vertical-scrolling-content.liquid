@@ -1,0 +1,738 @@
+{% comment %} {{ 'a-component-tickers.css' | asset_url | stylesheet_tag }} {% endcomment %}
+
+{%- liquid
+  assign global_heading_size = settings.enable_global_heading_font_size
+  assign global_body_size = settings.enable_global_body_font_size
+  assign global_color = settings.enable_global_color
+  assign max_speed = 210
+  assign speed_val_to_subtract = section.settings.speed | times: 20
+  assign speed_calculated = max_speed | minus: speed_val_to_subtract
+-%}
+
+{% if request.visual_preview_mode %}
+  {% comment %} For rendering in the theme editor visual preview. {% endcomment %}
+  {% assign section_id_variable = 'id' %}
+  {% assign section_id_selector = '' %}
+{% else %}
+  {% assign section_id_selector = '#section-' | append: section.id %}
+  {% assign section_id_variable = section.id %}
+{% endif %}
+
+{% style %}
+  .atlas-isolation-wrapper .section__vertical_scrolling_text {
+    padding: 5px 0;
+  }
+
+  .atlas-isolation-wrapper #heading-{{ section_id_variable }} {
+    font-size: {% if global_heading_size %}var(--atlas-font-heading-size)!important{% else %}{{ section.settings.heading_size }}px!important{% endif %};
+    line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-size) + 8px)!important{% else %}{{ section.settings.heading_size | plus: 8 }}px!important{% endif %};
+    color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ section.settings.heading_color }}{% endif %};
+    font-weight: 600;
+  }
+  .atlas-isolation-wrapper #heading-{{ section_id_variable }} strong {
+    {%- if section.settings.heading_use_gradient -%}
+      background: {% if section.settings.heading_gradient_color != blank %}{{ section.settings.heading_gradient_color }}{% endif %};
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    {% else %}
+      color: {{ section.settings.bolded_heading_color }};
+    {%- endif -%}
+  }
+  .atlas-isolation-wrapper #heading-{{ section_id_variable }} em strong {
+    font-weight: 500;
+  }
+  @media (max-width: 768px){
+    .atlas-isolation-wrapper #heading-{{ section_id_variable }}{
+      font-size: {% if global_heading_size %}var(--atlas-font-heading-mob-size) !important{% else %}{{ section.settings.heading_mob_size }}px!important{% endif %};
+      line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-mob-size) + 8px) !important{% else %}{{ section.settings.heading_mob_size | plus: 8 }}px!important{% endif %};
+    }
+  }
+
+  .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }},
+  .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }} p {
+    font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size){% else %}{{ section.settings.body_size }}px{% endif %} !important;
+    line-height: {% if global_body_size %}calc(var(--atlas-global-body-text-font-size) + 8px){% else %}{{ section.settings.body_size | plus: 8 }}px{% endif %} !important;
+    color: {% if global_color %}rgb(var(--atlas-color-base-text)){% else %}{{ section.settings.body_color }}{% endif %} !important;
+  }
+
+  .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }} strong {
+    color: {{ section.settings.bolded_body_color }};
+  }
+
+  @media (max-width: 768px) {
+    .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }} p,
+    .atlas-isolation-wrapper #section-body-text-{{ section_id_variable }} {
+      font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size)!important{% else %}{{ section.settings.body_size }}px !important{% endif %};
+    }
+  }
+
+  .atlas-isolation-wrapper .section-container-{{ section_id_variable }} {
+    padding-top: {{ section.settings.section_padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.section_padding_bottom_desktop }}px;
+  }
+{% endstyle %}
+
+{% comment %} Styles specific to scrolling text section: {% endcomment %}
+{%- style -%}
+  .atlas-isolation-wrapper #rightSideContainer-{{ section_id_variable }} {
+    padding-top: {{ section.settings.scrolling_text_padding_top }}px;
+    padding-bottom: {{ section.settings.scrolling_text_padding_bottom }}px;
+    position: relative;
+    gap: max(20px, calc( 100px - {{ section.settings.scrolling_text_gap_desktop }}px));
+  }
+  @media (max-width: 1024px) {
+    .atlas-isolation-wrapper #rightSideContainer-{{ section_id_variable }} {
+      gap: max(5px, calc( 100px/3 - {{ section.settings.scrolling_text_gap_mobile | divided_by: 3 }}px));
+    }
+  }
+  .atlas-isolation-wrapper #rightSideContainer-{{ section_id_variable }}::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(0, rgba({{ section.settings.gradient_overlay_color.red }}, {{ section.settings.gradient_overlay_color.green }}, {{ section.settings.gradient_overlay_color.blue }}, 0) 0%, rgba({{ section.settings.gradient_overlay_color.red }}, {{ section.settings.gradient_overlay_color.green }}, {{ section.settings.gradient_overlay_color.blue }}, 0.7) 70%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .atlas-isolation-wrapper #rightSideContainer-{{ section_id_variable }}::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    transform: rotate(180deg);
+    background: linear-gradient(0, rgba({{ section.settings.gradient_overlay_color.red }}, {{ section.settings.gradient_overlay_color.green }}, {{ section.settings.gradient_overlay_color.blue }}, 0) 0%, rgba({{ section.settings.gradient_overlay_color.red }}, {{ section.settings.gradient_overlay_color.green }}, {{ section.settings.gradient_overlay_color.blue }}, 0.7) 70%);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .atlas-isolation-wrapper #rightSideContainer-{{ section_id_variable }} > div {
+    max-width: 25%;
+    flex: 1;
+  }
+  .atlas-isolation-wrapper #rightSideContainer-{{ section_id_variable }} .scrolling-text-item-{{ section_id_variable }} {
+    width: 100%;
+    display:flex;
+    padding: 0;
+    height: {{ section.settings.scrolling_text_height | times: 0.3 }}px;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+  }
+  .atlas-isolation-wrapper #rightSideContainer-{{ section_id_variable }} .scrolling-text-item-{{ section_id_variable }} img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .atlas-isolation-wrapper #leftSideContainer-{{ section_id_variable }} .vertical-scrolling-content-button {
+    background-color: {{ section.settings.button_background_color }};
+    color: {{ section.settings.button_text_color }};
+    border-radius: {{ section.settings.button_border_radius }}px !important;
+    font-size: {{ section.settings.button_font_size }}px;
+    font-weight: 400;
+    min-width: fit-content;
+    width: {{ section.settings.button_width_increase_desktop }}%;
+    max-width: 100%;
+    padding: {{ section.settings.button_padding_vertical }}px 12px;
+  }
+  @media (max-width: 768px) {
+    .atlas-isolation-wrapper #leftSideContainer-{{ section_id_variable }} .vertical-scrolling-content-button {
+      width: {{ section.settings.button_width_increase_mobile }}%;
+      padding: {{ section.settings.button_padding_vertical }}px {{ section.settings.button_padding_horizontal }}px;
+    }
+  }
+  .atlas-isolation-wrapper .scrolling-text-container-{{ section_id_variable }} {
+    width: 100%;
+    height: {{ section.settings.scrolling_text_height }}px;
+    overflow: hidden;
+    position: relative;
+  }
+  .atlas-isolation-wrapper .scrolling-text-wrapper-{{ section_id_variable }} {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  .atlas-isolation-wrapper .scrolling-text-item-{{ section_id_variable }} {
+    padding: 10px;
+    text-align: center;
+    font-size: {{ section.settings.text_size | times: 0.5 | round: 1 }}rem;
+    color: {{ section.settings.scrolling_text_color }};
+    line-height: 1.2em;
+    margin-top: 12px;
+  }
+
+  @media screen and (min-width: 767px) {
+    .atlas-isolation-wrapper .scrolling-text-item-{{ section_id_variable }} {
+      font-size: {{ section.settings.text_size | times: 0.9 | round: 1 }}rem;
+    }
+  }
+
+  .atlas-isolation-wrapper .section-container-{{ section_id_variable }} {
+    display: flex;
+    align-items: stretch;
+    {% if section.settings.layout_desktop == 'scrolling_text_second' %}
+      flex-direction: row;
+    {% else %}
+      flex-direction: row-reverse;
+    {% endif %}
+  }
+
+  @media screen and (max-width: 750px) {
+    .atlas-isolation-wrapper .section-container-{{ section_id_variable }} {
+      {% if section.settings.layout_mobile == 'scrolling_text_second_mobile' %}
+        flex-direction: column;
+        {% else %}
+        flex-direction: column-reverse;
+      {% endif %}
+    }
+  }
+
+  .atlas-isolation-wrapper #leftSideContainer-{{ section_id_variable }} {
+    text-align: {{ section.settings.content_alignment }};
+    padding-bottom: 30px;
+  }
+  @media (max-width: 768px) {
+    .atlas-isolation-wrapper #leftSideContainer-{{ section_id_variable }} {
+      text-align: {{ section.settings.content_alignment_mobile }};
+    }
+  }
+  @media (min-width: 768px) {
+    /* only apply to desktop */
+    .atlas-isolation-wrapper #leftSideContainer-{{ section_id_variable }} {
+      margin-right: 80px;
+      max-width: 424px;
+    }
+  }
+{%- endstyle -%}
+
+<div
+  id="section-{{ section.id }}"
+  class="section__vertical_scrolling_text"
+  style="{% if section.settings.content_use_gradient_background %}background: {{ section.settings.content_background_gradient }};{% else %}background-color: {{ section.settings.content_background_color }};{% endif %}"
+>
+  <div class="page-width section-container-{{ section_id_variable }}">
+    <div
+      id="leftSideContainer-{{ section_id_variable }}"
+      class="half"
+      style="display:flex; align-items:center;"
+    >
+      <div style="margin-bottom: 15px; width: 100%;">
+        {% if section.settings.content_heading != blank %}
+          <h2 id="heading-{{ section_id_variable }}">
+            {{ section.settings.content_heading }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.content_text != blank %}
+          <div
+            id="section-body-text-{{ section_id_variable }}"
+            style="--atlas-color-highlighted-color: {{ section.settings.body_highlighted_color }};"
+          >
+            {{ section.settings.content_text }}
+          </div>
+        {% endif %}
+
+        {%- if section.settings.button_label != blank -%}
+          <div>
+            <a
+              {% if section.settings.link %}
+                href="{{ section.settings.link }}"
+              {% else %}
+                aria-disabled="true"
+              {% endif %}
+              class="button vertical-scrolling-content-button"
+            >
+              <span class="button-text">
+                {{- section.settings.button_label | escape -}}
+              </span>
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div
+      id="rightSideContainer-{{ section_id_variable }}"
+      class="half flex-align-center"
+    >
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</div>
+
+<script>
+    function initializeVerticalScrollingContent{{ section_id_variable | replace: '-', '' }}() {
+        // Find all scrolling containers in this section
+      const scrollingContainers = document.querySelectorAll('.scrolling-text-container-{{ section_id_variable }}');
+
+      if (scrollingContainers.length === 0) return;
+
+      // Speed calculation (pixels per second) - shared across all blocks
+      const speedPxPerSecond = {{ section.settings.speed | times: 20 | plus: 10 }};
+
+      // Global pause state for all animations
+      let globalPauseState = false;
+
+      // Initialize each scrolling container
+      scrollingContainers.forEach((container, containerIndex) => {
+        const scrollingWrapper = container.querySelector('.scrolling-text-wrapper-{{ section_id_variable }}');
+
+        if (!scrollingWrapper) return;
+
+        // Get all scrolling items within this container
+        const scrollingItems = scrollingWrapper.querySelectorAll('.scrolling-text-item-{{ section_id_variable }}');
+        if (scrollingItems.length === 0) return;
+
+        // Clone items for seamless loop
+        scrollingItems.forEach(item => {
+          const clone = item.cloneNode(true);
+          scrollingWrapper.appendChild(clone);
+        });
+
+        // Calculate total height of all items
+        const totalHeight = scrollingWrapper.scrollHeight / 2; // Divide by 2 because we cloned
+
+        let currentPosition = 0;
+
+        function animate() {
+          if (!globalPauseState) {
+            currentPosition -= speedPxPerSecond / 60; // 60fps
+
+            // Reset position when we've scrolled past all items
+            if (Math.abs(currentPosition) >= totalHeight) {
+              currentPosition = 0;
+            }
+
+            scrollingWrapper.style.top = currentPosition + 'px';
+          }
+          requestAnimationFrame(animate);
+        }
+
+        // Pause all animations on mouse enter
+        scrollingWrapper.addEventListener('mouseenter', function() {
+          globalPauseState = true;
+        });
+
+        // Resume all animations on mouse leave
+        scrollingWrapper.addEventListener('mouseleave', function() {
+          globalPauseState = false;
+        });
+
+        // Start animation for this container
+        animate();
+      });
+    }
+  document.addEventListener('DOMContentLoaded', function() {
+    initializeVerticalScrollingContent{{ section_id_variable | replace: '-', '' }}();
+  });
+  document.addEventListener('shopify:section:load', function() {
+    initializeVerticalScrollingContent{{ section_id_variable | replace: '-', '' }}();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Vertical sliding content",
+  "class": "atlas-isolation-wrapper atlas-gradient section animation_section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "content_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "content_text",
+      "label": "Body",
+      "default": "<p>Join thousands of people who have bought this product.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Discover [Brand name]",
+      "label": "Label",
+      "info": "Leave blank to hide"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Speed",
+      "min": 0,
+      "max": 10,
+      "default": 2,
+      "step": 0.5
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Desktop content alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment_mobile",
+      "label": "Mobile content alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+
+    {
+      "type": "select",
+      "id": "layout_desktop",
+      "label": "Desktop layout",
+      "options": [
+        {
+          "value": "scrolling_text_first",
+          "label": "Scrolling text first"
+        },
+        {
+          "value": "scrolling_text_second",
+          "label": "Scrolling text second"
+        }
+      ],
+      "default": "scrolling_text_second"
+    },
+    {
+      "type": "select",
+      "id": "layout_mobile",
+      "label": "Mobile layout",
+      "options": [
+        {
+          "value": "scrolling_text_first_mobile",
+          "label": "Scrolling text first"
+        },
+        {
+          "value": "scrolling_text_second_mobile",
+          "label": "Scrolling text second"
+        }
+      ],
+      "default": "scrolling_text_second_mobile"
+    },
+    {
+      "type": "range",
+      "id": "scrolling_text_gap_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "label": "Desktop image size control",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "scrolling_text_gap_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "label": "Mobile image size control",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "scrolling_text_height",
+      "min": 120,
+      "max": 350,
+      "default": 250,
+      "step": 5,
+      "label": "Scrolling Content Height"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop heading size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_mob_size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile heading size",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Body font size Desktop",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "Scrolling text size",
+      "options": [
+        {
+          "value": "2",
+          "label": "Small"
+        },
+        {
+          "value": "3",
+          "label": "Medium"
+        },
+        {
+          "value": "3.5",
+          "label": "Large"
+        }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bolded_heading_color",
+      "label": "Bolded heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_use_gradient",
+      "label": "Use gradient for heading",
+      "info": "Any text formatted as bold within the heading will be converted to a gradient.",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "heading_gradient_color",
+      "label": "Heading gradient color",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.heading_use_gradient }}"
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Body color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bolded_body_color",
+      "label": "Bolded text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "scrolling_text_color",
+      "label": "Scrolling text color",
+      "default": "#383838"
+    },
+    {
+      "type": "color",
+      "id": "gradient_overlay_color",
+      "label": "Gradient overlay color",
+      "default": "#FFFFFF",
+      "info": "This color will be used to create a gradient overlay on the scrolling text container."
+    },
+    {
+      "type": "checkbox",
+      "id": "content_use_gradient_background",
+      "label": "Use gradient background for content",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "content_background_gradient",
+      "label": "Content background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.content_use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "content_background_color",
+      "label": "Content background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.content_use_gradient_background == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "color",
+      "id": "button_background_color",
+      "label": "Button background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button font size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Button padding vertical",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "button_width_increase_desktop",
+      "label": "Desktop button width increase",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "button_width_increase_mobile",
+      "label": "Mobile button width increase",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.vertical-scrolling-content.settings.section_padding.content"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 24
+    },
+    {
+      "type": "paragraph",
+      "content": "Scrolling text padding"
+    },
+    {
+      "type": "range",
+      "id": "scrolling_text_padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "scrolling_text_padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "_a-vertical-scrolling-block"
+    }
+  ]
+}
+{% endschema %}

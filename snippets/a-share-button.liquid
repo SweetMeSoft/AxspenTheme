@@ -1,0 +1,69 @@
+{% comment %}
+  Renders share button.
+  Accepts:
+  - block: {Object} passes in the block information.
+  - share_link: {String} url to be added to the input the user will get/copy.
+
+  Usage:
+  {% render 'a-share-button',
+    block: block,
+    share_link: share_url
+  %}
+{% endcomment %}
+<script src="{{ 'a-share.js' | asset_url }}" defer="defer"></script>
+
+{% style %}
+  .atlas-isolation-wrapper .product-block-{{ block.id }} {
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+  }
+  .atlas-isolation-wrapper .share-button__message:not(:empty) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin-top: 0;
+    padding: 0.8rem 0 0.8rem 1.5rem;
+    margin: var(--atlas-inputs-border-width);
+  }
+  .atlas-isolation-wrapper .share-button__message:not(:empty):not(.hidden) ~ * {
+    display: none;
+  }
+{% endstyle %}
+
+<share-button id="Share-{{ section.id }}" class="share-button quick-add-hidden" {{ block.shopify_attributes }}>
+  <button class="share-button__button hidden">
+    {% render 'a-icon-share' %}
+    {{ block.settings.share_label }}
+  </button>
+  <details id="Details-{{ block.id }}-{{ section.id }}">
+    <summary class="share-button__button">
+      {% render 'a-icon-share' %}
+      {{ block.settings.share_label }}
+    </summary>
+    <div class="share-button__fallback motion-reduce">
+      <div class="field">
+        <span id="ShareMessage-{{ section.id }}" class="share-button__message hidden" role="status"> </span>
+        <input
+          type="text"
+          class="field__input"
+          id="ShareUrl-{{ section.id }}"
+          value="{{ share_link }}"
+          placeholder="Link"
+          onclick="this.select();"
+          readonly
+        >
+        <label class="field__label" for="ShareUrl-{{ section.id }}">Link</label>
+      </div>
+      <button class="share-button__close hidden no-js-hidden">
+        {% render 'a-icon-close' %}
+        <span class="visually-hidden">Close share</span>
+      </button>
+      <button class="share-button__copy no-js-hidden">
+        {% render 'a-icon-clipboard' %}
+        <span class="visually-hidden">Copy link</span>
+      </button>
+    </div>
+  </details>
+</share-button>
+

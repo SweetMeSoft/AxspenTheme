@@ -1,0 +1,134 @@
+{%- liquid
+  assign global_heading_size = settings.enable_global_heading_font_size
+  assign global_body_size = settings.enable_global_body_font_size
+  assign global_color = settings.enable_global_color
+-%}
+
+{%- style -%}
+  .atlas-isolation-wrapper .product-block-{{ block.id }} {
+    padding-top: {{block.settings.padding_top }}px;
+    padding-bottom: {{block.settings.padding_bottom }}px;
+  }
+
+  .atlas-isolation-wrapper .arrival-date-container-{{ block.id }} {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .atlas-isolation-wrapper .arrival-date-container-{{ block.id }} .material-icon svg {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    fill: {{ block.settings.icon_color }};
+    display: block;
+  }
+
+  .atlas-isolation-wrapper #estimated-arrival-date-custom-text-{{ block.id }} {
+    font-size: {% if global_body_size %}var(--atlas-global-body-text-font-size){% else %}{{ block.settings.font_size }}px {% endif %};
+    color: {% if global_color %}rgb(var(--atlas-color-base-text)){% else %}{{ block.settings.text_color }}{% endif %};
+    line-height: 1.2em;
+  }
+{%- endstyle -%}
+
+<div class="arrival-date-container-{{ block.id }}">
+  {% if block.settings.display_icon %}
+    {% if block.settings.custom_icon == blank and block.settings.icon != blank %}
+      <span 
+        class="material-icon material-symbols-outlined icon-container notranslate"
+        style="font-size: {{ block.settings.icon_size }}px;"
+      >
+        {{ block.settings.icon }}
+      </span>
+    {% else %}
+      <img
+        src="{{ block.settings.custom_icon | image_url }}"
+        width="{{ block.settings.icon_size }}px"
+        height="auto"
+        loading="lazy"
+      >
+    {% endif %}
+  {% endif %}
+ 
+  <div id="estimated-arrival-date-custom-text-{{ block.id }}">
+    {{ block.settings.custom_text }}
+  </div>
+</div>
+
+<script>
+  (function () {
+    const DAYS = "{{ block.settings.day_labels }}".split(',');
+    const MONTHS = "{{ block.settings.month_labels }}".split(',');
+    const CUSTOM_TEXT = "{{ block.settings.custom_text }}";
+    const EARLIEST_DAYS = parseInt("{{ block.settings.num_days_for_earliest_arrival }}", 10);
+    const LATEST_DAYS = parseInt("{{ block.settings.num_days_for_latest_arrival }}", 10);
+    const DATE_FORMAT = "{{ block.settings.date_format }}";
+    const BLOCK_ID = "{{ block.id }}";
+  
+    // Utility functions
+    function getDateXDaysFromNow(num) {
+      const date = new Date();
+      date.setDate(date.getDate() + num);
+      return date;
+    }
+  
+    function getDaySuffix(n) {
+      const j = n % 10, k = n % 100;
+      if (j === 1 && k !== 11) return "st";
+      if (j === 2 && k !== 12) return "nd";
+      if (j === 3 && k !== 13) return "rd";
+      return "th";
+    }
+  
+    const getDayLabelIndex = (day) => {
+      const dayIndex = day.getDay();
+      return (dayIndex + 6) % 7;
+    }
+  
+    const formatters = {
+      dayName_monthName_dayNumber: (d) => `${DAYS[getDayLabelIndex(d)]}, ${MONTHS[d.getMonth()]} ${d.getDate()}${getDaySuffix(d.getDate())}`,
+      dayName_dayNumber_monthName: (d) => `${DAYS[getDayLabelIndex(d)]}, ${d.getDate()}. ${MONTHS[d.getMonth()]}`,
+      monthName_dayNumber: (d) => `${MONTHS[d.getMonth()]} ${d.getDate()}${getDaySuffix(d.getDate())}`,
+      default: (d) => `${DAYS[getDayLabelIndex(d)]}, ${MONTHS[d.getMonth()]} ${d.getDate()}${getDaySuffix(d.getDate())}`,
+    };
+  
+    function formatDateRange(startDate, endDate, formatKey) {
+      const formatter = formatters[formatKey] || formatters.default;
+      return {
+        startDateString: formatter(startDate),
+        endDateString: formatter(endDate),
+      };
+    }
+  
+    function renderEstimatedArrival() {
+      const container = document.querySelector(`#estimated-arrival-date-custom-text-${BLOCK_ID}`);
+      if (!container) return;
+  
+      const earliest = getDateXDaysFromNow(EARLIEST_DAYS);
+      const latest = getDateXDaysFromNow(LATEST_DAYS);
+      const { startDateString, endDateString } = formatDateRange(earliest, latest, DATE_FORMAT);
+  
+      const output = CUSTOM_TEXT
+        .replace('[earliest_date]', startDateString)
+        .replace('[latest_date]', endDateString);
+  
+      container.innerHTML = output;
+    }
+  
+    document.addEventListener('DOMContentLoaded', renderEstimatedArrival);
+  
+    if (Shopify.designMode) {
+      document.addEventListener('shopify:section:load', function (event) {
+        if (event.detail.sectionId === "{{ section.id }}") {
+          renderEstimatedArrival();
+        }
+      });
+  
+      document.addEventListener('shopify:section:unload', function (event) {
+        if (event.detail.sectionId === "{{ section.id }}") {
+          renderEstimatedArrival();
+        }
+      });
+    }
+  })();
+</script>
+  
+

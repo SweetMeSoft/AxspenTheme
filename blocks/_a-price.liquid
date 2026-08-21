@@ -1,0 +1,223 @@
+{%- comment -%} Product is accessed via closest.product in the template {%- endcomment -%}
+<div
+                  class="no-js-hidden product-page-price product-block-{{ block.id }}"
+                  id="price-{{ section.id }}"
+                  role="status"
+                  {{ block.shopify_attributes }}
+                >
+                  {% style %}
+                    .product-block-{{ block.id }}{
+                      padding-top: {{block.settings.padding_top }}px;
+                      padding-bottom: {{block.settings.padding_bottom }}px;
+                    }
+                    @media screen and (max-width: 768px) {
+                      .product-block-{{ block.id }} {
+                        padding-top: {{block.settings.padding_top_mobile }}px;
+                        padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+                      }
+                    }
+                    .product-block-{{ block.id }} .price-container {
+                      display: flex;
+                      align-items: center;
+                      gap: {{ block.settings.price_gap | default: 8 }}px;
+                      flex-wrap: wrap;
+                    }
+
+                    .product-block-{{ block.id }} .main-price {
+                      font-family: var(--atlas-font-body-family);
+                      font-size: {{ block.settings.regular_font_size | default: 22 }}px;
+                      font-weight: 600;
+                      line-height: calc({{ block.settings.regular_font_size | default: 22 }}px + 3px);
+                      color: {{ block.settings.main_price_color | default: 'rgb(var(--atlas-color-base-text))' }};
+                      margin: 0;
+                    }
+
+                    .product-block-{{ block.id }} .compare-price {
+                      font-family: var(--atlas-font-body-family);
+                      font-size: {{ block.settings.compare_price_font_size | default: 18 }}px;
+                      font-weight: 500;
+                      line-height: calc({{ block.settings.compare_price_font_size | default: 18 }}px + 3px);
+                      color: {{ block.settings.compare_price_color | default: 'rgb(var(--atlas-color-base-text))' }};
+                      opacity: 0.5;
+                      text-decoration: line-through;
+                      margin: 0;
+                    }
+
+
+
+                    @media screen and (max-width: 768px) {
+                      .product-block-{{ block.id }} .price-container {
+                        gap: {{ block.settings.price_gap | default: 8 | minus: 4 }}px;
+                      }
+
+                      .product-block-{{ block.id }} .main-price {
+                        font-size: {{ block.settings.regular_font_size | default: 22 | minus: 2 }}px;
+                      }
+
+                      .product-block-{{ block.id }} .compare-price {
+                        font-size: {{ block.settings.compare_price_font_size | default: 18 | minus: 2 }}px;
+                      }
+                    }
+                  {% endstyle %}
+
+                  <div class="price-container" id="price-container-{{ section.id }}">
+                    {%- assign variant = product.selected_or_first_available_variant -%}
+                    {%- assign compare_at_price = variant.compare_at_price -%}
+                    {%- assign price = variant.price -%}
+
+                    {%- assign original_price = compare_at_price -%}
+                    {%- assign sale_price = price -%}
+                    {%- if original_price > sale_price -%}
+                      {%- if block.settings.layout == 'price_second' -%}
+                        <span class="compare-price" id="compare-price-{{ section.id }}">
+                          {{ original_price | money }}
+                        </span>
+                        <span class="main-price" id="main-price-{{ section.id }}">
+                          {{ sale_price | money }}
+                        </span>
+                      {%- else -%}
+                      <span class="main-price" id="main-price-{{ section.id }}">
+                        {{ sale_price | money }}
+                      </span>
+                      <span class="compare-price" id="compare-price-{{ section.id }}">
+                        {{ original_price | money }}
+                      </span>
+                      {%- endif -%}
+                      {% content_for 'block', type: '_a-price_badge', id: 'price_badge' %}
+                    {%- else -%}
+                      <span class="main-price" id="main-price-{{ section.id }}">
+                        {{ price | money }}
+                      </span>
+                    {%- endif -%}
+
+                    {% content_for 'block', type: '_a-price_unit_price', id: 'price_unit_price' %}
+                  </div>
+                </div>
+                <div {{ block.shopify_attributes }}>
+                  {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
+                  {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
+                    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                    {{ form | payment_terms }}
+                  {%- endform -%}
+                </div>
+
+{% schema %}
+{
+  "name": "Price",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Price display order",
+      "options": [
+        {
+          "value": "price_first",
+          "label": "Price first"
+        },
+        {
+          "value": "price_second",
+          "label": "Compare price first"
+        }
+      ],
+      "default": "price_first"
+    },
+    {
+      "type": "range",
+      "id": "price_gap",
+      "min": 4,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between prices",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "regular_font_size",
+      "min": 20,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Price size",
+      "default": 22
+    },
+    {
+      "type": "color",
+      "id": "main_price_color",
+      "label": "Price color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "compare_price_font_size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Compare price font size",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "compare_price_color",
+      "label": "Compare price color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Price",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

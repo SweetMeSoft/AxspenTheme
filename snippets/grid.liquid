@@ -1,0 +1,104 @@
+{%- liquid
+	assign container = 1200
+	assign screen_md = 992
+	assign screen_sm = 768
+	assign gap		 = 30
+	assign gutter    = 15
+
+	if settings.screen_lg > 0
+		assign container = settings.screen_lg
+	endif
+-%}
+
+.container {
+	max-width: 100%;
+	margin-right: auto;
+	margin-left: auto;
+	padding-left: {{ gutter }}px;
+	padding-right: {{ gutter }}px;
+}
+
+@media (min-width: {{ screen_sm }}px) {
+	.container {
+		max-width: {{ screen_md }}px;
+	}
+}
+
+@media (min-width: {{ screen_md }}px) {
+	.container {
+		max-width: {{ container }}px;
+	}
+}
+
+{% comment %} Grid {% endcomment %}
+.grid {
+	gap: {{ gap }}px;
+	display: grid;
+	padding: 0;
+	list-style: none;
+}
+
+@media (min-width: {{ container | plus: 100 }}px) {
+	.grid-left,
+	.grid-right {
+		max-width: 100%;
+	}
+
+	.grid-left .grid {
+		margin-left: 0;
+	}
+
+	.grid-right .grid {
+		margin-right: 0;
+	}
+
+	.grid-left {
+		padding-left: 0;
+		margin-right: calc( ( 100% - {{ container }}px ) / 2 );
+	}
+
+	.grid-right {
+		padding-right: 0;
+		margin-left: calc( ( 100% - {{ container }}px ) / 2 );
+	}
+
+	{% comment %} For testimonial section {% endcomment %}
+	.testimonial-section .testimonial {
+		margin-left: calc( ( 100% - {{ container | minus: gap }}px ) / 2 );
+	}
+
+	{% comment %} For quick search close button {% endcomment %}
+	.quick-search .form-wrapper .close-button {
+		position: absolute;
+	}
+}
+
+{%- for i in (1..12) -%}
+	{% comment %} For desktop {% endcomment %}
+	@media (min-width: {{ screen_md }}px) {
+		.grid.grid-{{ i }} {
+			grid-template-columns: repeat({{ i }}, minmax(0, 1fr));
+		}
+	}
+
+	{% comment %} For tablet {% endcomment %}
+	@media (min-width: {{ screen_sm }}px) and (max-width: {{ screen_md | minus: 1 }}px) {
+		.grid.grid-tablet-{{ i }} {
+			grid-template-columns: repeat({{ i }}, minmax(0, 1fr));
+		}
+	}
+
+	{% comment %} For mobile {% endcomment %}
+	@media (max-width: {{ screen_sm | minus: 1 }}px) {
+		.grid.grid-mobile-{{ i }} {
+			grid-template-columns: repeat({{ i }}, minmax(0, 1fr));
+		}
+	}
+{%- endfor -%}
+
+{% comment %} Transition delay {% endcomment %}
+{%- for i in (1..13) -%}
+	[data-delay="{{ i | times: 0.15 }}s"] {
+		transition-delay: {{ i | times: 0.15 }}s;
+	}
+{%- endfor -%}

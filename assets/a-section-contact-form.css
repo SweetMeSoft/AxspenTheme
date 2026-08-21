@@ -1,0 +1,30 @@
+.atlas-isolation-wrapper .contact img {
+  max-width: 100%;
+}
+
+.atlas-isolation-wrapper .contact .form__message {
+  align-items: flex-start;
+}
+
+.atlas-isolation-wrapper .contact .icon-success {
+  margin-top: 2px;
+}
+
+.atlas-isolation-wrapper .contact .field {
+  margin-bottom: 15px;
+}
+
+@media screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .contact .field {
+    margin-bottom: 20px;
+  }
+}
+
+
+@media screen and (min-width: 750px) {
+  .atlas-isolation-wrapper .contact__fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 20px;
+  }
+}

@@ -1,0 +1,153 @@
+{% assign product = closest.product %}
+{% style %}
+  .atlas-isolation-wrapper .product-block-{{ block.id }} {
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+  }
+  @media screen and (max-width: 768px) {
+    .atlas-isolation-wrapper .product-block-{{ block.id }} {
+      padding-top: {{block.settings.padding_top_mobile }}px;
+      padding-bottom: {{block.settings.padding_bottom_mobile }}px;
+    }
+  }
+  .atlas-isolation-wrapper .testimonials-{{ block.id }} {
+    width: 100%;
+    position: relative;
+  }
+  .atlas-isolation-wrapper .testimonials-header-{{ block.id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: {{ block.settings.gap_between_cards | default: 15 }}px;
+  }
+  .atlas-isolation-wrapper .testimonials-title-{{ block.id }} {
+    font-family: var(--atlas-font-body-family), sans-serif;
+    font-weight: 500;
+    font-size: {{ block.settings.title_font_size | default: 18 }}px;
+    color: {{ block.settings.title_color | default: '#000000' }};
+    margin: 0;
+  }
+{% endstyle %}
+  
+<div class="product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  <video-testimonials>
+    <div class="testimonials-{{ block.id }}">
+      <div class="testimonials-header-{{ block.id }}">
+        <h2 class="testimonials-title-{{ block.id }}">{{ block.settings.testimonials_title }}</h2>
+        {% content_for 'block', type: '_a-social_media_icons', id: 'social_media_icons' %}
+      </div>
+      {% content_for 'block', type: '_a-video_slider', id: 'video_slider' %}
+    </div>
+  </video-testimonials>
+</div>
+
+{% schema %}
+{
+  "name": "Video Testimonials",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_a-social_media_icons"
+    },
+    {
+      "type": "_a-video_slider"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "testimonials_title",
+      "label": "Section title",
+      "default": "What Our Followers Think"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Title font size",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "gap_between_cards",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap between cards",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Testimonials",
+      "category": "Product Information"
+    }
+  ]
+}
+{% endschema %}

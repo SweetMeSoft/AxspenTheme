@@ -1,0 +1,29 @@
+.atlas-isolation-wrapper .video-section__media {
+  position: relative;
+  padding-bottom: 56.25%;
+}
+
+.atlas-isolation-wrapper .video-section__media.deferred-media {
+  box-shadow: var(--atlas-media-shadow-horizontal-offset) var(--atlas-media-shadow-vertical-offset) var(--atlas-media-shadow-blur-radius) rgba(var(--atlas-color-shadow), var(--atlas-media-shadow-opacity));
+}
+
+.atlas-isolation-wrapper .video-section__media.deferred-media:after {
+  content: none;
+}
+
+.atlas-isolation-wrapper .video-section__poster.deferred-media__poster:focus {
+  outline-offset: 0.3rem;
+}
+
+.atlas-isolation-wrapper .video-section__media iframe {
+  background-color: rgba(var(--atlas-color-foreground), 0.03);
+  border: 0;
+}
+
+.atlas-isolation-wrapper .video-section__poster,
+.atlas-isolation-wrapper .video-section__media iframe,
+.atlas-isolation-wrapper .video-section__media video {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}

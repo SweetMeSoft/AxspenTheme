@@ -1,0 +1,165 @@
+  {% comment %}
+    Renders an article card for a given blog with settings to either show the image or not.
+
+    Accepts:
+    - blog: {Object} Blog object
+    - article: {Object} Article object
+    - lazy_load: {Boolean} Image should be lazy loaded. Default: true (optional)
+    Usage:
+    {% render 'a-article-card' blog: blog, article: article %}
+  {% endcomment %}
+   {% assign media_height = settings.image_height %}
+   {% assign show_image = settings.show_image %}
+  {%- if article and article != empty -%}
+    {%- liquid
+      assign ratio = 1
+      if media_aspect_ratio != null
+        assign ratio = media_aspect_ratio
+      endif
+    -%}
+    <a href="{{ article.url }}" class="full-unstyled-link article-card-full-link" style="display: block; text-decoration: none; color: inherit; cursor: pointer;">
+      <div class="article-card-wrapper card-wrapper underline-links-hover">
+        {% comment %} <article aria-labelledby="Article-{{ article.id }}"> {% endcomment %}
+        <div
+          class="
+            card article-card
+            card--standard
+            {% if media_height and media_height != 'adapt' %} article-card__image--{{ media_height }}{% endif %}
+            {% if article.image and show_image %} card--media{% else %} card--text{% endif %}
+            {% if settings.blog_card_has_custom_color == false %} color-{{ settings.blog_card_color_scheme }}{% endif %}
+          "
+          style="--atlas-ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;{% if settings.blog_card_has_custom_color == true %} background: {{ settings.blog_card_custom_color }};{% endif %}"
+        >
+          <div
+            class="card__inner ratio" 
+            style="--atlas-ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
+          >
+            {%- if show_image == true and article.image -%}
+              <div class="article-card__image-wrapper card__media">
+                <div
+                  class="article-card__image media media--hover-effect"
+                  {% if section.settings.media_height == 'adapt' %}
+                    style="padding-bottom: {{ 1 | divided_by: article.image.aspect_ratio | times: 100 }}%;"
+                  {% endif %}
+                >
+                  {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+                  <img
+                    srcset="
+                      {%- if article.image.src.width >= 165 -%}{{ article.image.src | image_url: width: 165 }} 165w,{%- endif -%}
+                      {%- if article.image.src.width >= 360 -%}{{ article.image.src | image_url: width: 360 }} 360w,{%- endif -%}
+                      {%- if article.image.src.width >= 533 -%}{{ article.image.src | image_url: width: 533 }} 533w,{%- endif -%}
+                      {%- if article.image.src.width >= 720 -%}{{ article.image.src | image_url: width: 720 }} 720w,{%- endif -%}
+                      {%- if article.image.src.width >= 1000 -%}{{ article.image.src | image_url: width: 1000 }} 1000w,{%- endif -%}
+                      {%- if article.image.src.width >= 1500 -%}{{ article.image.src | image_url: width: 1500 }} 1500w,{%- endif -%}
+                      {{ article.image.src | image_url }} {{ article.image.src.width }}w
+                    "
+                    src="{{ article.image.src | image_url: width: 533 }}"
+                    sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
+                    alt="{{ article.image.src.alt | escape }}"
+                    class="motion-reduce"
+                    {% unless lazy_load == false %}
+                      loading="lazy"
+                    {% endunless %}
+                    width="{{ article.image.width }}"
+                    height="{{ article.image.height }}"
+                  >
+                  {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
+                </div>
+              </div>
+            {%- endif -%}
+            <div class="card__content" {%- if show_image == true and article.image -%} style="display: none !important;" {% endif %}>
+              <div class="card__information">
+                {%- if settings.show_author -%}
+                  <svg class="author-icon" width="13" height="17" viewBox="0 0 13 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.25 11.1667H5.425C4.23877 11.1667 3.64566 11.1667 3.16303 11.3102C2.07639 11.6334 1.22603 12.467 0.896404 13.5324C0.75 14.0055 0.75 14.587 0.75 15.75M11.375 4.5C11.375 6.57107 9.66249 8.25 7.55 8.25C5.43751 8.25 3.725 6.57107 3.725 4.5C3.725 2.42893 5.43751 0.75 7.55 0.75C9.66249 0.75 11.375 2.42893 11.375 4.5Z" stroke="var(--atlas-blog-card-author-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg> 
+                  <span class="author-name">{{ article.author }}</span>
+                {%- endif -%}
+                {%- if article.comments_count > 0 and blog.comments_enabled? and settings.show_comments-%}
+                  <span class="author-comment"> {% if settings.show_author %} / {% endif %}{% if article.comments_count == 1 %}{{ article.comments_count }} comment{% else %}{{ article.comments_count }} comments{% endif %}</span>
+                {%- endif -%}
+                <h3 class="card__heading {% if settings.show_excerpt %} h2{% endif %}" style="color: var(--atlas-blog-card-title-color);">
+                    {{ article.title | truncate: 50 | escape }}
+                </h3>
+                {%- if settings.show_excerpt -%}
+                  {%- if article.excerpt.size > 0 or article.content.size > 0 -%}
+                    <p class="article-card__excerpt rte-width" style="color: var(--atlas-blog-card-excerpt-color);">
+                      {%- if article.excerpt.size > 0 -%}
+                        {{ article.excerpt | strip_html | truncatewords: 15 }}
+                      {%- else -%}
+                        {{ article.content | strip_html | truncatewords: 15 }}
+                      {%- endif -%}
+                    </p>
+                  {%- endif -%}
+                {%- endif -%}
+                {%- if settings.show_date -%}
+                  <span class="circle-divider" style="color: var(--atlas-blog-card-date-color);">{{ article.published_at | time_tag: format: 'date' }}</span>
+                {%- endif -%}
+                {% if article.tags.size > 0 and settings.show_tags %}
+                  <div class="article-card__footer">
+                    <strong class="tags" style="color: var(--atlas-blog-card-tags-color);">Tags:</strong>
+                    {% for tag in article.tags %}
+                      <span class="tag" style="color: var(--atlas-blog-card-tags-color);">#{{ tag }}</span>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+              {%- if show_badge -%}
+                <div class="card__badge {{ settings.badge_position }}">
+                  <span class="badge color-accent-1" style="color: var(--atlas-blog-card-tags-color);">Blog</span>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="card__content">
+            <div class="card__information">
+              <div class="article-card__info">
+                {%- if settings.show_author -%}
+                <svg class="author-icon" width="13" height="17" viewBox="0 0 13 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9.25 11.1667H5.425C4.23877 11.1667 3.64566 11.1667 3.16303 11.3102C2.07639 11.6334 1.22603 12.467 0.896404 13.5324C0.75 14.0055 0.75 14.587 0.75 15.75M11.375 4.5C11.375 6.57107 9.66249 8.25 7.55 8.25C5.43751 8.25 3.725 6.57107 3.725 4.5C3.725 2.42893 5.43751 0.75 7.55 0.75C9.66249 0.75 11.375 2.42893 11.375 4.5Z" stroke="var(--atlas-blog-card-author-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg> 
+                <span class="author-name" style="color: var(--atlas-blog-card-author-color);">{{ article.author }}</span>
+              {%- endif -%}
+              {%- if article.comments_count > 0 and blog.comments_enabled? and settings.show_comments -%}
+                <span class="author-comment" style="color: var(--atlas-blog-card-author-color);"> {% if settings.show_author %} / {% endif %}{% if article.comments_count == 1 %}{{ article.comments_count }} comment{% else %}{{ article.comments_count }} comments{% endif %}</span>
+              {%- endif -%}
+      
+          
+            </div>
+              <h3 class="card__heading {% if settings.show_excerpt %} h2{% endif %}" style="color: var(--atlas-blog-card-title-color);">
+                  {{ article.title | truncate: 50 | escape }}
+              </h3>
+   
+              {%- if settings.show_excerpt -%}
+                {%- if article.excerpt.size > 0 or article.content.size > 0 -%}
+                  <p class="article-card__excerpt rte-width" style="color: var(--atlas-blog-card-excerpt-color);">
+                    {%- if article.excerpt.size > 0 -%}
+                      {{ article.excerpt | strip_html | truncatewords: 15 }}
+                    {%- else -%}
+                      {{ article.content | strip_html | truncatewords: 15 }}
+                    {%- endif -%}
+                  </p>
+                {%- endif -%}
+              {%- endif -%}
+              {%- if settings.show_date -%}
+                <span class="circle-divider" style="color: var(--atlas-blog-card-date-color);">{{ article.published_at | time_tag: format: 'date' }}</span>
+              {%- endif -%}
+              {% if article.tags.size > 0 and settings.show_tags %}
+              <div class="article-card__footer">
+                <strong class="tags" style="color: var(--atlas-blog-card-tags-color);">Tags:</strong>
+                  {% for tag in article.tags %}
+                    <span class="tag" style="color: var(--atlas-blog-card-tags-color);">#{{ tag }}</span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+            {%- if show_badge -%} 
+              <div class="card__badge {{ settings.badge_position }}">
+                <span class="badge color-accent-1" style="color: var(--atlas-blog-card-tags-color);">Blog</span>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </a>
+  {%- endif -%}

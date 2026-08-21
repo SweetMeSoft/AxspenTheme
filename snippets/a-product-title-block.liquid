@@ -1,0 +1,30 @@
+{% style %}
+  .atlas-isolation-wrapper #title-{{block.id}} {
+    font-size: {% if global_heading_size %}var(--atlas-font-heading-size){% else %}{{ block.settings.font_size }}px{% endif %};
+    line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-size) + 8px){% else %}{{ block.settings.font_size | plus: 8 }}px{% endif %};
+  }
+  @media screen and (max-width: 750px) {
+    .atlas-isolation-wrapper #title-{{block.id}} {
+      font-size: {% if global_heading_size  %}var(--atlas-font-heading-mob-size){% else %}{{ block.settings.mobile_font_size }}px{% endif %};
+      line-height: {% if global_heading_size  %}calc(var(--atlas-font-heading-mob-size) + 8px){% else %}{{ block.settings.mobile_font_size | plus: 8 }}px{% endif %};
+    }
+  }
+{% endstyle %}
+
+<h2
+  class="title"
+  id="title-{{ block.id }}"
+  style="
+    color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ block.settings.heading_color }} !important{% endif %};
+    --atlas-color-highlighted-color : {{ block.settings.heading_highlighted_color }}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.custom_heading_text != blank -%}
+    {{ block.settings.custom_heading_text }}
+  {%- elsif product.title != blank -%}
+    {{ product.title | escape }}
+  {%- else -%}
+    Example product title
+  {%- endif -%}
+</h2> 

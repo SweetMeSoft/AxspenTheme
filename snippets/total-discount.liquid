@@ -1,0 +1,31 @@
+{% comment %}
+	Renders total discount
+
+	Accepts:
+	- cart items: {Object} Cart items
+
+	Usage:
+	{% render 'total-discount', items: items %}
+{% endcomment %}
+
+{%- liquid
+	assign total_discount = 0
+
+	for line_item in items
+		if line_item.final_line_price < line_item.original_line_price
+			assign total_discount = total_discount | plus: line_item.total_discount
+		elsif line_item.variant.compare_at_price > line_item.variant.price
+			assign line_discount  = line_item.variant.compare_at_price | minus: line_item.variant.price | times: line_item.quantity
+			assign total_discount = total_discount | plus: line_discount
+		endif
+	endfor
+
+	for discount_application in cart.cart_level_discount_applications
+		assign total_discount = total_discount | plus: discount_application.total_allocated_amount
+	endfor
+-%}
+
+{%- if total_discount > 0 -%}
+	{%- capture amount_saved -%}<span class="cart-amount-total">{%- render 'get-price', price: total_discount -%}</span>{%- endcapture -%}
+	<p class="cart-amount-saved">{{- 'cart.general.savings_html' | t: savings: amount_saved -}}</p>
+{%- endif -%}

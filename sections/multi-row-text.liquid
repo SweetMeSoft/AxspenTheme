@@ -1,0 +1,224 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+	assign full       = section.settings.full
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{{ section_id }} .line-order {
+			font-size: {{ section.settings.order_font_size }}px;
+		}
+
+		{{ section_id }} .line-item {
+			padding: {{ section.settings.padding }}px;
+		}
+
+		{{ section_id }} .line-heading {
+			font-size: {{ section.settings.heading_font_size }}px;
+		}
+
+		{{ section_id }} .line-description {
+			font-size: {{ section.settings.description_font_size }}px;
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+		<div class="multi-row-text">
+			{%- for block in section.blocks -%}
+				<div class="line-item">
+					<div class="line-order">{%- if forloop.index < 10 -%}0{%- endif -%}{{- forloop.index -}}</div>
+
+					<div class="line-content rte">
+						<h4 class="line-heading">{{- block.settings.heading -}}</h4>
+						<div class="line-description">{{- block.settings.description -}}</div>
+					</div>
+				</div>
+			{%- endfor -%}
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.multi-row-text.name",
+	"tag": "section",
+	"class": "multi-row-text-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "range",
+			"id": "padding",
+			"min": 0,
+			"max": 200,
+			"step": 2,
+			"default": 80,
+			"unit": "px",
+			"label": "t:sections.multi-row-text.settings.padding.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.multi-row-text.settings.header_order.content"
+		},
+		{
+			"type": "range",
+			"id": "order_font_size",
+			"min": 10,
+			"max": 200,
+			"step": 2,
+			"default": 128,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.heading.label"
+		},
+		{
+			"type": "range",
+			"id": "heading_font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 48,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.description.label"
+		},
+		{
+			"type": "range",
+			"id": "description_font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 18,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "content",
+			"name": "t:sections.multi-row-text.blocks.line.name",
+			"settings": [
+				{
+					"type": "richtext",
+					"id": "heading",
+					"default": "<p>Heading</p>",
+					"label": "t:general.typography.heading.label"
+				},
+				{
+					"type": "richtext",
+					"id": "description",
+					"default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+					"label": "t:general.typography.description.label"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.multi-row-text.presets.name",
+			"blocks": [
+				{
+					"type": "content",
+					"settings": {
+						"heading": "<p>Row heading</p>",
+						"description": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
+					}
+				},
+				{
+					"type": "content",
+					"settings": {
+						"heading": "<p>Row heading</p>",
+						"description": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
+					}
+				},
+				{
+					"type": "content",
+					"settings": {
+						"heading": "<p>Row heading</p>",
+						"description": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
+					}
+				}
+			]
+		}
+	]
+}
+{% endschema %}

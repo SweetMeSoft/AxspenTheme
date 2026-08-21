@@ -1,0 +1,1040 @@
+{%- liquid
+	assign section_id           = '#shopify-section-' | append: section.id
+	assign full                 = section.settings.full
+	assign layout               = section.settings.layout
+	assign content_width        = section.settings.content_width
+	assign rows                 = section.settings.rows
+	assign columns              = section.settings.columns | times: 1
+	assign columns_mobile       = section.settings.columns_mobile | times: 1
+	assign total                = rows | times: columns
+	assign sort_by              = collection.sort_by | default: collection.default_sort_by
+	assign show_filters         = section.settings.show_filters
+	assign show_sorting         = section.settings.show_sorting
+	assign show_count           = section.settings.show_count
+	assign active_filters_count = 0
+	assign icon_code            = 'chevron-down'
+
+	assign currencies_using_comma_decimals = 'ANG,ARS,BRL,BYN,BYR,CLF,CLP,COP,CRC,CZK,DKK,EUR,HRK,HUF,IDR,ISK,MZN,NOK,PLN,RON,RUB,SEK,UYU,VES,VND' | split: ','
+	assign uses_comma_decimals             = false
+	assign price_decimals                  = ',00'
+
+	if currencies_using_comma_decimals contains cart.currency.iso_code
+		assign uses_comma_decimals = true
+		assign price_decimals      = '.00'
+	endif
+
+	if layout != 'top'
+		assign icon_code = 'plus'
+	endif
+
+	for filter in collection.filters
+		if filter.type == 'list'
+			assign active_filters_count = active_filters_count | plus: filter.active_values.size
+		elsif filter.type == 'price_range' and filter.min_value.value or filter.max_value.value
+			assign active_filters_count = active_filters_count | plus: 1
+		endif
+	endfor
+-%}
+
+<style>
+	@media (min-width: 1024px) {
+		{{ section_id }} .collections {
+			max-width: {{ content_width }}%;
+			margin: 0 auto;
+		}
+	}
+
+	{{ section_id }} .section-wrapper {
+		--item-gap: 15px;
+		--template-columns: repeat({{ columns_mobile }}, minmax(0, 1fr));
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			--item-gap: 30px;
+			--template-columns: repeat({{ columns }}, minmax(0, 1fr));
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{{ section_id }} .title {
+			font-size: {{ section.settings.heading_font_size }}px;
+		}
+
+		{{ section_id }} .description {
+			font-size: {{ section.settings.description_font_size }}px;
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+		<div class="has-product-filters filters-{{ layout }}{% if layout != 'top' %} filters-sidebar{% endif %}" data-id="{{ section.id }}">
+			<div class="collections{% if section.settings.infinite_scroll %} infinite-scroll{% endif %}">
+				{% comment %} Collection image {% endcomment %}
+				{%- if section.settings.show_collection_image and collection.image -%}
+					<div class="collection-media">
+						<img
+							srcset="{%- if collection.image.width >= 165 -%}{{ collection.image | image_url: width: 165 }} 165w,{%- endif -%}
+								{%- if collection.image.width >= 360 -%}{{ collection.image | image_url: width: 360 }} 360w,{%- endif -%}
+								{%- if collection.image.width >= 535 -%}{{ collection.image | image_url: width: 535 }} 535w,{%- endif -%}
+								{%- if collection.image.width >= 750 -%}{{ collection.image | image_url: width: 750 }} 750w,{%- endif -%}
+								{%- if collection.image.width >= 1070 -%}{{ collection.image | image_url: width: 1070 }} 1070w,{%- endif -%}
+								{%- if collection.image.width >= 1500 -%}{{ collection.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+								{{ collection.image | image_url }} {{ collection.image.width }}w"
+							src="{{ collection.image | image_url: width: 940 }}"
+							alt="{{ collection.image.alt }}"
+							width="{{ collection.image.width }}"
+							height="{{ collection.image.height }}" >
+					</div>
+				{%- endif -%}
+
+				{% comment %} Collection content {% endcomment %}
+				{%- if collection.products.size > 0 -%}
+					{%- paginate collection.products by total -%}
+						{% comment %} Content {% endcomment %}
+						<div class="content">
+							{% comment %} Sorting {% endcomment %}
+							{%- capture filter_sorting -%}
+								{%- if show_sorting -%}
+									<select class="filter-sorting" name="sort_by" data-noui>
+										{%- assign collection_sort_by = collection.sort_by | default: collection.default_sort_by -%}
+
+										<option value="">{{- 'sections.collection_template.sort_by_label' | t -}}</option>
+
+										{%- for option in collection.sort_options -%}
+											<option value="{{ option.value }}" {% if option.value == collection_sort_by %} selected{% endif %}>{{- option.name | escape -}}</option>
+										{%- endfor -%}
+									</select>
+								{%- endif -%}
+							{%- endcapture -%}
+
+							{% comment %} Results product count {% endcomment %}
+							{%- capture results_product_count -%}
+								<span class="results-count">
+									{%- liquid
+										if collection.results_count
+											echo 'templates.search.results_with_count' | t: count: collection.results_count
+										elsif paginate.items <= paginate.page_size
+											echo 'sections.collection_template.product_count_simple' | t: count: collection.products_count
+										else
+											assign from_count = paginate.current_offset | plus: 1
+											assign to_count   = paginate.page_size | times: paginate.current_page
+
+											if paginate.items < to_count
+												assign to_count = paginate.items
+											endif
+
+											echo 'sections.collection_template.product_from_to_count' | t: from: from_count, to: to_count, count: paginate.items
+										endif
+									-%}
+								</span>
+							{%- endcapture -%}
+
+							{% comment %} Active filter {% endcomment %}
+							{%- capture active_filter -%}
+								{%- if show_filters -%}
+									<div class="active-filter">
+										{%- if active_filters_count > 0 -%}
+											{%- for filter in collection.filters -%}
+												{%- if filter.type == 'price_range' -%}
+													{%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+														<a class="active-filter-item" href="{{ filter.url_to_remove }}" data-reset="price">
+															{%- liquid
+																capture min_price
+																	if filter.min_value.value
+																		render 'get-price', price: filter.min_value.value
+																	else
+																		render 'get-price', price: 0
+																	endif
+																endcapture
+
+																capture max_price
+																	if filter.max_value.value
+																		render 'get-price', price: filter.max_value.value
+																	else
+																		render 'get-price', price: filter.range_max
+																	endif
+																endcapture
+
+																echo min_price | append: ' - ' | append: max_price | strip | remove: '.00'
+
+																render 'icon', code: 'close'
+															-%}
+														</a>
+													{%- endif -%}
+												{%- else -%}
+													{%- for filter_value in filter.active_values -%}
+														<a class="active-filter-item" href="{{ filter.url_to_remove }}">
+															{{- filter_value.label | escape -}}
+															{%- render 'icon', code: 'close' -%}
+														</a>
+													{%- endfor -%}
+												{%- endif -%}
+											{%- endfor -%}
+
+											<a class="active-filter-item link-underline" href="{{ collection.url }}" data-reset="all">
+												{{- 'sections.collection_template.clear_all' | t -}}
+											</a>
+										{%- endif -%}
+									</div>
+								{%- endif -%}
+							{%- endcapture -%}
+
+							<div class="layer-first">
+								{% comment %} Heading and description {% endcomment %}
+								{%- if section.settings.show_heading -%}
+									<h1 class="title text-{{ section.settings.align }}">
+										{%- liquid
+											if collection.handle == 'all'
+												echo 'sections.collection_template.title' | t
+											else
+												echo collection.title
+											endif
+										-%}
+									</h1>
+								{%- endif -%}
+
+								{%- if collection.description != blank and section.settings.show_description -%}
+									<div class="description">{{- collection.description | strip_html -}}</div>
+								{%- endif -%}
+
+								{% comment %} Mobile filters {% endcomment %}
+								{%- if show_filters or show_sorting -%}
+									<div class="mobile-filter">
+										{% comment %} Active filters {% endcomment %}
+										<div class="mobile-active-filter">
+											{%- if active_filters_count > 0 -%}
+												<h3 class="heading sr-only">{{- 'sections.collection_template.filter_by' | t -}}</h3>
+
+												{%- for filter in collection.filters -%}
+													{%- if filter.type == 'price_range' -%}
+														{%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+															<a class="active-filter-item" href="{{ filter.url_to_remove }}" data-reset="price">
+																{%- liquid
+																	capture min_price
+																		if filter.min_value.value
+																			render 'get-price', price: filter.min_value.value
+																		else
+																			render 'get-price', price: 0
+																		endif
+																	endcapture
+
+																	capture max_price
+																		if filter.max_value.value
+																			render 'get-price', price: filter.max_value.value
+																		else
+																			render 'get-price', price: filter.range_max
+																		endif
+																	endcapture
+
+																	echo min_price | append: ' - ' | append: max_price | strip | remove: '.00'
+																-%}
+
+																{%- render 'icon', code: 'close' -%}
+															</a>
+														{%- endif -%}
+													{%- else -%}
+														{%- for filter_value in filter.active_values -%}
+															<a href="{{ filter.url_to_remove }}" class="active-filter-item">
+																{{- filter_value.label | escape -}}
+																{%- render 'icon', code: 'close-bold' -%}
+															</a>
+														{%- endfor -%}
+													{%- endif -%}
+												{%- endfor -%}
+
+												<a class="active-filter-item link-underline" href="{{ collection.url }}" data-reset="all">
+													{{- 'sections.collection_template.clear_all' | t -}}
+												</a>
+											{%- endif -%}
+										</div>
+
+										{% comment %} Filter modal {% endcomment %}
+										<div class="mobile-filter-modal">
+											<form class="mobile-filter-form">
+												<div class="form-header">
+													<span class="close-button">{%- render 'icon', code: 'close' -%}</span>
+													<span class="back-button">{%- render 'icon', code: 'arrow-left-short' -%}</span>
+													<span class="heading">
+														{%- liquid
+															if show_filters and show_sorting
+																echo 'sections.collection_template.filter_and_sort' | t
+															elsif show_filters
+																echo 'sections.collection_template.filter_only' | t
+															elsif show_sorting
+																echo 'sections.collection_template.sort_only' | t
+															endif
+														-%}
+													</span>
+												</div>
+
+												<div class="form-content">
+													<div class="form-content-inner">
+														{%- if show_filters -%}
+															{%- for filter in collection.filters -%}
+																{% case filter.type %}
+																	{% when 'list' %}
+																		<div class="filter-item">
+																			<div class="filter-heading">
+																				<span class="heading-text"{% if filter.operator == 'AND' %} data-helptext="{{- 'sections.collection_template.filter_and_operator_subtitle' | t -}}"{% endif %}>{{- filter.label | escape -}}</span>
+																				{%- render 'icon', code: 'chevron-right' -%}
+																			</div>
+
+																			<div class="filter-content">
+																				<ul class="item-list" role="list">
+																					{%- for filter_value in filter.values -%}
+																						{%- liquid
+																							assign list_item_id = 'mobile-' | append: filter_value.param_name | append: '-' | append: filter_value.value | handle | append: forloop.index0
+																							assign color        = ''
+																							assign contrast     = 4.5
+
+																							if filter_value.param_name contains 'option.color'
+																								assign color    = filter_value.value | handle | remove: '-'
+																								assign contrast = color | color_contrast: '#000000'
+																							endif
+
+																							### New color swatch
+																							assign m_swatch_value = false
+																							if filter_value.swatch.image
+																								assign m_image_url          = filter_value.swatch.image | image_url: width: 100
+																								assign m_swatch_value       = 'url(' | append: m_image_url | append: ')'
+																								assign m_swatch_focal_point = filter_value.swatch.image.presentation.focal_point
+																							elsif filter_value.swatch.color
+																								assign m_swatch_value = 'rgb(' | append: filter_value.swatch.color.rgb | append: ')'
+																								assign m_contrast     = m_swatch_value | color_contrast: '#000000'
+																							endif
+																						-%}
+
+																						{%- if m_swatch_value -%}
+																							<li{% if m_swatch_value != nil %} class="color-type"{% endif %}{% if filter_value.count == 0 %} disabled{% endif %}>
+																								<input type="checkbox"
+																									name="{{ filter_value.param_name }}"
+																									value="{{ filter_value.value }}"
+																									id="{{ list_item_id }}"
+																									class="hidden-color-input"
+																									{% if filter_value.active %}checked{% endif %}>
+
+																								<span class="color-visual{% unless m_contrast %} invalid-color{% endunless %} {% if m_contrast > 4.5 %}light{% else %}dark{% endif %}" style="--swatch-background: {{ m_swatch_value }};{% if m_swatch_focal_point %} --swatch-focal-point: {{ m_swatch_focal_point }};{% endif %}"></span>
+
+																								<label for="{{ list_item_id }}" class="filter-label">{{- filter_value.label | escape }}{% if show_count %}<span class="label-count">{{- filter_value.count -}}</span>{% endif %}</label>
+																							</li>
+																						{%- else -%}
+																							<li{% if color != blank %} class="color-type"{% endif %}{% if filter_value.count == 0 %} disabled{% endif %}>
+																								<input type="checkbox"
+																									name="{{ filter_value.param_name }}"
+																									value="{{ filter_value.value }}"
+																									id="{{ list_item_id }}"
+																									{% if color != blank %}class="hidden-color-input"{% endif %}
+																									{% if filter_value.active %}checked{% endif %}>
+
+																								{%- if color != blank -%}
+																									<span class="color-visual{% unless contrast %} invalid-color{% endunless %} {% if contrast > 4.5 %}light{% else %}dark{% endif %}">
+																										<span{% if contrast %} style="background-color: {{ color }};"{% endif %}></span>
+																									</span>
+																								{%- endif -%}
+
+																								<label for="{{ list_item_id }}" class="filter-label">{{- filter_value.label | escape }}{% if show_count %}<span class="label-count">{{- filter_value.count -}}</span>{% endif %}</label>
+																							</li>
+																						{%- endif -%}
+																					{%- endfor -%}
+																				</ul>
+																			</div>
+																		</div>
+																	{% when 'price_range' %}
+																		{% liquid
+																			assign price_item_id = 'mobile-' | append: filter.param_name | handle
+																		%}
+
+																		<div class="filter-item">
+																			<div class="filter-heading">
+																				<span class="heading-text">{{- filter.label | escape -}}</span>
+																				{%- render 'icon', code: 'chevron-right' -%}
+																			</div>
+
+																			<div class="filter-content">
+																				<div class="range-slider">
+																					{%- liquid
+																						if uses_comma_decimals
+																							assign min = filter.min_value.value | default: 0 | money_without_currency | replace: '.', '' | replace: ',', '.'
+																							assign max = filter.range_max | default: 100 | money_without_currency | replace: '.', '' | replace: ',', '.'
+
+																							assign max_value = max
+																							if filter.max_value.value
+																								assign max_value = filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.'
+																							endif
+																						else
+																							assign min = filter.min_value.value | default: 0 | money_without_currency | replace: ',', ''
+																							assign max = filter.range_max | default: 100 | money_without_currency | replace: ',', ''
+
+																							assign max_value = max
+																							if filter.max_value.value
+																								assign max_value = filter.max_value.value | money_without_currency | replace: ',', ''
+																							endif
+																						endif
+																					-%}
+
+																					<div class="price-slider">
+																						<template>
+																							{
+																								"start": [{{ min | replace: price_decimals, '' }}, {{ max_value | replace: price_decimals, '' }}],
+																								"connect": true,
+																								"range": {
+																									"min": 0,
+																									"max": {{ max | replace: price_decimals, '' }}
+																								}
+																							}
+																						</template>
+																					</div>
+
+																					<div class="price-input">
+																						<div class="price-from">
+																							<span class="price-currency">{{- cart.currency.symbol -}}</span>
+																							<label class="sr-only" for="filter-{{ price_item_id }}-gte">{{- 'sections.collection_template.from' | t -}}</label>
+																							<input class="price-value"
+																								name="{{ filter.min_value.param_name }}"
+																								{%- if filter.min_value.value -%}
+																									value="{{ min }}"
+																								{%- endif -%}
+																								type="number"
+																								placeholder="0"
+																								min="0"
+																								max="{{ max }}"
+																								data-type="min">
+																						</div>
+
+																						<span class="separator">-</span>
+
+																						<div class="price-to">
+																							<span class="price-currency">{{- cart.currency.symbol -}}</span>
+																							<label class="sr-only" for="filter-{{ price_item_id }}-lte">{{- 'sections.collection_template.to' | t -}}</label>
+																							<input class="price-value"
+																								name="{{ filter.max_value.param_name }}"
+																								id="filter-{{ price_item_id }}-lte"
+																								{%- if filter.max_value.value -%}
+																									value="{{ max_value }}"
+																								{%- endif -%}
+																								type="number"
+																								min="0"
+																								placeholder="{{ max }}"
+																								max="{{ max }}"
+																								data-type="max">
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																{% endcase %}
+															{%- endfor -%}
+														{%- endif -%}
+
+														{%- if show_sorting -%}
+															<div class="filter-item">
+																<div class="filter-heading">
+																	<span class="heading-text">{{- 'sections.collection_template.sort_by_label' | t -}}</span>
+																	{%- render 'icon', code: 'chevron-right' -%}
+																</div>
+
+																<div class="filter-content">
+																	{%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+
+																	<ul class="item-list">
+																		{%- for option in collection.sort_options -%}
+																			<li class="radio-item">
+																				<input type="radio" id="mobile-sort-by-{{ option.name | handle }}" name="sort_by" value="{{ option.value | escape }}"{% if option.value == sort_by %} checked{% endif %}>
+																				<label for="mobile-sort-by-{{ option.name | handle }}">{{- option.name | escape -}}</label>
+																			</li>
+																		{%- endfor -%}
+																	</ul>
+																</div>
+															</div>
+														{%- endif -%}
+													</div>
+												</div>
+
+												<div class="form-footer">
+													<a class="active-filter-item button form-footer-button secondary-button" href="{{ routes.all_products_collection_url }}">{{- 'sections.collection_template.clear' | t -}}</a>
+													<button type="submit" class="button primary-button">{{- 'sections.collection_template.apply' | t -}}</button>
+												</div>
+											</form>
+										</div>
+
+										{% comment %} Filter and sort {% endcomment %}
+										<button class="filter-sort primary-button">
+											{%- liquid
+												render 'icon', code: 'filter'
+
+												if show_filters and show_sorting
+													echo 'sections.collection_template.filter_and_sort' | t
+												elsif show_filters
+													echo 'sections.collection_template.filter_only' | t
+												elsif show_sorting
+													echo 'sections.collection_template.sort_only' | t
+												endif
+											-%}
+										</button>
+									</div>
+								{%- endif -%}
+
+								{% comment %} Desktop filters {% endcomment %}
+								{%- if show_filters or show_sorting -%}
+									<div class="filter-form-wrapper">
+										<form class="filter-form{% if show_filters == false %} no-filters{% endif %}">
+											{% comment %} Filters {% endcomment %}
+											{%- if show_filters -%}
+												<div class="filter-wrapper">
+													{%- for filter in collection.filters -%}
+														{%- liquid
+															assign color_type = filter.values | where: 'param_name', 'filter.v.option.color' | first
+														-%}
+
+														{% case filter.type %}
+															{% when 'boolean' or 'list' %}
+																<details class="filter-item{% if color_type %} color-option{% endif %}" data-index="{{ forloop.index }}"{% if layout == 'top' %} data-motion-reduce{% endif %}>
+																	<summary class="details-summary" aria-expanded="false">
+																		<span class="filter-title">{{- filter.label | escape -}}</span>
+
+																		<span class="details-icon">
+																			{%- liquid
+																				render 'icon', code: icon_code
+
+																				if layout != 'top'
+																					render 'icon', code: 'minus'
+																				endif
+																			-%}
+																		</span>
+																	</summary>
+
+																	<div class="details-content">
+																		<div class="details-header">
+																			<span class="item-selected">{{- 'sections.collection_template.selected' | t: count: filter.active_values.size -}}</span>
+																			<a class="item-reset link-underline" href="{{ filter.url_to_remove }}">{{- 'sections.collection_template.reset' | t -}}</a>
+
+																			{%- if filter.operator == 'AND' -%}
+																				<span class="item-helptext">
+																					{{- 'sections.collection_template.filter_and_operator_subtitle' | t -}}
+																				</span>
+																			{%- endif -%}
+																		</div>
+
+																		<ul class="item-list" role="list">
+																			{%- for filter_value in filter.values -%}
+																				{%- liquid
+																					assign list_item_id = filter_value.param_name | append: '-' | append: filter_value.value | handle | append: forloop.index0
+																					assign color        = ''
+																					assign contrast     = 4
+
+																					if filter_value.param_name contains 'option.color'
+																						assign color    = filter_value.value | handle | remove: '-'
+																						assign contrast = color | color_contrast: '#000000'
+																					endif
+
+																					### New color swatch
+																					assign swatch_value = false
+																					if filter_value.swatch.image
+																						assign image_url          = filter_value.swatch.image | image_url: width: 100
+																						assign swatch_value       = 'url(' | append: image_url | append: ')'
+																						assign swatch_focal_point = filter_value.swatch.image.presentation.focal_point
+																					elsif filter_value.swatch.color
+																						assign swatch_value = 'rgb(' | append: filter_value.swatch.color.rgb | append: ')'
+																						assign contrast     = swatch_value | color_contrast: '#000000'
+																					endif
+																				-%}
+
+																				{%- comment -%} New color swatch {%- endcomment -%}
+																				{%- if swatch_value -%}
+																					<li{% if swatch_value != nil %} class="color-type"{% endif %}{% if filter_value.count == 0 %} disabled{% endif %}>
+																						<input type="checkbox"
+																							name="{{ filter_value.param_name }}"
+																							value="{{ filter_value.value }}"
+																							id="{{ list_item_id }}"
+																							class="hidden-color-input"
+																							{% if filter_value.active %}checked{% endif %}>
+
+																						<span class="color-visual{% unless contrast %} invalid-color{% endunless %} {% if contrast > 4.5 %}light{% else %}dark{% endif %}" style="--swatch-background: {{ swatch_value }};{% if swatch_focal_point %} --swatch-focal-point: {{ swatch_focal_point }};{% endif %}"></span>
+
+																						<label for="{{ list_item_id }}" class="filter-label">
+																							{{- filter_value.label }} {% if show_count %}<span class="label-count">({{ filter_value.count -}})</span>{% endif %}
+																						</label>
+																					</li>
+																				{%- else -%}
+																					{%- comment -%} Support old color {%- endcomment -%}
+																					<li{% if color != blank %} class="color-type"{% endif %}{% if filter_value.count == 0 %} disabled{% endif %}>
+																						{%- if color != blank -%}
+																							<input type="checkbox"
+																								name="{{ filter_value.param_name }}"
+																								value="{{ filter_value.value }}"
+																								id="{{ list_item_id }}"
+																								{% if color != blank %}class="hidden-color-input"{% endif %}
+																								{% if filter_value.active %}checked{% endif %}>
+
+																							<span class="color-visual{% unless contrast %} invalid-color{% endunless %} {% if contrast > 4.5 %}light{% else %}dark{% endif %}"{% if contrast %} style="background-color: {{ color }};"{% endif %}></span>
+
+																							<label for="{{ list_item_id }}" class="filter-label">
+																								{{- filter_value.label }} {% if show_count %}<span class="label-count">({{ filter_value.count -}})</span>{% endif %}
+																							</label>
+																						{%- else -%}
+																							<input type="checkbox"
+																								name="{{ filter_value.param_name }}"
+																								value="{{ filter_value.value }}"
+																								id="{{ list_item_id }}"
+																								{% if color != blank %}class="hidden-color-input"{% endif %}
+																								{% if filter_value.active %}checked{% endif %}>
+
+																							<label for="{{ list_item_id }}" class="filter-label">
+																								{{- filter_value.label | escape }}{% if show_count %}<span class="label-count">({{ filter_value.count -}})</span>{% endif %}
+																							</label>
+																						{%- endif -%}
+																					</li>
+																				{%- endif -%}
+																			{%- endfor -%}
+																		</ul>
+																	</div>
+																</details>
+															{% when 'price_range' %}
+																{% liquid
+																	assign price_item_id    = '' | append: filter.param_name | handle
+																	assign max_price_amount = filter.range_max | money | strip_html | escape
+																%}
+
+																<details class="filter-item" data-index="{{ forloop.index }}"{% if layout == 'top' %} data-motion-reduce{% endif %}>
+																	<summary class="details-summary" aria-expanded="false">
+																		<span class="filter-title">{{- filter.label | escape -}}</span>
+
+																		<span class="details-icon">
+																			{%- liquid
+																				render 'icon', code: icon_code
+
+																				if layout != 'top'
+																					render 'icon', code: 'minus'
+																				endif
+																			-%}
+																		</span>
+																	</summary>
+
+																	<div class="details-content">
+																		<div class="details-header">
+																			<span class="item-selected">{{- 'sections.collection_template.max_price' | t: price: max_price_amount -}}</span>
+																			<a class="item-reset link-underline" href="{{ filter.url_to_remove }}">{{- 'sections.collection_template.reset' | t -}}</a>
+
+																			{%- if filter.operator == 'AND' -%}
+																				<span class="item-helptext">
+																					{{- 'sections.collection_template.filter_and_operator_subtitle' | t -}}
+																				</span>
+																			{%- endif -%}
+																		</div>
+
+																		<div class="range-slider">
+																			{%- liquid
+																				if uses_comma_decimals
+																					assign min = filter.min_value.value | default: 0 | money_without_currency | replace: '.', '' | replace: ',', '.'
+																					assign max = filter.range_max | default: 100 | money_without_currency | replace: '.', '' | replace: ',', '.'
+
+																					assign max_value = max
+																					if filter.max_value.value
+																						assign max_value = filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.'
+																					endif
+																				else
+																					assign min = filter.min_value.value | default: 0 | money_without_currency | replace: ',', ''
+																					assign max = filter.range_max | default: 100 | money_without_currency | replace: ',', ''
+
+																					assign max_value = max
+																					if filter.max_value.value
+																						assign max_value = filter.max_value.value | money_without_currency | replace: ',', ''
+																					endif
+																				endif
+																			-%}
+
+																			<div class="price-slider">
+																				<template>
+																					{
+																						"start": [{{ min | replace: price_decimals, '' }}, {{ max_value | replace: price_decimals, '' }}],
+																						"connect": true,
+																						"range": {
+																							"min": 0,
+																							"max": {{ max | replace: price_decimals, '' }}
+																						}
+																					}
+																				</template>
+																			</div>
+
+																			<div class="price-input">
+																				<div class="price-from">
+																					<span class="price-currency">{{- cart.currency.symbol -}}</span>
+																					<label class="sr-only" for="filter-{{ price_item_id }}-gte">{{- 'sections.collection_template.from' | t -}}</label>
+																					<input class="price-value"
+																						name="{{ filter.min_value.param_name }}"
+																						{%- if filter.min_value.value -%}
+																							value="{{ min }}"
+																						{%- endif -%}
+																						type="number"
+																						placeholder="0"
+																						min="0"
+																						max="{{ max }}"
+																						data-type="min">
+																				</div>
+
+																				<span class="separator">{{- 'sections.collection_template.to' | t -}}</span>
+
+																				<div class="price-to">
+																					<span class="price-currency">{{- cart.currency.symbol -}}</span>
+																					<label class="sr-only" for="filter-{{ price_item_id }}-lte">{{- 'sections.collection_template.to' | t -}}</label>
+																					<input class="price-value"
+																						name="{{ filter.max_value.param_name }}"
+																						id="filter-{{ price_item_id }}-lte"
+																						{%- if filter.max_value.value -%}
+																							value="{{ max_value }}"
+																						{%- endif -%}
+																						type="number"
+																						min="0"
+																						placeholder="{{ max }}"
+																						max="{{ max }}"
+																						data-type="max">
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</details>
+														{% endcase %}
+													{%- endfor -%}
+												</div>
+											{%- endif -%}
+
+											{% comment %} Sorting {% endcomment %}
+											{%- liquid
+												if layout == 'top'
+													if show_filters == false
+														echo results_product_count
+													endif
+
+													echo filter_sorting
+												endif
+											-%}
+
+											<noscript>
+												{%- if layout != 'top' -%}
+													<select class="filter-sorting" name="sort_by" data-noui>
+														{%- assign collection_sort_by = collection.sort_by | default: '' -%}
+
+														<option value="">{{- 'sections.collection_template.sort_button' | t -}}</option>
+
+														{%- for option in collection.sort_options -%}
+															<option value="{{ option.value }}" {% if option.value == collection_sort_by %} selected{% endif %}>{{- option.name | escape -}}</option>
+														{%- endfor -%}
+													</select>
+												{%- endif -%}
+
+												<button type="submit" class="primary-button button medium-button">{{- 'sections.collection_template.filter_button' | t -}}</button>
+											</noscript>
+
+											{% if collection.current_vendor or collection.current_type %}
+												<input type="hidden" name="q" value="{{ collection.current_vendor }}{{ collection.current_type }}">
+											{% endif %}
+										</form>
+
+										{% comment %} Active filters {% endcomment %}
+										{%- liquid
+											if layout == 'top'
+												echo active_filter
+											endif
+										-%}
+									</div>
+								{%- endif -%}
+							</div>
+
+							<div class="layer-last">
+								{% comment %} Active filters, product count, filter sorting {% endcomment %}
+								{%- if layout != 'top' -%}
+									<div class="layer-last-header">
+										{{- results_product_count | append: filter_sorting | append: active_filter -}}
+									</div>
+								{%- endif -%}
+
+								{% comment %} Products {% endcomment %}
+								<div class="products">
+									{%- liquid
+										for product in collection.products
+											render 'product-card', product: product, show_product_id: true
+										endfor
+									-%}
+								</div>
+
+								{% comment %} Pagination {% endcomment %}
+								{%- liquid
+									capture pagination
+										if paginate.pages > 1
+											render 'pagination', paginate: paginate, alignment: 'center'
+										endif
+									endcapture
+
+									if section.settings.infinite_scroll
+										if paginate.next
+											assign next_page = paginate.current_page | plus: 1
+
+											echo '<div class="infinite-loading no-js-hidden"><span data-page="' | append: next_page | append: '"></span></div>'
+										endif
+									else
+										echo pagination
+									endif
+								-%}
+
+								{%- if pagination != blank -%}
+									<noscript>
+										{{- pagination -}}
+									</noscript>
+								{%- endif -%}
+							</div>
+						</div>
+					{%- endpaginate -%}
+				{%- else -%}
+					<div class="content">
+						<h2 class="title text-{{ section.settings.align }}">
+							{{- 'sections.collection_template.empty' | t -}}
+						</h2>
+					</div>
+				{%- endif -%}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.main-collection.name",
+	"class": "collection-page-section",
+	"settings": [
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "select",
+			"id": "layout",
+			"options": [
+				{
+					"value": "top",
+					"label": "t:sections.main-collection.settings.layout.option_1.label"
+				},
+				{
+					"value": "left",
+					"label": "t:sections.main-collection.settings.layout.option_2.label"
+				},
+				{
+					"value": "right",
+					"label": "t:sections.main-collection.settings.layout.option_3.label"
+				}
+			],
+			"default": "top",
+			"label": "t:sections.main-collection.settings.layout.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_collection_image",
+			"default": false,
+			"label": "t:sections.main-collection.settings.show_collection_image.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "infinite_scroll",
+			"default": false,
+			"label": "t:sections.main-collection.settings.infinite_scroll.label"
+		},
+		{
+			"type": "range",
+			"id": "content_width",
+			"default": 100,
+			"min": 60,
+			"max": 100,
+			"step": 1,
+			"unit": "%",
+			"label": "t:general.dimensions.content_width.label"
+		},
+		{
+			"type": "range",
+			"id": "rows",
+			"default": 3,
+			"min": 1,
+			"max": 20,
+			"step": 1,
+			"label": "t:sections.main-collection.settings.rows.label"
+		},
+		{
+			"type": "select",
+			"id": "columns",
+			"default": "3",
+			"options": [
+				{
+					"value": "2",
+					"label": "2"
+				},
+				{
+					"value": "3",
+					"label": "3"
+				},
+				{
+					"value": "4",
+					"label": "4"
+				}
+			],
+			"label": "t:sections.main-collection.settings.columns.label"
+		},
+		{
+			"type": "select",
+			"id": "columns_mobile",
+			"default": "2",
+			"options": [
+				{
+					"value": "1",
+					"label": "1"
+				},
+				{
+					"value": "2",
+					"label": "2"
+				}
+			],
+			"label": "t:sections.main-collection.settings.columns_mobile.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.main-collection.settings.header_filters.content"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_filters",
+			"default": true,
+			"label": "t:sections.main-collection.settings.show_filters.label",
+			"info": "t:sections.main-collection.settings.show_filters.info"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_sorting",
+			"default": true,
+			"label": "t:sections.main-collection.settings.show_sorting.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_count",
+			"default": true,
+			"label": "t:sections.main-collection.settings.show_count.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.heading.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_heading",
+			"default": true,
+			"label": "t:sections.main-collection.settings.show_heading.label"
+		},
+		{
+			"type": "range",
+			"id": "heading_font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 48,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "select",
+			"id": "align",
+			"options": [
+				{
+					"value": "left",
+					"label": "t:general.layout.alignment.option_1.label"
+				},
+				{
+					"value": "center",
+					"label": "t:general.layout.alignment.option_2.label"
+				},
+				{
+					"value": "right",
+					"label": "t:general.layout.alignment.option_3.label"
+				}
+			],
+			"default": "left",
+			"label": "t:general.layout.alignment.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.description.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_description",
+			"default": true,
+			"label": "t:sections.main-collection.settings.show_description.label"
+		},
+		{
+			"type": "range",
+			"id": "description_font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 16,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 40,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 60,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	]
+}
+{% endschema %}

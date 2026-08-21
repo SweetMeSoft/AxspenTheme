@@ -1,0 +1,240 @@
+{% style %}
+   .product-block-{{ block.id }}.rating-container {
+    {% if block.settings.is_rating_container_gradient %}
+      background: {{ block.settings.rating_container_gradient_color | default: 'linear-gradient(160.21deg, #EA3885 -0.37%, #5F4DBC 181.87%)' }};
+    {% else %}
+      background: {{ block.settings.rating_container_background | default: '#E9FFF2' }};
+    {% endif %}
+    border-radius: {{ block.settings.rating_container_border_radius | default: 3 }}px;
+    padding: {{ block.settings.rating_container_vertical_padding }}px 6px;
+    display: flex;
+    align-items: center;
+  }
+  .product-block-{{ block.id }} .rating-text {
+      color: {{ block.settings.rating_text_color | default: '#000000' }};
+      font-size: {{ block.settings.rating_text_font_size | default: 13 }}px;
+      line-height: 100%;
+      margin-left: {{ block.settings.stars_margin | default: 8 }}px;
+    }
+    @media screen and (max-width: 768px) {
+      .product-block-{{ block.id }} .rating-text {
+        font-size: {{ block.settings.rating_text_mob_font_size | default: 12 }}px;
+      }
+    }
+    .product-block-{{ block.id }} .rating-text * {
+      margin: 0;
+    }
+    .product-block-{{ block.id }} .stars {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.stars_gap | default: 0 }}px;
+  }
+  @media screen and (max-width: 390px) {
+    .product-block-{{ block.id }}.rating-container {
+      margin-right: 0;
+      height: fit-content;
+      flex-wrap: wrap;
+      width: fit-content;
+    }
+  }
+{% endstyle %}
+<div class="rating-container product-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  <div class="stars">
+    {% liquid
+      assign rating = block.settings.product_rating | default: 4.8
+      assign full_stars = rating | floor
+      assign has_half_star = false
+      assign decimal = rating | modulo: 1
+
+      if decimal >= 0.3 and decimal <= 0.7
+        assign has_half_star = true
+      elsif decimal > 0.7
+        assign full_stars = full_stars | plus: 1
+      endif
+
+      assign empty_stars = 5 | minus: full_stars
+      if has_half_star
+        assign empty_stars = empty_stars | minus: 1
+      endif
+    %}
+
+    {% comment %} Full stars {% endcomment %}
+    {% for i in (1..full_stars) %}
+      {% render 'a-icon-star-full', color: block.settings.stars_color, size: block.settings.star_size %}
+    {% endfor %}
+
+    {% comment %} Half star {% endcomment %}
+    {% if has_half_star %}
+      {% render 'a-icon-star-half',
+        color: block.settings.stars_color,
+        background_color: block.settings.stars_background_color,
+        size: block.settings.star_size
+      %}
+    {% endif %}
+
+    {% comment %} Empty stars {% endcomment %}
+    {% for i in (1..empty_stars) %}
+      {% render 'a-icon-star-empty',
+        color: block.settings.stars_color,
+        background_color: block.settings.stars_background_color,
+        size: block.settings.star_size
+      %}
+    {% endfor %}
+  </div>
+  {% if block.settings.rating_text != blank %}
+    <span class="rating-text">
+      {{ block.settings.rating_text | replace: '[rating_value]', block.settings.product_rating }}
+    </span>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Rating content",
+  "tag": null,
+  "blocks": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Rating content"
+    },
+    {
+      "type": "richtext",
+      "id": "rating_text",
+      "label": "Rating text",
+      "default": "<p>Excellent [rating_value] | 12,319 Customers</p>",
+      "info": "Use [rating_value] to display the rating value that will be replaced with the actual rating value"
+    },
+    {
+      "type": "range",
+      "id": "product_rating",
+      "min": 0,
+      "max": 5,
+      "step": 0.1,
+      "label": "Rating",
+      "default": 4.8,
+      "info": "This value will be replaced with the actual rating value in the rating text using [rating_value]"
+    },
+    {
+      "type": "range",
+      "id": "rating_text_font_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop rating text font size",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "rating_text_mob_font_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile rating text font size",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "rating_text_color",
+      "label": "Rating text color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "rating_container_background",
+      "label": "Rating background color",
+      "default": "#E9FFF2"
+    },
+    {
+      "type": "checkbox",
+      "id": "is_rating_container_gradient",
+      "label": "Gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "rating_container_gradient_color",
+      "label": "Rating gradient color",
+      "default": "linear-gradient(160.21deg, #EA3885 -0.37%, #5F4DBC 181.87%)",
+      "visible_if": "{{ block.settings.is_rating_container_gradient }}"
+    },
+    {
+      "type": "range",
+      "id": "rating_container_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Rating border radius",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "rating_container_vertical_padding",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Rating height increase",
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "Stars settings"
+    },
+    {
+      "type": "range",
+      "id": "star_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Star size",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "stars_color",
+      "label": "Star color",
+      "default": "#F2D952"
+    },
+    {
+      "type": "color",
+      "id": "stars_background_color",
+      "label": "Star background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "stars_gap",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Gap between stars",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "stars_margin",
+      "min": 2,
+      "max": 15,
+      "step": 1,
+      "unit": "px",
+      "label": "Stars margin right",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rating content"
+    }
+  ]
+}
+{% endschema %}

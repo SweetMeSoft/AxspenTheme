@@ -1,0 +1,443 @@
+:root {
+	--swiper-navigation-size: 5rem;
+	--swiper-pagination-bullet-size: 1rem;
+	--swiper-pagination-bullet-active-size: 1.6rem;
+	--swiper-pagination-bullet-inactive-opacity: 1;
+	--swiper-pagination-bullet-opacity: 1;
+	--swiper-pagination-bullet-horizontal-gap: 0.4rem;
+	--swiper-pagination-bullet-vertical-gap: 0.6rem;
+}
+
+.swiper {
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	overflow: hidden;
+	list-style: none;
+	padding: 0;
+	z-index: 1;
+}
+
+.swiper-vertical > .swiper-wrapper {
+	flex-direction: column;
+}
+
+.swiper-wrapper {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	display: flex;
+	transition-property: transform;
+	box-sizing: content-box;
+}
+
+.swiper-horizontal {
+	touch-action: pan-y;
+}
+
+.swiper-vertical {
+	touch-action: pan-x;
+}
+
+.swiper-android .swiper-slide,
+.swiper-wrapper {
+	transform: translate3d(0px, 0, 0);
+}
+
+.swiper-pointer-events {
+	touch-action: pan-y;
+}
+.swiper-pointer-events.swiper-vertical {
+	touch-action: pan-x;
+}
+
+.swiper-slide {
+	flex-shrink: 0;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	transition-property: transform;
+}
+
+.swiper-slide-invisible-blank {
+	visibility: hidden;
+}
+
+.swiper-autoheight,
+.swiper-autoheight .swiper-slide {
+	height: auto;
+}
+.swiper-autoheight .swiper-wrapper {
+	align-items: flex-start;
+	transition-property: transform, height;
+}
+
+.swiper-centered > .swiper-wrapper::before {
+	content: "";
+	flex-shrink: 0;
+	order: 9999;
+}
+.swiper-centered.swiper-horizontal > .swiper-wrapper > .swiper-slide:first-child {
+	margin-inline-start: var(--swiper-centered-offset-before);
+}
+.swiper-centered.swiper-horizontal > .swiper-wrapper::before {
+	height: 100%;
+	width: var(--swiper-centered-offset-after);
+}
+.swiper-centered.swiper-vertical > .swiper-wrapper > .swiper-slide:first-child {
+	margin-block-start: var(--swiper-centered-offset-before);
+}
+.swiper-centered.swiper-vertical > .swiper-wrapper::before {
+	width: 100%;
+	height: var(--swiper-centered-offset-after);
+}
+.swiper-centered > .swiper-wrapper > .swiper-slide {
+	scroll-snap-align: center center;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 10;
+	border-radius: 5rem;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: rgb(var(--background-color));
+	color: rgb(var(--text-color));
+	transition: all 0.3s;
+}
+.swiper-button-prev svg,
+.swiper-button-next svg {
+	width: 1.6rem;
+	height: 1.6rem;
+}
+.swiper-button-prev.swiper-button-disabled,
+.swiper-button-next.swiper-button-disabled {
+	opacity: 0.1;
+}
+
+@media (min-width: 1300px) {
+	.swiper-button-prev,
+	.swiper-rtl .swiper-button-next {
+		left: 0;
+		right: auto;
+	}
+	.swiper-button-next,
+	.swiper-rtl .swiper-button-prev {
+		right: 0;
+		left: auto;
+	}
+}
+.swiper-button-lock {
+	display: none;
+}
+
+.swiper-pagination {
+	position: absolute;
+	text-align: center;
+	display: inline-flex;
+	align-items: center;
+	z-index: 10;
+}
+.swiper-pagination.swiper-pagination-hidden {
+	display: none;
+}
+
+.swiper-pagination-fraction,
+.swiper-pagination-custom {
+	bottom: 1rem;
+	left: 0;
+	width: 100%;
+}
+
+.swiper-horizontal > .swiper-pagination-bullets,
+.swiper-pagination-bullets.swiper-pagination-horizontal {
+	bottom: 1rem;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.swiper-pagination-bullet {
+	width: var(--swiper-pagination-bullet-size);
+	height: var(--swiper-pagination-bullet-size);
+	display: inline-block;
+	border-radius: 5rem;
+	background-color: rgb(var(--text-color));
+	transition: background-color 0.3s ease;
+	margin: 0 0.6rem;
+	position: relative;
+}
+.swiper-pagination-bullet:before {
+	content: "";
+	position: absolute;
+	inset: -0.3rem;
+	border: 0.1rem solid transparent;
+	border-radius: 50%;
+	transition: background-color 0.5s ease, border-color 0.5s ease;
+	background-color: transparent;
+}
+.swiper-pagination-clickable .swiper-pagination-bullet {
+	cursor: pointer;
+}
+.swiper-pagination-bullet:only-child {
+	display: none !important;
+}
+
+button.swiper-pagination-bullet {
+	border: none;
+	margin: 0;
+	padding: 0;
+	box-shadow: none;
+	appearance: none;
+}
+
+.swiper-pagination-bullet-active {
+	background-color: rgb(var(--background-color));
+}
+.swiper-pagination-bullet-active:before {
+	background-color: rgb(var(--background-color));
+	border-color: rgb(var(--text-color));
+}
+
+.swiper-vertical > .swiper-pagination-bullets,
+.swiper-pagination-vertical.swiper-pagination-bullets {
+	right: 1rem;
+	top: 50%;
+	transform: translate3d(0px, -50%, 0);
+}
+.swiper-vertical > .swiper-pagination-bullets .swiper-pagination-bullet,
+.swiper-pagination-vertical.swiper-pagination-bullets .swiper-pagination-bullet {
+	margin: var(--swiper-pagination-bullet-vertical-gap, 6px) 0;
+	display: block;
+}
+.swiper-vertical > .swiper-pagination-bullets.swiper-pagination-bullets-dynamic,
+.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic {
+	top: 50%;
+	transform: translateY(-50%);
+	width: 8px;
+}
+.swiper-vertical > .swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,
+.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet {
+	display: inline-block;
+	transition: 200ms transform, 200ms top;
+}
+
+.swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
+.swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet {
+	margin: 0 var(--swiper-pagination-bullet-horizontal-gap, 4px);
+}
+.swiper-horizontal > .swiper-pagination-bullets.swiper-pagination-bullets-dynamic,
+.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic {
+	left: 50%;
+	transform: translateX(-50%);
+	white-space: nowrap;
+}
+.swiper-horizontal > .swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,
+.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet {
+	transition: 200ms transform, 200ms left;
+}
+
+.swiper-horizontal.swiper-rtl > .swiper-pagination-bullets-dynamic .swiper-pagination-bullet {
+	transition: 200ms transform, 200ms right;
+}
+
+.swiper-pagination-progressbar {
+	background: rgba(0, 0, 0, 0.25);
+	position: absolute;
+}
+.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+	background: var(--text-color, var(--text-color));
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	transform: scale(0);
+	transform-origin: left top;
+}
+.swiper-rtl .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+	transform-origin: right top;
+}
+.swiper-horizontal > .swiper-pagination-progressbar, .swiper-pagination-progressbar.swiper-pagination-horizontal, .swiper-vertical > .swiper-pagination-progressbar.swiper-pagination-progressbar-opposite, .swiper-pagination-progressbar.swiper-pagination-vertical.swiper-pagination-progressbar-opposite {
+	width: 100%;
+	height: 4px;
+	left: 0;
+	top: 0;
+}
+.swiper-vertical > .swiper-pagination-progressbar, .swiper-pagination-progressbar.swiper-pagination-vertical, .swiper-horizontal > .swiper-pagination-progressbar.swiper-pagination-progressbar-opposite, .swiper-pagination-progressbar.swiper-pagination-horizontal.swiper-pagination-progressbar-opposite {
+	width: 4px;
+	height: 100%;
+	left: 0;
+	top: 0;
+}
+
+.swiper-pagination-lock {
+	display: none;
+}
+
+.swiper-css-mode > .swiper-wrapper {
+	overflow: auto;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+
+.swiper-css-mode > .swiper-wrapper::-webkit-scrollbar {
+	display: none;
+}
+
+.swiper-css-mode > .swiper-wrapper > .swiper-slide {
+	scroll-snap-align: start start;
+}
+
+.swiper-css-mode.swiper-horizontal > .swiper-wrapper {
+	scroll-snap-type: x mandatory;
+}
+
+.swiper-css-mode.swiper-vertical > .swiper-wrapper {
+	scroll-snap-type: y mandatory;
+}
+
+.swiper-free-mode > .swiper-wrapper {
+	transition-timing-function: ease-out;
+	margin: 0 auto;
+	transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+.swiper-3d.swiper-css-mode .swiper-wrapper {
+	perspective: 1200px;
+}
+
+.swiper-3d .swiper-wrapper {
+	transform-style: preserve-3d;
+}
+
+.swiper-3d {
+	perspective: 1200px;
+}
+.swiper-3d .swiper-slide,
+.swiper-3d .swiper-cube-shadow {
+	transform-style: preserve-3d;
+}
+
+.swiper-creative .swiper-slide {
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	overflow: hidden;
+	transition-property: transform, opacity, height;
+}
+
+.swiper-fade.swiper-free-mode .swiper-slide {
+	transition-timing-function: ease-out;
+}
+
+.swiper-fade .swiper-slide {
+	pointer-events: none;
+	transition-property: opacity;
+}
+
+.swiper-fade .swiper-slide .swiper-slide {
+	pointer-events: none;
+}
+
+.swiper-fade .swiper-slide-active {
+	pointer-events: auto;
+}
+
+.swiper-fade .swiper-slide-active .swiper-slide-active {
+	pointer-events: auto;
+}
+
+.swiper-thumbs .media-preview-wrap {
+	border: 0.1rem solid transparent;
+}
+.swiper-thumbs .swiper-slide-thumb-active .media-preview-wrap {
+	border-color: rgb(var(--text-color));
+}
+
+.swiper-notification {
+	display: none;
+}
+
+.swiper-scrollbar {
+	border-radius: 10px;
+	position: relative;
+	-ms-touch-action: none;
+	background: rgba(0, 0, 0, 0.1);
+}
+
+.swiper-scrollbar-disabled > .swiper-scrollbar,
+.swiper-scrollbar.swiper-scrollbar-disabled {
+	display: none !important;
+}
+
+.swiper-horizontal > .swiper-scrollbar,
+.swiper-scrollbar.swiper-scrollbar-horizontal {
+	position: absolute;
+	left: 1%;
+	bottom: 3px;
+	z-index: 50;
+	height: 5px;
+	width: 98%;
+}
+
+.swiper-vertical > .swiper-scrollbar,
+.swiper-scrollbar.swiper-scrollbar-vertical {
+	position: absolute;
+	right: 3px;
+	top: 1%;
+	z-index: 50;
+	width: 5px;
+	height: 98%;
+}
+
+.swiper-scrollbar-drag {
+	height: 100%;
+	width: 100%;
+	position: relative;
+	background: rgba(0, 0, 0, 0.5);
+	border-radius: 10px;
+	left: 0;
+	top: 0;
+}
+
+.swiper-scrollbar-cursor-drag {
+	cursor: move;
+}
+
+.swiper-scrollbar-lock {
+	display: none;
+}
+
+.swiper-lazy-preloader {
+	width: 4.2rem;
+	height: 4.2rem;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -2.1rem;
+	margin-top: -2.1rem;
+	z-index: 10;
+	transform-origin: 50%;
+	border: 0.4rem solid rgb(var(--loading-color));
+	border-radius: 50%;
+	border-top-color: #fff;
+}
+
+.swiper:not(.swiper-watch-progress) .swiper-lazy-preloader,
+.swiper-watch-progress .swiper-slide-visible .swiper-lazy-preloader {
+	animation: swiper-preloader-spin 1s infinite linear;
+}
+
+@keyframes swiper-preloader-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}

@@ -1,0 +1,197 @@
+{% style %}
+  .scroll-to-top-button {
+    position: fixed !important;
+    width: {{ section.settings.button_size }}px;
+    height: {{ section.settings.button_size }}px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    bottom: {{ section.settings.offset_y }}px;
+    z-index: 2;
+
+    {% case section.settings.position %}
+      {% when 'bottom_left' %}
+        left: {{ section.settings.offset_x }}px;
+      {% when 'bottom_right' %}
+        right: {{ section.settings.offset_x }}px;
+      {% when 'bottom_center' %}
+        left: 50%;
+        transform: translateX(-50%);
+    {% endcase %}
+  }
+
+  @media screen and (max-width: 768px) {
+    .scroll-to-top-button {
+      bottom: 100px;
+    }
+  }
+{% endstyle %}
+
+{% if section.settings.enable_scroll_button %}
+  <button 
+    id="scrollToTopBtn" 
+    class="scroll-to-top-button"
+    style="{% if section.settings.use_gradient_background %}background: {{ section.settings.section_background_gradient }};{% else %}background-color: {{ section.settings.section_background_color }};{% endif %}"
+    aria-label="Scroll to top"
+  >
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path fill="{{ section.settings.arrow_color }}" d="M8.12 14.71 12 10.83l3.88 3.88c.39.39 1.02.39 1.41 0s.39-1.02 0-1.41L12.7 8.71a.996.996 0 0 0-1.41 0L6.7 13.3c-.39.39-.39 1.02 0 1.41.39.38 1.03.39 1.42 0" />
+    </svg>
+  </button>
+{% endif %}
+
+<script>
+  (function() {
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+    if (!scrollToTopBtn) return;
+
+    const toggleScrollButton = () => {
+      window.requestAnimationFrame(() => {
+        scrollToTopBtn.style.display = window.scrollY > {{ section.settings.display_after }} ? 'block' : 'none';
+      })
+    };
+
+    const scrollToTop = () => {
+      window.requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    };
+
+    // Event Listeners
+    window.addEventListener('scroll', toggleScrollButton);
+    scrollToTopBtn.addEventListener('click', scrollToTop);
+
+    document.addEventListener('DOMContentLoaded', toggleScrollButton)
+
+    // Theme editor support
+    if (Shopify.designMode) {
+      const sectionId = "{{ section.id }}";
+      
+      document.addEventListener('shopify:section:unload', (event) => {
+        if (event.detail.sectionId === sectionId) {
+          toggleScrollButton();
+        }
+      });
+    
+      document.addEventListener('shopify:section:load', (event) => {
+        if (event.detail.sectionId === sectionId) {
+          toggleScrollButton();
+        }
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Scroll to top button",
+  "limit": 1,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_scroll_button",
+      "default": false,
+      "label": "Enable scroll to top button"
+    },
+    {
+      "type": "range",
+      "id": "display_after",
+      "min": 0,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "label": "Display after scroll height",
+      "default": 400
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "options": [
+        {
+          "value": "bottom_left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom_center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "bottom_right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "bottom_right",
+      "label": "Position"
+    },
+    {
+      "type": "range",
+      "id": "offset_x",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Offset X",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "offset_y",
+      "min": 100,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Offset Y",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "button_size",
+      "min": 30,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "Button size",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_background_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.use_gradient_background == false }}"
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Arrow color",
+      "default": "#000000"
+    }
+  ]
+}
+{% endschema %}

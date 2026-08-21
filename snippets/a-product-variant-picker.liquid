@@ -1,0 +1,253 @@
+{% comment %}
+  Renders product variant-picker
+
+  Accepts:
+  - product: {Object} product object.
+  - block: {Object} passing the block information.
+  - product_form_id: {String} Id of the product form to which the variant picker is associated.
+  - update_url: {Boolean} whether or not to update url when changing variants. If false, the url isn't updated. Default: true (optional).
+  Usage:
+  {% render 'a-product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+{% endcomment %}
+
+{%- liquid
+  assign color_option_name = block.settings.custom_swatch_option_name | downcase | default: 'color'
+  assign has_custom_color = block.settings.variants_custom_color
+  assign swatch_type = block.settings.swatch_type
+  assign swatch_size = block.settings.swatch_size | default: '5rem'
+-%}
+
+{%- if has_custom_color -%}
+  <style>
+    :root {
+      --atlas-variants-custom-color: {{ block.settings.variants_custom_color }};
+    }
+    .atlas-isolation-wrapper .swatch-color__label::before,
+    .atlas-isolation-wrapper .swatch-color__label {
+      background-color: var(--atlas-variants-custom-color) !important;
+    }
+    .atlas-isolation-wrapper variant-radios input:after {
+      background-color: var(--atlas-variants-custom-color) !important;
+    }
+    .atlas-isolation-wrapper .custom_variants_select_color {
+      select, select + svg {
+        color: var(--atlas-variants-custom-color) !important;
+      }
+      &:after {
+        box-shadow: 0 0 0 var(--atlas-inputs-border-width) var(--atlas-variants-custom-color) !important;
+      }
+      &:hover:after,
+      select:focus-visible,
+      select:focus {
+        box-shadow: 0 0 0 calc(.1rem + var(--atlas-inputs-border-width)) var(--atlas-variants-custom-color) !important;
+      }
+    }
+  </style>
+{%- else -%}
+  <style>
+    :root {
+      --atlas-variants-custom-color: #000;
+    }
+  </style>
+{%- endif -%}
+
+<style>
+  :root {
+    --atlas-custom-swatch-border-radius: {% if swatch_type == 'circle' %}50%{% else %}0{% endif %};
+    --atlas-custom-swtach-size: {{ swatch_size }};
+  }
+
+  .atlas-isolation-wrapper legend span {
+    font-weight: 400;
+    color: currentColor;
+  }
+</style>
+
+{% style %}
+  .atlas-isolation-wrapper .product-block-{{ block.id }} {
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+  }
+{% endstyle %}
+
+{%- unless product.has_only_default_variant -%}
+  {%- if block.settings.enable_color_swatches -%}
+    <hybrid-variant-picker
+      id="variant-picker-{{ section.id }}"
+      class="no-js-hidden"
+      data-section="{{ section.id }}"
+      data-url="{{ product.url }}"
+      {% if update_url == false %}
+        data-update-url="false"
+      {% endif %}
+      style="display: flex;flex-direction: column;gap: 11px;"
+    >
+      {%- for option in product.options_with_values -%}
+        {% assign option_downcase = option.name | downcase %}
+
+        {% if option_downcase contains color_option_name %}
+          <fieldset class="js product-form__input" data-option-index="{{ forloop.index }}">
+            <legend class="form__label" style="color: var(--atlas-variants-custom-color) !important;">
+              {{ option.name }}: <span>{% unless section.settings.show_main_image_first %}{{ option.selected_value }}{% endunless %}</span>
+            </legend>
+            <section class="swatches-container">
+              {% render 'a-product-variant-options',
+                product: product,
+                option: option,
+                block: block,
+                is_color_swatch: true
+              %}
+            </section>
+          </fieldset>
+        {% else %}
+          {% if block.settings.picker_type == 'button' %}
+            <fieldset class="js product-form__input" data-option-index="{{ forloop.index }}">
+              <legend class="form__label" style="color: var(--atlas-variants-custom-color) !important;">
+                {{ option.name }}: <span>{% unless section.settings.show_main_image_first %}{{ option.selected_value }}{% endunless %}</span>
+              </legend>
+              {% render 'a-product-variant-options', product: product, option: option, block: block %}
+            </fieldset>
+          {%- else -%}
+            <div class="product-form__input product-form__input--dropdown">
+              <label
+                class="form__label"
+                style="color: var(--atlas-variants-custom-color) !important;"
+                for="Option-{{ section.id }}-{{ forloop.index0 }}"
+              >
+                {{ option.name }}
+              </label>
+              <div class="select custom_variants_select_color">
+                <select
+                  id="Option-{{ section.id }}-{{ forloop.index0 }}"
+                  class="select__select"
+                  name="options[{{ option.name | escape }}]"
+                  form="{{ product_form_id }}"
+                  data-option-index="{{ forloop.index }}"
+                >
+                  {% render 'a-product-variant-options', product: product, option: option, block: block %}
+                </select>
+                {% render 'a-icon-caret' %}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      <script type="application/json">
+        {{ product.variants | json }}
+      </script>
+    </hybrid-variant-picker>
+  {%- else -%}
+    {%- if block.settings.picker_type == 'button' -%}
+      <variant-radios
+        id="variant-radios-{{ section.id }}"
+        class="no-js-hidden"
+        data-section="{{ section.id }}"
+        data-url="{{ product.url }}"
+        {% if update_url == false %}
+          data-update-url="false"
+        {% endif %}
+      >
+        {%- for option in product.options_with_values -%}
+          <fieldset class="js product-form__input" data-option-index="{{ forloop.index }}">
+            <legend class="form__label" style="color: var(--atlas-variants-custom-color) !important;">
+              {{ option.name }}: <span>{% unless section.settings.show_main_image_first %}{{ option.selected_value }}{% endunless %}</span>
+            </legend>
+            {% render 'a-product-variant-options', product: product, option: option, block: block %}
+          </fieldset>
+        {%- endfor -%}
+        <script type="application/json">
+          {{ product.variants | json }}
+        </script>
+      </variant-radios>
+    {%- else -%}
+      <variant-selects
+        id="variant-selects-{{ section.id }}"
+        class="no-js-hidden"
+        data-section="{{ section.id }}"
+        data-url="{{ product.url }}"
+        {% if update_url == false %}
+          data-update-url="false"
+        {% endif %}
+      >
+        {%- for option in product.options_with_values -%}
+          <div class="product-form__input product-form__input--dropdown">
+            <label
+              class="form__label"
+              style="color: var(--atlas-variants-custom-color) !important;"
+              for="Option-{{ section.id }}-{{ forloop.index0 }}"
+            >
+              {{ option.name }}
+            </label>
+            <div class="select custom_variants_select_color">
+              <select
+                id="Option-{{ section.id }}-{{ forloop.index0 }}"
+                class="select__select"
+                name="options[{{ option.name | escape }}]"
+                form="{{ product_form_id }}"
+                data-option-index="{{ forloop.index }}"
+              >
+                {% render 'a-product-variant-options', product: product, option: option, block: block %}
+              </select>
+              {% render 'a-icon-caret' %}
+            </div>
+          </div>
+        {%- endfor -%}
+        <script type="application/json">
+          {{ product.variants | json }}
+        </script>
+      </variant-selects>
+    {%- endif -%}
+  {%- endif -%}
+{%- endunless -%}
+
+<noscript class="product-form__noscript-wrapper-{{ section.id }}">
+  <div class="product-form__input{% if product.has_only_default_variant %} hidden{% endif %}">
+    <label class="form__label" style="color: var(--atlas-variants-custom-color) !important;" for="Variants-{{ section.id }}">
+      Product variants
+    </label>
+    <div class="select">
+      <select
+        name="id"
+        id="Variants-{{ section.id }}"
+        class="select__select custom_variants_select_color"
+        form="{{ product_form_id }}"
+      >
+        {%- for variant in product.variants -%}
+          <option
+            {% unless section.settings.show_main_image_first %}
+              {% if variant == product.selected_or_first_available_variant %}
+                selected="selected"
+              {% endif %}
+            {% endunless %}
+            {% if variant.available == false %}
+              disabled
+            {% endif %}
+            value="{{ variant.id }}"
+          >
+            {%- liquid
+              echo variant.title
+              echo variant.price | money | strip_html | prepend: ' - '
+              if variant.available == false
+                echo 'Sold out' | prepend: ' - '
+              endif
+              if variant.quantity_rule.increment > 1
+                echo 'Increments of ' | append: variant.quantity_rule.increment | prepend: ' - '
+              endif
+              if variant.quantity_rule.min > 1
+                echo 'Minimum of ' | append: variant.quantity_rule.min | prepend: ' - '
+              endif
+              if variant.quantity_rule.max != null
+                echo 'Maximum of ' | append: variant.quantity_rule.max | prepend: ' - '
+              endif
+              assign cart_quantity = cart | item_count_for_variant: variant.id
+              if cart_quantity > 0
+                echo '<span class="quantity-cart">' | append: cart_quantity | append: '</span> in cart' | prepend: ' - '
+              endif
+            -%}
+          </option>
+        {%- endfor -%}
+      </select>
+      {% render 'a-icon-caret' %}
+    </div>
+  </div>
+</noscript>

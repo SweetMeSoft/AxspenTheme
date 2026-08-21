@@ -1,0 +1,814 @@
+{{ 'a-collage.css' | asset_url | stylesheet_tag }}
+{{ 'a-component-modal-video.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign global_heading_size = settings.enable_global_heading_font_size
+  assign global_body_size = settings.enable_global_body_font_size
+  assign global_color = settings.enable_global_color
+-%}
+{% if request.visual_preview_mode %}
+  {% assign section_id_selector = '' %}
+  {% assign section_id_variable = 'id' %}
+{% else %}
+  {% assign section_id_selector = '#section-' | append: section.id %}
+  {% assign section_id_variable = section.id %}
+{% endif %}
+<style>
+  {%- if request.visual_preview_mode -%}
+    {% comment %} don't want fade-in animation in preview mode because it messes up preview {% endcomment %}
+    .animation_section,
+    .animation_section * {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+      will-change: auto !important;
+    }
+  {%- endif -%}
+
+    .atlas-isolation-wrapper {{ section_id_selector }} .card__inner {
+      --atlas-ratio-percent: 80% !important; /* Make the card's image 80% as tall */
+    }
+
+    .atlas-isolation-wrapper {{ section_id_selector }} .section__collage {
+      padding: 5px 0;
+    }
+
+    .atlas-isolation-wrapper .section-{{ section_id_variable }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    }
+
+    @media screen and (min-width: 750px) {
+      .atlas-isolation-wrapper .section-{{ section_id_variable }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+
+    .atlas-isolation-wrapper #heading-{{ section_id_variable }} {
+      text-align: {{ section.settings.text_alignment }};
+      color: {% if global_color %}rgb(var(--atlas-color-base-heading)){% else %}{{ section.settings.heading_color }}{% endif %};
+      font-size: {% if global_heading_size %}var(--atlas-font-heading-size){% else %}{{ section.settings.heading_size }}px{% endif %};
+      line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-size) + 8px){% else %}{{ section.settings.heading_size | plus: 8 }}px{% endif %};
+      margin-bottom: {{ section.settings.heading_subheading_gap }}px;
+    }
+    .atlas-isolation-wrapper #heading-{{ section_id_variable }} p {
+      margin: 0;
+    }
+    .atlas-isolation-wrapper #heading-{{ section_id_variable }} strong {
+      {%- if section.settings.heading_use_gradient -%}
+        background: {% if section.settings.heading_gradient_color != blank %}{{ section.settings.heading_gradient_color }}{% else %}var(--atlas-gradient-base-background-1){% endif %};
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      {% else %}
+        color: {{ section.settings.bolded_heading_color }};
+      {%- endif -%}
+    }
+    .atlas-isolation-wrapper #subheading-{{ section_id_variable }} {
+      text-align: {{ section.settings.text_alignment }};
+      font-size: {{ section.settings.subheading_size }}px;
+      color: {{ section.settings.subheading_color }};
+      line-height: 100%;
+    }
+    .atlas-isolation-wrapper #subheading-{{ section_id_variable }} p {
+      margin:0;
+    }
+    .atlas-isolation-wrapper #subheading-{{ section_id_variable }} strong {
+      {%- if section.settings.subheading_use_gradient -%}
+        background: {% if section.settings.subheading_gradient_color != blank %}{{ section.settings.subheading_gradient_color }}{% else %}var(--atlas-gradient-base-background-1){% endif %};
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      {% else %}
+        color: {{ section.settings.subheading_highlighted_color }};
+      {%- endif -%}
+    }
+    @media (max-width: 768px) {
+      .atlas-isolation-wrapper #heading-{{ section_id_variable }} {
+        font-size: {% if global_heading_size %}var(--atlas-font-heading-mob-size){% else %}{{ section.settings.heading_mob_size }}px{% endif %};
+        line-height: {% if global_heading_size %}calc(var(--atlas-font-heading-mob-size) + 8px){% else %}{{ section.settings.heading_mob_size | plus: 8 }}px{% endif %};
+        margin-bottom: {{ section.settings.heading_subheading_gap_mobile }}px;
+      }
+      .atlas-isolation-wrapper #subheading-{{ section_id_variable }} {
+        font-size: {{ section.settings.subheading_mob_size }}px;
+      }
+    }
+
+    @media screen and (min-width: 768px) {
+      .atlas-isolation-wrapper {{ section_id_selector }} .collage {
+        grid-auto-flow: column;
+        grid-column-gap: {{ section.settings.grid_column_gap_desktop }}px;
+        grid-row-gap: {{ section.settings.grid_row_gap_desktop }}px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-top: {{ section.settings.content_gap_desktop }}px;
+      }
+    }
+    @media (max-width: 768px) {
+      .atlas-isolation-wrapper {{ section_id_selector }} .collage {
+        margin-top: {{ section.settings.content_gap_mobile }}px;
+      }
+    }
+</style>
+
+<div
+  id="section-{{ section_id_variable }}"
+  class="gradient isolate section__collage"
+  style="{% if section.settings.use_gradient_background %}background: {{ section.settings.section_background_gradient }};{% else %}background-color: {{ section.settings.section_background_color }};{% endif %}"
+>
+  <div
+    class="page-width{% if section.settings.heading == blank %} no-heading{% endif %} section-{{ section_id_variable }}-padding"
+    style="max-width: {{ section.settings.content_max_width_desktop }}px !important;"
+  >
+    <h2 id="heading-{{ section_id_variable }}" class="title collage-wrapper-title">{{ section.settings.heading }}</h2>
+    {%- if section.settings.subheading != blank -%}
+      <div id="subheading-{{ section_id_variable }}" class="subheading">
+        {{ section.settings.subheading }}
+      </div>
+    {%- endif -%}
+    <div class="collage fade-in-child">
+      {%- for block in section.blocks -%}
+        <div
+          class="collage__item collage__item--{{ block.type }} collage__item--{{ section.settings.desktop_layout }}"
+          {{ block.shopify_attributes }}
+        >
+          {%- case block.type -%}
+            {%- when 'image' -%}
+              {% render 'a-collage-image',
+                image: block.settings.image,
+                card_styles: section.settings.card_styles,
+                border_radius: block.settings.border_radius
+              %}
+
+            {%- when 'product' -%}
+              {% render 'a-collage-card-product',
+                card_product: block.settings.product,
+                media_aspect_ratio: 'adapt',
+                show_secondary_image: block.settings.second_image,
+                extend_height: true,
+                border_radius: block.settings.border_radius,
+                card_background: block.settings.card_background,
+                product_badge_text: block.settings.product_badge_text,
+                product_badge_text_font_size: block.settings.product_badge_text_font_size,
+                product_badge_text_color: block.settings.product_badge_text_color,
+                product_badge_background_color: block.settings.product_badge_background_color,
+                product_badge_border_radius: block.settings.product_badge_border_radius,
+                product_badge_has_gradient: block.settings.product_badge_has_gradient,
+                product_badge_gradient_color: block.settings.product_badge_gradient_color,
+                product_badge_position: block.settings.product_badge_position,
+                product_title_font_size: block.settings.product_title_font_size,
+                product_title_color: block.settings.product_title_color,
+                product_price_font_size: block.settings.product_price_font_size,
+                product_price_color: block.settings.product_price_color,
+                product_compare_at_price_font_size: block.settings.product_compare_at_price_font_size,
+                product_compare_at_price_color: block.settings.product_compare_at_price_color
+              %}
+
+            {%- when 'collection' -%}
+              {% render 'a-card-collection',
+                card_collection: block.settings.collection,
+                media_aspect_ratio: 'adapt',
+                columns: 2,
+                extend_height: true,
+                wrapper_class: section.settings.card_styles,
+                border_radius: block.settings.border_radius,
+                is_collage: true,
+                overlay_gradient_color: block.settings.overlay_gradient_color,
+                text_color: block.settings.text_color,
+                text_size: block.settings.text_size
+              %}
+
+            {%- when 'video' -%}
+              {% render 'a-collage-video',
+                video_url: block.settings.video_url,
+                video_file: block.settings.video_file,
+                cover_image: block.settings.cover_image,
+                description: block.settings.description,
+                card_styles: section.settings.card_styles,
+                block_id: block.id,
+                border_radius: block.settings.border_radius,
+                icon_size: block.settings.icon_size,
+                icon_background_color: block.settings.icon_background_color,
+                icon_color: block.settings.icon_color
+              %}
+          {%- endcase -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collage",
+  "tag": "section",
+  "class": "atlas-isolation-wrapper atlas-gradient section animation_section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Multimedia collage",
+      "label": "Section heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "Section subheading",
+      "default": "Subheading"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width_desktop",
+      "label": "Desktop content max width",
+      "min": 400,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1100
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left",
+      "label": "Desktop layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "content_gap_desktop",
+      "min": 0,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop content gap",
+      "default": 21
+    },
+    {
+      "type": "range",
+      "id": "content_gap_mobile",
+      "min": 0,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile content gap",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "grid_column_gap_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop grid column gap",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "grid_row_gap_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop grid row gap",
+      "default": 21
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 10,
+      "max": 70,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop heading size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_mob_size",
+      "min": 10,
+      "max": 70,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile heading size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bolded_heading_color",
+      "label": "Bold text color in heading",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_use_gradient",
+      "label": "Use gradient for bold text in heading",
+      "info": "Any text formatted as bold within the heading will be converted to a gradient.",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "heading_gradient_color",
+      "label": "Heading gradient color",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.heading_use_gradient }}"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop subheading size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "subheading_mob_size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile subheading size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "subheading_highlighted_color",
+      "label": "Bold text color in subheading",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "subheading_use_gradient",
+      "label": "Use gradient for bold text in subheading",
+      "info": "Any text formatted as bold within the subheading will be converted to a gradient.",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "subheading_gradient_color",
+      "label": "Subheading gradient color",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.subheading_use_gradient }}"
+    },
+    {
+      "type": "range",
+      "id": "heading_subheading_gap",
+      "label": "Desktop gap between heading and subheading",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "heading_subheading_gap_mobile",
+      "label": "Mobile gap between heading and subheading",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 7
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background",
+      "default": false
+    },
+    {
+      "type": "color_background",
+      "id": "section_background_gradient",
+      "label": "Section background gradient",
+      "default": "linear-gradient(180deg, rgba(251, 51, 166, 1), rgba(127, 72, 176, 1) 50%, rgba(48, 145, 211, 1) 100%)",
+      "visible_if": "{{ section.settings.use_gradient_background }}"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Section background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.use_gradient_background == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 24
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "range",
+          "id": "border_radius",
+          "label": "Border radius",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 6
+        }
+      ]
+    },
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "checkbox",
+          "id": "second_image",
+          "default": false,
+          "label": "Show second image on hover"
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "range",
+          "id": "border_radius",
+          "label": "Border radius",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 6
+        },
+        {
+          "type": "color",
+          "id": "card_background",
+          "label": "Card background color",
+          "default": "#F9F9F9"
+        },
+        {
+          "type": "header",
+          "content": "Typography"
+        },
+        {
+          "type": "range",
+          "id": "product_title_font_size",
+          "max": 32,
+          "min": 8,
+          "label": "Product title font size",
+          "default": 20,
+          "unit": "px"
+        },
+        {
+          "type": "color",
+          "id": "product_title_color",
+          "label": "Product title color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "product_price_font_size",
+          "max": 32,
+          "min": 8,
+          "label": "Product price font size",
+          "default": 22,
+          "unit": "px"
+        },
+        {
+          "type": "color",
+          "id": "product_price_color",
+          "label": "Product price color",
+          "default": "#1D1A2D"
+        },
+        {
+          "type": "range",
+          "id": "product_compare_at_price_font_size",
+          "max": 32,
+          "min": 8,
+          "label": "Product compare at price font size",
+          "default": 18,
+          "unit": "px"
+        },
+        {
+          "type": "color",
+          "id": "product_compare_at_price_color",
+          "label": "Product compare at price color",
+          "default": "#545260"
+        },
+        {
+          "type": "header",
+          "content": "Product badge"
+        },
+        {
+          "type": "text",
+          "id": "product_badge_text",
+          "label": "Product badge text",
+          "default": "SALE"
+        },
+        {
+          "type": "select",
+          "id": "product_badge_position",
+          "label": "Product badge position",
+          "options": [
+            {
+              "value": "top_left",
+              "label": "Top left"
+            },
+            {
+              "value": "top_right",
+              "label": "Top right"
+            },
+            {
+              "value": "bottom_left",
+              "label": "Bottom left"
+            },
+            {
+              "value": "bottom_right",
+              "label": "Bottom right"
+            }
+          ],
+          "default": "top_left"
+        },
+        {
+          "type": "range",
+          "id": "product_badge_text_font_size",
+          "max": 32,
+          "min": 8,
+          "label": "Product badge text font size",
+          "default": 10,
+          "unit": "px"
+        },
+        {
+          "type": "color",
+          "id": "product_badge_text_color",
+          "label": "Product badge text color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "product_badge_background_color",
+          "label": "Product badge background color",
+          "default": "#3AB951"
+        },
+        {
+          "type": "checkbox",
+          "id": "product_badge_has_gradient",
+          "label": "Product badge has gradient",
+          "info": "Enable to use a gradient instead of solid color for the badge background",
+          "default": false
+        },
+        {
+          "type": "color_background",
+          "id": "product_badge_gradient_color",
+          "label": "Product badge gradient color",
+          "default": "linear-gradient(90deg, #4F6CF7 0%, #876CF7 100%)",
+          "info": "Only visible when gradient is enabled",
+          "visible_if": "{{ block.settings.product_badge_has_gradient }}"
+        },
+        {
+          "type": "range",
+          "id": "product_badge_border_radius",
+          "label": "Product badge border radius",
+          "min": 0,
+          "max": 200,
+          "step": 2,
+          "unit": "px",
+          "default": 100
+        }
+      ]
+    },
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "range",
+          "id": "border_radius",
+          "label": "Border radius",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 6
+        },
+        {
+          "type": "header",
+          "content": "Typography"
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "label": "Collection title font size",
+          "min": 10,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Collection title color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Overlay"
+        },
+        {
+          "type": "color",
+          "id": "overlay_gradient_color",
+          "label": "Overlay gradient color",
+          "default": "#717171"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "image_picker",
+          "id": "cover_image",
+          "label": "Cover image"
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "accept": ["youtube", "vimeo"],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+          "label": "URL",
+          "placeholder": "Use a YouTube or Vimeo URL",
+          "info": "Video plays in a pop-up if the section contains other blocks."
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "default": "Describe the video",
+          "label": "Video alt text",
+          "info": "Describe the video for customers using screen readers. [Learn more](https://help.shopify.com/manual/online-store/themes/theme-structure/theme-features#video-block)"
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "range",
+          "id": "border_radius",
+          "label": "Border radius",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 6
+        },
+        {
+          "type": "header",
+          "content": "Icon"
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "label": "Icon size",
+          "min": 24,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 52
+        },
+        {
+          "type": "color",
+          "id": "icon_background_color",
+          "label": "Icon background color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon color",
+          "default": "#000000"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4
+}
+{% endschema %}

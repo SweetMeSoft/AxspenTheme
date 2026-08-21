@@ -1,0 +1,55 @@
+<li class="main-key-feature-card__list-item" {{ block.shopify_attributes }} {% if block.settings.image != blank %}data-image="{{ block.settings.image | image_url: width: 1000 }}"{%else%}data-image="placeholder"{% endif %}>
+  <div class="main-key-feature-card__list-item-content">
+    {% if block.settings.badge != blank %}
+      <div class="main-key-feature-card__list-item-badge">
+        {{ block.settings.badge }}
+      </div>
+    {% endif %}
+    {% if block.settings.title != blank %}
+      <h3 class="main-key-feature-card__list-item-title">{{ block.settings.title }}</h3>
+    {% endif %}
+    {% if block.settings.text != blank %}
+      <div class="main-key-feature-card__list-item-text">{{ block.settings.text }}</div>
+    {% endif %}
+  </div>
+  <div class="arrow-icon">
+    <!-- arrow_icon -->
+  </div>
+</li>
+{% schema %}
+{
+  "name": "Key feature",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "badge",
+      "label": "Badge",
+      "default": "<p>#1_Benefit</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "<p>Deep Nourishment</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Hydrates deeply and restores your skin's natural glow. Keeps it soft, smooth, and healthy all day.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "This image will be shown when the key feature is hovered"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Key feature"
+    }
+  ]
+}
+{% endschema %}

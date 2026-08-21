@@ -1,0 +1,650 @@
+{%- liquid
+	assign section_id  = '#shopify-section-' | append: section.id
+	assign full        = section.settings.full
+	assign heading     = section.settings.heading_text
+	assign layout      = section.settings.layout
+	assign column      = section.settings.column
+	assign column_gap  = section.settings.column_gap
+	assign show_arrows = section.settings.show_arrows
+	assign show_dots   = section.settings.show_dots
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+		--aspect-ratio: 1 / 1.48;
+	}
+
+	{{ section_id }} .grid-items {
+		--grid-column: {{ column }};
+		--grid-column-gap: {{ column_gap }}px;
+	}
+
+	{{ section_id }} .swiper:not(.swiper-initialized) .swiper-slide {
+		margin-right: {{ column_gap }}px;
+	}
+
+	{{ section_id }} .swiper-slide {
+		width: 80%;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{{ section_id }} .heading {
+			font-size: {{ section.settings.heading_font_size }}px;
+		}
+
+		{{ section_id }} .swiper:not(.swiper-initialized) .swiper-slide {
+			width: calc( ( 100% - {{ column | minus: 1 | times: column_gap }}px ) / {{ column }} );
+			margin-right: {{ column_gap }}px;
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+		{%- if heading != blank -%}
+			<h2 class="heading text-{{ section.settings.heading_align }}">{{- heading -}}</h2>
+		{%- endif -%}
+
+		<div class="shopable-wrapper {% if layout == 'slider' %}carousel-swiper{% else %}grid-items{% endif %}">
+			{%- if layout == 'slider' -%}
+				<template data-options>
+					{
+						{%- if section.settings.autoplay -%}
+							"autoplay": {
+								"delay": 10000,
+								"disableOnInteraction": false,
+								"pauseOnMouseEnter": true
+							},
+						{%- endif -%}
+
+						{%- if show_arrows -%}
+							"navigation": {
+								"nextEl": "{{ section_id }} .shopable-wrapper .swiper-button-next",
+								"prevEl": "{{ section_id }} .shopable-wrapper .swiper-button-prev"
+							},
+						{%- endif -%}
+
+						{%- if show_dots -%}
+							"pagination": {
+								"el": "{{ section_id }} .shopable-wrapper .swiper-pagination",
+								"clickable": true
+							},
+						{%- endif -%}
+
+						"spaceBetween": {{ column_gap }},
+						"speed": 600,
+						"breakpoints": {
+							"240": {
+								"slidesPerView": "auto",
+								"spaceBetween": 15
+							},
+							"992": {
+								"slidesPerView": {{ column }}
+							}
+						}
+					}
+				</template>
+
+				<div class="swiper" data-index="0"><div class="swiper-wrapper">
+			{%- endif -%}
+				{%- for block in section.blocks -%}
+					{%- liquid
+						assign image          = block.settings.image
+						assign video          = block.settings.video
+						assign product        = block.settings.product
+						assign featured_image = product.featured_media
+					-%}
+
+					<div class="{% if layout == 'grid' %}item{% else %}swiper-slide{% endif %}" data-{{ block.id }} {{ block.shopify_attributes }} {% if request.design_mode and layout == 'slider' %} data-index="{{ forloop.index0 }}"{% endif %}>
+						<div class="card-wrapper">
+							<div class="card-media">
+								{%- if video != blank -%}
+									<div class="card-video">
+										<video playsinline autoplay loop muted preload="none" poster="{{ video.preview_image.src | image_url: width: '540x' }}">
+											<source data-src="{{ video.sources[1].url | default: video.sources[0].url }}" type="video/mp4">
+											{{ video.preview_image.src | image_url: width: 540 | image_tag: width: 540, loading: 'lazy', alt: product.title }}
+										</video>
+									</div>
+								{%- elsif image != blank -%}
+									<div class="card-image{% if settings.image_lazy %} lazy-image{% endif %}">
+										{%- render 'lazy-image', image: image, width: 500 -%}
+									</div>
+								{%- else -%}
+									{%- render 'icon', code: 'placeholder' -%}
+								{%- endif -%}
+							</div>
+
+							<div class="product-wrapper">
+								<div class="product-image">
+									{%- liquid
+										if featured_image != blank
+											echo featured_image | image_url: width: 300 | image_tag
+										else
+											render 'icon', code: 'placeholder'
+										endif
+									-%}
+								</div>
+
+								<div class="product-info">
+									<h3 class="product-title">
+										{%- liquid
+											if product != blank
+												echo product.title
+											else
+												echo 'onboarding.products.title' | t
+											endif
+										-%}
+									</h3>
+
+									{%- render 'price', product: product -%}
+								</div>
+							</div>
+
+							{%- if product != blank -%}
+								<a href="{{ product.url }}" class="toggle-shopable-popup" data-id="{{ product.id }}"></a>
+							{%- endif -%}
+						</div>
+					</div>
+				{%- endfor -%}
+			{%- if layout == 'slider' -%}
+				</div></div>
+
+				{%- if show_arrows -%}
+					<div class="swiper-controls">
+						<button class="swiper-button-prev">{%- render 'icon', code: 'chevron-left-light' -%}</button>
+						<button class="swiper-button-next">{%- render 'icon', code: 'chevron-right-light' -%}</button>
+					</div>
+				{%- endif -%}
+
+				{%- if show_dots -%}
+					<div class="swiper-pagination" tabindex="-1"></div>
+				{%- endif -%}
+			{%- endif -%}
+		</div>
+
+		{%- if section.blocks.size > 0 -%}
+			<div class="shopable-popup">
+				<div class="shopable-popup-inner">
+					<div class="popup-controls">
+						<button class="arrow-button" data-type="prev">{%- render 'icon', code: 'chevron-left' -%}</button>
+						<button class="close-button">{%- render 'icon', code: 'close' -%}</button>
+						<button class="arrow-button" data-type="next">{%- render 'icon', code: 'chevron-right' -%}</button>
+					</div>
+
+					<div class="shopable-item-wrapper">
+						{%- for block in section.blocks -%}
+							{%- liquid
+								assign image          = block.settings.image
+								assign video          = block.settings.video
+								assign product        = block.settings.product
+								assign featured_image = product.featured_media
+
+								unless product
+									continue
+								endunless
+
+								assign product_form_id = 'product-form-' | append: section.id | append: product.id | append: forloop.index
+							-%}
+
+							<div class="popup-item" data-id="{{ product.id }}">
+								<div class="media-area">
+									{%- if video != blank -%}
+										<div class="area-video">
+											<video controls playsinline loop autoplay preload="none" poster="{{ video.preview_image.src | image_url: width: '720x' }}">
+												<source data-src="{{ video.sources[1].url | default: video.sources[0].url }}" type="video/mp4">
+												{{ video.preview_image.src | image_url: width: 800 | image_tag: width: 800, loading: 'lazy', alt: product.title }}
+											</video>
+										</div>
+									{%- elsif image != blank -%}
+										<div class="area-image{% if settings.image_lazy %} lazy-image{% endif %}">
+											{%- render 'lazy-image', image: image, width: 500 -%}
+										</div>
+									{%- else -%}
+										{%- render 'icon', code: 'placeholder' -%}
+									{%- endif -%}
+
+									<div class="product-wrapper">
+										<div class="product-image">
+											{%- liquid
+												if featured_image != blank
+													echo featured_image | image_url: width: 300 | image_tag
+												else
+													render 'icon', code: 'placeholder'
+												endif
+											-%}
+										</div>
+
+										<div class="product-info">
+											<h3 class="product-title">{{- product.title -}}</h3>
+
+											{%- render 'price', product: product -%}
+										</div>
+
+										<a href="{{ product.url }}" class="product-buy-now-button">{{- 'products.product.shop_now' | t -}}</a>
+									</div>
+								</div>
+
+								<div class="product-area">
+									{%- if product.media.size >= 1 -%}
+										<div class="product-media carousel-swiper">
+											<template data-options data-custom-pagination>
+												{
+													"lazy": true,
+													"speed": 600,
+													"slidesPerView": 2,
+													"spaceBetween": 15,
+													"pagination": {
+														"el": "{{ section_id }} .shopable-popup .popup-item[data-id=\"{{ product.id }}\"] .swiper-pagination"
+													}
+												}
+											</template>
+
+											<div class="swiper" data-index="{{ forloop.index }}">
+												<div class="swiper-wrapper">
+													{%- for media in product.media -%}
+														<div class="main-item swiper-slide" data-id="{{ section.id }}-{{ media.id }}" data-{{ media.media_type | escape }}>
+															{%- render 'product-media', media: media, position: forloop.index, loop: true, role: 'main', index: forloop.index -%}
+														</div>
+													{%- endfor -%}
+												</div>
+
+												<div class="swiper-pagination"></div>
+											</div>
+										</div>
+									{%- endif -%}
+
+									<div class="product-summary">
+										<h3 class="product-title">
+											{%- if product != blank -%}
+												<a class="link-underline-transparent" href="{{ product.url }}">{{- product.title -}}</a>
+											{%- else -%}
+												{{- 'onboarding.products.title' | t -}}
+											{%- endif -%}
+										</h3>
+
+										{%- render 'price', product: product -%}
+
+										{%- if product.description != blank -%}
+											<div class="product-description">
+												{{- product.description -}}
+											</div>
+										{%- endif -%}
+
+										{%- unless product.has_only_default_variant -%}
+											{%- liquid
+												assign swatch = settings.swatch_type
+											-%}
+
+											<div class="product-variants variant-swatch swatches-{{ settings.swatch_style }}" data-url="{{ product.url }}">
+												{%- for option in product.options_with_values -%}
+													{%- liquid
+														assign selected_value = option.selected_value
+														assign id             = 'option-' | append : section.id | append: '-' | append: forloop.index
+													-%}
+
+													<div class="variant-field">
+														<div class="field-title">
+															{{- option.name -}}:
+															<span class="selected-value">{{- selected_value -}}</span>
+														</div>
+
+														<div class="field-wrap">
+															<div class="field-wrap-inner">
+																{%- for value in option.values -%}
+																	{%- liquid
+																		assign handle_value     = value | handle
+																		assign is_valid_color   = handle_value | remove: '-' | color_to_rgb
+																		assign swatch_file_name = handle_value | append: '.png'
+																		assign swatch_file_url  = swatch_file_name | file_url
+																		assign is_swatch_png    = false
+																		assign input_id         = id | append: forloop.index | append: '-' | append: product.title | handle
+
+																		# Check .png file available.
+																		if swatch_file_url contains '.png?v'
+																			assign is_swatch_png = true
+																		endif
+																	-%}
+
+																	<input type="radio" id="{{ input_id }}"
+																		name="{{ option.name | escape }}"
+																		value="{{ value | escape }}"
+																		form="{{ product_form_id }}"
+																		class="field-value sr-only"{% if selected_value == value %} checked{% endif %}>
+
+																	{%- liquid
+																		case swatch
+																			when 'color'
+																				### Color first ###
+																				if value.swatch.color
+																					assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+																					assign contrast     = swatch_value | color_contrast: '#ffffff'
+																					assign swatch_type  = 'color'
+																				elsif is_valid_color
+																					assign swatch_value = is_valid_color
+																					assign contrast     = swatch_value | color_contrast: '#ffffff'
+																					assign swatch_type  = 'color'
+																				elsif value.swatch.image
+																					assign image_url          = value.swatch.image | image_url: width: 100
+																					assign swatch_value       = 'url(' | append: image_url | append: ')'
+																					assign swatch_focal_point = value.swatch.image.presentation.focal_point
+																					assign swatch_type        = 'image'
+																				elsif is_swatch_png and swatch_file_url contains handle_value
+																					assign image_url    = images[swatch_file_name] | image_url: width: 100
+																					assign swatch_value = 'url(' | append: image_url | append: ')'
+																					assign swatch_type  = 'png'
+																				else
+																					assign swatch_value = null
+																					assign swatch_type  = 'button'
+																				endif
+																			when 'image'
+																				### Image is first ###
+																				if value.swatch.image
+																					assign image_url          = value.swatch.image | image_url: width: 100
+																					assign swatch_value       = 'url(' | append: image_url | append: ')'
+																					assign swatch_focal_point = value.swatch.image.presentation.focal_point
+																					assign swatch_type        = 'image'
+																				elsif is_swatch_png and swatch_file_url contains handle_value
+																					assign image_url    = images[swatch_file_name] | image_url: width: 100
+																					assign swatch_value = 'url(' | append: image_url | append: ')'
+																					assign swatch_type  = 'png'
+																				elsif value.swatch.color
+																					assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+																					assign contrast     = swatch_value | color_contrast: '#ffffff'
+																					assign swatch_type  = 'color'
+																				elsif is_valid_color
+																					assign swatch_value = is_valid_color
+																					assign contrast     = swatch_value | color_contrast: '#ffffff'
+																					assign swatch_type  = 'color'
+																				else
+																					assign swatch_value = null
+																					assign swatch_type  = 'button'
+																				endif
+																		endcase
+																	-%}
+
+																	{%- if swatch == 'color' or swatch == 'image' -%}
+																		<label class="field-label {% if swatch_type == 'button' %}field-button{% else %}swatch swatch-{{ swatch_type }}{% endif %}{% if swatch_type == 'color' and contrast < 4.5 %} dark{% endif %}" for="{{ input_id }}"{% if swatch_value %} style="--swatch--background: {{ swatch_value }};{% if swatch_focal_point %}--swatch-focal-point: {{ swatch_focal_point }};{% endif %}"{% endif %}>
+																			<span class="{% if swatch_value %}sr-only{% else %}swatch-text{% endif %}">{{- value -}}</span>
+																		</label>
+																	{%- else -%}
+																		<label class="field-label field-button" for="{{ input_id }}">{{- value -}}</label>
+																	{%- endif -%}
+																{%- endfor -%}
+															</div>
+														</div>
+													</div>
+												{%- endfor -%}
+											</div>
+										{%- endunless -%}
+
+										{%- if product != blank -%}
+											<a href="{{ product.url }}" class="view-product-detail link-underline">{{- 'products.product.view_detail' | t -}}</a>
+
+											{%- form 'product', product, id: product_form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+												<input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+												<button type="submit" name="add" class="button add-to-cart-button primary-button">
+													{%- liquid
+														if product.selected_or_first_available_variant.available
+															echo 'products.product.add_to_cart' | t
+														else
+															echo 'products.product.out_of_stock' | t
+														endif
+													-%}
+												</button>
+											{%- endform -%}
+
+											<script data-product-variants>
+												{{ product.variants | json }}
+											</script>
+
+											{% comment %} Product quantity data {% endcomment %}
+											<script data-inventory-quantity>
+												[{%- liquid
+													for var in product.variants
+														echo '{"id":' | append: var.id | append: ',"qty":' | append: var.inventory_quantity | append: '}'
+
+														unless forloop.last
+															echo ','
+														endunless
+													endfor
+												-%}]
+											</script>
+										{%- else -%}
+											<div class="form-add-to-cart">
+												<button type="button" class="add-to-cart-button button primary-button" disabled>{{- 'products.product.sold_out' | t -}}</button>
+											</div>
+										{%- endif -%}
+									</div>
+								</div>
+							</div>
+						{%- endfor -%}
+					</div>
+				</div>
+			</div>
+		{%- endif -%}
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.shopable-video.name",
+	"tag": "section",
+	"class": "shopable-video-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.heading.label"
+		},
+		{
+			"type": "text",
+			"id": "heading_text",
+			"default": "Heading for your section",
+			"label": "t:general.typography.text.label"
+		},
+		{
+			"type": "range",
+			"id": "heading_font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 48,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "select",
+			"id": "heading_align",
+			"default": "center",
+			"options": [
+				{
+					"value": "left",
+					"label": "t:general.layout.alignment.option_1.label"
+				},
+				{
+					"value": "center",
+					"label": "t:general.layout.alignment.option_2.label"
+				},
+				{
+					"value": "right",
+					"label": "t:general.layout.alignment.option_3.label"
+				}
+			],
+			"label": "t:general.layout.alignment.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "full",
+			"label": "t:general.layout.full.label",
+			"default": false
+		},
+		{
+			"type": "select",
+			"id": "layout",
+			"default": "slider",
+			"options": [
+				{
+					"value": "grid",
+					"label": "t:general.layout.grid.label"
+				},
+				{
+					"value": "slider",
+					"label": "t:general.layout.slider.label"
+				}
+			],
+			"label": "t:general.layout.name"
+		},
+		{
+			"type": "range",
+			"id": "column",
+			"min": 2,
+			"max": 6,
+			"step": 1,
+			"default": 4,
+			"label": "t:general.slide.column.label"
+		},
+		{
+			"type": "range",
+			"id": "column_gap",
+			"min": 0,
+			"max": 50,
+			"step": 1,
+			"default": 30,
+			"unit": "px",
+			"label": "t:general.slide.column_gap.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.layout.slider_options.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "autoplay",
+			"label": "t:general.slide.autoplay.label",
+			"default": false
+		},
+		{
+			"type": "checkbox",
+			"id": "show_arrows",
+			"label": "t:general.slide.show_arrows.label",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_dots",
+			"label": "t:general.slide.show_dots.label",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+	"blocks": [
+		{
+			"type": "item",
+			"name": "t:sections.shopable-video.blocks.item.name",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "t:general.image.label"
+				},
+				{
+					"type": "video",
+					"id": "video",
+					"label": "t:sections.video.name"
+				},
+				{
+					"type": "product",
+					"id": "product",
+					"label": "t:settings_schema.product.name"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.shopable-video.name",
+			"blocks": [
+				{
+					"type": "item"
+				},
+				{
+					"type": "item"
+				},
+				{
+					"type": "item"
+				},
+				{
+					"type": "item"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

@@ -1,0 +1,46 @@
+{% comment %}
+		Renders recent posts
+
+		Accepts:
+		- limit: {Number} Limit post
+{% endcomment %}
+
+{%- liquid
+	assign blogs = blog.articles | sort: 'published_at' | reverse
+-%}
+
+{%- for article in blogs limit: limit -%}
+	<div class="recent-post-item">
+		{%- if article.image != blank -%}
+			<div class="card-media adapt-media">
+				<a href="{{ article.url }}" class="{% if settings.image_lazy and article.image %} lazy-image{% endif %}">
+					{%- render 'lazy-image', image: article.image, width: 150 -%}
+				</a>
+			</div>
+		{%- endif -%}
+
+		<div class="card-content">
+			<h2 class="card-title">
+				<a href="{{ article.url }}">
+					{{- article.title | escape -}}
+				</a>
+			</h2>
+
+			<div class="card-info">
+				<span class="info-item">
+					<a href="{{ blog.url }}">
+						{{- blog.title | escape -}}
+					</a>
+				</span>
+
+				<span class="info-item">
+					{{- article.published_at | time_tag: format: 'short_month_day_year' -}}
+				</span>
+
+				{%- if blog.comments_enabled? -%}
+					<span class="info-item">{{- 'blogs.article.comments' | t: count: article.comments_count -}}</span>
+				{%- endif -%}
+			</div>
+		</div>
+	</div>
+{%- endfor -%}

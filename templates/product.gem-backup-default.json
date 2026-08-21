@@ -1,0 +1,58 @@
+{
+  "sections": {
+    "gp_section_624864568379835348": {
+      "type": "gp-section-624864568379835348",
+      "settings": {
+        "gg8uZsxDc-D_customText": "Entrega estimada",
+        "ggqQVkBYZ1f_label": "Añadir al carrito",
+        "ggqQVkBYZ1f_outOfStockLabel": "Out of stock",
+        "ggqQVkBYZ1f_unavailableLabel": "Unavailable",
+        "ggqQVkBYZ1f_variantSelectionRequiredMessage": "Please select a variant to add product to cart",
+        "ggqQVkBYZ1f_successMessage": "Agregaste un producto a tu carrito",
+        "ggqQVkBYZ1f_errorMessage": "Cannot add product to cart",
+        "ggZo1i6Rlmf_srcSet_desktop_src": "https:\/\/cdn.shopify.com\/s\/files\/1\/0926\/2350\/3645\/files\/ex.png",
+        "gg4PCeGW9W0_srcSet_desktop_src": "https:\/\/cdn.shopify.com\/s\/files\/1\/0926\/2350\/3645\/files\/Visa.png",
+        "ggGBPWXVlLa_srcSet_desktop_src": "https:\/\/cdn.shopify.com\/s\/files\/1\/0926\/2350\/3645\/files\/MasterCard.png",
+        "ggXixIxlGIh_srcSet_desktop_src": "https:\/\/cdn.shopify.com\/s\/files\/1\/0926\/2350\/3645\/files\/ApplePay.png",
+        "gg6Xb7a1Aqj_srcSet_desktop_src": "https:\/\/cdn.shopify.com\/s\/files\/1\/0926\/2350\/3645\/files\/Gpay.png",
+        "ggfr0AqtBkI_childItem_0": "<p>Descripción<\/p>",
+        "ggfr0AqtBkI_childItem_1": "<p>Cambios y Devoluciones&nbsp;<\/p>",
+        "ggL1iA7KE_L_viewMoreText": "Show more",
+        "ggL1iA7KE_L_viewLessText": "Show less",
+        "ggekMlBHqv1_text": "<p>ENVÍOS A BOGOTÁ<\/p><p>En 2 - 4 días laborales $8.000 COP<\/p><p><strong>Envíos a otas ciudades de Colombia<\/strong><\/p><p>En 6 - 8 días laborales $15.000 COP<\/p><p><strong>DEVOLUCIÓN:<\/strong><\/p><p>Devoluciones<\/p><p>Dispones de 30 días a partir de la fecha del envío del pedido.<\/p><p><strong>Devolución en domicilio<\/strong><\/p><p>Las devoluciones tienen un costo equivalente al valor del envío.<\/p><p>Sin embargo, si el cambio o devolucion se realiza por error de talla, color o defecto de fábrica, el costo lo asumimos nosotros.<\/p>",
+        "checksum": "eb28ce877ae2dc781e43a4e9361edb2414149f318c9fcdef16bd40f30d4ecb64_1_1_1_0__1",
+        "section_preload": "true"
+      }
+    },
+    "gp_section_624864568379966420": {
+      "type": "gp-section-624864568379966420",
+      "settings": {
+        "ggzVTboLwzC_label": "Add to cart",
+        "ggzVTboLwzC_outOfStockLabel": "Out of stock",
+        "ggzVTboLwzC_unavailableLabel": "Unavailable",
+        "ggzVTboLwzC_variantSelectionRequiredMessage": "Please select a variant to add product to cart",
+        "ggzVTboLwzC_successMessage": "Add product to cart successfully",
+        "ggzVTboLwzC_errorMessage": "Cannot add product to cart",
+        "checksum": "dca1cb280c989c7e66032c017a67c5c288295ade05303cf91bbe65d707da9906_1_1_1_0__1"
+      }
+    },
+    "gp_section_624864568379900884": {
+      "type": "gp-section-624864568379900884",
+      "settings": {
+        "checksum": "82b76790747951e6a354d5ae7ae787517674fc65cf36233021df19440be82617_1_1_1_0__1"
+      }
+    },
+    "gp_section_624864568379769812": {
+      "type": "gp-section-624864568379769812",
+      "settings": {
+        "checksum": "2984d1fc790d3a17eafeaa54019181a22f4b32814a01263877844248072fad51_1_1_1_0__1"
+      }
+    }
+  },
+  "order": [
+    "gp_section_624864568379835348",
+    "gp_section_624864568379966420",
+    "gp_section_624864568379900884",
+    "gp_section_624864568379769812"
+  ]
+}

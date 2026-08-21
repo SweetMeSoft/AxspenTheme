@@ -1,0 +1,311 @@
+{%- liquid
+	assign section_id    = '#shopify-section-' | append: section.id
+	assign full          = section.settings.full
+	assign heading       = section.settings.heading_text
+	assign avatar        = section.settings.avatar
+	assign name          = section.settings.name
+	assign position      = section.settings.position
+	assign button        = section.settings.button_text
+	assign image_ratio   = section.settings.image_ratio
+	assign header_layout = section.settings.header_layout
+-%}
+
+<style>
+	{{ section_id }} .section-wrapper {
+		padding-top: {{ section.settings.padding_top_mobile }}px;
+		padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+	}
+
+	{{ section_id }} .heading {
+		font-size: {{ section.settings.heading_font_size | times: 0.7 }}px;
+	}
+
+	@media (min-width: 992px) {
+		{{ section_id }} .section-wrapper {
+			padding-top: {{ section.settings.padding_top }}px;
+			padding-bottom: {{ section.settings.padding_bottom }}px;
+		}
+
+		{{ section_id }} .heading {
+			font-size: {{ section.settings.heading_font_size }}px;
+		}
+	}
+</style>
+
+<div class="section-wrapper color-{{ section.settings.color_scheme }}">
+	<div class="{% if full %}stretch-section stretch-padding{% else %}container{% endif %}">
+		<div class="image-collage {{ header_layout }}">
+			{%- if heading != blank or name != blank -%}
+				<div class="title-wrapper heading-color">
+					{%- if heading != blank -%}
+						<div class="heading rte">{{- heading -}}</div>
+					{%- endif -%}
+
+					<div class="author-options">
+						<div class="content">
+							<div class="avatar adapt-media">
+								<div class="image{% if settings.image_lazy and avatar %} lazy-image{% endif %}">
+									{%- liquid
+										if avatar != blank
+											render 'lazy-image', image: avatar, width: 48
+										else
+											render 'icon', code: 'placeholder'
+										endif
+									-%}
+								</div>
+							</div>
+
+							<div class="content-inner text-left">
+								{%- if name != blank -%}
+									<span class="name rte">{{- name -}}</span>
+								{%- endif -%}
+
+								{%- if position != blank -%}
+									<span class="position rte">{{- position -}}</span>
+								{%- endif -%}
+							</div>
+						</div>
+
+						{%- if button != blank -%}
+							<div class="button-wrap">
+								<a class="button primary-button" href="{{ section.settings.button_link | default: '#' }}">{{- button -}}</a>
+							</div>
+						{%- endif -%}
+					</div>
+				</div>
+			{%- endif -%}
+
+			<div class="image-collage-content scrollbar">
+				{%- for block in section.blocks -%}
+					<div class="image-item">
+						{%- case block.type -%}
+							{%- when '@app' -%}
+								{%- render block -%}
+
+							{%- when 'image' -%}
+								{%- assign image = block.settings.image -%}
+
+								<div class="image-wrap {{ image_ratio }}-media">
+									<div class="collage-image-wrapper{% if settings.image_lazy and image %} lazy-image{% endif %}">
+										{%- liquid
+											if image != blank
+												render 'lazy-image', image: image, width: 294
+											else
+												render 'icon', code: 'placeholder'
+											endif
+										-%}
+									</div>
+								</div>
+						{%- endcase -%}
+					</div>
+				{%- endfor -%}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.image-collage.name",
+	"tag": "section",
+	"class": "image-collage-section",
+	"disabled_on": {
+		"groups": ["header", "footer"]
+	},
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "full",
+			"default": false,
+			"label": "t:general.layout.full.label"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "select",
+			"id": "image_ratio",
+			"options": [
+				{
+					"value": "adapt",
+					"label": "t:sections.image-collage.settings.image_ratio.options__1.label"
+				},
+				{
+					"value": "portrait",
+					"label": "t:sections.image-collage.settings.image_ratio.options__2.label"
+				},
+				{
+					"value": "square",
+					"label": "t:sections.image-collage.settings.image_ratio.options__3.label"
+				}
+			],
+			"default": "square",
+			"label": "t:sections.image-collage.settings.image_ratio.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.heading.label"
+		},
+		{
+			"type": "select",
+			"id": "header_layout",
+			"options": [
+				{
+					"value": "inside",
+					"label": "t:sections.image-collage.settings.header_layout.options__1.label"
+				},
+				{
+					"value": "outside",
+					"label": "t:sections.image-collage.settings.header_layout.options__2.label"
+				}
+			],
+			"default": "outside",
+			"label": "t:sections.image-collage.settings.header_layout.label"
+		},
+		{
+			"type": "richtext",
+			"id": "heading_text",
+			"default": "<p>Heading</p>",
+			"label": "t:general.typography.text.label"
+		},
+		{
+			"type": "range",
+			"id": "heading_font_size",
+			"min": 10,
+			"max": 100,
+			"step": 1,
+			"default": 48,
+			"unit": "px",
+			"label": "t:general.typography.font_size.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.image-collage.settings.author.label"
+		},
+		{
+			"type": "image_picker",
+			"id": "avatar",
+			"label": "t:sections.image-collage.settings.avatar.label"
+		},
+		{
+			"type": "text",
+			"id": "name",
+			"default": "Some text",
+			"label": "t:sections.image-collage.settings.name.label"
+		},
+		{
+			"type": "text",
+			"id": "position",
+			"default": "Some text",
+			"label": "t:sections.image-collage.settings.position.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.typography.button.label"
+		},
+		{
+			"type": "text",
+			"id": "button_text",
+			"default": "Button label",
+			"label": "t:general.typography.text.label"
+		},
+		{
+			"type": "url",
+			"id": "button_link",
+			"label": "t:general.typography.link.label"
+		},
+		{
+			"type": "header",
+			"content": "t:general.padding.header_padding.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 50,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		},
+		{
+			"type": "paragraph",
+			"content": "t:general.padding.paragraph_mobile.content"
+		},
+		{
+			"type": "range",
+			"id": "padding_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.top.label"
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"default": 20,
+			"unit": "px",
+			"label": "t:general.padding.bottom.label"
+		}
+	],
+		"blocks": [
+		{
+			"type": "@app"
+		},
+		{
+			"type": "image",
+			"name": "t:general.image.label",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "t:general.image.label"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.image-collage.presets.name",
+			"blocks": [
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				}
+			]
+		}
+	]
+}
+{% endschema %}
