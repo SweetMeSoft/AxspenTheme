@@ -1,0 +1,860 @@
+{
+  "gid://shopify/Page/148132397341": {
+    "productIds": [
+      "gid://shopify/Product/9816557879581",
+      "gid://shopify/Product/9816558600477",
+      "gid://shopify/Product/9816558633245",
+      "gid://shopify/Product/9816559059229",
+      "gid://shopify/Product/9816559747357",
+      "gid://shopify/Product/9816559780125",
+      "gid://shopify/Product/9816561647901",
+      "gid://shopify/Product/9816562204957",
+      "gid://shopify/Product/9816568791325",
+      "gid://shopify/Product/9816568824093",
+      "gid://shopify/Product/9816570429725",
+      "gid://shopify/Product/9816570593565",
+      "gid://shopify/Product/9816570790173",
+      "gid://shopify/Product/9816570855709",
+      "gid://shopify/Product/9816571216157",
+      "gid://shopify/Product/9816571281693",
+      "gid://shopify/Product/9816571347229",
+      "gid://shopify/Product/9816571445533",
+      "gid://shopify/Product/9816572461341",
+      "gid://shopify/Product/9816573706525",
+      "gid://shopify/Product/9816573739293",
+      "gid://shopify/Product/9816573804829",
+      "gid://shopify/Product/9816574165277",
+      "gid://shopify/Product/9816574329117",
+      "gid://shopify/Product/9816574853405",
+      "gid://shopify/Product/9816574918941",
+      "gid://shopify/Product/9816576557341",
+      "gid://shopify/Product/9816576852253",
+      "gid://shopify/Product/9816577769757",
+      "gid://shopify/Product/9816578392349",
+      "gid://shopify/Product/9816578457885",
+      "gid://shopify/Product/9816578588957",
+      "gid://shopify/Product/9816580718877",
+      "gid://shopify/Product/9816583667997",
+      "gid://shopify/Product/9816583799069",
+      "gid://shopify/Product/9816584225053",
+      "gid://shopify/Product/9816584519965",
+      "gid://shopify/Product/9816584913181",
+      "gid://shopify/Product/9816584978717",
+      "gid://shopify/Product/9816585109789",
+      "gid://shopify/Product/9816585142557",
+      "gid://shopify/Product/9816585273629",
+      "gid://shopify/Product/9816585339165",
+      "gid://shopify/Product/9816585437469",
+      "gid://shopify/Product/9816585470237",
+      "gid://shopify/Product/9816585568541",
+      "gid://shopify/Product/9816586060061",
+      "gid://shopify/Product/9816586158365",
+      "gid://shopify/Product/9816586289437",
+      "gid://shopify/Product/9816587272477",
+      "gid://shopify/Product/9816587665693",
+      "gid://shopify/Product/9816587763997",
+      "gid://shopify/Product/9816588419357",
+      "gid://shopify/Product/9816588517661",
+      "gid://shopify/Product/9816588550429",
+      "gid://shopify/Product/9816589173021",
+      "gid://shopify/Product/9816590156061",
+      "gid://shopify/Product/9816591073565",
+      "gid://shopify/Product/9816591532317",
+      "gid://shopify/Product/9816591565085",
+      "gid://shopify/Product/9816593105181",
+      "gid://shopify/Product/9816596447517",
+      "gid://shopify/Product/9816597463325",
+      "gid://shopify/Product/9816597692701",
+      "gid://shopify/Product/9816599691549",
+      "gid://shopify/Product/9816600740125",
+      "gid://shopify/Product/9816602116381",
+      "gid://shopify/Product/9816602181917",
+      "gid://shopify/Product/9816602444061",
+      "gid://shopify/Product/9816603754781",
+      "gid://shopify/Product/9816605786397",
+      "gid://shopify/Product/9816606474525",
+      "gid://shopify/Product/9816607260957",
+      "gid://shopify/Product/9816607359261",
+      "gid://shopify/Product/9816607818013",
+      "gid://shopify/Product/9816607883549",
+      "gid://shopify/Product/9816608080157",
+      "gid://shopify/Product/9816608178461",
+      "gid://shopify/Product/9816608342301",
+      "gid://shopify/Product/9816609128733",
+      "gid://shopify/Product/9816609554717",
+      "gid://shopify/Product/9816610079005",
+      "gid://shopify/Product/9816610406685",
+      "gid://shopify/Product/9816610439453",
+      "gid://shopify/Product/9816611258653",
+      "gid://shopify/Product/9816616239389",
+      "gid://shopify/Product/9816616272157",
+      "gid://shopify/Product/9816617517341",
+      "gid://shopify/Product/9816617550109",
+      "gid://shopify/Product/9816617582877",
+      "gid://shopify/Product/9816617615645",
+      "gid://shopify/Product/9816617648413",
+      "gid://shopify/Product/9816623743261",
+      "gid://shopify/Product/9816624464157",
+      "gid://shopify/Product/9816629739805",
+      "gid://shopify/Product/9816631771421",
+      "gid://shopify/Product/9816631869725",
+      "gid://shopify/Product/9816632295709",
+      "gid://shopify/Product/9816632525085",
+      "gid://shopify/Product/9816632983837",
+      "gid://shopify/Product/9816633049373",
+      "gid://shopify/Product/9816633442589",
+      "gid://shopify/Product/9816633770269",
+      "gid://shopify/Product/9816633803037",
+      "gid://shopify/Product/9816635015453",
+      "gid://shopify/Product/9816635834653",
+      "gid://shopify/Product/9816636031261",
+      "gid://shopify/Product/9816636129565",
+      "gid://shopify/Product/9816636621085",
+      "gid://shopify/Product/9816636686621",
+      "gid://shopify/Product/9816637407517",
+      "gid://shopify/Product/9816637669661",
+      "gid://shopify/Product/9816638325021",
+      "gid://shopify/Product/9816640061725",
+      "gid://shopify/Product/9816640094493",
+      "gid://shopify/Product/9816645173533",
+      "gid://shopify/Product/9816645271837",
+      "gid://shopify/Product/9816645370141",
+      "gid://shopify/Product/9816645468445",
+      "gid://shopify/Product/9816645566749",
+      "gid://shopify/Product/9816680923421",
+      "gid://shopify/Product/9816681414941",
+      "gid://shopify/Product/9816682430749",
+      "gid://shopify/Product/9816682594589",
+      "gid://shopify/Product/9816684462365",
+      "gid://shopify/Product/9816685936925",
+      "gid://shopify/Product/9816686461213",
+      "gid://shopify/Product/9816687444253",
+      "gid://shopify/Product/9816702681373",
+      "gid://shopify/Product/9816703041821",
+      "gid://shopify/Product/9816703172893",
+      "gid://shopify/Product/9816704123165",
+      "gid://shopify/Product/9816704254237",
+      "gid://shopify/Product/9816704352541",
+      "gid://shopify/Product/9816705794333",
+      "gid://shopify/Product/9816705859869",
+      "gid://shopify/Product/9816706023709",
+      "gid://shopify/Product/9816707039517",
+      "gid://shopify/Product/9816707301661",
+      "gid://shopify/Product/9816714248477",
+      "gid://shopify/Product/9816714445085",
+      "gid://shopify/Product/9816715460893",
+      "gid://shopify/Product/9816715657501",
+      "gid://shopify/Product/9816720408861",
+      "gid://shopify/Product/9816724635933",
+      "gid://shopify/Product/9816724865309",
+      "gid://shopify/Product/9817386352925",
+      "gid://shopify/Product/9819930984733",
+      "gid://shopify/Product/9828603494685",
+      "gid://shopify/Product/9832194015517",
+      "gid://shopify/Product/9838151205149",
+      "gid://shopify/Product/9848501469469",
+      "gid://shopify/Product/9848503468317",
+      "gid://shopify/Product/9848516837661",
+      "gid://shopify/Product/9848976703773",
+      "gid://shopify/Product/9858360541469",
+      "gid://shopify/Product/9866810818845",
+      "gid://shopify/Product/9867463229725",
+      "gid://shopify/Product/9868724011293",
+      "gid://shopify/Product/9868730171677",
+      "gid://shopify/Product/9874757812509",
+      "gid://shopify/Product/9889797505309",
+      "gid://shopify/Product/9889798422813",
+      "gid://shopify/Product/9889800192285",
+      "gid://shopify/Product/9902085439773",
+      "gid://shopify/Product/9903981265181",
+      "gid://shopify/Product/9903985590557",
+      "gid://shopify/Product/9903989752093",
+      "gid://shopify/Product/9919160451357",
+      "gid://shopify/Product/9920592249117",
+      "gid://shopify/Product/9936953180445",
+      "gid://shopify/Product/9936958226717",
+      "gid://shopify/Product/9936961765661",
+      "gid://shopify/Product/9936965140765",
+      "gid://shopify/Product/9940451688733",
+      "gid://shopify/Product/9944639308061",
+      "gid://shopify/Product/9944657658141",
+      "gid://shopify/Product/9947727986973",
+      "gid://shopify/Product/9958333546781",
+      "gid://shopify/Product/9962133192989",
+      "gid://shopify/Product/9962218422557",
+      "gid://shopify/Product/9962220945693",
+      "gid://shopify/Product/9963012456733",
+      "gid://shopify/Product/9978811711773",
+      "gid://shopify/Product/9978812072221",
+      "gid://shopify/Product/9978812694813",
+      "gid://shopify/Product/9978818429213",
+      "gid://shopify/Product/9980070953245",
+      "gid://shopify/Product/9980100673821",
+      "gid://shopify/Product/9980102836509",
+      "gid://shopify/Product/9980103131421",
+      "gid://shopify/Product/9980115222813",
+      "gid://shopify/Product/9982701797661",
+      "gid://shopify/Product/9982714020125",
+      "gid://shopify/Product/9986680193309",
+      "gid://shopify/Product/9986700411165",
+      "gid://shopify/Product/9986774499613",
+      "gid://shopify/Product/9990678577437",
+      "gid://shopify/Product/9990756696349",
+      "gid://shopify/Product/9990876037405",
+      "gid://shopify/Product/9990957596957",
+      "gid://shopify/Product/9991018774813",
+      "gid://shopify/Product/9996081529117",
+      "gid://shopify/Product/9997040091421",
+      "gid://shopify/Product/9997040648477",
+      "gid://shopify/Product/9997040845085",
+      "gid://shopify/Product/10003703660829",
+      "gid://shopify/Product/10009370460445",
+      "gid://shopify/Product/10009432129821",
+      "gid://shopify/Product/10009744015645",
+      "gid://shopify/Product/10009786188061",
+      "gid://shopify/Product/10009787498781",
+      "gid://shopify/Product/10009788612893",
+      "gid://shopify/Product/10009792610589",
+      "gid://shopify/Product/10009799131421",
+      "gid://shopify/Product/10014211473693",
+      "gid://shopify/Product/10022429622557",
+      "gid://shopify/Product/10026826334493",
+      "gid://shopify/Product/10026826432797",
+      "gid://shopify/Product/10035901628701",
+      "gid://shopify/Product/10035901792541",
+      "gid://shopify/Product/10038390096157",
+      "gid://shopify/Product/10038397993245",
+      "gid://shopify/Product/10038398550301",
+      "gid://shopify/Product/10038400385309",
+      "gid://shopify/Product/10038415851805",
+      "gid://shopify/Product/10038416933149",
+      "gid://shopify/Product/10038422602013",
+      "gid://shopify/Product/10038426206493",
+      "gid://shopify/Product/10038454812957",
+      "gid://shopify/Product/10038458450205",
+      "gid://shopify/Product/10041942016285",
+      "gid://shopify/Product/10041953976605",
+      "gid://shopify/Product/10041957056797",
+      "gid://shopify/Product/10050328101149",
+      "gid://shopify/Product/10051387195677",
+      "gid://shopify/Product/10051389915421",
+      "gid://shopify/Product/10051397222685",
+      "gid://shopify/Product/10054412599581",
+      "gid://shopify/Product/10054412697885",
+      "gid://shopify/Product/10056376975645",
+      "gid://shopify/Product/10056377663773",
+      "gid://shopify/Product/10056378319133",
+      "gid://shopify/Product/10065988583709",
+      "gid://shopify/Product/10065994678557",
+      "gid://shopify/Product/10067673350429",
+      "gid://shopify/Product/10067679019293",
+      "gid://shopify/Product/10071076864285",
+      "gid://shopify/Product/10071077552413",
+      "gid://shopify/Product/10071081222429",
+      "gid://shopify/Product/10095893610781",
+      "gid://shopify/Product/10095901770013",
+      "gid://shopify/Product/10095904129309",
+      "gid://shopify/Product/10096203366685",
+      "gid://shopify/Product/10096205889821",
+      "gid://shopify/Product/10096275849501",
+      "gid://shopify/Product/10096327688477",
+      "gid://shopify/Product/10108171682077",
+      "gid://shopify/Product/10144739066141",
+      "gid://shopify/Product/10147925426461",
+      "gid://shopify/Product/10147945447709",
+      "gid://shopify/Product/10148052271389",
+      "gid://shopify/Product/10148128227613",
+      "gid://shopify/Product/10148157325597",
+      "gid://shopify/Product/10148190880029",
+      "gid://shopify/Product/10156107366685",
+      "gid://shopify/Product/10156140167453",
+      "gid://shopify/Product/10156154323229",
+      "gid://shopify/Product/10174415569181",
+      "gid://shopify/Product/10177740013853",
+      "gid://shopify/Product/10179474620701",
+      "gid://shopify/Product/10179479568669",
+      "gid://shopify/Product/10179582886173",
+      "gid://shopify/Product/10180239098141",
+      "gid://shopify/Product/10184540520733",
+      "gid://shopify/Product/10184558870813",
+      "gid://shopify/Product/10184585543965",
+      "gid://shopify/Product/10201012601117",
+      "gid://shopify/Product/10239726551325",
+      "gid://shopify/Product/10264758059293"
+    ],
+    "pageTitle": "GUIA DE TALLAS WIDE LEG ( Horma reducida)",
+    "pageHandle": "guia-de-tallas-wide-leg",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/GUIA_TALLAS_WIDE-LEG-AX.jpg?v=1744732428"
+  },
+  "gid://shopify/Page/148132495645": {
+    "productIds": [
+      "gid://shopify/Product/9816559485213",
+      "gid://shopify/Product/9816561516829",
+      "gid://shopify/Product/9816561680669",
+      "gid://shopify/Product/9816574263581",
+      "gid://shopify/Product/9816575869213",
+      "gid://shopify/Product/9816576164125",
+      "gid://shopify/Product/9816576196893",
+      "gid://shopify/Product/9816576590109",
+      "gid://shopify/Product/9816577442077",
+      "gid://shopify/Product/9816577638685",
+      "gid://shopify/Product/9816577900829",
+      "gid://shopify/Product/9816577966365",
+      "gid://shopify/Product/9816578523421",
+      "gid://shopify/Product/9816579178781",
+      "gid://shopify/Product/9816582488349",
+      "gid://shopify/Product/9816583143709",
+      "gid://shopify/Product/9816583438621",
+      "gid://shopify/Product/9816585732381",
+      "gid://shopify/Product/9816586027293",
+      "gid://shopify/Product/9816605753629",
+      "gid://shopify/Product/9816606867741",
+      "gid://shopify/Product/9816644682013",
+      "gid://shopify/Product/9816713232669",
+      "gid://shopify/Product/9867411816733",
+      "gid://shopify/Product/9867413717277",
+      "gid://shopify/Product/9867414733085",
+      "gid://shopify/Product/10067686883613",
+      "gid://shopify/Product/10107609153821",
+      "gid://shopify/Product/10132988428573",
+      "gid://shopify/Product/10156123652381",
+      "gid://shopify/Product/10156129091869",
+      "gid://shopify/Product/10224672604445"
+    ],
+    "pageTitle": "GUIA DE TALLAS SKINNY",
+    "pageHandle": "guia-de-tallas-skinny",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/GUIA_TALLAS_SKINNY-AX.jpg?v=1744732428"
+  },
+  "gid://shopify/Page/148137214237": {
+    "productIds": [
+      "gid://shopify/Product/9816560337181",
+      "gid://shopify/Product/9816560566557",
+      "gid://shopify/Product/9816568856861",
+      "gid://shopify/Product/9816568955165",
+      "gid://shopify/Product/9816569479453",
+      "gid://shopify/Product/9816570954013",
+      "gid://shopify/Product/9816575148317",
+      "gid://shopify/Product/9816577704221",
+      "gid://shopify/Product/9816577835293",
+      "gid://shopify/Product/9816578326813",
+      "gid://shopify/Product/9816579408157",
+      "gid://shopify/Product/9816582062365",
+      "gid://shopify/Product/9816582553885",
+      "gid://shopify/Product/9816583176477",
+      "gid://shopify/Product/9816585371933",
+      "gid://shopify/Product/9816587206941",
+      "gid://shopify/Product/9816588255517",
+      "gid://shopify/Product/9816591630621",
+      "gid://shopify/Product/9816599920925",
+      "gid://shopify/Product/9816601133341",
+      "gid://shopify/Product/9816601526557",
+      "gid://shopify/Product/9816601592093",
+      "gid://shopify/Product/9816601624861",
+      "gid://shopify/Product/9816604279069",
+      "gid://shopify/Product/9816606540061",
+      "gid://shopify/Product/9816606933277",
+      "gid://shopify/Product/9816606966045",
+      "gid://shopify/Product/9816607031581",
+      "gid://shopify/Product/9816607097117",
+      "gid://shopify/Product/9816607129885",
+      "gid://shopify/Product/9816607162653",
+      "gid://shopify/Product/9816607228189",
+      "gid://shopify/Product/9816607326493",
+      "gid://shopify/Product/9816607916317",
+      "gid://shopify/Product/9816609095965",
+      "gid://shopify/Product/9816609161501",
+      "gid://shopify/Product/9816609325341",
+      "gid://shopify/Product/9816609358109",
+      "gid://shopify/Product/9816609390877",
+      "gid://shopify/Product/9816611782941",
+      "gid://shopify/Product/9816618303773",
+      "gid://shopify/Product/9816620826909",
+      "gid://shopify/Product/9816620859677",
+      "gid://shopify/Product/9816623841565",
+      "gid://shopify/Product/9816623874333",
+      "gid://shopify/Product/9816623939869",
+      "gid://shopify/Product/9816630493469",
+      "gid://shopify/Product/9816726372637",
+      "gid://shopify/Product/9816728207645",
+      "gid://shopify/Product/9848546033949",
+      "gid://shopify/Product/9874755191069",
+      "gid://shopify/Product/9874761974045",
+      "gid://shopify/Product/9897459908893",
+      "gid://shopify/Product/9958321029405",
+      "gid://shopify/Product/9979338916125",
+      "gid://shopify/Product/10003263521053",
+      "gid://shopify/Product/10147934372125",
+      "gid://shopify/Product/10148070949149",
+      "gid://shopify/Product/10148104929565",
+      "gid://shopify/Product/10179462856989"
+    ],
+    "pageTitle": "GUIA DE TALLAS CARGO",
+    "pageHandle": "guia-de-tallas-cargo",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/CARGO-AX.jpg?v=1746741691"
+  },
+  "gid://shopify/Page/149650931997": {
+    "productIds": [
+      "gid://shopify/Product/9816561582365",
+      "gid://shopify/Product/10182294372637",
+      "gid://shopify/Product/10184571388189",
+      "gid://shopify/Product/10184580071709",
+      "gid://shopify/Product/10201831571741"
+    ],
+    "pageTitle": "JEAN WIDE LEG RIGIDO",
+    "pageHandle": "jean-wide-leg-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/wide_leg_rigido.jpg?v=1750957500"
+  },
+  "gid://shopify/Page/148132200733": {
+    "productIds": [
+      "gid://shopify/Product/9816561713437",
+      "gid://shopify/Product/9816563712285",
+      "gid://shopify/Product/9816568725789",
+      "gid://shopify/Product/9816570003741",
+      "gid://shopify/Product/9816570462493",
+      "gid://shopify/Product/9816570757405",
+      "gid://shopify/Product/9816570822941",
+      "gid://shopify/Product/9816571379997",
+      "gid://shopify/Product/9816572985629",
+      "gid://shopify/Product/9816573215005",
+      "gid://shopify/Product/9816574394653",
+      "gid://shopify/Product/9816578064669",
+      "gid://shopify/Product/9816578359581",
+      "gid://shopify/Product/9816578556189",
+      "gid://shopify/Product/9816582160669",
+      "gid://shopify/Product/9816585601309",
+      "gid://shopify/Product/9816587403549",
+      "gid://shopify/Product/9816587469085",
+      "gid://shopify/Product/9816587600157",
+      "gid://shopify/Product/9816616829213",
+      "gid://shopify/Product/9816622891293",
+      "gid://shopify/Product/9816660246813",
+      "gid://shopify/Product/9816709955869",
+      "gid://shopify/Product/9828474814749",
+      "gid://shopify/Product/9828530946333",
+      "gid://shopify/Product/9868718833949",
+      "gid://shopify/Product/9899077828893",
+      "gid://shopify/Product/9899101880605",
+      "gid://shopify/Product/9903979430173",
+      "gid://shopify/Product/10071114776861",
+      "gid://shopify/Product/10071115137309",
+      "gid://shopify/Product/10132994883869",
+      "gid://shopify/Product/10239721439517"
+    ],
+    "pageTitle": "GUIA DE TALLAS MOM FIT",
+    "pageHandle": "guia-de-tallas-mom-fit",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/GUIA_TALLAS_MOM-FIT-AX.jpg?v=1744732429"
+  },
+  "gid://shopify/Page/148065452317": {
+    "productIds": [
+      "gid://shopify/Product/9816568758557",
+      "gid://shopify/Product/9816578687261",
+      "gid://shopify/Product/9866811965725",
+      "gid://shopify/Product/9874760761629",
+      "gid://shopify/Product/9874764988701",
+      "gid://shopify/Product/9889796489501",
+      "gid://shopify/Product/9899908366621",
+      "gid://shopify/Product/9904588587293",
+      "gid://shopify/Product/9919180833053",
+      "gid://shopify/Product/9944655528221",
+      "gid://shopify/Product/9977667453213",
+      "gid://shopify/Product/9982775296285",
+      "gid://shopify/Product/10038414541085",
+      "gid://shopify/Product/10066093965597",
+      "gid://shopify/Product/10147892953373",
+      "gid://shopify/Product/10148011016477",
+      "gid://shopify/Product/10148176068893",
+      "gid://shopify/Product/10200990908701",
+      "gid://shopify/Product/10224679190813"
+    ],
+    "pageTitle": "GUIA DE TALLAS JEAN BALLOON",
+    "pageHandle": "guia-de-tallas-jean-balloon",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/GUIA_TALLAS_BALLOON-AX.jpg?v=1744732429"
+  },
+  "gid://shopify/Page/148132528413": {
+    "productIds": [
+      "gid://shopify/Product/9816571150621",
+      "gid://shopify/Product/9816571183389",
+      "gid://shopify/Product/9816577540381",
+      "gid://shopify/Product/9850630963485",
+      "gid://shopify/Product/9883042414877",
+      "gid://shopify/Product/9936902553885",
+      "gid://shopify/Product/10026823221533",
+      "gid://shopify/Product/10041948602653",
+      "gid://shopify/Product/10050466185501",
+      "gid://shopify/Product/10056372027677",
+      "gid://shopify/Product/10056374092061",
+      "gid://shopify/Product/10056374681885",
+      "gid://shopify/Product/10056375828765",
+      "gid://shopify/Product/10056428355869",
+      "gid://shopify/Product/10108056961309",
+      "gid://shopify/Product/10108085502237",
+      "gid://shopify/Product/10179468591389",
+      "gid://shopify/Product/10179580461341",
+      "gid://shopify/Product/10201833472285",
+      "gid://shopify/Product/10224675258653"
+    ],
+    "pageTitle": "GUIA DE TALLAS FLARE",
+    "pageHandle": "guia-de-tallas-flare",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/GUIA_TALLAS_FLARE-AX.jpg?v=1744732428"
+  },
+  "gid://shopify/Page/149126643997": {
+    "productIds": [
+      "gid://shopify/Product/9816571478301",
+      "gid://shopify/Product/9816571543837",
+      "gid://shopify/Product/9816571609373",
+      "gid://shopify/Product/9816717754653",
+      "gid://shopify/Product/9853796417821",
+      "gid://shopify/Product/9986770043165"
+    ],
+    "pageTitle": "GUIA DE TALLAS JEAN HOMBRE CARGO",
+    "pageHandle": "guia-de-tallas-jean-hombre-cargo",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/IMG-20250605-WA0004.jpg?v=1749218869"
+  },
+  "gid://shopify/Page/150224863517": {
+    "productIds": [
+      "gid://shopify/Product/9816576229661",
+      "gid://shopify/Product/9816576950557",
+      "gid://shopify/Product/9816728076573",
+      "gid://shopify/Product/9849999851805",
+      "gid://shopify/Product/10107609514269",
+      "gid://shopify/Product/10132982169885",
+      "gid://shopify/Product/10147901374749",
+      "gid://shopify/Product/10147912450333",
+      "gid://shopify/Product/10147976184093",
+      "gid://shopify/Product/10203071349021"
+    ],
+    "pageTitle": "GUIA DE TALLAS MOM FIT SLIM",
+    "pageHandle": "guia-de-tallas-mom-fit-slim",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/guia_de_tallas_mom_slim.jpg?v=1752273041"
+  },
+  "gid://shopify/Page/149126545693": {
+    "productIds": [
+      "gid://shopify/Product/9816618828061",
+      "gid://shopify/Product/9816618959133",
+      "gid://shopify/Product/9816618991901",
+      "gid://shopify/Product/9816619024669",
+      "gid://shopify/Product/9816619090205",
+      "gid://shopify/Product/9816619122973",
+      "gid://shopify/Product/9816619155741",
+      "gid://shopify/Product/9816619188509",
+      "gid://shopify/Product/9816619221277",
+      "gid://shopify/Product/9816720867613",
+      "gid://shopify/Product/9854127833373",
+      "gid://shopify/Product/9920908296477",
+      "gid://shopify/Product/9920922288413",
+      "gid://shopify/Product/10186514039069",
+      "gid://shopify/Product/10187766137117",
+      "gid://shopify/Product/10187872043293"
+    ],
+    "pageTitle": "GUIA DE TALLAS HOMBRE STRAIGHT",
+    "pageHandle": "guia-de-tallas-hombre-straight",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/IMG-20250605-WA0006.jpg?v=1749218869"
+  },
+  "gid://shopify/Page/149126578461": {
+    "productIds": [
+      "gid://shopify/Product/9816638619933",
+      "gid://shopify/Product/9816638751005",
+      "gid://shopify/Product/9816647762205",
+      "gid://shopify/Product/9816678727965",
+      "gid://shopify/Product/9816683020573",
+      "gid://shopify/Product/9816697930013",
+      "gid://shopify/Product/9816705335581",
+      "gid://shopify/Product/9816706711837",
+      "gid://shopify/Product/9816708350237",
+      "gid://shopify/Product/9816727945501",
+      "gid://shopify/Product/9920915570973"
+    ],
+    "pageTitle": "GUIA DE TALLAS JEAN HOMBRE SKINNY",
+    "pageHandle": "guia-de-tallas-jean-hombre-skinny",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/IMG-20250605-WA0005.jpg?v=1749218868"
+  },
+  "gid://shopify/Page/158867620125": {
+    "productIds": [
+      "gid://shopify/Product/9848494653725"
+    ],
+    "pageTitle": "JEAN WIDE LEG 2704 RIGIDO",
+    "pageHandle": "jean-wide-leg-2704-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/2704.jpg?v=1776459670"
+  },
+  "gid://shopify/Page/158339006749": {
+    "productIds": [
+      "gid://shopify/Product/9848496554269"
+    ],
+    "pageTitle": "WIDE LEG 2685 RIGIDO",
+    "pageHandle": "wide-leg-2685-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/PLANTILLA_-_GUIA_DE_TALLAS_12__jpg.jpg?v=1774725002"
+  },
+  "gid://shopify/Page/149126480157": {
+    "productIds": [
+      "gid://shopify/Product/9854125834525",
+      "gid://shopify/Product/9854130094365",
+      "gid://shopify/Product/9858592964893",
+      "gid://shopify/Product/9919244402973",
+      "gid://shopify/Product/10067683344669",
+      "gid://shopify/Product/10111093506333",
+      "gid://shopify/Product/10111094096157",
+      "gid://shopify/Product/10111100649757",
+      "gid://shopify/Product/10186472292637",
+      "gid://shopify/Product/10186501030173",
+      "gid://shopify/Product/10187779604765",
+      "gid://shopify/Product/10187819122973",
+      "gid://shopify/Product/10187823677725",
+      "gid://shopify/Product/10187850940701",
+      "gid://shopify/Product/10187854053661",
+      "gid://shopify/Product/10187863064861",
+      "gid://shopify/Product/10187865194781",
+      "gid://shopify/Product/10187868438813"
+    ],
+    "pageTitle": "GUIA DE TALLA HOMBRE BAGGY",
+    "pageHandle": "guia-de-talla-hombre-baggy",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/IMG-20250605-WA0003.jpg?v=1749218868"
+  },
+  "gid://shopify/Page/158867587357": {
+    "productIds": [
+      "gid://shopify/Product/9857847689501"
+    ],
+    "pageTitle": "JEAN WIDE LEG 2718 RIGIDO",
+    "pageHandle": "jean-wide-leg-2718-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/2718.jpg?v=1776459671"
+  },
+  "gid://shopify/Page/158338941213": {
+    "productIds": [
+      "gid://shopify/Product/9874756469021"
+    ],
+    "pageTitle": "WIDE LEG 2710 RIGIDO",
+    "pageHandle": "wide-leg-2710-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/PLANTILLA_-_GUIA_DE_TALLAS_11__jpg.jpg?v=1774725002"
+  },
+  "gid://shopify/Page/158865490205": {
+    "productIds": [
+      "gid://shopify/Product/9903987753245"
+    ],
+    "pageTitle": "JEAN WIDE LEG 2810 RIGIDO",
+    "pageHandle": "jean-wide-leg-2810-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/2810.jpg?v=1776459670"
+  },
+  "gid://shopify/Page/158338777373": {
+    "productIds": [
+      "gid://shopify/Product/9905914708253"
+    ],
+    "pageTitle": "WIDE LEG 2747 RIGIDO",
+    "pageHandle": "wide-leg-2747-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/PLANTILLA_-_GUIA_DE_TALLAS_10__jpg.jpg?v=1774725002"
+  },
+  "gid://shopify/Page/158095900957": {
+    "productIds": [
+      "gid://shopify/Product/10009379340573"
+    ],
+    "pageTitle": "WIDE LEG 2885 LICRADO",
+    "pageHandle": "wide-leg-2885-licrado",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/8.jpg?v=1773872572"
+  },
+  "gid://shopify/Page/158865883421": {
+    "productIds": [
+      "gid://shopify/Product/10038460154141"
+    ],
+    "pageTitle": "JEAN WIDE LEG 2835 RIGIDO",
+    "pageHandle": "jean-wide-leg-2835-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/2835.jpg?v=1776459671"
+  },
+  "gid://shopify/Page/158868013341": {
+    "productIds": [
+      "gid://shopify/Product/10051400204573"
+    ],
+    "pageTitle": "JEAN WIDE LEG 2936 LICRADO",
+    "pageHandle": "jean-wide-leg-2936-licrado",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/2936.jpg?v=1776459671"
+  },
+  "gid://shopify/Page/158867783965": {
+    "productIds": [
+      "gid://shopify/Product/10056384839965"
+    ],
+    "pageTitle": "JEAN WIDE LEG 2547 RIGIDO",
+    "pageHandle": "jean-wide-leg-2547-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/2547_bf00ef01-4cea-4e94-956c-c70a8e109cb3.jpg?v=1776459670"
+  },
+  "gid://shopify/Page/158867521821": {
+    "productIds": [
+      "gid://shopify/Product/10066113233181"
+    ],
+    "pageTitle": "JEAN WIDE LEG 2788 LICRADO",
+    "pageHandle": "jean-wide-leg-2788-licrado",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/2788.jpg?v=1776459670"
+  },
+  "gid://shopify/Page/158867882269": {
+    "productIds": [
+      "gid://shopify/Product/10066123915549"
+    ],
+    "pageTitle": "JEAN WIDE LEG 2890 RIGIDO",
+    "pageHandle": "jean-wide-leg-2890-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/2890_9a940ec8-98f5-4ca4-80a1-2275f1dd2c94.jpg?v=1776459671"
+  },
+  "gid://shopify/Page/158867915037": {
+    "productIds": [
+      "gid://shopify/Product/10067127828765"
+    ],
+    "pageTitle": "JEAN WIDE LEG 2829 LICRADO",
+    "pageHandle": "jean-wide-leg-2829",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/2829.jpg?v=1776459671"
+  },
+  "gid://shopify/Page/158866833693": {
+    "productIds": [
+      "gid://shopify/Product/10069328691485"
+    ],
+    "pageTitle": "JEAN WIDE LEG 2977 RIGIDO",
+    "pageHandle": "jean-wide-leg-2977-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/2977.jpg?v=1776459671"
+  },
+  "gid://shopify/Page/158868078877": {
+    "productIds": [
+      "gid://shopify/Product/10071114285341"
+    ],
+    "pageTitle": "JEAN WIDE LEG 2946 LICRADO",
+    "pageHandle": "jean-wide-leg-2946",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/2946.jpg?v=1776459671"
+  },
+  "gid://shopify/Page/158337958173": {
+    "productIds": [
+      "gid://shopify/Product/10072021598493"
+    ],
+    "pageTitle": "STRIGHT 2990 RIGIDO",
+    "pageHandle": "stright-2990-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/PLANTILLA_-_GUIA_DE_TALLAS_9__jpg.jpg?v=1774724120"
+  },
+  "gid://shopify/Page/158338122013": {
+    "productIds": [
+      "gid://shopify/Product/10079872352541"
+    ],
+    "pageTitle": "WIDE LEG  2958 LICRADO",
+    "pageHandle": "wide-leg-2958-licrado",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/PLANTILLA_-_GUIA_DE_TALLAS_8__jpg.jpg?v=1774725002"
+  },
+  "gid://shopify/Page/158338482461": {
+    "productIds": [
+      "gid://shopify/Product/10091898536221"
+    ],
+    "pageTitle": "WIDE LEG 3007 LICRADO",
+    "pageHandle": "wide-leg-3007-licrado",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/PLANTILLA_-_GUIA_DE_TALLAS_7__jpg.jpg?v=1774725002"
+  },
+  "gid://shopify/Page/158337859869": {
+    "productIds": [
+      "gid://shopify/Product/10092562088221"
+    ],
+    "pageTitle": "WIDE LEG 3024 LICRADO",
+    "pageHandle": "wide-leg-3024-licrado",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/PLANTILLA_-_GUIA_DE_TALLAS_5__jpg.jpg?v=1774723769"
+  },
+  "gid://shopify/Page/157545333021": {
+    "productIds": [
+      "gid://shopify/Product/10095896723741"
+    ],
+    "pageTitle": "WIDE LEG 2965 LICRADO",
+    "pageHandle": "wide-leg-2965-licrado",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/WhatsApp_Image_2026-02-25_at_12.41.45.jpg?v=1772054483"
+  },
+  "gid://shopify/Page/157574103325": {
+    "productIds": [
+      "gid://shopify/Product/10095899869469"
+    ],
+    "pageTitle": "WIDE LEG 2994 LICRADO",
+    "pageHandle": "copia-de-wide-leg-2929-rigido-1",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/WhatsApp_Image_2026-02-25_at_17.21.03_1.jpg?v=1772145943"
+  },
+  "gid://shopify/Page/157574005021": {
+    "productIds": [
+      "gid://shopify/Product/10095900459293"
+    ],
+    "pageTitle": "WIDE LEG 2858 LICRADO",
+    "pageHandle": "copia-de-wide-leg-2929-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/WhatsApp_Image_2026-02-25_at_17.21.03_2.jpg?v=1772145942"
+  },
+  "gid://shopify/Page/157574234397": {
+    "productIds": [
+      "gid://shopify/Product/10095905833245"
+    ],
+    "pageTitle": "WIDE LEG 2978 RIGIDO",
+    "pageHandle": "wide-leg-2978-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/WhatsApp_Image_2026-02-25_at_17.21.04.jpg?v=1772145942"
+  },
+  "gid://shopify/Page/157573906717": {
+    "productIds": [
+      "gid://shopify/Product/10096270016797"
+    ],
+    "pageTitle": "WIDE LEG 2996 RIGIDO",
+    "pageHandle": "wide-leg-2996-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/WhatsApp_Image_2026-02-25_at_17.21.01.jpg?v=1772145942"
+  },
+  "gid://shopify/Page/157574267165": {
+    "productIds": [
+      "gid://shopify/Product/10096273326365"
+    ],
+    "pageTitle": "WIDE LEG 2930 RIGIDO",
+    "pageHandle": "wide-leg-2930-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/WhatsApp_Image_2026-02-25_at_17.21.04_1.jpg?v=1772145943"
+  },
+  "gid://shopify/Page/158339137821": {
+    "productIds": [
+      "gid://shopify/Product/10096277586205"
+    ],
+    "pageTitle": "WIDE LEG 2924 RIGIDO",
+    "pageHandle": "wide-leg-2924-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/PLANTILLA_-_GUIA_DE_TALLAS_4__jpg.jpg?v=1774725001"
+  },
+  "gid://shopify/Page/157573972253": {
+    "productIds": [
+      "gid://shopify/Product/10096316154141"
+    ],
+    "pageTitle": "WIDE LEG 2929 RIGIDO",
+    "pageHandle": "wide-leg-2929-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/WhatsApp_Image_2026-02-25_at_17.21.02.jpg?v=1772145942"
+  },
+  "gid://shopify/Page/158339203357": {
+    "productIds": [
+      "gid://shopify/Product/10096325329181"
+    ],
+    "pageTitle": "MOM FIT  3006 RIGIDO",
+    "pageHandle": "mom-fit-3006-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/MOM_FIT-AX_jpg.jpg?v=1774726303"
+  },
+  "gid://shopify/Page/158094557469": {
+    "productIds": [
+      "gid://shopify/Product/10096328605981"
+    ],
+    "pageTitle": "WIDE LEG 2980 RIGIDO",
+    "pageHandle": "copia-de-wide-leg-2980-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/WhatsApp_Image_2026-02-25_at_17.21.03_91fc6dc5-c40a-482d-ade5-92261b297001.jpg?v=1773867881"
+  },
+  "gid://shopify/Page/151444783389": {
+    "productIds": [
+      "gid://shopify/Product/10107623735581"
+    ],
+    "pageTitle": "Jean Wide Leg LIcrado",
+    "pageHandle": "jean-wide-leg-licrado",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/wide_leg_licrado.jpg?v=1754943020"
+  },
+  "gid://shopify/Page/158339039517": {
+    "productIds": [
+      "gid://shopify/Product/10108050571549"
+    ],
+    "pageTitle": "WIDE LEG 2921 RIGIDO",
+    "pageHandle": "wide-leg-2921-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/PLANTILLA_-_GUIA_DE_TALLAS_1__jpg.jpg?v=1774725002"
+  },
+  "gid://shopify/Page/158339105053": {
+    "productIds": [
+      "gid://shopify/Product/10132973093149"
+    ],
+    "pageTitle": "WIDE LEG 3026 RIGIDO",
+    "pageHandle": "wide-leg-3026-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/PLANTILLA_-_GUIA_DE_TALLAS_3__jpg.jpg?v=1774725002"
+  },
+  "gid://shopify/Page/158095573277": {
+    "productIds": [
+      "gid://shopify/Product/10133000356125"
+    ],
+    "pageTitle": "WIDE LEG 3002 RIGIDO",
+    "pageHandle": "wide-leg-3002-rigido",
+    "imagenUrl": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/PLANTILLA_-_GUIA_DE_TALLAS_1.jpg?v=1773871884"
+  }
+}

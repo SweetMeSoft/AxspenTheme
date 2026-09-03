@@ -1,0 +1,337 @@
+{% comment %}
+  Plantilla: Mis Tiendas
+  Compatible con Páginas, Snippets y Bloques HTML de Shopify.
+{% endcomment %}
+
+{% assign stores_data = "Ferias|Calle 72 # 69M – 33,Centro Comercial Plaza Imperial|Cra. 104 #148 – 07 local 1-46,Centro Comercial Ventura Terreros|Carrera 1 # 38 – 53 Tienda 2-41,Bosa|Kra 80c 65-29 sur,San Mateo|AC 30 # 1-30,Venecia|Diagonal 45 # 53 – 43 sur,Centro Comercial Salitre Plaza|Cra 68b #24-39 Local 168,Centro Comercial Hayuelos|Calle 20 # 82- 52 Local 2-74,Perdomo|Calle 63 sur #71h-15 Barrio perdomo,Centro Comercial Plaza de las Américas|Calle 6 sur #71D-43,Centro Comercial Nuestro Bogotá|Ak 86 # 55A – 75 Local L2-017" | split: "," %}
+
+<div class="our-stores-wrapper">
+  <div class="our-stores-container">
+    
+    <!-- Encabezado -->
+    <header class="our-stores-header">
+      <h1 class="our-stores-title">Nuestras Tiendas</h1>
+      <p class="our-stores-subtitle">Encuentra la tienda física más cercana y visítanos.</p>
+
+      <!-- Buscador -->
+      <div class="store-search-box">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input 
+          type="text" 
+          id="storeSearchInput" 
+          class="store-search-input" 
+          placeholder="Buscar por nombre o dirección..." 
+          aria-label="Buscar tienda"
+        />
+      </div>
+    </header>
+
+    <!-- Grid de Tiendas -->
+    <div class="stores-grid" id="storesGrid">
+      {% for item in stores_data %}
+        {% assign store = item | split: "|" %}
+        {% assign store_name = store[0] %}
+        {% assign store_address = store[1] %}
+        {% assign query_address = store_name | append: ' ' | append: store_address | append: ' Colombia' | url_encode %}
+
+        <article class="store-card" data-name="{{ store_name | downcase }}" data-address="{{ store_address | downcase }}">
+          
+          <div class="store-card-header">
+            <h2 class="store-name">{{ store_name }}</h2>
+          </div>
+
+          <!-- Mapa con ubicación -->
+          <div class="store-map-wrapper">
+            <iframe 
+              title="Mapa de {{ store_name }}"
+              src="https://maps.google.com/maps?q={{ query_address }}&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              class="store-map-iframe"
+              loading="lazy" 
+              allowfullscreen="" 
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+
+          <!-- Dirección -->
+          <div class="store-card-body">
+            <div class="store-info-row">
+              <svg class="store-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span class="store-address-text">{{ store_address }}</span>
+            </div>
+          </div>
+
+          <!-- Botones -->
+          <div class="store-card-footer">
+            <a 
+              href="https://www.google.com/maps/search/?api=1&query={{ query_address }}" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="btn-store btn-primary"
+            >
+              <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              Cómo llegar
+            </a>
+
+            <button 
+              type="button" 
+              class="btn-store btn-secondary copy-btn" 
+              data-copy="{{ store_address }}"
+              title="Copiar dirección"
+            >
+              <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+
+        </article>
+      {% endfor %}
+    </div>
+
+    <div id="noResults" class="stores-no-results" style="display: none;">
+      <p>No se encontraron tiendas que coincidan con tu búsqueda.</p>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .our-stores-wrapper {
+    padding: 50px 20px;
+    background: #f8fafc;
+    color: #1e293b;
+    font-family: inherit;
+  }
+  .our-stores-container {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .our-stores-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .our-stores-title {
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 12px 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .our-stores-subtitle {
+    font-size: 1.3rem;
+    color: #475569;
+    margin: 0 0 28px 0;
+    line-height: 1.5;
+  }
+  .store-search-box {
+    position: relative;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+  .store-search-input {
+    width: 100%;
+    padding: 16px 20px 16px 52px;
+    border-radius: 9999px;
+    border: 2px solid #cbd5e1;
+    font-size: 1.15rem;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    color: #0f172a;
+  }
+  .store-search-input:focus {
+    border-color: #0f172a;
+    box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.12);
+  }
+  .search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    color: #64748b;
+    pointer-events: none;
+  }
+  .stores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 28px;
+  }
+  .store-card {
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #e2e8f0;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 8px -2px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .store-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 28px -6px rgba(0,0,0,0.1);
+  }
+  .store-card-header {
+    margin-bottom: 14px;
+  }
+  .store-name {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    line-height: 1.35;
+  }
+  .store-map-wrapper {
+    width: 100%;
+    height: 180px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 18px;
+    background: #e2e8f0;
+    border: 1px solid #cbd5e1;
+  }
+  .store-map-iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+  .store-card-body {
+    flex-grow: 1;
+    margin-bottom: 22px;
+  }
+  .store-info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 1.12rem;
+    color: #334155;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  .store-icon {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    color: #0284c7;
+    margin-top: 3px;
+  }
+  .store-card-footer {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+  }
+  .btn-store {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 18px;
+    border-radius: 10px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    box-sizing: border-box;
+  }
+  .btn-primary {
+    background: #0f172a;
+    color: #ffffff !important;
+    flex: 1;
+  }
+  .btn-primary:hover {
+    background: #334155;
+  }
+  .btn-secondary {
+    background: #f1f5f9;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+  }
+  .btn-secondary:hover {
+    background: #e2e8f0;
+  }
+  .btn-icon {
+    width: 18px;
+    height: 18px;
+  }
+  .stores-no-results {
+    text-align: center;
+    padding: 50px 20px;
+    color: #64748b;
+    font-size: 1.25rem;
+  }
+  @media (max-width: 640px) {
+    .our-stores-title {
+      font-size: 2.1rem;
+    }
+    .our-stores-subtitle {
+      font-size: 1.1rem;
+    }
+    .stores-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    const searchInput = document.getElementById("storeSearchInput");
+    const grid = document.getElementById("storesGrid");
+    const noResults = document.getElementById("noResults");
+
+    if (searchInput && grid) {
+      const cards = grid.querySelectorAll(".store-card");
+
+      searchInput.addEventListener("input", function(e) {
+        const query = e.target.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        cards.forEach(function(card) {
+          const name = card.getAttribute("data-name") || "";
+          const address = card.getAttribute("data-address") || "";
+
+          if (name.includes(query) || address.includes(query)) {
+            card.style.display = "flex";
+            visibleCount++;
+          } else {
+            card.style.display = "none";
+          }
+        });
+
+        if (noResults) {
+          noResults.style.display = visibleCount === 0 ? "block" : "none";
+        }
+      });
+    }
+
+    document.querySelectorAll(".copy-btn").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        const text = this.getAttribute("data-copy");
+        if (navigator.clipboard && text) {
+          navigator.clipboard.writeText(text).then(() => {
+            const originalText = this.innerHTML;
+            this.textContent = "¡Copiado!";
+            setTimeout(() => {
+              this.innerHTML = originalText;
+            }, 1800);
+          });
+        }
+      });
+    });
+  })();
+</script>

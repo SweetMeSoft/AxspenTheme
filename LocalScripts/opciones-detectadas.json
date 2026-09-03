@@ -1,0 +1,414 @@
+{
+  "linkedMetafield": {
+    "namespace": "shopify",
+    "key": "size"
+  },
+  "changes": [
+    {
+      "productId": "gid://shopify/Product/9816559583517",
+      "title": "Buzo Tejido Axspen BZM2403",
+      "optionId": "gid://shopify/ProductOption/12463866970397",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/5114606551325",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/131799712029"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5114606584093",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/131799744797"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9816573509917",
+      "title": "Camiseta Hombre CAMI-10",
+      "optionId": "gid://shopify/ProductOption/12463860154653",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/5114576765213",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/131799679261"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5114576797981",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/131799744797"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9816576753949",
+      "title": "Buzo Tejido Hombre  BZM-9281",
+      "optionId": "gid://shopify/ProductOption/12463862513949",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/5114597343517",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/131799712029"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5114597376285",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/131799744797"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9883042414877",
+      "title": "Jean Axspen Flare Ax-2733 Negro",
+      "optionId": "gid://shopify/ProductOption/12424203370781",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/5006268432669",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/294490013981"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5006268465437",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5006268498205",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5006268530973",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953504541"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5006268563741",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953537309"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5120613646621",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/162347057437"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9977667453213",
+      "title": "Jean Axspen Baggy Ax-2822 Gris",
+      "optionId": "gid://shopify/ProductOption/12537104924957",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/5327268806941",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/294490013981"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5327268839709",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5327268872477",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5327268905245",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953504541"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9991018774813",
+      "title": "Jean Axspen Wide Leg Ax-2914",
+      "optionId": "gid://shopify/ProductOption/12559428649245",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/5395965149469",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/294490013981"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5395965182237",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5395965215005",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/5395965247773",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953504541"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/10156159500573",
+      "title": "Pantalón Drill Flare Negro Ax-3060 Licrado",
+      "optionId": "gid://shopify/ProductOption/12764758540573",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/6165774729501",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/294490013981"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6165774762269",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6165774598429",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6165774631197",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953504541"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6165774663965",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953537309"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/10179477405981",
+      "title": "Pantalón Drill Flare cafe Ax-3044 Licrado",
+      "optionId": "gid://shopify/ProductOption/12794770784541",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/6263353147677",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6263353016605",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6263353049373",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953504541"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/10319958966557",
+      "title": "Jean Axspen Wide Leg Ax-3144 Licrado",
+      "optionId": "gid://shopify/ProductOption/12980510916893",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/6878108549405",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/294490013981"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6878108582173",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6878108614941",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6878108647709",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953504541"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6878108680477",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953537309"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/10330975437085",
+      "title": "Pantalón Wide Leg Ax-3143 Preimum Horma reducida",
+      "optionId": "gid://shopify/ProductOption/12993201930525",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/6904452874525",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/294490013981"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6904452907293",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6904452940061",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6904452972829",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953504541"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6904453005597",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953537309"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/10338839167261",
+      "title": "Jean Wide Leg Marfil ax-3150 Rigido Premium",
+      "optionId": "gid://shopify/ProductOption/13002234036509",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/6930869747997",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/294490013981"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6930869780765",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6930869649693",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6930869682461",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953504541"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6930869715229",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953537309"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/10338839494941",
+      "title": "Jean oxap wide leg Ox-2970",
+      "optionId": "gid://shopify/ProductOption/13002234495261",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/6930871648541",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/294490013981"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6930871681309",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6930871550237",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6930871583005",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953504541"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6930871615773",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953537309"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/10338849587485",
+      "title": "Jean oxap Ox-2908",
+      "optionId": "gid://shopify/ProductOption/13002247209245",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/6930972967197",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/294490013981"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6930972999965",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6930972868893",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6930972901661",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953504541"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6930972934429",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953537309"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/10345606578461",
+      "title": "Jean Wide Leg Marfil Ax-3107 Rigido Premium",
+      "optionId": "gid://shopify/ProductOption/13010041733405",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/6951186596125",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/294490013981"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6951186628893",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6951186497821",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6951186530589",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953504541"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/6951186563357",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953537309"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/10370086732061",
+      "title": "Jean Oxap ox-3135",
+      "optionId": "gid://shopify/ProductOption/13040656744733",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/7065637257501",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/10370086961437",
+      "title": "Jean Oxap ox-2982",
+      "optionId": "gid://shopify/ProductOption/13046563766557",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/7085516521757",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/294490013981"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/7085516554525",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/10372138139933",
+      "title": "Pantalón Wide Leg Axspen Ax-3228",
+      "optionId": "gid://shopify/ProductOption/13043030655261",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/7073670496541",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/294490013981"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/7073670529309",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/7073670562077",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/7073670594845",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953504541"
+        }
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/10375017759005",
+      "title": "Pantalón Pana wide leg ax-3165",
+      "optionId": "gid://shopify/ProductOption/13046563897629",
+      "optionValuesToUpdate": [
+        {
+          "id": "gid://shopify/ProductOptionValue/7086120075549",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/294490013981"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/7085516816669",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953406237"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/7085517013277",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953471773"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/7085814153501",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953504541"
+        },
+        {
+          "id": "gid://shopify/ProductOptionValue/7086120108317",
+          "linkedMetafieldValue": "gid://shopify/Metaobject/139953537309"
+        }
+      ]
+    }
+  ]
+}

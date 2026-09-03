@@ -1,0 +1,75 @@
+{% comment %}
+  Plantilla: templates/search.liquid
+  Compatible al 100% con la estructura, clases y snippets de tu tema (Eurus / Shopify OS).
+{% endcomment %}
+
+<div class="search-page-main" style="padding: 40px 0 80px 0;">
+	<div class="container">
+		{%- paginate search.results by 24 -%}
+			<div class="search-head" style="margin-bottom: 30px; text-align: center;">
+				<h1 class="heading" style="font-size: 2.2rem; margin-bottom: 12px;">
+					{{- 'general.search.search_results' | t -}}
+				</h1>
+
+				{%- if search.performed -%}
+					<p class="products-found" style="color: #64748b; font-size: 1.1rem;">
+						{{- 'general.search.results_with_count' | t: count: search.results_count -}} (<strong>"{{ search.terms }}"</strong>)
+					</p>
+				{%- endif -%}
+			</div>
+
+			{%- if search.performed -%}
+				{%- if search.results.size > 0 -%}
+					{%- assign highlight = search.terms | split: ' AND ' | last | remove_first: '*' -%}
+
+					<div class="main-content grid grid-4 grid-tablet-3 grid-mobile-2" style="display: grid; gap: 20px;">
+						{%- for item in search.results -%}
+							<div class="grid-item">
+								{%- liquid
+									case item.object_type
+										when 'product'
+											render 'product-card', product: item, highlight: highlight
+										when 'article'
+											render 'post-card', article: item, in_search_results: true, highlight: highlight
+										when 'page'
+											render 'product-card', product: item, highlight: highlight
+									endcase
+								-%}
+							</div>
+						{%- endfor -%}
+					</div>
+
+					{%- if paginate.pages > 1 -%}
+						<div class="pagination-wrapper" style="margin-top: 40px; display: flex; justify-content: center; gap: 15px; align-items: center;">
+							{%- if paginate.previous -%}
+								<a href="{{ paginate.previous.url }}" class="button primary-button" style="padding: 10px 20px; text-decoration: none;">
+									&larr; {{- 'general.pagination.previous' | t | default: 'Anterior' -}}
+								</a>
+							{%- endif -%}
+
+							<span style="font-weight: 600;">
+								{{ paginate.current_page }} / {{ paginate.pages }}
+							</span>
+
+							{%- if paginate.next -%}
+								<a href="{{ paginate.next.url }}" class="button primary-button" style="padding: 10px 20px; text-decoration: none;">
+									{{- 'general.pagination.next' | t | default: 'Siguiente' -}} &rarr;
+								</a>
+							{%- endif -%}
+						</div>
+					{%- endif -%}
+
+				{%- else -%}
+					<div class="no-results-box" style="text-align: center; padding: 60px 20px;">
+						<p class="no-results h4" style="font-size: 1.3rem; margin-bottom: 20px;">
+							{{- 'general.search.no_results' | t -}}
+						</p>
+						<a class="button primary-button" href="{{ routes.all_products_collection_url }}" style="display: inline-block; padding: 12px 24px; text-decoration: none;">
+							Ver todos los productos
+						</a>
+					</div>
+				{%- endif -%}
+			{%- endif -%}
+		{%- endpaginate -%}
+	</div>
+</div>

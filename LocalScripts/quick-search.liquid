@@ -1,0 +1,131 @@
+{%- liquid
+	assign section_id = '#shopify-section-' | append: section.id
+	assign collection = collections.all.products
+
+	if section.settings.collection != blank and section.settings.collection.all_products_count > 0
+		assign collection = section.settings.collection.products
+	endif
+-%}
+
+<div class="quick-search color-{{ section.settings.color_scheme }}">
+	<div class="container quick-search-container">
+		<div class="form-wrapper">
+			<form action="{{ routes.search_url }}" method="get" role="search" class="quick-search-form">
+				<input class="search-input" id="{{ section.id | append: '-field-input' }}" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" required tabindex="-1">
+
+				<label class="sr-only" for="{{ section.id | append: '-field-input' }}">{{- 'general.search.label' | t -}}</label>
+				<input type="hidden" name="type" value="{{ settings.search_type }}">
+				<input type="hidden" name="options[unavailable_products]" value="{{ settings.search_unavailable_products }}">
+				<input type="hidden" name="options[prefix]" value="last">
+
+				<button class="search-button" aria-label="{{ 'general.search.label' | t }}">
+					{%- render 'icon', code: 'search' -%}
+				</button>
+			</form>
+
+			<button type="button" class="close-button">{%- render 'icon', code: 'close' -%}</button>
+		</div>
+
+		<div class="search-body">
+			<div class="search-content">
+				<div class="search-top">
+					{% comment %} Collection {% endcomment %}
+					<div class="suggestions-product">
+						{%- if section.settings.heading != blank -%}
+							<div class="search-head">
+								<h3 class="heading">{{- section.settings.heading | escape -}}</h3>
+							</div>
+						{%- endif -%}
+
+						<div class="main-content carousel-swiper">
+							<template data-options>
+								{
+									"slidesPerView": "auto",
+									"spaceBetween": 30,
+									"navigation": {
+										"nextEl": "{{ section_id }} .swiper-button-next",
+										"prevEl": "{{ section_id }} .swiper-button-prev"
+									},
+									"breakpoints": {
+										"240": {
+											"spaceBetween": 15
+										},
+										"992": {
+											"spaceBetween": 30
+										}
+									}
+								}
+							</template>
+
+							<div class="swiper">
+								<div class="swiper-wrapper">
+									{%- for product in collection limit: 12 -%}
+										<div class="swiper-slide">
+											{%- render 'product-card', product: product -%}
+										</div>
+									{%- endfor -%}
+								</div>
+							</div>
+
+							<div class="swiper-controls">
+								<div class="swiper-button-prev">{%- render 'icon', code: 'chevron-left' -%}</div>
+								<div class="swiper-button-next">{%- render 'icon', code: 'chevron-right' -%}</div>
+							</div>
+						</div>
+					</div>
+
+					{% comment %} Results {% endcomment %}
+					<div class="search-results sr-only"></div>
+				</div>
+
+				{% comment %} Bottom {% endcomment %}
+				{%- if section.settings.show_collections and collections.first -%}
+					<div class="search-bottom">
+						<h3 class="heading">{{- 'general.search.collections' | t -}}</h3>
+
+						<div class="collection-list">
+							{%- liquid
+								for collection in collections
+									echo collection.title | link_to: collection.url
+								endfor
+							-%}
+						</div>
+					</div>
+				{%- endif -%}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.quick-search.name",
+	"tag": "section",
+	"class": "quick-search-section",
+	"settings": [
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "t:settings_schema.colors.label",
+			"default": "scheme-1"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_collections",
+			"default": true,
+			"label": "t:sections.quick-search.settings.show_collections.label"
+		},
+		{
+			"type": "text",
+			"id": "heading",
+			"label": "t:general.typography.heading.label"
+		},
+		{
+			"type": "collection",
+			"id": "collection",
+			"label": "t:sections.quick-search.settings.collection.label",
+			"info": "t:sections.quick-search.settings.collection.info"
+		}
+	]
+}
+{% endschema %}
