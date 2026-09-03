@@ -1,0 +1,127 @@
+{
+  "sections": {
+    "hero_video": {
+      "type": "video-background",
+      "settings": {
+        "full": true,
+        "color_scheme": "scheme-1",
+        "source": "host",
+        "url": "https://www.youtube.com/watch?v=NfASaHFN1zg",
+        "native_url": "",
+        "overlay": 0,
+        "height": "750px",
+        "mobile_height": "400px",
+        "sub_heading_text": "",
+        "sub_heading_font_size": 16,
+        "heading_text": "",
+        "heading_font_size": 56,
+        "button_text": "",
+        "button_link": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0
+      }
+    },
+    "new_product_carousel_QUgwqt": {
+      "type": "new-product-carousel",
+      "settings": {
+        "full": true,
+        "color_scheme": "scheme-1",
+        "collection": "mujer",
+        "heading_text": "<h1><strong>   LO NUEVO</strong></h1>",
+        "heading_font_size": 42,
+        "sub_heading_text": "<h2>            </h2>",
+        "sub_heading_font_size": 51,
+        "button_text": "",
+        "button_link": "",
+        "show_arrows": false,
+        "show_dots": false,
+        "loop": true,
+        "mousewheel": false,
+        "autoplay": true,
+        "delay": 3,
+        "column": 5,
+        "column_gap": 15,
+        "total": 16,
+        "column_gap_mobile": "1",
+        "padding_top": 0,
+        "padding_bottom": 29,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 20
+      }
+    },
+    "new_product_carousel_VH9h9m": {
+      "type": "new-product-carousel",
+      "name": "t:sections.new-product-carousel.name",
+      "settings": {
+        "full": false,
+        "color_scheme": "scheme-f934079b-2f56-489f-8504-574582365f8d",
+        "collection": "jean-apliques",
+        "heading_text": "<p><strong>TUS FAVORITOS</strong></p>",
+        "heading_font_size": 48,
+        "sub_heading_text": "",
+        "sub_heading_font_size": 48,
+        "button_text": "",
+        "button_link": "",
+        "show_arrows": true,
+        "show_dots": false,
+        "loop": true,
+        "mousewheel": false,
+        "autoplay": false,
+        "delay": 5,
+        "column": 4,
+        "column_gap": 30,
+        "total": 10,
+        "column_gap_mobile": "1",
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 20
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "color_scheme": "",
+        "description": "<p>Sé el primero en enterarte de nuevas colecciones y ofertas exclusivas.</p>",
+        "placeholder": "Email",
+        "padding_top": 90,
+        "padding_bottom": 100,
+        "padding_top_mobile": 50,
+        "padding_bottom_mobile": 60
+      }
+    },
+    "17568573124160162b": {
+      "type": "apps",
+      "blocks": {
+        "juniper_tiktok_feed_mintty_tiktok_feed_PKkiGn": {
+          "type": "shopify://apps/mintt-tiktok-feed/blocks/mintty-tiktok-feed/fa514c33-5475-4484-b270-5f1e7eb87a9a",
+          "settings": {
+            "title": "",
+            "title_color": "",
+            "alignment": "center",
+            "html_area": ""
+          }
+        }
+      },
+      "block_order": [
+        "juniper_tiktok_feed_mintty_tiktok_feed_PKkiGn"
+      ],
+      "settings": {
+        "full": true,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0
+      }
+    }
+  },
+  "order": [
+    "hero_video",
+    "new_product_carousel_QUgwqt",
+    "new_product_carousel_VH9h9m",
+    "newsletter",
+    "17568573124160162b"
+  ]
+}
