@@ -1,1 +1,148 @@
-{"sections":{"gp_section_624864568379835348":{"type":"gp-section-624864568379835348","settings":{"gg8uZsxDc-D_customText":"Entrega estimada","ggqQVkBYZ1f_label":"Añadir al carrito","ggqQVkBYZ1f_outOfStockLabel":"Out of stock","ggqQVkBYZ1f_unavailableLabel":"Unavailable","ggqQVkBYZ1f_variantSelectionRequiredMessage":"Please select a variant to add product to cart","ggqQVkBYZ1f_successMessage":"Agregaste un producto a tu carrito","ggqQVkBYZ1f_errorMessage":"Cannot add product to cart","ggZo1i6Rlmf_srcSet_desktop_src":"https://cdn.shopify.com/s/files/1/0926/2350/3645/files/ex.png","gg4PCeGW9W0_srcSet_desktop_src":"https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Visa.png","ggGBPWXVlLa_srcSet_desktop_src":"https://cdn.shopify.com/s/files/1/0926/2350/3645/files/MasterCard.png","ggXixIxlGIh_srcSet_desktop_src":"https://cdn.shopify.com/s/files/1/0926/2350/3645/files/ApplePay.png","gg6Xb7a1Aqj_srcSet_desktop_src":"https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Gpay.png","ggfr0AqtBkI_childItem_0":"<p>Descripción</p>","ggfr0AqtBkI_childItem_1":"<p>Cambios y Devoluciones&nbsp;</p>","ggL1iA7KE_L_viewMoreText":"Show more","ggL1iA7KE_L_viewLessText":"Show less","ggekMlBHqv1_text":"<p>ENVÍOS A BOGOTÁ</p><p>En 2 - 4 días laborales $8.000 COP</p><p><strong>Envíos a otas ciudades de Colombia</strong></p><p>En 6 - 8 días laborales $15.000 COP</p><p><strong>DEVOLUCIÓN:</strong></p><p>Devoluciones</p><p>Dispones de 30 días a partir de la fecha del envío del pedido.</p><p><strong>Devolución en domicilio</strong></p><p>Las devoluciones tienen un costo equivalente al valor del envío.</p><p>Sin embargo, si el cambio o devolucion se realiza por error de talla, color o defecto de fábrica, el costo lo asumimos nosotros.</p>","checksum":"eb28ce877ae2dc781e43a4e9361edb2414149f318c9fcdef16bd40f30d4ecb64_1_1_1_0__1","section_preload":"true"}},"gp_section_624864568379966420":{"type":"gp-section-624864568379966420","settings":{"ggzVTboLwzC_label":"Add to cart","ggzVTboLwzC_outOfStockLabel":"Out of stock","ggzVTboLwzC_unavailableLabel":"Unavailable","ggzVTboLwzC_variantSelectionRequiredMessage":"Please select a variant to add product to cart","ggzVTboLwzC_successMessage":"Add product to cart successfully","ggzVTboLwzC_errorMessage":"Cannot add product to cart","checksum":"dca1cb280c989c7e66032c017a67c5c288295ade05303cf91bbe65d707da9906_1_1_1_0__1"}},"gp_section_624864568379900884":{"type":"gp-section-624864568379900884","settings":{"checksum":"82b76790747951e6a354d5ae7ae787517674fc65cf36233021df19440be82617_1_1_1_0__1"}},"gp_section_624864568379769812":{"type":"gp-section-624864568379769812","settings":{"checksum":"2984d1fc790d3a17eafeaa54019181a22f4b32814a01263877844248072fad51_1_1_1_0__1"}}},"order":["gp_section_624864568379835348","gp_section_624864568379966420","gp_section_624864568379900884","gp_section_624864568379769812"]}
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "gfx": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom-liquid": "<style>.main-product .product-media-box,.main-product .main-item,.main-product .main-item img,.main-product .product-thumb-slide .thumb-item,.main-product .product-thumb-slide img{border-radius:14px;}.main-product .main-item,.main-product .product-thumb-slide .thumb-item{overflow:hidden;}.gp-gallery-nav{position:absolute;top:calc(50% - 20px);z-index:6;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);border:1px solid rgba(0,0,0,.08);box-shadow:0 2px 10px rgba(0,0,0,.14);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,transform .15s;}.gp-gallery-nav:hover{background:#fff;transform:scale(1.06);}.gp-gallery-nav.prev{left:12px;}.gp-gallery-nav.next{right:12px;}.main-product .product-thumb-slide .media-preview-wrap,.main-product .product-thumb-slide .media-preview{border:none !important;outline:none !important;box-shadow:none !important;}@media(max-width:991px){.gp-gallery-nav{display:none;}}</style><script>(function(){function mk(host,dir,path,sw){var b=document.createElement('button');b.type='button';b.className='gp-gallery-nav '+dir;b.setAttribute('aria-label',dir==='prev'?'Anterior':'Siguiente');b.innerHTML=\"<svg viewBox='0 0 24 24' fill='none' stroke='#222' stroke-width='2' width='18' height='18'><path d='\"+path+\"'/></svg>\";b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();dir==='prev'?sw.slidePrev():sw.slideNext();});host.appendChild(b);}function init(){var main=document.querySelector('.main-product .product-main-slide.swiper');if(!main||!main.swiper)return false;if(main.querySelector('.gp-gallery-nav'))return true;if(getComputedStyle(main).position==='static')main.style.position='relative';mk(main,'prev','M15 18l-6-6 6-6',main.swiper);mk(main,'next','M9 6l6 6-6 6',main.swiper);return true;}var n=0,t=setInterval(function(){if(init()||++n>40)clearInterval(t);},150);document.addEventListener('DOMContentLoaded',init);})();</script>",
+            "padding_bottom": 0
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+            "font_size": 30,
+            "heading_font_weight": "700",
+            "text_transform": "none",
+            "padding_bottom": 8
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "font_size": 20,
+            "padding_bottom": 16
+          }
+        },
+        "variant": {
+          "type": "variant-picker",
+          "settings": {
+            "picker_type": "swatch",
+            "swatch_size": 44,
+            "padding_bottom": 16
+          }
+        },
+        "delivery": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom-liquid": "<div style=\"display:flex;align-items:center;gap:8px;font-size:14px;color:#555;margin:2px 0 4px;\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/></svg><span>Entrega estimada <strong>{{ 'now' | date: '%s' | plus: 259200 | date: '%b %d' }} &ndash; {{ 'now' | date: '%s' | plus: 518400 | date: '%b %d' }}</strong></span></div>",
+            "padding_bottom": 12
+          }
+        },
+        "atc": {
+          "type": "add-to-cart",
+          "settings": {
+            "text_transform": "none",
+            "quantity_selector": true,
+            "dynamic_checkout": false,
+            "show_gift_card": true,
+            "padding_bottom": 16
+          }
+        },
+        "tallaje": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom-liquid": "{%- assign m = product.metafields.custom.imagen_de_tallaje -%}{%- if m != blank and m.value != blank -%}{%- assign timg = m.value.image | default: m.value -%}<div class=\"tabla-tallaje-custom\" style=\"margin:4px 0 8px;\"><img src=\"{{ timg | image_url: width: 800 }}\" alt=\"Tabla de tallajes para {{ product.title | escape }}\" loading=\"lazy\" style=\"width:100%;height:auto;border-radius:12px;display:block;\"></div>{%- endif -%}",
+            "padding_bottom": 12
+          }
+        },
+        "pay": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom-liquid": "<div style=\"display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:4px 0 8px;\"><img src=\"https://cdn.shopify.com/s/files/1/0926/2350/3645/files/ex.png\" alt=\"American Express\" style=\"height:24px;width:auto;\" loading=\"lazy\"><img src=\"https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Visa.png\" alt=\"Visa\" style=\"height:24px;width:auto;\" loading=\"lazy\"><img src=\"https://cdn.shopify.com/s/files/1/0926/2350/3645/files/MasterCard.png\" alt=\"Mastercard\" style=\"height:24px;width:auto;\" loading=\"lazy\"><img src=\"https://cdn.shopify.com/s/files/1/0926/2350/3645/files/ApplePay.png\" alt=\"Apple Pay\" style=\"height:24px;width:auto;\" loading=\"lazy\"><img src=\"https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Gpay.png\" alt=\"Google Pay\" style=\"height:24px;width:auto;\" loading=\"lazy\"></div>",
+            "padding_bottom": 20
+          }
+        },
+        "desc_tab": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom-liquid": "{%- if product.description != blank -%}<details class=\"native-desc-acc\" open style=\"border-top:1px solid #e5e5e5;\"><summary style=\"display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:16px 0;font-size:16px;font-weight:500;list-style:none;\">Descripción<span class=\"acc-plus\">+</span></summary><div style=\"padding:0 0 16px;font-size:15px;line-height:1.6;\">{{ product.description }}</div></details><style>.native-desc-acc summary::-webkit-details-marker{display:none;}.native-desc-acc[open] .acc-plus{transform:rotate(45deg);}.native-desc-acc .acc-plus{transition:transform .2s;font-size:20px;}</style>{%- endif -%}",
+            "padding_bottom": 0
+          }
+        },
+        "cambios_tab": {
+          "type": "collapsible-tab",
+          "settings": {
+            "heading": "Cambios y Devoluciones",
+            "heading_font_size": 16,
+            "content": "<p><strong>DEVOLUCIÓN:</strong></p><p>Dispones de 30 días a partir de la fecha del envío del pedido.</p><p><strong>Devolución en domicilio</strong></p><p>Las devoluciones tienen un costo equivalente al valor del envío. Sin embargo, si el cambio o devolución se realiza por error de talla, color o defecto de fábrica, el costo lo asumimos nosotros.</p>",
+            "content_font_size": 15,
+            "icon": "return",
+            "padding_bottom": 0
+          }
+        },
+        "envios_tab": {
+          "type": "collapsible-tab",
+          "settings": {
+            "heading": "Envíos",
+            "heading_font_size": 16,
+            "content": "<p><strong>ENVÍOS A BOGOTÁ</strong></p><p>En 2 - 4 días laborales $8.000 COP</p><p><strong>Envíos a otras ciudades de Colombia</strong></p><p>En 6 - 8 días laborales $15.000 COP</p>",
+            "content_font_size": 15,
+            "icon": "truck",
+            "padding_bottom": 0
+          }
+        }
+      },
+      "block_order": [
+        "gfx",
+        "title",
+        "price",
+        "variant",
+        "delivery",
+        "atc",
+        "tallaje",
+        "pay",
+        "desc_tab",
+        "cambios_tab",
+        "envios_tab"
+      ],
+      "settings": {
+        "full": false,
+        "color_scheme": "scheme-1",
+        "space": 60,
+        "sticky_add_to_cart": "hidden",
+        "width": 50,
+        "media_fit": "cover",
+        "media_ratio": "portrait",
+        "layout": "layout-3",
+        "lightbox": true,
+        "group_image": true,
+        "show_thumbnail_images": true,
+        "sticky_thumbnail_images": true,
+        "sticky_content": true,
+        "alignment": "left"
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "full": false,
+        "color_scheme": "scheme-1",
+        "heading": "También te puede gustar",
+        "text_align": "left",
+        "layout": "real-carousel",
+        "rows": 8,
+        "columns": 4,
+        "show_arrows": true,
+        "show_dots": false,
+        "loop": false,
+        "autoplay": false,
+        "padding_top": 20,
+        "padding_bottom": 50
+      }
+    }
+  },
+  "order": ["main", "recommendations"]
+}
