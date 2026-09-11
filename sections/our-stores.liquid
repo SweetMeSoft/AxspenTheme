@@ -1,117 +1,35 @@
-{% comment %}
-  Plantilla: Mis Tiendas Axspen (Split-Screen Flagship Locator)
-  Compatible con Páginas, Snippets y Bloques HTML/Liquid de Shopify.
-{% endcomment %}
+{%- liquid
+  assign section_id = '#shopify-section-' | append: section.id
+  assign heading = section.settings.heading | default: 'Nuestras Tiendas'
+  assign subheading = section.settings.subheading | default: 'Encuentra tu punto físico más cercano, visítanos y vive la experiencia Axspen en denim.'
+  assign badge_text = section.settings.badge_text | default: 'Puntos Físicos'
+  assign whatsapp_num = section.settings.whatsapp_number | default: '573133644023'
+-%}
 
 <!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
-<div class="axspen-stores-scope">
-  <!-- Header -->
-  <header class="axspen-stores-header">
-    <div class="axspen-stores-badge">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-      </svg>
-      <span>Puntos Físicos</span>
-    </div>
-    <h1 class="axspen-stores-title">Nuestras Tiendas</h1>
-    <p class="axspen-stores-subtitle">Encuentra tu punto físico más cercano, visítanos y vive la experiencia Axspen en denim.</p>
-  </header>
-
-  <!-- Split Screen Container -->
-  <div class="axspen-stores-split">
-    
-    <!-- Left: Controls & Store Cards -->
-    <div class="axspen-stores-panel is-list-view" id="axspenStoresPanel">
-      
-      <!-- Mobile Switcher (Tab buttons) -->
-      <div class="axspen-mobile-switcher" role="tablist">
-        <button type="button" class="axspen-switch-btn active" id="btnSwitchList" role="tab" aria-selected="true">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-          </svg>
-          <span>Lista de Tiendas</span>
-        </button>
-        <button type="button" class="axspen-switch-btn" id="btnSwitchMap" role="tab" aria-selected="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-          </svg>
-          <span>Ver Mapa</span>
-        </button>
-      </div>
-
-      <!-- Controls Area -->
-      <div class="axspen-controls-area">
-        <!-- Search input -->
-        <div class="axspen-search-wrap">
-          <svg class="axspen-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <input 
-            type="text" 
-            id="axspenSearchInput" 
-            class="axspen-search-input" 
-            placeholder="Buscar por tienda, centro comercial, barrio..." 
-            aria-label="Buscar tienda física"
-          />
-          <button type="button" id="axspenClearSearch" class="axspen-clear-btn" aria-label="Limpiar búsqueda" style="display: none;">
-            &times;
-          </button>
-        </div>
-
-        <!-- Filter Pills -->
-        <div class="axspen-filter-pills" id="axspenFilterPills">
-          <button type="button" class="axspen-pill-btn active" data-filter="all">Todas</button>
-          <button type="button" class="axspen-pill-btn axspen-geo-pill" id="axspenGeoBtn">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <span id="geoBtnLabel">Cerca de mí</span>
-          </button>
-          <button type="button" class="axspen-pill-btn" data-filter="mall">Centros Comerciales</button>
-          <button type="button" class="axspen-pill-btn" data-filter="bogota">Bogotá</button>
-          <button type="button" class="axspen-pill-btn" data-filter="soacha">Soacha</button>
-        </div>
-
-        <!-- Meta status line -->
-        <div class="axspen-stores-meta">
-          <span id="axspenCounterText">Mostrando <strong>11</strong> tiendas</span>
-          <span id="axspenGeoStatus" style="display: none; color: #1d4ed8; font-weight: 600;">⚡ Ordenadas por cercanía</span>
-        </div>
-      </div>
-
-      <!-- Scrollable Store Cards Feed -->
-      <div class="axspen-stores-list" id="axspenStoresList" role="list">
-        <!-- Injected dynamically via JS -->
-      </div>
-
-      <!-- Empty state when no stores found -->
-      <div class="axspen-no-results" id="axspenNoResults" style="display: none;">
-        <p>No encontramos tiendas que coincidan con tu búsqueda.</p>
-        <button type="button" class="axspen-btn axspen-btn-dark" id="axspenResetSearchBtn">Ver todas las tiendas</button>
-      </div>
-
-    </div>
-
-    <!-- Right: Master Sticky Interactive Map -->
-    <div class="axspen-map-container is-list-view" id="axspenMapContainer">
-      <div id="axspenMasterMap"></div>
-    </div>
-
-  </div>
-</div>
-
 <style>
+  {{ section_id }} {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    background-color: #ffffff;
+    color: #0f172a;
+    font-family: inherit;
+  }
+  @media (min-width: 992px) {
+    {{ section_id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
   .axspen-stores-scope {
     width: 100%;
     max-width: 1540px;
     margin: 0 auto;
-    padding: 40px 16px 80px;
+    padding: 0 16px;
     box-sizing: border-box;
-    color: #0f172a;
-    font-family: inherit;
   }
 
   /* Header Section */
@@ -367,6 +285,7 @@
     gap: 14px;
     margin-top: 10px;
   }
+  /* Elegant scrollbar */
   .axspen-stores-list::-webkit-scrollbar {
     width: 5px;
   }
@@ -739,11 +658,113 @@
   }
 </style>
 
+<div class="axspen-stores-scope">
+  <!-- Header -->
+  <header class="axspen-stores-header">
+    {% if badge_text != blank %}
+      <div class="axspen-stores-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+        <span>{{ badge_text }}</span>
+      </div>
+    {% endif %}
+    <h1 class="axspen-stores-title">{{ heading }}</h1>
+    {% if subheading != blank %}
+      <p class="axspen-stores-subtitle">{{ subheading }}</p>
+    {% endif %}
+  </header>
+
+  <!-- Split Screen Container -->
+  <div class="axspen-stores-split">
+    
+    <!-- Left: Controls & Store Cards -->
+    <div class="axspen-stores-panel is-list-view" id="axspenStoresPanel">
+      
+      <!-- Mobile Switcher (Tab buttons) -->
+      <div class="axspen-mobile-switcher" role="tablist">
+        <button type="button" class="axspen-switch-btn active" id="btnSwitchList" role="tab" aria-selected="true">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+          </svg>
+          <span>Lista de Tiendas</span>
+        </button>
+        <button type="button" class="axspen-switch-btn" id="btnSwitchMap" role="tab" aria-selected="false">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+          </svg>
+          <span>Ver Mapa</span>
+        </button>
+      </div>
+
+      <!-- Controls Area -->
+      <div class="axspen-controls-area">
+        <!-- Search input -->
+        <div class="axspen-search-wrap">
+          <svg class="axspen-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input 
+            type="text" 
+            id="axspenSearchInput" 
+            class="axspen-search-input" 
+            placeholder="Buscar por tienda, centro comercial, barrio..." 
+            aria-label="Buscar tienda física"
+          />
+          <button type="button" id="axspenClearSearch" class="axspen-clear-btn" aria-label="Limpiar búsqueda" style="display: none;">
+            &times;
+          </button>
+        </div>
+
+        <!-- Filter Pills -->
+        <div class="axspen-filter-pills" id="axspenFilterPills">
+          <button type="button" class="axspen-pill-btn active" data-filter="all">Todas</button>
+          <button type="button" class="axspen-pill-btn axspen-geo-pill" id="axspenGeoBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span id="geoBtnLabel">Cerca de mí</span>
+          </button>
+          <button type="button" class="axspen-pill-btn" data-filter="mall">Centros Comerciales</button>
+          <button type="button" class="axspen-pill-btn" data-filter="bogota">Bogotá</button>
+          <button type="button" class="axspen-pill-btn" data-filter="soacha">Soacha</button>
+        </div>
+
+        <!-- Meta status line -->
+        <div class="axspen-stores-meta">
+          <span id="axspenCounterText">Mostrando <strong>11</strong> tiendas</span>
+          <span id="axspenGeoStatus" style="display: none; color: #1d4ed8; font-weight: 600;">⚡ Ordenadas por cercanía</span>
+        </div>
+      </div>
+
+      <!-- Scrollable Store Cards Feed -->
+      <div class="axspen-stores-list" id="axspenStoresList" role="list">
+        <!-- Injected via JavaScript for rich interactions and distance updates -->
+      </div>
+
+      <!-- Empty state when no stores found -->
+      <div class="axspen-no-results" id="axspenNoResults" style="display: none;">
+        <p>No encontramos tiendas que coincidan con tu búsqueda.</p>
+        <button type="button" class="axspen-btn axspen-btn-dark" id="axspenResetSearchBtn">Ver todas las tiendas</button>
+      </div>
+
+    </div>
+
+    <!-- Right: Master Sticky Interactive Map -->
+    <div class="axspen-map-container is-list-view" id="axspenMapContainer">
+      <div id="axspenMasterMap"></div>
+    </div>
+
+  </div>
+</div>
+
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 <script>
   (function() {
+    // 11 real Axspen physical stores in Bogotá and Soacha
     const STORES_DATA = [
       {
         id: "ferias",
@@ -934,8 +955,9 @@
       }
     ];
 
-    const WHATSAPP_BASE = "573133644023";
+    const WHATSAPP_BASE = "{{ whatsapp_num }}";
 
+    // Haversine distance in km
     function calculateDistance(lat1, lon1, lat2, lon2) {
       const R = 6371;
       const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -948,11 +970,13 @@
       return R * c;
     }
 
+    // Live open/closed calculation in Colombia Time (UTC-5)
     function getStoreStatus(store) {
       const now = new Date();
+      // Adjust to UTC-5
       const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
       const colombiaTime = new Date(utc - (3600000 * 5));
-      const day = colombiaTime.getDay();
+      const day = colombiaTime.getDay(); // 0 is Sunday
       const hours = colombiaTime.getHours() + (colombiaTime.getMinutes() / 60);
 
       const isSunday = (day === 0);
@@ -974,6 +998,7 @@
       }
     }
 
+    // State
     let storesList = [...STORES_DATA];
     let activeFilter = 'all';
     let searchQuery = '';
@@ -993,17 +1018,21 @@
     const geoBtnLabel = document.getElementById("geoBtnLabel");
     const resetSearchBtn = document.getElementById("axspenResetSearchBtn");
 
+    // Mobile Switcher elements
     const btnSwitchList = document.getElementById("btnSwitchList");
     const btnSwitchMap = document.getElementById("btnSwitchMap");
     const panelEl = document.getElementById("axspenStoresPanel");
     const mapContainerEl = document.getElementById("axspenMapContainer");
 
+    // Render Store Cards
     function renderCards() {
       let filtered = storesList.filter(store => {
+        // Filter by Category
         if (activeFilter === 'mall' && !store.isMall) return false;
         if (activeFilter === 'bogota' && store.city.toLowerCase() !== 'bogotá') return false;
         if (activeFilter === 'soacha' && store.city.toLowerCase() !== 'soacha') return false;
 
+        // Filter by Search Query
         if (searchQuery) {
           const haystack = `${store.name} ${store.address} ${store.city} ${store.zone} ${store.mall}`.toLowerCase();
           if (!haystack.includes(searchQuery)) return false;
@@ -1012,6 +1041,7 @@
         return true;
       });
 
+      // Update counter
       counterText.innerHTML = `Mostrando <strong>${filtered.length}</strong> de ${STORES_DATA.length} tiendas`;
       noResultsEl.style.display = filtered.length === 0 ? 'block' : 'none';
       listEl.innerHTML = '';
@@ -1095,6 +1125,7 @@
           </div>
         `;
 
+        // Card Click -> Pan Map
         card.addEventListener("click", function(e) {
           if (e.target.closest("a") || e.target.closest(".axspen-copy-btn")) return;
           selectStore(store.id, true);
@@ -1103,6 +1134,7 @@
         listEl.appendChild(card);
       });
 
+      // Bind copy buttons
       listEl.querySelectorAll(".axspen-copy-btn").forEach(btn => {
         btn.addEventListener("click", function(e) {
           e.stopPropagation();
@@ -1127,9 +1159,11 @@
       });
     }
 
+    // Select and highlight a store
     function selectStore(id, panMap) {
       selectedStoreId = id;
 
+      // Highlight card in list
       listEl.querySelectorAll(".axspen-store-card").forEach(c => {
         if (c.getAttribute("data-id") === id) {
           c.classList.add("is-active");
@@ -1139,6 +1173,7 @@
         }
       });
 
+      // Highlight map pin
       Object.keys(markers).forEach(k => {
         const el = markers[k].getElement();
         if (el) {
@@ -1153,6 +1188,7 @@
         }
       });
 
+      // Pan & open popup
       if (panMap && map && markers[id]) {
         const store = STORES_DATA.find(s => s.id === id);
         if (store) {
@@ -1162,12 +1198,14 @@
       }
     }
 
+    // Initialize Map
     function initMap() {
       if (typeof L === 'undefined') {
         setTimeout(initMap, 200);
         return;
       }
 
+      // Center around Bogotá / Soacha region
       map = L.map('axspenMasterMap', {
         center: [4.6500, -74.1200],
         zoom: 12,
@@ -1175,12 +1213,14 @@
         scrollWheelZoom: false
       });
 
+      // Sleek, minimal monochrome CartoDB Positron tiles for high-fashion elegance
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: 'abcd',
         maxZoom: 19
       }).addTo(map);
 
+      // Create Custom SVG Pins
       STORES_DATA.forEach(store => {
         const queryEnc = encodeURIComponent(`${store.name} ${store.address} ${store.city} Colombia`);
         const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${queryEnc}`;
@@ -1229,6 +1269,7 @@
       });
     }
 
+    // Geolocation Handler
     function handleGeolocation() {
       if (!navigator.geolocation) {
         alert("La geolocalización no es compatible con tu navegador.");
@@ -1247,6 +1288,7 @@
           geoBtnLabel.textContent = "Más cercanas";
           geoStatus.style.display = "inline-block";
 
+          // Calculate distance for all stores & sort ascending
           storesList.forEach(s => {
             s.distance = calculateDistance(lat, lon, s.lat, s.lng);
           });
@@ -1254,6 +1296,7 @@
 
           renderCards();
 
+          // Auto-select nearest store
           if (storesList.length > 0) {
             selectStore(storesList[0].id, true);
           }
@@ -1267,6 +1310,7 @@
       );
     }
 
+    // Event Listeners: Search
     if (searchInput) {
       searchInput.addEventListener("input", function(e) {
         searchQuery = e.target.value.toLowerCase().trim();
@@ -1295,6 +1339,7 @@
       });
     }
 
+    // Event Listeners: Category Filter Pills
     filterPills.forEach(pill => {
       pill.addEventListener("click", function() {
         filterPills.forEach(p => p.classList.remove("active"));
@@ -1308,6 +1353,7 @@
       geoBtn.addEventListener("click", handleGeolocation);
     }
 
+    // Mobile View Toggle
     if (btnSwitchList && btnSwitchMap) {
       btnSwitchList.addEventListener("click", function() {
         btnSwitchList.classList.add("active");
@@ -1332,6 +1378,7 @@
         mapContainerEl.classList.remove("is-list-view");
         mapContainerEl.classList.add("is-map-view");
 
+        // Force Leaflet to recalculate dimensions upon showing
         if (map) {
           setTimeout(() => {
             map.invalidateSize();
@@ -1344,8 +1391,95 @@
       });
     }
 
+    // Initial Execution
     renderCards();
     initMap();
 
   })();
 </script>
+
+{% schema %}
+{
+  "name": "Nuestras Tiendas (Map)",
+  "class": "our-stores-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Nuestras Tiendas"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Encuentra tu punto físico más cercano, visítanos y vive la experiencia Axspen en denim."
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Etiqueta superior (Badge)",
+      "default": "Puntos Físicos"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "Número de WhatsApp para consultas",
+      "default": "573133644023",
+      "info": "Número con código de país (ej. 573133644023)"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado de Sección"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 40,
+      "unit": "px",
+      "label": "Padding superior (Desktop)"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Padding inferior (Desktop)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 25,
+      "unit": "px",
+      "label": "Padding superior (Móvil)"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Padding inferior (Móvil)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nuestras Tiendas (Map)"
+    }
+  ]
+}
+{% endschema %}
