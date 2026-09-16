@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "t:sections.header.name",
   "type": "header",
@@ -7,21 +16,19 @@
       "blocks": {
         "slide_yUgcVi": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "text": "<p>🚚 <strong>ENVÍO GRATIS</strong> en Bogotá por compras de <strong>$270.000 </strong>o más 💙</p>"
-          },
-          "disabled": true
+          }
         },
         "slide_WpXy9W": {
           "type": "slide",
           "settings": {
             "text": "<h4>  ✨ 3 JEANS x $270.000 </h4>"
-          },
-          "disabled": false
+          }
         },
         "slide_wBqpfF": {
           "type": "slide",
-          "disabled": false,
           "settings": {
             "text": "<p><strong>SABOR A CASA 🇨🇴✨</strong></p>"
           }
@@ -41,8 +48,7 @@
         "padding_bottom": 5,
         "padding_top_mobile": 5,
         "padding_bottom_mobile": 5
-      },
-      "disabled": false
+      }
     },
     "header": {
       "type": "header",

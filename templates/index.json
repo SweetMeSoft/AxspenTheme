@@ -1,16 +1,19 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "gp_global_section_557313572275750081_9djEUM": {
       "type": "gp-global-section-557313572275750081",
       "settings": {
         "section_preload": "off_lazy_script",
-        "checksum": "",
-        "ggicyk8PFIi_background_desktop_video_206581703": "https://www.youtube.com/watch?v=NfASaHFN1zg",
-        "ggicyk8PFIi_background_desktop_videoHtml5_-1485078548": "https://cdn.shopify.com/videos/c/o/v/3b216e4f58374cdd9f92c38110b57274.mp4",
-        "ggicyk8PFIi_background_tablet_video_604531941": "https://cdn.shopify.com/videos/c/o/v/0abda14772b54439bcf3efce7590ec66.mp4",
-        "ggicyk8PFIi_background_tablet_videoHtml5_-864389378": "https://cdn.shopify.com/videos/c/o/v/4ee8c066d6af44d0b6eb2e37646e279e.mp4",
-        "ggicyk8PFIi_background_mobile_video_206581703": "https://www.youtube.com/watch?v=NfASaHFN1zg",
-        "ggicyk8PFIi_background_mobile_videoHtml5_-1165787320": "https://cdn.shopify.com/videos/c/o/v/2eae7477bc4545f0b5c0032cc46fc660.mp4"
+        "checksum": ""
       }
     },
     "gp_global_section_561241152934642544_xXCHfb": {
@@ -34,9 +37,7 @@
       "settings": {
         "section_preload": "off_lazy_script",
         "checksum": "",
-        "ggJ7oOoHAP2_background_desktop_image_src_585585204": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/IMG_1635.jpg?v=1773876900",
         "ggJ7oOoHAP2_background_desktop_video_1673735153": "https://cdn.shopify.com/videos/c/o/v/f77acfde26094a83815c92908c9e5c96.mp4",
-        "ggJ7oOoHAP2_background_mobile_image_src_-1885817860": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/IMG_3112.jpg?v=1777715399",
         "ggJ7oOoHAP2_background_mobile_video_-152779725": "https://youtu.be/KOxfzBp72uk"
       }
     },
@@ -153,8 +154,7 @@
         "padding_bottom": 29,
         "padding_top_mobile": 20,
         "padding_bottom_mobile": 20
-      },
-      "blocks": {}
+      }
     },
     "gp_global_section_617702271689425568_iaaNFx": {
       "type": "gp-global-section-617702271689425568",
@@ -198,8 +198,7 @@
         "padding_bottom": 50,
         "padding_top_mobile": 20,
         "padding_bottom_mobile": 20
-      },
-      "blocks": {}
+      }
     },
     "gp_global_section_611115494627345261_p8HjRe": {
       "type": "gp-global-section-611115494627345261",

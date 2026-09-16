@@ -1,8 +1,16 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "text-content": {
       "type": "text-content",
-      "disabled": true,
       "blocks": {
         "block-1": {
           "type": "text",
@@ -22,6 +30,7 @@
         "block-2",
         "block-3"
       ],
+      "disabled": true,
       "settings": {}
     },
     "1661138587d2b05718": {
@@ -55,19 +64,15 @@
         "block-2",
         "block-3"
       ],
-      "settings": {},
-      "disabled": true
+      "disabled": true,
+      "settings": {}
     },
     "blocks_VCPUw": {
       "type": "_blocks",
-      "disabled": false,
-      "settings": {},
       "blocks": {
         "ai_gen_block_f386099_M4tTz": {
           "type": "ai_gen_block_f386099",
-          "disabled": false,
           "settings": {
-            "header-ce2407a0cccb77746008f07d65a32104": null,
             "heading": "Deja tu reseña",
             "description": "Comparte tu experiencia con este producto",
             "name_label": "Nombre",
@@ -78,13 +83,11 @@
             "button_text": "Enviar reseña",
             "success_message": "¡Gracias por tu reseña! La revisaremos pronto.",
             "error_message": "Por favor completa todos los campos requeridos.",
-            "header-442266f3ac4dfd45d2581b127e855a5f": null,
             "desktop_width_percent": 100,
             "heading_size": 28,
             "border_radius": 8,
             "input_border_radius": 4,
             "button_border_radius": 4,
-            "header-33520b564a3c38bac53785d6d0f8cf9c": null,
             "background_color": "#f9f9f9",
             "text_color": "#000000",
             "input_border_color": "#cccccc",
@@ -102,7 +105,8 @@
       "block_order": [
         "ai_gen_block_f386099_M4tTz"
       ],
-      "name": "Formulario de reseñas"
+      "name": "Formulario de reseñas",
+      "settings": {}
     }
   },
   "order": [

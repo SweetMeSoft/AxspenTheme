@@ -1,21 +1,25 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "contact": {
       "type": "contact",
-      "settings": {},
       "disabled": true,
-      "blocks": {}
+      "settings": {}
     },
     "blocks_PwjLU": {
       "type": "_blocks",
-      "disabled": false,
-      "settings": {},
       "blocks": {
         "ai_gen_block_f386099_dT8rR": {
           "type": "ai_gen_block_f386099",
-          "disabled": false,
           "settings": {
-            "header-a5d41c44f9c1de00d4141b44b7cbbe6c": null,
             "heading": "Deja tu reseña",
             "description": "Comparte tu experiencia con este producto",
             "name_label": "Nombre",
@@ -26,13 +30,11 @@
             "button_text": "Enviar reseña",
             "success_message": "¡Gracias por tu reseña! La revisaremos pronto.",
             "error_message": "Por favor completa todos los campos requeridos.",
-            "header-e046a357a842457cf37c0fca21f297ff": null,
             "desktop_width_percent": 100,
             "heading_size": 28,
             "border_radius": 8,
             "input_border_radius": 4,
             "button_border_radius": 4,
-            "header-b1c51eab31fc6b03df6d2e5fe2157240": null,
             "background_color": "#f9f9f9",
             "text_color": "#000000",
             "input_border_color": "#cccccc",
@@ -50,7 +52,8 @@
       "block_order": [
         "ai_gen_block_f386099_dT8rR"
       ],
-      "name": "Formulario de reseñas"
+      "name": "Formulario de reseñas",
+      "settings": {}
     }
   },
   "order": [
