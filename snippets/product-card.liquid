@@ -321,7 +321,18 @@
 	{%- endform -%}
 {%- endcapture -%}
 
-<div class="product-card text-{{ alignment | default: 'left' }}"{% if show_product_id %} data-product-id="{{ product.id }}"{% endif %}>
+{%- liquid
+	assign avail_sizes_data = ''
+	for variant in product.variants
+		if variant.available
+			for opt in variant.options
+				assign avail_sizes_data = avail_sizes_data | append: opt | append: ','
+			endfor
+		endif
+	endfor
+-%}
+
+<div class="product-card text-{{ alignment | default: 'left' }}"{% if show_product_id %} data-product-id="{{ product.id }}"{% endif %} data-available="{{ product.available }}" data-available-sizes="{{ avail_sizes_data | escape }}">
 	<div class="product-media-wrap {{ card_image_ratio }}-media{{ image_effect }}{% if hover_media != nil and settings.card_image_hover_effect != 'none' %} has-second-image{% endif %}{% unless featured_image %} no-media{% endunless %}{% if settings.card_image_overlay %} has-overlay{% endif %}{% if settings.card_padding > 0 %} card-padding{% endif %}{% if scrolling_text != blank and product_sale %} scrolling-wrapper scrolling-{{ settings.card_scrolling_position }} scrolling-{{ settings.card_scrolling_direction }}{% endif %}">
 		{% comment %} Image {% endcomment %}
 		{%- if featured_image != blank -%}

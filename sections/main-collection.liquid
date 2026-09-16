@@ -755,8 +755,44 @@
 								{% comment %} Products {% endcomment %}
 								<div class="products">
 									{%- liquid
+										assign active_sizes_filter = ''
+										for filter in collection.filters
+											assign f_label = filter.label | downcase
+											assign f_param = filter.param_name | downcase
+											if f_label contains 'talla' or f_label contains 'size' or f_param contains 'talla' or f_param contains 'size'
+												for val in filter.active_values
+													assign active_sizes_filter = active_sizes_filter | append: val.value | downcase | append: '|||'
+												endfor
+											endif
+										endfor
+										assign active_sizes_filter_arr = active_sizes_filter | split: '|||'
+
 										for product in collection.products
-											render 'product-card', product: product, show_product_id: true
+											assign render_card = true
+											if active_sizes_filter_arr.size > 0
+												assign card_has_stock_in_size = false
+												for variant in product.variants
+													if variant.available
+														for opt in variant.options
+															assign opt_low = opt | downcase
+															if active_sizes_filter_arr contains opt_low
+																assign card_has_stock_in_size = true
+																break
+															endif
+														endfor
+													endif
+													if card_has_stock_in_size
+														break
+													endif
+												endfor
+												if card_has_stock_in_size == false
+													assign render_card = false
+												endif
+											endif
+
+											if render_card
+												render 'product-card', product: product, show_product_id: true
+											endif
 										endfor
 									-%}
 								</div>

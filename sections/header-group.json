@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "name": "t:sections.header.name",
   "type": "header",
@@ -17,27 +8,29 @@
         "slide_yUgcVi": {
           "type": "slide",
           "settings": {
-            "text": "<p>SABOR A CASA 🇨🇴✨</p>"
-          }
+            "text": "<p>🚚 <strong>ENVÍO GRATIS</strong> en Bogotá por compras de <strong>$270.000 </strong>o más 💙</p>"
+          },
+          "disabled": true
         },
         "slide_WpXy9W": {
           "type": "slide",
           "settings": {
-            "text": "<p>🚚 <strong>ENVÍO GRATIS</strong> en Bogotá por compras de <strong>$270.000 </strong>o más 💙</p>"
-          }
+            "text": "<h4>  ✨ 3 JEANS x $270.000 </h4>"
+          },
+          "disabled": false
         },
         "slide_wBqpfF": {
           "type": "slide",
-          "disabled": true,
+          "disabled": false,
           "settings": {
-            "text": "<p>✨ 3 JEANS x $270.000</p>"
+            "text": "<p><strong>SABOR A CASA 🇨🇴✨</strong></p>"
           }
         }
       },
       "block_order": [
+        "slide_wBqpfF",
         "slide_yUgcVi",
-        "slide_WpXy9W",
-        "slide_wBqpfF"
+        "slide_WpXy9W"
       ],
       "settings": {
         "color_scheme": "scheme-bb283ae1-5113-4975-a6d4-9c86e2d83e82",
@@ -48,7 +41,8 @@
         "padding_bottom": 5,
         "padding_top_mobile": 5,
         "padding_bottom_mobile": 5
-      }
+      },
+      "disabled": false
     },
     "header": {
       "type": "header",
@@ -56,12 +50,12 @@
         "mega_menu_B34RFR": {
           "type": "mega_menu",
           "settings": {
-            "mega_item": "3 JEANS X 240.000",
+            "mega_item": "3 JEANS X 270.000",
             "data": "collection",
             "image_ratio": "adapt",
             "data_menu": "menu-head",
             "data_collection": "jeans-mujer",
-            "image_1": "shopify://shop_images/IMG_1929.jpg",
+            "image_1": "shopify://shop_images/3x_270.png",
             "overlay_opacity": 0,
             "link_1": "shopify://collections/jeans-mujer",
             "text_1": "",

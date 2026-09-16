@@ -310,6 +310,223 @@ function btyMiniSearch( doc = document ) {
 	}
 }
 
+// Smart Filter state & helpers
+window.btySmartAvailabilityActive = window.btySmartAvailabilityActive || false;
+window.btyUserChangedAvailability = window.btyUserChangedAvailability || false;
+
+function btyIsSizeParam( name ) {
+	if ( ! name ) return false;
+	let n = name.toLowerCase();
+	return n.includes( 'talla' ) || n.includes( 'size' );
+}
+
+function btyIsAvailabilityParam( name ) {
+	if ( ! name ) return false;
+	let n = name.toLowerCase();
+	return n.includes( 'availability' ) || n.includes( 'disponib' );
+}
+
+function btyIsSizeElement( el ) {
+	if ( ! el ) return false;
+	if ( btyIsSizeParam( el.name ) ) return true;
+	let parent = el.closest( '.filter-item' );
+	if ( parent ) {
+		let label = parent.querySelector( '.filter-title, .heading-text' );
+		if ( label && btyIsSizeParam( label.textContent ) ) return true;
+	}
+	return false;
+}
+
+function btyIsAvailabilityElement( el ) {
+	if ( ! el ) return false;
+	if ( btyIsAvailabilityParam( el.name ) ) return true;
+	let parent = el.closest( '.filter-item' );
+	if ( parent ) {
+		let label = parent.querySelector( '.filter-title, .heading-text' );
+		if ( label && btyIsAvailabilityParam( label.textContent ) ) return true;
+	}
+	return false;
+}
+
+function btyApplySmartFilter( form, changedEl ) {
+	if ( ! form ) return;
+
+	if ( changedEl && btyIsAvailabilityElement( changedEl ) ) {
+		window.btyUserChangedAvailability = true;
+		if ( changedEl.hasAttribute( 'data-smart-applied' ) ) {
+			changedEl.removeAttribute( 'data-smart-applied' );
+		}
+		return;
+	}
+
+	let sizeCheckboxes = Array.from( form.querySelectorAll( 'input[type="checkbox"]' ) ).filter( btyIsSizeElement );
+	let hasCheckedSize = sizeCheckboxes.some( function( ip ) { return ip.checked; } );
+
+	let availCheckboxes = Array.from( form.querySelectorAll( 'input[type="checkbox"]' ) ).filter( btyIsAvailabilityElement );
+	let inStockCheckbox = availCheckboxes.find( function( ip ) { return ip.value === '1' || ip.value.toLowerCase() === 'true'; } );
+	let outOfStockCheckbox = availCheckboxes.find( function( ip ) { return ip.value === '0' || ip.value.toLowerCase() === 'false'; } );
+
+	if ( hasCheckedSize ) {
+		if ( ! window.btyUserChangedAvailability && ( ! outOfStockCheckbox || ! outOfStockCheckbox.checked ) ) {
+			if ( inStockCheckbox && ! inStockCheckbox.checked ) {
+				inStockCheckbox.checked = true;
+				inStockCheckbox.setAttribute( 'data-smart-applied', 'true' );
+				window.btySmartAvailabilityActive = true;
+			} else if ( inStockCheckbox && inStockCheckbox.checked ) {
+				window.btySmartAvailabilityActive = true;
+			}
+		}
+	} else {
+		if ( inStockCheckbox && inStockCheckbox.hasAttribute( 'data-smart-applied' ) ) {
+			inStockCheckbox.checked = false;
+			inStockCheckbox.removeAttribute( 'data-smart-applied' );
+			window.btySmartAvailabilityActive = false;
+		}
+	}
+}
+
+function btyEnsureSmartSearchParams( form, searchParams ) {
+	let sizeCheckboxes = form ? Array.from( form.querySelectorAll( 'input[type="checkbox"]' ) ).filter( btyIsSizeElement ) : [];
+	let hasCheckedSize = sizeCheckboxes.some( function( ip ) { return ip.checked; } );
+
+	let hasSizeInParams = false;
+	for ( let key of searchParams.keys() ) {
+		if ( btyIsSizeParam( key ) ) {
+			hasSizeInParams = true;
+			break;
+		}
+	}
+
+	if ( ( hasCheckedSize || hasSizeInParams ) && ! window.btyUserChangedAvailability ) {
+		let availCheckboxes = form ? Array.from( form.querySelectorAll( 'input[type="checkbox"]' ) ).filter( btyIsAvailabilityElement ) : [];
+		let outOfStockCheckbox = availCheckboxes.find( function( ip ) { return ip.value === '0' || ip.value.toLowerCase() === 'false'; } );
+
+		if ( ( ! outOfStockCheckbox || ! outOfStockCheckbox.checked ) && ! searchParams.has( 'filter.v.availability' ) ) {
+			searchParams.set( 'filter.v.availability', '1' );
+			window.btySmartAvailabilityActive = true;
+		}
+	}
+}
+
+function btyFilterProductsBySizeStock( wrapper ) {
+	if ( ! wrapper ) return;
+	let productsContainer = wrapper.querySelector( '.products' );
+	if ( ! productsContainer ) return;
+
+	let activeSizes = [];
+	let currentUrl = new URL( window.location.href );
+	for ( let [key, val] of currentUrl.searchParams.entries() ) {
+		if ( btyIsSizeParam( key ) && val ) {
+			let v = val.toLowerCase().trim();
+			if ( ! activeSizes.includes( v ) ) {
+				activeSizes.push( v );
+			}
+		}
+	}
+
+	let form = wrapper.querySelector( '.filter-form' ) || wrapper.querySelector( '.mobile-filter-form' );
+	if ( form ) {
+		let checkedSizes = Array.from( form.querySelectorAll( 'input[type="checkbox"]:checked' ) ).filter( btyIsSizeElement );
+		checkedSizes.forEach( function( ip ) {
+			let v = ip.value.toLowerCase().trim();
+			if ( ! activeSizes.includes( v ) ) {
+				activeSizes.push( v );
+			}
+		} );
+	}
+
+	let cards = productsContainer.querySelectorAll( '.product-card' );
+	if ( ! cards.length ) return;
+
+	let visibleCount = 0;
+	cards.forEach( function( card ) {
+		if ( activeSizes.length === 0 ) {
+			card.classList.remove( 'smart-filter-hidden' );
+			card.style.display = '';
+			visibleCount++;
+			return;
+		}
+
+		let hasStock = false;
+		let availSizesAttr = card.getAttribute( 'data-available-sizes' );
+		if ( availSizesAttr !== null && availSizesAttr !== undefined ) {
+			let sizesArr = availSizesAttr.split( ',' ).map( function( s ) { return s.trim().toLowerCase(); } ).filter( Boolean );
+			hasStock = activeSizes.some( function( s ) { return sizesArr.includes( s ); } );
+		} else {
+			let variantScript = card.querySelector( 'script[data-product-variants]' );
+			if ( variantScript ) {
+				try {
+					let variants = JSON.parse( variantScript.textContent );
+					hasStock = variants.some( function( v ) {
+						if ( ! v.available ) return false;
+						let opts = ( v.options || [] ).map( function( o ) { return String( o ).toLowerCase().trim(); } );
+						return activeSizes.some( function( s ) { return opts.includes( s ) || ( v.title && v.title.toLowerCase().includes( s ) ); } );
+					} );
+				} catch ( e ) {
+					hasStock = true;
+				}
+			} else {
+				hasStock = true;
+			}
+		}
+
+		if ( ! hasStock ) {
+			card.classList.add( 'smart-filter-hidden' );
+			card.style.display = 'none';
+		} else {
+			card.classList.remove( 'smart-filter-hidden' );
+			card.style.display = '';
+			visibleCount++;
+		}
+	} );
+
+	let noProductsMsg = productsContainer.querySelector( '.no-products-size-msg' );
+	if ( activeSizes.length > 0 && visibleCount === 0 && cards.length > 0 ) {
+		if ( ! noProductsMsg ) {
+			let p = document.createElement( 'p' );
+			p.className = 'no-products-size-msg';
+			p.style.gridColumn = '1 / -1';
+			p.style.textAlign = 'center';
+			p.style.padding = '40px 0';
+			p.textContent = 'No se encontraron productos disponibles en la talla seleccionada.';
+			productsContainer.appendChild( p );
+		}
+	} else if ( noProductsMsg ) {
+		noProductsMsg.remove();
+	}
+}
+
+function btySmartFilterInit( doc = document ) {
+	let wrapper = doc.querySelector( '.has-product-filters' );
+	if ( ! wrapper ) return;
+
+	let currentUrl = new URL( window.location.href );
+	let hasSizeInUrl = false;
+	for ( let key of currentUrl.searchParams.keys() ) {
+		if ( btyIsSizeParam( key ) ) {
+			hasSizeInUrl = true;
+			break;
+		}
+	}
+
+	if ( hasSizeInUrl && ! currentUrl.searchParams.has( 'filter.v.availability' ) && ! window.btyUserChangedAvailability ) {
+		currentUrl.searchParams.set( 'filter.v.availability', '1' );
+		window.btySmartAvailabilityActive = true;
+		let form = wrapper.querySelector( '.filter-form' );
+		if ( form ) {
+			let inStockCheckbox = Array.from( form.querySelectorAll( 'input[type="checkbox"]' ) ).find( function( ip ) {
+				return btyIsAvailabilityElement( ip ) && ( ip.value === '1' || ip.value.toLowerCase() === 'true' );
+			} );
+			if ( inStockCheckbox ) {
+				inStockCheckbox.checked = true;
+				inStockCheckbox.setAttribute( 'data-smart-applied', 'true' );
+			}
+		}
+	}
+
+	btyFilterProductsBySizeStock( wrapper );
+}
+
 // Desktop filter.
 function btyDesktopFilters( doc = document ) {
 	let currentUrl = new URL( window.location.href ),
@@ -392,8 +609,14 @@ function btyDesktopFilters( doc = document ) {
 		filters.forEach(
 			function( el ) {
 				el.onchange = function() {
-					let formData           = new FormData( form ),
-						searchParamsString = window.location.pathname + '?' + new URLSearchParams( formData ).toString();
+					btyApplySmartFilter( form, el );
+
+					let formData     = new FormData( form ),
+						searchParams = new URLSearchParams( formData );
+
+					btyEnsureSmartSearchParams( form, searchParams );
+
+					let searchParamsString = window.location.pathname + '?' + searchParams.toString();
 
 					currentUrl = new URL( searchParamsString, window.location.origin );
 
@@ -417,7 +640,33 @@ function btyDesktopFilters( doc = document ) {
 					function( e ) {
 						e.preventDefault();
 
-						currentUrl = new URL( el.href, window.location.origin );
+						if ( el.getAttribute( 'data-reset' ) === 'all' || el.href.indexOf( 'filter.' ) === -1 ) {
+							window.btySmartAvailabilityActive = false;
+							window.btyUserChangedAvailability = false;
+							currentUrl = new URL( el.href, window.location.origin );
+						} else {
+							let targetUrl = new URL( el.href, window.location.origin );
+
+							if ( currentUrl.searchParams.has( 'filter.v.availability' ) && ! targetUrl.searchParams.has( 'filter.v.availability' ) ) {
+								window.btyUserChangedAvailability = true;
+								window.btySmartAvailabilityActive = false;
+							}
+
+							let hasRemainingSize = false;
+							for ( let key of targetUrl.searchParams.keys() ) {
+								if ( btyIsSizeParam( key ) ) {
+									hasRemainingSize = true;
+									break;
+								}
+							}
+
+							if ( ! hasRemainingSize && window.btySmartAvailabilityActive ) {
+								targetUrl.searchParams.delete( 'filter.v.availability' );
+								window.btySmartAvailabilityActive = false;
+							}
+
+							currentUrl = targetUrl;
+						}
 
 						desktopFiltering( currentUrl );
 					}
@@ -669,6 +918,7 @@ function btyDesktopFilters( doc = document ) {
 					resetFilters();
 					btyRangeSlider( wrapper );
 					btyDesktopFilters( document );
+					btyFilterProductsBySizeStock( wrapper );
 
 					if ( 'function' === typeof( btyToggleDetails ) ) {
 						btyToggleDetails( wrapper );
@@ -814,7 +1064,33 @@ function btyMobileFilters( doc = document ) {
 					function( e ) {
 						e.preventDefault();
 
-						currentUrl = new URL( el.href, window.location.origin );
+						if ( el.getAttribute( 'data-reset' ) === 'all' || el.href.indexOf( 'filter.' ) === -1 ) {
+							window.btySmartAvailabilityActive = false;
+							window.btyUserChangedAvailability = false;
+							currentUrl = new URL( el.href, window.location.origin );
+						} else {
+							let targetUrl = new URL( el.href, window.location.origin );
+
+							if ( currentUrl.searchParams.has( 'filter.v.availability' ) && ! targetUrl.searchParams.has( 'filter.v.availability' ) ) {
+								window.btyUserChangedAvailability = true;
+								window.btySmartAvailabilityActive = false;
+							}
+
+							let hasRemainingSize = false;
+							for ( let key of targetUrl.searchParams.keys() ) {
+								if ( btyIsSizeParam( key ) ) {
+									hasRemainingSize = true;
+									break;
+								}
+							}
+
+							if ( ! hasRemainingSize && window.btySmartAvailabilityActive ) {
+								targetUrl.searchParams.delete( 'filter.v.availability' );
+								window.btySmartAvailabilityActive = false;
+							}
+
+							currentUrl = targetUrl;
+						}
 
 						mobileFiltering( currentUrl );
 					}
@@ -1022,6 +1298,7 @@ function btyMobileFilters( doc = document ) {
 					btyRangeSlider( wrapper );
 					removeFilter();
 					btyPagination( mobileFiltering, currentUrl );
+					btyFilterProductsBySizeStock( wrapper );
 
 					if ( 'function' === typeof( btyToggleDetails ) ) {
 						btyToggleDetails( wrapper );
@@ -1131,8 +1408,14 @@ function btyMobileFilters( doc = document ) {
 		if ( submit === target ) {
 			e.preventDefault();
 
-			let formData           = new FormData( form ),
-				searchParamsString = window.location.pathname + '?' + new URLSearchParams( formData ).toString();
+			btyApplySmartFilter( form );
+
+			let formData     = new FormData( form ),
+				searchParams = new URLSearchParams( formData );
+
+			btyEnsureSmartSearchParams( form, searchParams );
+
+			let searchParamsString = window.location.pathname + '?' + searchParams.toString();
 
 			currentUrl = new URL( searchParamsString, window.location.origin );
 
@@ -1157,6 +1440,16 @@ function btyMobileFilters( doc = document ) {
 		}
 	);
 
+	// Attach change listener to mobile checkboxes for smart filter synchronization
+	let mobileCheckboxes = form ? form.querySelectorAll( 'input[type="checkbox"]' ) : [];
+	mobileCheckboxes.forEach(
+		function( el ) {
+			el.addEventListener( 'change', function() {
+				btyApplySmartFilter( form, el );
+			} );
+		}
+	);
+
 	removeFilter();
 
 	if ( window.matchMedia( '(max-width: 991px)' ).matches ) {
@@ -1172,6 +1465,7 @@ document.addEventListener(
 		btyRangeSlider();
 		btyDesktopFilters();
 		btyMobileFilters();
+		btySmartFilterInit( document );
 	}
 );
 
@@ -1182,5 +1476,6 @@ document.addEventListener(
 		btyRangeSlider( e.target );
 		btyDesktopFilters( e.target );
 		btyMobileFilters( e.target );
+		btySmartFilterInit( e.target );
 	}
 );

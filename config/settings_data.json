@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "current": {
     "blocks": {
@@ -68,7 +59,7 @@
       "18408366429334172745": {
         "disabled": false,
         "settings": {},
-        "type": "shopify://apps/pop-convert-pop-ups-banners/blocks/app-embed/ed587aec-4936-43ae-a1b3-1c9e0d08f185"
+        "type": "shopify://apps/pop-convert/blocks/app-embed/ed587aec-4936-43ae-a1b3-1c9e0d08f185"
       },
       "2200952712151285029": {
         "disabled": false,
@@ -110,24 +101,24 @@
     "body_font_size": 14,
     "breadcrumb": true,
     "button_radius": 4,
-    "card_image_overlay": false,
+    "card_image_overlay": true,
     "card_image_ratio": "portrait",
-    "card_padding": 24,
+    "card_padding": 16,
     "card_show_rating": false,
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background_color": "#ffffff",
+          "background_color": "#acdafe",
           "background_gradient": "",
-          "text_color": "#000000",
-          "heading_color": "#232020",
+          "text_color": "#4e2c08",
+          "heading_color": "#4e2c08",
           "link_color": "#232020",
           "success_color": "#00aa00",
           "error_color": "#ff0000",
-          "loading_color": "#2b2b2b",
-          "button_bg_color": "#232020",
-          "button_text_color": "#ffffff",
-          "button_outline_color": "#232020",
+          "loading_color": "#000000",
+          "button_bg_color": "#ffffff",
+          "button_text_color": "#000000",
+          "button_outline_color": "#000000",
           "sale_label": "#ce373a",
           "sale_price": "#ce373a",
           "in_stock": "#1e9458",
@@ -140,13 +131,13 @@
         "settings": {
           "background_color": "#ffffff",
           "background_gradient": "",
-          "text_color": "#000000",
-          "heading_color": "#ffffff",
+          "text_color": "#53565e",
+          "heading_color": "#53565e",
           "link_color": "#ffffff",
           "success_color": "#00aa00",
           "error_color": "#ff0000",
           "loading_color": "#2b2b2b",
-          "button_bg_color": "#232020",
+          "button_bg_color": "#acdafe",
           "button_text_color": "#ffffff",
           "button_outline_color": "#232020",
           "sale_label": "#ce373a",
@@ -159,10 +150,10 @@
       },
       "scheme-f6417a66-de69-4b20-8437-8ee13a4b4b42": {
         "settings": {
-          "background_color": "#fff7da",
+          "background_color": "#fffcf2",
           "background_gradient": "",
           "text_color": "#a46d43",
-          "heading_color": "#232020",
+          "heading_color": "#7c0204",
           "link_color": "#232020",
           "success_color": "#00aa00",
           "error_color": "#ff0000",
@@ -201,7 +192,7 @@
       },
       "scheme-bb283ae1-5113-4975-a6d4-9c86e2d83e82": {
         "settings": {
-          "background_color": "#000000",
+          "background_color": "#acdafe",
           "background_gradient": "",
           "text_color": "#ffffff",
           "heading_color": "#ffffff",
@@ -210,7 +201,7 @@
           "error_color": "#ff0000",
           "loading_color": "#2b2b2b",
           "button_bg_color": "#232020",
-          "button_text_color": "#ffffff",
+          "button_text_color": "#7c0204",
           "button_outline_color": "#232020",
           "sale_label": "#ce373a",
           "sale_price": "#ce373a",
@@ -327,7 +318,10 @@
     "social_twitter_link": "",
     "social_youtube_link": "",
     "sticky_toolbar_mobile": true,
-    "swatch_type": "color"
+    "swatch_type": "color",
+    "card_show_title": true,
+    "card_show_stock": false,
+    "cart_note": true
   },
   "presets": {
     "Limitless": {
