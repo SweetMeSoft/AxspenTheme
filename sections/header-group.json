@@ -14,6 +14,18 @@
     "topbar": {
       "type": "topbar",
       "blocks": {
+        "slide_AXY8tD": {
+          "type": "slide",
+          "settings": {
+            "text": "<p>Jeans desde 89,900</p>"
+          }
+        },
+        "slide_wBqpfF": {
+          "type": "slide",
+          "settings": {
+            "text": "<p><strong>SABOR A CASA 🇨🇴✨</strong></p>"
+          }
+        },
         "slide_yUgcVi": {
           "type": "slide",
           "disabled": true,
@@ -23,18 +35,14 @@
         },
         "slide_WpXy9W": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "text": "<h4>  ✨ 3 JEANS x $270.000 </h4>"
-          }
-        },
-        "slide_wBqpfF": {
-          "type": "slide",
-          "settings": {
-            "text": "<p><strong>SABOR A CASA 🇨🇴✨</strong></p>"
           }
         }
       },
       "block_order": [
+        "slide_AXY8tD",
         "slide_wBqpfF",
         "slide_yUgcVi",
         "slide_WpXy9W"
