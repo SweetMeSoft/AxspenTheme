@@ -15,7 +15,7 @@
 				<p>{{- 'cart.general.empty' | t -}}</p>
 			{%- else -%}
 				{%- for item in cart.items -%}
-					<div class="product-item" data-id="{{ item.id }}" data-line="{{ forloop.index }}">
+					<div class="product-item" data-id="{{ item.id }}" data-key="{{ item.key }}" data-line="{{ forloop.index }}">
 						{%- if item.image -%}
 							<a href="{{ item.url | default: '#' }}" class="product-image{% unless item.image %} no-image{% endunless %}" tabindex="-1">
 								<img src="{{ item.image | image_url: width: 300 }}" alt="{{ item.image.alt | escape }}" loading="lazy" width="150" height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}" />
@@ -91,12 +91,15 @@
 									<input class="quantity-input"
 										type="number"
 										name="quantity"
-										id="quantity-item-{{ item.index | plus: 1 }}"
+										id="quantity-item-{{ forloop.index }}"
 										min="0"
 										step="1"
+										data-key="{{ item.key }}"
+										data-line="{{ forloop.index }}"
 										data-qty="{{ item.quantity }}"
 										value="{{ item.quantity }}"
 										aria-label="{{ 'products.product.quantity.input_label' | t: product: item.product.title | escape }}"
+										autocomplete="off"
 										data-noui>
 
 									<button class="quantity-button" name="plus" type="button">
@@ -121,7 +124,7 @@
 								</div>
 
 								{% comment %} Remove {% endcomment %}
-								<a href="{{ item.url_to_remove }}" class="product-remove" aria-label="{{ 'sections.cart.remove_title' | t: title: item.title }}">
+								<a href="{{ item.url_to_remove }}" class="product-remove" data-line="{{ forloop.index }}" data-key="{{ item.key }}" aria-label="{{ 'sections.cart.remove_title' | t: title: item.title }}">
 									<span class="tooltip">{{- 'products.product.remove' | t -}}</span>
 									<span class="remove-icon">{%- render 'icon', code: 'remove' -%}</span>
 								</a>

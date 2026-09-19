@@ -1504,7 +1504,12 @@ function btySelectedVariant( variant, data, slider ) {
 function btyFetchCart( obj, modules, item ) {
 	let body = JSON.stringify( obj );
 
-	fetch( btyGlobals.cart_change_url, {...btyFetchConfig(), ...{ body }})
+	let changeUrl = btyGlobals.cart_change_url || '/cart/change.js';
+	if ( ! changeUrl.endsWith( '.js' ) && ! changeUrl.includes( '.js?' ) ) {
+		changeUrl = changeUrl.replace( /\/?$/, '.js' );
+	}
+
+	fetch( changeUrl, {...btyFetchConfig(), ...{ body }})
 		.then(
 			function( r ) {
 				return r.json();
@@ -1582,7 +1587,9 @@ function btyFetchCart( obj, modules, item ) {
 						totalPrice.innerHTML = btyGetSectionHtml( res.sections['main-cart'], '[data-line="' + obj.line + '"] .totals-item-price' );
 					}
 
-					if ( sidecartContent ) {
+					if ( sidecartContent && res.sections && res.sections['side-cart'] ) {
+						sidecartContent.innerHTML = btyGetSectionHtml( res.sections['side-cart'], '.side-cart-content' );
+					} else if ( sidecartContent ) {
 						item.innerHTML = btyGetSectionHtml( res.sections['side-cart'], '[data-line="' + obj.line + '"]' );
 					}
 
@@ -1594,16 +1601,26 @@ function btyFetchCart( obj, modules, item ) {
 						);
 					}
 				} else {
-					item.remove();
+					let sidecartContent = item.closest( '.side-cart-content' );
+					if ( sidecartContent && res.sections && res.sections['side-cart'] ) {
+						sidecartContent.innerHTML = btyGetSectionHtml( res.sections['side-cart'], '.side-cart-content' );
+					} else {
+						item.remove();
+					}
 				}
 
 				// Update html.
 				btyUpdateHtml( res.sections, modules );
 
-				// Update sidecart total price.
-				let sideCartPrice = document.querySelector( '.side-cart-footer .total-price' );
-				if ( sideCartPrice ) {
-					sideCartPrice.innerHTML = btyGetSectionHtml( res.sections['side-cart'], '.total-price' );;
+				// Update sidecart footer.
+				let sideCartFooter = document.querySelector( '.side-cart-footer' );
+				if ( sideCartFooter && res.sections && res.sections['side-cart'] ) {
+					sideCartFooter.innerHTML = btyGetSectionHtml( res.sections['side-cart'], '.side-cart-footer' );
+				} else {
+					let sideCartPrice = document.querySelector( '.side-cart-footer .total-price' );
+					if ( sideCartPrice && res.sections && res.sections['side-cart'] ) {
+						sideCartPrice.innerHTML = btyGetSectionHtml( res.sections['side-cart'], '.total-price' );
+					}
 				}
 
 				// Re-init quantity button.
@@ -1611,6 +1628,9 @@ function btyFetchCart( obj, modules, item ) {
 
 				// Re-init update product quantity.
 				btyUpdateProductQuantity();
+
+				// Re-init side cart close button.
+				btySideCart();
 			}
 		).catch(
 			function( e ) {

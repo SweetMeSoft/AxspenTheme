@@ -475,104 +475,290 @@
 {%- endif -%}
 
 	<script>
-console.log('--- Monitor de Carrito Total v4 (Agregar y Borrar) ---');
+console.log('--- Monitor de Carrito Total v5 (Agregar, Borrar y Cantidades) ---');
 
-// 1. FUNCIÓN REUTILIZABLE PARA SINCRONIZAR EL CARRITO CON EL SERVIDOR
-function sincronizarCarrito(forzarApertura) {
-  console.log('Sincronizando datos frescos desde el controlador /cart...');
-  
-  fetch('/cart?sections=side-cart,cart-count&t=' + Date.now())
-    .then(res => res.json())
-    .then(sections => {
-      const parser = new DOMParser();
-      const cartDrawer = document.querySelector('cart-drawer, #CartDrawer, .cart-drawer, #cart-drawer, .side-cart');
+// 1. ACTUALIZAR INTERFAZ DEL CARRITO CON SECCIONES FRESCAS
+function actualizarContenidoCarrito(sections, forzarApertura) {
+  if (!sections) return;
+  const parser = new DOMParser();
+  const cartDrawer = document.querySelector('cart-drawer, #CartDrawer, .cart-drawer, #cart-drawer, .side-cart');
 
-      if (!cartDrawer) return;
+  if (cartDrawer && sections['side-cart']) {
+    const docCart = parser.parseFromString(sections['side-cart'], 'text/html');
+    const nuevoDrawerRoot = docCart.querySelector('cart-drawer, #CartDrawer, .cart-drawer, #cart-drawer, .side-cart') || docCart.body.firstElementChild || docCart.body;
 
-      const docCart = parser.parseFromString(sections['side-cart'], 'text/html');
-      const nuevoDrawerRoot = docCart.querySelector('cart-drawer, #CartDrawer, .cart-drawer, #cart-drawer, .side-cart') || docCart.body.firstElementChild || docCart.body;
+    if (nuevoDrawerRoot) {
+      const eraAbierto = document.documentElement.classList.contains('side-cart-open') || cartDrawer.classList.contains('is-open') || cartDrawer.classList.contains('active');
+      const clasesActuales = Array.from(cartDrawer.classList);
 
-      if (nuevoDrawerRoot) {
-        const clasesActuales = Array.from(cartDrawer.classList);
-        
-        // Reemplazamos el HTML interno con las cantidades reales del servidor
-        cartDrawer.innerHTML = nuevoDrawerRoot.innerHTML;
-        
-        // Devolvemos las clases para mantenerlo visible
-        clasesActuales.forEach(clase => cartDrawer.classList.add(clase));
+      // Reemplazamos el HTML interno con los datos frescos del servidor
+      cartDrawer.innerHTML = nuevoDrawerRoot.innerHTML;
+
+      // Restauramos las clases del contenedor
+      clasesActuales.forEach(clase => cartDrawer.classList.add(clase));
+
+      if (forzarApertura || eraAbierto) {
         cartDrawer.classList.add('is-open', 'active');
+        document.documentElement.classList.add('side-cart-open');
 
-        // Aseguramos el tiro en las capas de animación internas
         const capasInternas = cartDrawer.querySelectorAll('.drawer, .drawer__inner, .cart-drawer__inner, .drawer__wrapper');
         capasInternas.forEach(capa => {
           capa.classList.add('is-open', 'active', 'active-drawer');
         });
       }
+    }
+  }
 
-      // ACTUALIZACIÓN DEL CONTADOR GLOBAL DE LA CABECERA
-      const nuevoCountHTML = sections['cart-count'];
-      if (nuevoCountHTML) {
-        const cartCountBubble = document.querySelector('.cart-count-bubble, #cart-icon-bubble, .cart-count, .header__cart-count');
-        if (cartCountBubble) {
-          const docCount = parser.parseFromString(nuevoCountHTML, 'text/html');
-          cartCountBubble.innerHTML = docCount.body.innerHTML;
+  // Actualización del contador global de la cabecera
+  const nuevoCountHTML = sections['cart-count'];
+  if (nuevoCountHTML !== undefined && nuevoCountHTML !== null) {
+    const parserCount = new DOMParser();
+    const docCount = parserCount.parseFromString(String(nuevoCountHTML), 'text/html');
+    const valorContador = docCount.body.textContent.trim();
+
+    const selectoresContador = '.cart-count-bubble, #cart-icon-bubble, .cart-count, .header__cart-count, .action-cart .cart-count, .header-icon.action-cart span:not(.sr-only)';
+    const elementosContador = document.querySelectorAll(selectoresContador);
+    elementosContador.forEach(el => {
+      el.textContent = valorContador;
+    });
+  }
+
+  // Re-inicializar utilidades del tema si existen
+  if (typeof window.btyQuantityButton === 'function' && cartDrawer) {
+    try { window.btyQuantityButton(cartDrawer); } catch (e) { console.error('Error en btyQuantityButton:', e); }
+  }
+  if (typeof window.btyUpdateProductQuantity === 'function' && cartDrawer) {
+    try { window.btyUpdateProductQuantity(cartDrawer); } catch (e) { console.error('Error en btyUpdateProductQuantity:', e); }
+  }
+  if (typeof window.btySideCart === 'function') {
+    try { window.btySideCart(); } catch (e) { console.error('Error en btySideCart:', e); }
+  }
+
+  // Notificar a listeners globales
+  document.dispatchEvent(new CustomEvent('cart:updated', { bubbles: true }));
+
+  if (forzarApertura) {
+    setTimeout(() => {
+      document.documentElement.classList.add('side-cart-open');
+      if (cartDrawer && typeof cartDrawer.open === 'function') {
+        cartDrawer.open();
+      } else {
+        const cartIcon = document.querySelector('.header__cart-icon, #cart-icon-bubble, .cart-toggle, .header__icon--cart, [href="/cart"]');
+        if (cartIcon && !document.documentElement.classList.contains('side-cart-open')) {
+          cartIcon.click();
         }
       }
-
-      // Avisamos a los listeners globales del tema
-      document.dispatchEvent(new CustomEvent('cart:updated', { bubbles: true }));
-      
-      // Solo forzamos la apertura si viene del botón "Añadir"
-      if (forzarApertura) {
-        setTimeout(() => {
-          if (typeof cartDrawer.open === 'function') {
-            cartDrawer.open();
-          } else {
-            const cartIcon = document.querySelector('.header__cart-icon, #cart-icon-bubble, .cart-toggle, .header__icon--cart, [href="/cart"]');
-            if (cartIcon) cartIcon.click();
-          }
-        }, 100);
-      }
-    })
-    .catch(err => console.error('Error crítico en la sincronización:', err));
+    }, 100);
+  }
 }
 
-// 2. ESCUCHA GLOBAL DE EVENTOS DE CLIC (Fase de captura)
+// 2. SINCRONIZACIÓN COMPLETA DESDE EL SERVIDOR (/cart)
+function sincronizarCarrito(forzarApertura) {
+  fetch('/cart?sections=side-cart,cart-count&t=' + Date.now())
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP ' + res.status + ' al consultar /cart');
+      return res.json();
+    })
+    .then(sections => {
+      actualizarContenidoCarrito(sections, forzarApertura);
+    })
+    .catch(err => console.error('Error en sincronizarCarrito:', err));
+}
+
+// 3. CAMBIO DE CANTIDAD DIRECTO MEDIANTE API (/cart/change.js)
+function cambiarCantidadProducto(itemEl, nuevaCantidad) {
+  if (!itemEl) return;
+  const line = itemEl.getAttribute('data-line');
+  const key = itemEl.getAttribute('data-key');
+  const id = itemEl.getAttribute('data-id');
+
+  itemEl.classList.add('updating');
+
+  const payload = {
+    quantity: nuevaCantidad,
+    sections: 'side-cart,cart-count',
+    sections_url: window.location.pathname
+  };
+
+  if (key) {
+    payload.id = key;
+  } else if (line) {
+    payload.line = parseInt(line, 10);
+  } else if (id) {
+    payload.id = id;
+  }
+
+  fetch('/cart/change.js', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(res => {
+    if (!res.ok) {
+      return res.json().then(errData => { throw errData; });
+    }
+    return res.json();
+  })
+  .then(cartData => {
+    if (cartData.sections) {
+      actualizarContenidoCarrito(cartData.sections, false);
+    } else {
+      sincronizarCarrito(false);
+    }
+  })
+  .catch(err => {
+    console.error('Error al actualizar cantidad en el servidor:', err);
+    itemEl.classList.remove('updating');
+    const warning = itemEl.querySelector('.product-warning');
+    if (warning) {
+      warning.innerHTML = (err && (err.message || err.description)) ? (err.message || err.description) : 'No se pudo actualizar la cantidad';
+    }
+    setTimeout(() => sincronizarCarrito(false), 600);
+  });
+}
+
+// 4. FUNCIÓN PARA CERRAR EL CARRITO LATERAL
+function cerrarSideCart() {
+  document.documentElement.classList.remove('side-cart-open');
+  const cartDrawer = document.querySelector('cart-drawer, #CartDrawer, .cart-drawer, #cart-drawer, .side-cart');
+  if (cartDrawer) {
+    cartDrawer.classList.remove('is-open', 'active');
+    const capasInternas = cartDrawer.querySelectorAll('.drawer, .drawer__inner, .cart-drawer__inner, .drawer__wrapper');
+    capasInternas.forEach(capa => {
+      capa.classList.remove('is-open', 'active', 'active-drawer');
+    });
+  }
+}
+
+// 5. ESCUCHA GLOBAL DELEGADA DE CLICS (Fase de captura)
 document.addEventListener('click', function(e) {
-  
-  // CASO A: DETECTAR CLIC EN EL BOTÓN DE COMPRA (Añadir al carrito)
-  const addButton = e.target.closest('button[type="submit"], .add-to-cart-button, [name="add"], .gp-product-button');
-  if (addButton) {
-    console.log('¡Click de compra detectado!');
-    setTimeout(function() {
-      sincronizarCarrito(true); // Sincroniza y fuerza apertura
-    }, 1000);
+  // CASO 1: BOTONES DE MÁS (+) Y MENOS (-) EN EL SIDE-CART
+  const qtyButton = e.target.closest('.side-cart .quantity-button, cart-drawer .quantity__button, .side-cart [name="minus"], .side-cart [name="plus"]');
+  if (qtyButton) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const itemEl = qtyButton.closest('.product-item, .cart-item, [data-line]');
+    if (!itemEl || itemEl.classList.contains('updating')) return;
+
+    const input = itemEl.querySelector('.quantity-input, .quantity__input, input[name="quantity"], input[name="updates[]"]');
+    if (!input) return;
+
+    const currentQty = parseInt(input.value || input.getAttribute('data-qty') || 0, 10);
+    const step = parseInt(input.getAttribute('step') || 1, 10);
+    const min = parseInt(input.getAttribute('min') || 0, 10);
+    const maxAttr = input.getAttribute('max');
+    const max = maxAttr ? parseInt(maxAttr, 10) : null;
+
+    const isMinus = qtyButton.getAttribute('name') === 'minus' ||
+                    qtyButton.classList.contains('quantity-minus-icon') ||
+                    qtyButton.classList.contains('quantity__button--minus');
+
+    let newQty = currentQty;
+    if (isMinus) {
+      newQty = currentQty - step;
+      if (newQty < min) return;
+    } else {
+      newQty = currentQty + step;
+      if (max !== null && newQty > max) return;
+    }
+
+    input.value = newQty;
+    cambiarCantidadProducto(itemEl, newQty);
     return;
   }
 
-  // CASO B: DETECTAR CLIC EN EL BOTÓN / ENLACE DE BORRAR PRODUCTO
-  const removeButton = e.target.closest('a[href*="/cart/change"], .cart-item__remove, [data-cart-remove], .cart-remove, [href*="quantity=0"]');
-  if (removeButton) {
-    console.log('¡Click de eliminación detectado! Evitando redirección nativa...');
-    
-    // Frenamos en seco la redirección a la página completa de /cart
-    e.preventDefault(); 
+  // CASO 2: BOTÓN DE CERRAR EL SIDE-CART
+  const closeButton = e.target.closest('.side-cart-close, .side-cart .close-button, [data-cart-close]');
+  if (closeButton) {
+    e.preventDefault();
+    cerrarSideCart();
+    return;
+  }
 
-    const urlCambio = removeButton.href; // Obtenemos la URL de borrado de Shopify
-    if (urlCambio) {
-      // Ejecutamos el borrado de forma invisible por debajo
-      fetch(urlCambio)
-        .then(() => {
-          console.log('Producto eliminado en backend. Actualizando interfaz...');
-          // Refrescamos el contenido inmediatamente sin cerrar el menú
-          setTimeout(function() {
-            sincronizarCarrito(false); 
-          }, 300);
-        })
-        .catch(err => console.error('Error al intentar borrar el producto:', err));
+  // CASO 3: CLIC EN EL FONDO OSCURO DEL SIDE-CART (BACKDROP)
+  if (e.target.classList.contains('side-cart') || e.target.id === 'CartDrawer-Overlay') {
+    cerrarSideCart();
+    return;
+  }
+
+  // CASO 4: DETECTAR CLIC EN EL BOTÓN / ENLACE DE BORRAR PRODUCTO
+  const removeButton = e.target.closest('.side-cart .product-remove, a[href*="/cart/change"], .cart-item__remove, [data-cart-remove], .cart-remove, [href*="quantity=0"]');
+  if (removeButton) {
+    const itemEl = removeButton.closest('.product-item, .cart-item, [data-line]');
+    if (itemEl) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const urlCambio = removeButton.href;
+      if (urlCambio) {
+        itemEl.classList.add('updating');
+        fetch(urlCambio)
+          .then(() => {
+            setTimeout(function() {
+              sincronizarCarrito(false);
+            }, 200);
+          })
+          .catch(err => {
+            console.error('Error al intentar borrar el producto:', err);
+            itemEl.classList.remove('updating');
+          });
+      } else {
+        cambiarCantidadProducto(itemEl, 0);
+      }
+      return;
     }
   }
+
+  // CASO 5: DETECTAR CLIC EN EL BOTÓN DE COMPRA (Añadir al carrito)
+  const addButton = e.target.closest('button[type="submit"], .add-to-cart-button, [name="add"], .gp-product-button');
+  if (addButton && !addButton.closest('.side-cart') && !addButton.closest('cart-drawer') && !addButton.closest('.go-to-checkout')) {
+    console.log('¡Click de compra detectado!');
+    setTimeout(function() {
+      sincronizarCarrito(true);
+    }, 800);
+    return;
+  }
 }, true);
+
+// 6. ESCUCHA DE CAMBIO MANUAL EN EL INPUT DE CANTIDAD
+document.addEventListener('change', function(e) {
+  const input = e.target.closest('.side-cart .quantity-input, cart-drawer .quantity__input');
+  if (input) {
+    const itemEl = input.closest('.product-item, .cart-item, [data-line]');
+    if (!itemEl || itemEl.classList.contains('updating')) return;
+
+    const currentQty = parseInt(input.getAttribute('data-qty') || input.defaultValue || 1, 10);
+    let newQty = parseInt(input.value.trim(), 10);
+
+    if (isNaN(newQty) || newQty < 0) {
+      input.value = currentQty;
+      return;
+    }
+
+    const maxAttr = input.getAttribute('max');
+    if (maxAttr && newQty > parseInt(maxAttr, 10)) {
+      newQty = parseInt(maxAttr, 10);
+      input.value = newQty;
+    }
+
+    if (newQty === currentQty) return;
+
+    cambiarCantidadProducto(itemEl, newQty);
+  }
+}, true);
+
+// 7. CERRAR CON TECLA ESCAPE
+document.addEventListener('keyup', function(e) {
+  if (e.key === 'Escape' || e.keyCode === 27) {
+    if (document.documentElement.classList.contains('side-cart-open')) {
+      cerrarSideCart();
+    }
+  }
+});
 	</script>
 {% schema %}
 {
