@@ -12,5 +12,26 @@
     "market": "co"
   },
   "parent": "header-group.json",
-  "sections": {}
+  "sections": {
+    "topbar": {
+      "settings": {},
+      "blocks": {
+        "slide_wBqpfF": {
+          "settings": {
+            "text": "<p><strong>¡Tu próximo básico está aquí!✨3 JEANS X $270.000.✨</strong></p>"
+          }
+        },
+        "slide_AXY8tD": {
+          "settings": {
+            "text": "<p>Bienvenid@ a casa 🏠 </p>"
+          }
+        }
+      },
+      "block_order": [
+        "slide_AXY8tD",
+        "slide_wBqpfF",
+        "slide_yUgcVi"
+      ]
+    }
+  }
 }

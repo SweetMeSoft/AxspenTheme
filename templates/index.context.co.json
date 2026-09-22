@@ -12,5 +12,12 @@
     "market": "co"
   },
   "parent": "index.json",
-  "sections": {}
+  "sections": {
+    "new_product_carousel_VH9h9m": {
+      "settings": {
+        "color_scheme": "scheme-bb283ae1-5113-4975-a6d4-9c86e2d83e82"
+      },
+      "blocks": {}
+    }
+  }
 }
