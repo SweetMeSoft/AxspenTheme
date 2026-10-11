@@ -536,11 +536,9 @@
   }
 
   /* Minimalist styling for basemap tiles without requiring an API key */
-  {%- unless section.settings.carto_api_key != blank or section.settings.map_style == 'standard' or section.settings.map_style == 'esri' -%}
   #axspenMasterMap .leaflet-tile-pane {
     filter: grayscale(100%) contrast(92%) brightness(104%);
   }
-  {%- endunless -%}
 
   /* Leaflet Controls & Attribution */
   .leaflet-control-attribution {
@@ -1236,24 +1234,11 @@
         scrollWheelZoom: false
       });
 
-      // Basemap layer: Free OpenStreetMap minimal by default (no API key needed, zero watermarks)
-      {%- if section.settings.carto_api_key != blank -%}
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key={{ section.settings.carto_api_key | strip }}', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
-          subdomains: 'abcd',
-          maxZoom: 19
-        }).addTo(map);
-      {%- elsif section.settings.map_style == 'esri' -%}
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-          attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ',
-          maxZoom: 19
-        }).addTo(map);
-      {%- else -%}
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
-          maxZoom: 19
-        }).addTo(map);
-      {%- endif -%}
+      // Free OpenStreetMap minimal basemap (no API key needed, zero watermarks)
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+        maxZoom: 19
+      }).addTo(map);
 
       // Create Custom SVG Pins
       STORES_DATA.forEach(store => {
@@ -1465,36 +1450,6 @@
       "label": "Número de WhatsApp para consultas",
       "default": "573133644023",
       "info": "Número con código de país (ej. 573133644023)"
-    },
-    {
-      "type": "header",
-      "content": "Configuración del Mapa"
-    },
-    {
-      "type": "select",
-      "id": "map_style",
-      "label": "Estilo del mapa (Sin API Key)",
-      "default": "minimal",
-      "options": [
-        {
-          "value": "minimal",
-          "label": "Monocromático Minimalista (Recomendado - Sin API Key)"
-        },
-        {
-          "value": "standard",
-          "label": "OpenStreetMap Estándar (Color - Sin API Key)"
-        },
-        {
-          "value": "esri",
-          "label": "Esri World Street (Sin API Key)"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "carto_api_key",
-      "label": "CARTO API Key (Opcional)",
-      "info": "Opcional. Si deseas usar CARTO Positron nativo, puedes solicitar una key gratis en carto.com/basemaps/apikey. Si está vacía, se usa OpenStreetMap sin marcas de agua y sin requerir key."
     },
     {
       "type": "header",
