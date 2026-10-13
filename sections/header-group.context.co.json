@@ -16,6 +16,16 @@
     "topbar": {
       "settings": {},
       "blocks": {
+        "slide_AXY8tD": {
+          "disabled": true,
+          "settings": {}
+        },
+        "slide_wBqpfF": {
+          "disabled": false,
+          "settings": {
+            "text": "<p>Envíos Nacionales <strong>🇨🇴✨</strong></p>"
+          }
+        },
         "slide_yUgcVi": {
           "disabled": false,
           "settings": {
@@ -24,14 +34,6 @@
         },
         "slide_WpXy9W": {
           "disabled": false,
-          "settings": {}
-        },
-        "slide_wBqpfF": {
-          "disabled": true,
-          "settings": {}
-        },
-        "slide_AXY8tD": {
-          "disabled": true,
           "settings": {}
         }
       }
