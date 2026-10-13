@@ -12,5 +12,29 @@
     "market": "co"
   },
   "parent": "header-group.json",
-  "sections": {}
+  "sections": {
+    "topbar": {
+      "settings": {},
+      "blocks": {
+        "slide_yUgcVi": {
+          "disabled": false,
+          "settings": {
+            "text": "<p>Bienvenid@ a Casa 🏠&nbsp;</p>"
+          }
+        },
+        "slide_WpXy9W": {
+          "disabled": false,
+          "settings": {}
+        },
+        "slide_wBqpfF": {
+          "disabled": true,
+          "settings": {}
+        },
+        "slide_AXY8tD": {
+          "disabled": true,
+          "settings": {}
+        }
+      }
+    }
+  }
 }
