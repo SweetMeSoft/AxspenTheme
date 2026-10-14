@@ -1,0 +1,620 @@
+/* ==========================================================================
+   AXSPEN - Legal & Policy Pages Premium Stylesheet
+   Applies to /policies/* (Contact, Shipping, Refund/Exchange, Privacy, Terms)
+   Wide container & Large readable typography
+   ========================================================================== */
+
+/* Page Background & Layout Base */
+body.template-policy {
+	background-color: #F8F8F6 !important;
+	color: #262424;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body.template-policy #main-content {
+	padding-top: 1.5rem;
+	padding-bottom: 5rem;
+}
+
+/* ==========================================================================
+   Top Policy Navigation Pills Bar
+   ========================================================================== */
+.policy-page-header {
+	margin-bottom: 2.25rem;
+}
+
+.policy-nav-tabs {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 0.85rem;
+	padding: 0.5rem 0;
+}
+
+.policy-nav-tab {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.75rem 1.55rem;
+	border-radius: 50px;
+	font-size: 1.05rem;
+	font-weight: 600;
+	color: #4A4646;
+	background: #FFFFFF;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	text-decoration: none;
+	transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+	white-space: nowrap;
+}
+
+.policy-nav-tab:hover {
+	color: #5D1226;
+	border-color: rgba(93, 18, 38, 0.35);
+	background: #FFFDF8;
+	transform: translateY(-2px);
+	box-shadow: 0 6px 14px rgba(93, 18, 38, 0.1);
+}
+
+.policy-nav-tab.is-active {
+	background: #5D1226;
+	color: #F6F3D8;
+	border-color: #5D1226;
+	font-weight: 700;
+	box-shadow: 0 6px 18px rgba(93, 18, 38, 0.28);
+	transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   Shopify Policy Container & Title (Wide Layout - No Empty Gutters)
+   ========================================================================== */
+.shopify-policy__container {
+	max-width: 1240px !important;
+	width: 100% !important;
+	margin: 0 auto !important;
+	padding: 0 1.5rem !important;
+}
+
+.shopify-policy__title {
+	text-align: center !important;
+	margin-bottom: 2.75rem !important;
+	padding: 1rem 1rem 0 !important;
+}
+
+.shopify-policy__title::before {
+	content: "AXSPEN • INFORMACIÓN LEGAL";
+	display: inline-block;
+	font-size: 0.85rem;
+	font-weight: 700;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: #5D1226;
+	background: rgba(93, 18, 38, 0.08);
+	padding: 0.45rem 1.25rem;
+	border-radius: 50px;
+	margin-bottom: 1.25rem;
+	border: 1px solid rgba(93, 18, 38, 0.15);
+}
+
+.shopify-policy__title h1 {
+	font-family: var(--heading-font-family, inherit);
+	font-size: clamp(2.4rem, 4vw, 3.25rem) !important;
+	font-weight: 800 !important;
+	letter-spacing: -0.025em !important;
+	color: #1F1C1D !important;
+	line-height: 1.2 !important;
+	margin: 0 auto !important;
+	text-transform: none;
+}
+
+.shopify-policy__title::after {
+	content: "";
+	display: block;
+	width: 56px;
+	height: 4px;
+	background-color: #5D1226;
+	border-radius: 4px;
+	margin: 1.5rem auto 0;
+}
+
+/* Specific Badge for Contact */
+.is-contact-policy .shopify-policy__title::before {
+	content: "AXSPEN • ATENCIÓN AL CLIENTE";
+}
+
+/* ==========================================================================
+   Shopify Policy Body (Wide Card & Generous Spacing)
+   ========================================================================== */
+.shopify-policy__body {
+	background: #FFFFFF;
+	border-radius: 20px;
+	border: 1px solid rgba(0, 0, 0, 0.06);
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02),
+	            0 20px 35px -8px rgba(0, 0, 0, 0.05),
+	            0 1px 2px rgba(0, 0, 0, 0.02);
+	padding: 3.5rem 4.5rem !important;
+	margin-bottom: 3rem;
+}
+
+@media (max-width: 991px) {
+	.shopify-policy__body {
+		padding: 2.75rem 2.25rem !important;
+	}
+}
+
+@media (max-width: 768px) {
+	.shopify-policy__body {
+		padding: 2rem 1.35rem !important;
+		border-radius: 16px;
+	}
+}
+
+/* ==========================================================================
+   Rich Text Typography (Large, Clear, High Legibility)
+   ========================================================================== */
+.shopify-policy__body .rte {
+	font-family: var(--body-font-family, inherit);
+	color: #2D2A2A;
+	font-size: 1.225rem;
+	line-height: 1.85;
+}
+
+.shopify-policy__body .rte p {
+	font-size: 1.225rem;
+	line-height: 1.85;
+	color: #2D2A2A;
+	margin-top: 0;
+	margin-bottom: 1.5rem;
+}
+
+/* Section Headings (H2, H3, H4) */
+.shopify-policy__body .rte h2,
+.shopify-policy__body .rte h3 {
+	font-family: var(--heading-font-family, inherit);
+	color: #1A1818;
+	font-weight: 700;
+	line-height: 1.3;
+	letter-spacing: -0.01em;
+}
+
+.shopify-policy__body .rte h2 {
+	font-size: 1.85rem;
+	margin-top: 3rem;
+	margin-bottom: 1.25rem;
+	padding-bottom: 0.65rem;
+	border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+}
+
+.shopify-policy__body .rte h3 {
+	font-size: 1.55rem;
+	margin-top: 2.5rem;
+	margin-bottom: 1rem;
+}
+
+/* Legal Notice Banner (Intro H4 in Privacy Policy) */
+.shopify-policy__body .rte h4,
+.shopify-policy__body .rte .policy-legal-notice-card {
+	font-family: var(--body-font-family, inherit) !important;
+	font-size: 1.15rem !important;
+	font-weight: 400 !important;
+	line-height: 1.85 !important;
+	color: #3D3939 !important;
+	background: #FDFBF7 !important;
+	border: 1px solid rgba(93, 18, 38, 0.12) !important;
+	border-left: 5px solid #5D1226 !important;
+	padding: 1.6rem 2rem !important;
+	border-radius: 12px !important;
+	margin: 1.75rem 0 2.25rem 0 !important;
+}
+
+/* Section Headings in Paragraphs (e.g. POLÍTICAS DE CAMBIO, POLÍTICAS DE GARANTÍA) */
+.shopify-policy__body .rte .policy-section-heading,
+.shopify-policy__body .rte p:has(> strong:only-child),
+.shopify-policy__body .rte p:has(> span:only-child > strong) {
+	display: block;
+	font-family: var(--heading-font-family, inherit);
+	font-size: 1.4rem;
+	font-weight: 700;
+	color: #5D1226;
+	letter-spacing: 0.02em;
+	margin-top: 3rem;
+	margin-bottom: 1.15rem;
+	padding-left: 1.15rem;
+	border-left: 4px solid #5D1226;
+	line-height: 1.4;
+}
+
+.shopify-policy__body .rte > .policy-section-heading:first-child,
+.shopify-policy__body .rte > p:first-child:has(> strong:only-child),
+.shopify-policy__body .rte > p:first-child:has(> span:only-child > strong) {
+	margin-top: 0.25rem;
+}
+
+/* ==========================================================================
+   Lists (Unordered & Ordered)
+   ========================================================================== */
+.shopify-policy__body .rte ul {
+	list-style: none !important;
+	padding-left: 0 !important;
+	margin: 1.5rem 0 2rem 0 !important;
+}
+
+.shopify-policy__body .rte ul > li {
+	position: relative;
+	padding-left: 2.25rem !important;
+	margin-bottom: 1.15rem;
+	font-size: 1.2rem;
+	line-height: 1.85;
+	color: #2D2A2A;
+}
+
+.shopify-policy__body .rte ul > li::before {
+	content: "";
+	position: absolute;
+	left: 0.5rem;
+	top: 0.7em;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background-color: #5D1226;
+	box-shadow: 0 0 0 2.5px rgba(93, 18, 38, 0.2);
+}
+
+/* Ordered list sections (Terms of Service, Privacy Policy) */
+.shopify-policy__body .rte ol {
+	list-style: none !important;
+	padding-left: 0 !important;
+	margin: 1.75rem 0 0.75rem 0 !important;
+}
+
+.shopify-policy__body .rte ol > li {
+	position: relative;
+	list-style: none !important;
+	padding-left: 3.25rem !important;
+	margin-bottom: 1.25rem;
+	font-size: 1.2rem;
+	line-height: 1.85;
+	color: #2D2A2A;
+}
+
+/* Custom step counter */
+.shopify-policy__body .rte ol > li[data-step]::before {
+	content: attr(data-step) ".";
+	position: absolute;
+	left: 0;
+	top: 0;
+	font-weight: 800;
+	font-size: 1.25rem;
+	color: #5D1226;
+	font-variant-numeric: tabular-nums;
+}
+
+/* Major numbered headings (Terms of Service clauses) */
+.shopify-policy__body .rte ol:has(strong) {
+	margin-top: 3.25rem !important;
+	margin-bottom: 1rem !important;
+}
+
+.shopify-policy__body .rte ol > li:has(strong) {
+	font-family: var(--heading-font-family, inherit);
+	font-size: 1.4rem;
+	font-weight: 700;
+	color: #1A1818;
+	padding-bottom: 0.75rem;
+	border-bottom: 2px solid rgba(93, 18, 38, 0.12);
+	margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   Shipping Policy Items
+   ========================================================================== */
+.shopify-policy__body .rte .policy-shipping-item {
+	position: relative;
+	padding: 1.25rem 1.65rem;
+	background: #FAF8F5;
+	border-radius: 12px;
+	border: 1px solid rgba(0, 0, 0, 0.06);
+	margin-bottom: 1rem;
+	font-size: 1.225rem;
+	line-height: 1.8;
+}
+
+.shopify-policy__body .rte .policy-shipping-subitem {
+	margin-left: 2rem;
+	background: #FFFFFF;
+	border-left: 4px solid #5D1226;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+@media (max-width: 768px) {
+	.shopify-policy__body .rte .policy-shipping-subitem {
+		margin-left: 1rem;
+	}
+}
+
+/* ==========================================================================
+   Contact Information Page (Full-Width Responsive 3-Card Grid)
+   ========================================================================== */
+.is-contact-policy .shopify-policy__body {
+	max-width: 100% !important;
+	margin: 0 auto 3rem !important;
+	padding: 3.5rem 4.5rem !important;
+}
+
+.is-contact-policy .shopify-policy__body .rte {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+.is-contact-policy .contact-lead {
+	text-align: center;
+	font-size: 1rem !important;
+	font-weight: 700 !important;
+	letter-spacing: 0.16em !important;
+	text-transform: uppercase !important;
+	color: #5D1226 !important;
+	margin-bottom: 0.5rem !important;
+}
+
+.is-contact-policy .contact-company {
+	text-align: center;
+	font-family: var(--heading-font-family, inherit);
+	font-size: 2rem !important;
+	font-weight: 800 !important;
+	color: #1A1818 !important;
+	margin-bottom: 2.75rem !important;
+}
+
+/* Responsive 3-Column Grid for Contact Info */
+.is-contact-policy .contact-cards-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1.75rem;
+	width: 100%;
+	margin-top: 0.5rem;
+	margin-bottom: 2rem;
+}
+
+@media (max-width: 991px) {
+	.is-contact-policy .contact-cards-grid {
+		grid-template-columns: 1fr;
+		gap: 1.25rem;
+	}
+}
+
+.is-contact-policy .contact-card-item {
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: center !important;
+	text-align: center !important;
+	gap: 1.25rem !important;
+	background: #FAF9F6 !important;
+	border: 1px solid rgba(0, 0, 0, 0.08) !important;
+	border-radius: 18px !important;
+	padding: 2.25rem 1.75rem !important;
+	margin-bottom: 0 !important;
+	transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02) !important;
+	font-size: 1.225rem !important;
+	line-height: 1.6 !important;
+	color: #2D2A2A !important;
+}
+
+.is-contact-policy .contact-card-item:hover {
+	background: #FFFFFF !important;
+	border-color: rgba(93, 18, 38, 0.3) !important;
+	transform: translateY(-3px);
+	box-shadow: 0 10px 24px rgba(93, 18, 38, 0.09) !important;
+}
+
+/* Large Contact Icons */
+.is-contact-policy .contact-card-item::before {
+	content: "";
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	border-radius: 16px;
+	background-color: rgba(93, 18, 38, 0.08);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 28px 28px;
+	flex-shrink: 0;
+	transition: all 0.2s ease;
+}
+
+.is-contact-policy .contact-card-item:hover::before {
+	background-color: #5D1226;
+	transform: scale(1.05);
+}
+
+/* Location Pin */
+.is-contact-policy .contact-item-address::before {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%235D1226' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'%3E%3C/path%3E%3Ccircle cx='12' cy='10' r='3'%3E%3C/circle%3E%3C/svg%3E");
+}
+.is-contact-policy .contact-card-item.contact-item-address:hover::before {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'%3E%3C/path%3E%3Ccircle cx='12' cy='10' r='3'%3E%3C/circle%3E%3C/svg%3E");
+}
+
+/* Email Envelope */
+.is-contact-policy .contact-item-email::before {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%235D1226' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E");
+}
+.is-contact-policy .contact-card-item.contact-item-email:hover::before {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* Phone */
+.is-contact-policy .contact-item-phone::before {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%235D1226' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'%3E%3C/path%3E%3C/svg%3E");
+}
+.is-contact-policy .contact-card-item.contact-item-phone:hover::before {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+/* ==========================================================================
+   Links inside Content
+   ========================================================================== */
+.shopify-policy__body .rte a {
+	color: #5D1226 !important;
+	font-weight: 700;
+	text-decoration: underline !important;
+	text-underline-offset: 4px !important;
+	text-decoration-thickness: 2px !important;
+	text-decoration-color: rgba(93, 18, 38, 0.4) !important;
+	transition: all 0.2s ease !important;
+}
+
+.shopify-policy__body .rte a:hover {
+	color: #8C1C3A !important;
+	text-decoration-color: #8C1C3A !important;
+	opacity: 0.9;
+}
+
+.shopify-policy__body .rte a[href^="mailto:"],
+.shopify-policy__body .rte a[href^="tel:"] {
+	display: inline-flex;
+	align-items: center;
+	background: rgba(93, 18, 38, 0.07);
+	padding: 0.35rem 0.95rem;
+	border-radius: 8px;
+	text-decoration: none !important;
+	border: 1px solid rgba(93, 18, 38, 0.16);
+}
+
+.shopify-policy__body .rte a[href^="mailto:"]:hover,
+.shopify-policy__body .rte a[href^="tel:"]:hover {
+	background: rgba(93, 18, 38, 0.14);
+	border-color: rgba(93, 18, 38, 0.35);
+}
+
+/* Defensive Cleanup for Empty HTML Artifacts */
+.policy-is-empty,
+.shopify-policy__body .rte img:not([src]),
+.shopify-policy__body .rte img[src=""],
+.shopify-policy__body .rte p:empty,
+.shopify-policy__body .rte span:empty {
+	display: none !important;
+}
+
+/* ==========================================================================
+   Policy Page Support & Navigation Footer (Wide Layout)
+   ========================================================================== */
+.policy-page-footer {
+	max-width: 1240px !important;
+	width: 100% !important;
+	margin: 0 auto;
+	padding: 0 1.5rem;
+}
+
+.policy-footer-card {
+	background: #FFFFFF;
+	border-radius: 20px;
+	border: 1px solid rgba(0, 0, 0, 0.06);
+	box-shadow: 0 4px 18px -3px rgba(0, 0, 0, 0.04);
+	padding: 2.25rem 3rem;
+	display: flex;
+	align-items: center;
+	gap: 2rem;
+	justify-content: space-between;
+}
+
+.policy-footer-icon {
+	width: 56px;
+	height: 56px;
+	border-radius: 14px;
+	background: rgba(93, 18, 38, 0.08);
+	color: #5D1226;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.policy-footer-icon svg {
+	width: 28px;
+	height: 28px;
+}
+
+.policy-footer-text {
+	flex: 1;
+}
+
+.policy-footer-text h4 {
+	font-size: 1.3rem;
+	font-weight: 700;
+	color: #1A1818;
+	margin: 0 0 0.35rem 0;
+	font-family: var(--heading-font-family, inherit);
+}
+
+.policy-footer-text p {
+	font-size: 1.1rem;
+	color: #555;
+	margin: 0;
+	line-height: 1.6;
+}
+
+.policy-footer-actions {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	flex-shrink: 0;
+}
+
+.policy-footer-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.65rem;
+	padding: 0.85rem 1.65rem;
+	border-radius: 10px;
+	font-size: 1.05rem;
+	font-weight: 600;
+	text-decoration: none;
+	transition: all 0.2s ease;
+	white-space: nowrap;
+}
+
+.policy-footer-btn-primary {
+	background: #128C7E;
+	color: #FFFFFF;
+}
+
+.policy-footer-btn-primary:hover {
+	background: #075E54;
+	color: #FFFFFF;
+	transform: translateY(-2px);
+	box-shadow: 0 6px 14px rgba(18, 140, 126, 0.28);
+}
+
+.policy-footer-btn-secondary {
+	background: #F4F4F4;
+	color: #2D2A2A;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.policy-footer-btn-secondary:hover {
+	background: #E8E8E8;
+	color: #000000;
+	transform: translateY(-2px);
+}
+
+@media (max-width: 991px) {
+	.policy-footer-card {
+		flex-direction: column;
+		text-align: center;
+		padding: 2rem 1.75rem;
+		gap: 1.5rem;
+	}
+
+	.policy-footer-actions {
+		flex-direction: column;
+		width: 100%;
+	}
+
+	.policy-footer-btn {
+		width: 100%;
+		justify-content: center;
+	}
+}

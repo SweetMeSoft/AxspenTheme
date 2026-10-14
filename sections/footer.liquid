@@ -18,16 +18,39 @@
 	endif
 -%}
 
-{%- if section.settings.show_footer_bar and ft_logo != blank -%}
 <style>
-	@media  (max-width: 991px) {
-		{{ section_id }} .ft-logo {
-			width: {{ ft_logo_width | times: 0.8 | round | at_least: 50 }}px;
-			max-width: 100%;
+	{{ section_id }} .footer {
+		color: rgb(var(--text-color));
+	}
+
+	{{ section_id }} .ft-block-nav a,
+	{{ section_id }} .ft-copyright a,
+	{{ section_id }} .ft-block-html a:not(.icon),
+	{{ section_id }} .ft-block-text a {
+		color: rgb(var(--text-color));
+		text-decoration: none;
+		transition: opacity var(--duration-default, 0.3s) ease;
+	}
+
+	@media (hover: hover) {
+		{{ section_id }} .ft-block-nav a:hover,
+		{{ section_id }} .ft-copyright a:hover,
+		{{ section_id }} .ft-block-html a:not(.icon):hover,
+		{{ section_id }} .ft-block-text a:hover {
+			opacity: 0.75;
+			text-decoration: underline;
 		}
 	}
+
+	{%- if section.settings.show_footer_bar and ft_logo != blank -%}
+		@media  (max-width: 991px) {
+			{{ section_id }} .ft-logo {
+				width: {{ ft_logo_width | times: 0.8 | round | at_least: 50 }}px;
+				max-width: 100%;
+			}
+		}
+	{%- endif -%}
 </style>
-{%- endif -%}
 
 <footer class="footer color-{{ section.settings.color_scheme }}">
 	<div class="ft-blocks">
@@ -277,7 +300,7 @@
 
 					{%- if section.settings.show_copyright -%}
 						<div class="ft-copyright">
-							<p>&copy; {{ 'now' | date: '%Y' }} {{ routes.root_url }}. <a href="https://sweetmesoft.com/" target="_blank" rel="noopener noreferrer">Desarrollado por SweetMeSoft - Cada detalle nos importa 🩵</a></p>
+							<p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. <a href="https://sweetmesoft.com/" target="_blank" rel="noopener noreferrer">Desarrollado por SweetMeSoft - Cada detalle nos importa 🩵</a></p>
 						</div>
 					{%- endif -%}
 

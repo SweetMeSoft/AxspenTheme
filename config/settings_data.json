@@ -117,11 +117,11 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background_color": "#acdafe",
+          "background_color": "#5D1226",
           "background_gradient": "",
-          "text_color": "#4e2c08",
-          "heading_color": "#4e2c08",
-          "link_color": "#232020",
+          "text_color": "#F6F3D8",
+          "heading_color": "#F6F3D8",
+          "link_color": "#F6F3D8",
           "success_color": "#00aa00",
           "error_color": "#ff0000",
           "loading_color": "#000000",
@@ -201,11 +201,11 @@
       },
       "scheme-bb283ae1-5113-4975-a6d4-9c86e2d83e82": {
         "settings": {
-          "background_color": "#acdafe",
+          "background_color": "#5D1226",
           "background_gradient": "",
-          "text_color": "#ffffff",
-          "heading_color": "#ffffff",
-          "link_color": "#232020",
+          "text_color": "#F6F3D8",
+          "heading_color": "#F6F3D8",
+          "link_color": "#F6F3D8",
           "success_color": "#00aa00",
           "error_color": "#ff0000",
           "loading_color": "#2b2b2b",
