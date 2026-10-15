@@ -9,226 +9,31 @@
  */
 {
   "current": {
-    "blocks": {
-      "10148494829067693542": {
-        "disabled": false,
-        "settings": {
-          "custom_liquid": "",
-          "custom_css": "",
-          "custom_js": ""
-        },
-        "type": "shopify://apps/xo-insert-code/blocks/insert-code-body/72017b12-3679-442e-b23c-5c62460717f5"
-      },
-      "12424619676349770391": {
-        "disabled": false,
-        "settings": {},
-        "type": "shopify://apps/lably/blocks/app-embeds/6c1584f0-c71d-4a5f-8025-affd32e7e34d"
-      },
-      "12648720965605750730": {
-        "disabled": true,
-        "settings": {},
-        "type": "shopify://apps/folder-product-tabs/blocks/app-embed/e4a7401b-931e-422d-bab8-fc6ef5da44a4"
-      },
-      "13392549970259155148": {
-        "disabled": false,
-        "settings": {
-          "custom_liquid": "",
-          "custom_css": "",
-          "custom_js": ""
-        },
-        "type": "shopify://apps/xo-insert-code/blocks/insert-code-header/72017b12-3679-442e-b23c-5c62460717f5"
-      },
-      "14826766009936288847": {
-        "disabled": false,
-        "settings": {},
-        "type": "shopify://apps/discounty/blocks/sdk/d65eb522-0d94-499f-9831-d4b3301f5340"
-      },
-      "15179280101827346836": {
-        "disabled": false,
-        "settings": {},
-        "type": "shopify://apps/juniper-tiktok-feed/blocks/head-block/fa514c33-5475-4484-b270-5f1e7eb87a9a"
-      },
-      "15683396631634586217": {
-        "disabled": true,
-        "settings": {
-          "greeting_message": "",
-          "button_color": "#000000",
-          "button_icon": "question_mark",
-          "button_text": "no_text",
-          "button_horizontal_position": "bottom_left",
-          "button_vertical_position": "lowest"
-        },
-        "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b"
-      },
-      "16357531335331704164": {
-        "disabled": false,
-        "settings": {},
-        "type": "shopify://apps/wheelify-spin-wheel-email-pop/blocks/wheelify/505ff42c-abce-4466-9558-7e1d3b2cfcd7"
-      },
-      "18408366429334172745": {
-        "disabled": false,
-        "settings": {},
-        "type": "shopify://apps/pop-convert/blocks/app-embed/ed587aec-4936-43ae-a1b3-1c9e0d08f185"
-      },
-      "2200952712151285029": {
-        "disabled": false,
-        "settings": {},
-        "type": "shopify://apps/microsoft-clarity/blocks/brandAgents_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea"
-      },
-      "2567389343055140935": {
-        "disabled": false,
-        "settings": {},
-        "type": "shopify://apps/microsoft-clarity/blocks/clarity_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea"
-      },
-      "3180380345701805225": {
-        "disabled": false,
-        "settings": {},
-        "type": "shopify://apps/b-s-announcements/blocks/boostandsales_bar/622d5231-2b17-46c2-b570-613654521b45"
-      },
-      "4188547153274344210": {
-        "disabled": false,
-        "settings": {},
-        "type": "shopify://apps/easy-bundle/blocks/app/491a753a-7e8b-4c89-a6fb-9028a1df000b"
-      },
-      "6478312753674380289": {
-        "disabled": false,
-        "settings": {},
-        "type": "shopify://apps/gempages-builder/blocks/embed-gp-script-head/20b379d4-1b20-474c-a6ca-665c331919f3"
-      },
-      "8208493610395315515": {
-        "disabled": false,
-        "settings": {},
-        "type": "shopify://apps/dondy-whatsapp-chat-marketing/blocks/app-block/7f5a70cb-e171-4cc7-ac02-e2220203abd6"
-      },
-      "855628211100114053": {
-        "disabled": false,
-        "settings": {},
-        "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507"
-      }
-    },
+    "image_lazy": true,
+    "breadcrumb": true,
+    "sticky_toolbar_mobile": true,
+    "enabled_cookies_bar": true,
     "body_font": "sans_serif_n4",
     "body_font_size": 14,
-    "breadcrumb": true,
-    "button_radius": 4,
-    "card_image_overlay": true,
-    "card_image_ratio": "portrait",
-    "card_padding": 16,
-    "card_show_rating": false,
-    "color_schemes": {
-      "scheme-1": {
-        "settings": {
-          "background_color": "#5D1226",
-          "background_gradient": "",
-          "text_color": "#F6F3D8",
-          "heading_color": "#F6F3D8",
-          "link_color": "#F6F3D8",
-          "success_color": "#00aa00",
-          "error_color": "#ff0000",
-          "loading_color": "#000000",
-          "button_bg_color": "#ffffff",
-          "button_text_color": "#000000",
-          "button_outline_color": "#000000",
-          "sale_label": "#ce373a",
-          "sale_price": "#ce373a",
-          "in_stock": "#1e9458",
-          "low_stock": "#ee0000",
-          "out_stock": "#53565e",
-          "rating_star": "#fdc643"
-        }
-      },
-      "scheme-2": {
-        "settings": {
-          "background_color": "#ffffff",
-          "background_gradient": "",
-          "text_color": "#53565e",
-          "heading_color": "#53565e",
-          "link_color": "#ffffff",
-          "success_color": "#00aa00",
-          "error_color": "#ff0000",
-          "loading_color": "#2b2b2b",
-          "button_bg_color": "#acdafe",
-          "button_text_color": "#ffffff",
-          "button_outline_color": "#232020",
-          "sale_label": "#ce373a",
-          "sale_price": "#ce373a",
-          "in_stock": "#1e9458",
-          "low_stock": "#ee0000",
-          "out_stock": "#53565e",
-          "rating_star": "#fdc643"
-        }
-      },
-      "scheme-f6417a66-de69-4b20-8437-8ee13a4b4b42": {
-        "settings": {
-          "background_color": "#fffcf2",
-          "background_gradient": "",
-          "text_color": "#a46d43",
-          "heading_color": "#7c0204",
-          "link_color": "#232020",
-          "success_color": "#00aa00",
-          "error_color": "#ff0000",
-          "loading_color": "#2b2b2b",
-          "button_bg_color": "#232020",
-          "button_text_color": "#ffffff",
-          "button_outline_color": "#232020",
-          "sale_label": "#ce373a",
-          "sale_price": "#ce373a",
-          "in_stock": "#1e9458",
-          "low_stock": "#ee0000",
-          "out_stock": "#53565e",
-          "rating_star": "#fdc643"
-        }
-      },
-      "scheme-f934079b-2f56-489f-8504-574582365f8d": {
-        "settings": {
-          "background_color": "#a0070f",
-          "background_gradient": "",
-          "text_color": "#ffffff",
-          "heading_color": "#ffffff",
-          "link_color": "#232020",
-          "success_color": "#00aa00",
-          "error_color": "#ff0000",
-          "loading_color": "#2b2b2b",
-          "button_bg_color": "#232020",
-          "button_text_color": "#a0070f",
-          "button_outline_color": "#232020",
-          "sale_label": "#ce373a",
-          "sale_price": "#ce373a",
-          "in_stock": "#1e9458",
-          "low_stock": "#ee0000",
-          "out_stock": "#53565e",
-          "rating_star": "#fdc643"
-        }
-      },
-      "scheme-bb283ae1-5113-4975-a6d4-9c86e2d83e82": {
-        "settings": {
-          "background_color": "#5D1226",
-          "background_gradient": "",
-          "text_color": "#F6F3D8",
-          "heading_color": "#F6F3D8",
-          "link_color": "#F6F3D8",
-          "success_color": "#00aa00",
-          "error_color": "#ff0000",
-          "loading_color": "#2b2b2b",
-          "button_bg_color": "#232020",
-          "button_text_color": "#7c0204",
-          "button_outline_color": "#232020",
-          "sale_label": "#ce373a",
-          "sale_price": "#ce373a",
-          "in_stock": "#1e9458",
-          "low_stock": "#ee0000",
-          "out_stock": "#53565e",
-          "rating_star": "#fdc643"
-        }
-      }
-    },
-    "content_for_index": [],
-    "enabled_cookies_bar": true,
     "heading_font": "sans_serif_n4",
     "heading_font_weight": "800",
     "heading_line_height": 1.5,
-    "image_lazy": true,
-    "screen_lg": 1200,
     "search_unavailable_products": "hide",
+    "screen_lg": 1200,
+    "button_radius": 4,
+    "swatch_type": "color",
+    "show_card_scrolling_text": false,
+    "card_image_overlay": true,
+    "card_image_ratio": "portrait",
+    "card_padding": 16,
+    "card_show_title": true,
+    "card_show_rating": false,
+    "card_show_stock": false,
+    "social_twitter_link": "",
+    "social_facebook_link": "https://www.facebook.com/axspen.co",
+    "social_instagram_link": "https://www.instagram.com/axspen.co",
+    "social_youtube_link": "",
+    "cart_note": true,
     "sections": {
       "breadcrumb": {
         "type": "breadcrumb",
@@ -321,16 +126,190 @@
         }
       }
     },
-    "show_card_scrolling_text": false,
-    "social_facebook_link": "https://www.facebook.com/axspen.co",
-    "social_instagram_link": "https://www.instagram.com/axspen.co",
-    "social_twitter_link": "",
-    "social_youtube_link": "",
-    "sticky_toolbar_mobile": true,
-    "swatch_type": "color",
-    "card_show_title": true,
-    "card_show_stock": false,
-    "cart_note": true
+    "content_for_index": [],
+    "blocks": {
+      "10148494829067693542": {
+        "type": "shopify://apps/xo-insert-code/blocks/insert-code-body/72017b12-3679-442e-b23c-5c62460717f5",
+        "disabled": false,
+        "settings": {
+          "custom_liquid": "",
+          "custom_css": "",
+          "custom_js": ""
+        }
+      },
+      "12424619676349770391": {
+        "type": "shopify://apps/lably/blocks/app-embeds/6c1584f0-c71d-4a5f-8025-affd32e7e34d",
+        "disabled": false,
+        "settings": {}
+      },
+      "12648720965605750730": {
+        "type": "shopify://apps/folder-product-tabs/blocks/app-embed/e4a7401b-931e-422d-bab8-fc6ef5da44a4",
+        "disabled": true,
+        "settings": {}
+      },
+      "13392549970259155148": {
+        "type": "shopify://apps/xo-insert-code/blocks/insert-code-header/72017b12-3679-442e-b23c-5c62460717f5",
+        "disabled": false,
+        "settings": {
+          "custom_liquid": "",
+          "custom_css": "",
+          "custom_js": ""
+        }
+      },
+      "14826766009936288847": {
+        "type": "shopify://apps/discounty/blocks/sdk/d65eb522-0d94-499f-9831-d4b3301f5340",
+        "disabled": false,
+        "settings": {}
+      },
+      "15179280101827346836": {
+        "type": "shopify://apps/juniper-tiktok-feed/blocks/head-block/fa514c33-5475-4484-b270-5f1e7eb87a9a",
+        "disabled": false,
+        "settings": {}
+      },
+      "15683396631634586217": {
+        "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
+        "disabled": true,
+        "settings": {
+          "greeting_message": "",
+          "button_color": "#000000",
+          "button_icon": "question_mark",
+          "button_text": "no_text",
+          "button_horizontal_position": "bottom_left",
+          "button_vertical_position": "lowest"
+        }
+      },
+      "16357531335331704164": {
+        "type": "shopify://apps/wheelify-spin-wheel-email-pop/blocks/wheelify/505ff42c-abce-4466-9558-7e1d3b2cfcd7",
+        "disabled": false,
+        "settings": {}
+      },
+      "18408366429334172745": {
+        "type": "shopify://apps/pop-convert/blocks/app-embed/ed587aec-4936-43ae-a1b3-1c9e0d08f185",
+        "disabled": false,
+        "settings": {}
+      },
+      "2200952712151285029": {
+        "type": "shopify://apps/microsoft-clarity/blocks/brandAgents_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea",
+        "disabled": false,
+        "settings": {}
+      },
+      "2567389343055140935": {
+        "type": "shopify://apps/microsoft-clarity/blocks/clarity_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea",
+        "disabled": false,
+        "settings": {}
+      },
+      "3180380345701805225": {
+        "type": "shopify://apps/b-s-announcements/blocks/boostandsales_bar/622d5231-2b17-46c2-b570-613654521b45",
+        "disabled": false,
+        "settings": {}
+      },
+      "4188547153274344210": {
+        "type": "shopify://apps/easy-bundle/blocks/app/491a753a-7e8b-4c89-a6fb-9028a1df000b",
+        "disabled": false,
+        "settings": {}
+      },
+      "6478312753674380289": {
+        "type": "shopify://apps/gempages-builder/blocks/embed-gp-script-head/20b379d4-1b20-474c-a6ca-665c331919f3",
+        "disabled": false,
+        "settings": {}
+      },
+      "8208493610395315515": {
+        "type": "shopify://apps/dondy-whatsapp-chat-marketing/blocks/app-block/7f5a70cb-e171-4cc7-ac02-e2220203abd6",
+        "disabled": false,
+        "settings": {}
+      },
+      "855628211100114053": {
+        "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
+        "disabled": false,
+        "settings": {}
+      }
+    },
+    "color_schemes": {
+      "scheme-1": {
+        "settings": {
+          "background_color": "#FFFEFE",
+          "background_gradient": "",
+          "text_color": "#17181C",
+          "heading_color": "#3652DD",
+          "link_color": "#3652DD",
+          "success_color": "#00aa00",
+          "error_color": "#ff0000",
+          "loading_color": "#3652DD",
+          "button_bg_color": "#ffffff",
+          "button_text_color": "#000000",
+          "button_outline_color": "#000000",
+          "sale_label": "#ce373a",
+          "sale_price": "#ce373a",
+          "in_stock": "#1e9458",
+          "low_stock": "#ee0000",
+          "out_stock": "#53565e",
+          "rating_star": "#fdc643"
+        }
+      },
+      "scheme-2": {
+        "settings": {
+          "background_color": "#ffffff",
+          "background_gradient": "",
+          "text_color": "#53565e",
+          "heading_color": "#53565e",
+          "link_color": "#ffffff",
+          "success_color": "#00aa00",
+          "error_color": "#ff0000",
+          "loading_color": "#2b2b2b",
+          "button_bg_color": "#acdafe",
+          "button_text_color": "#ffffff",
+          "button_outline_color": "#232020",
+          "sale_label": "#ce373a",
+          "sale_price": "#ce373a",
+          "in_stock": "#1e9458",
+          "low_stock": "#ee0000",
+          "out_stock": "#53565e",
+          "rating_star": "#fdc643"
+        }
+      },
+      "scheme-f6417a66-de69-4b20-8437-8ee13a4b4b42": {
+        "settings": {
+          "background_color": "#fffcf2",
+          "background_gradient": "",
+          "text_color": "#a46d43",
+          "heading_color": "#7c0204",
+          "link_color": "#232020",
+          "success_color": "#00aa00",
+          "error_color": "#ff0000",
+          "loading_color": "#2b2b2b",
+          "button_bg_color": "#232020",
+          "button_text_color": "#ffffff",
+          "button_outline_color": "#232020",
+          "sale_label": "#ce373a",
+          "sale_price": "#ce373a",
+          "in_stock": "#1e9458",
+          "low_stock": "#ee0000",
+          "out_stock": "#53565e",
+          "rating_star": "#fdc643"
+        }
+      },
+      "scheme-f934079b-2f56-489f-8504-574582365f8d": {
+        "settings": {
+          "background_color": "#a0070f",
+          "background_gradient": "",
+          "text_color": "#ffffff",
+          "heading_color": "#ffffff",
+          "link_color": "#232020",
+          "success_color": "#00aa00",
+          "error_color": "#ff0000",
+          "loading_color": "#2b2b2b",
+          "button_bg_color": "#232020",
+          "button_text_color": "#a0070f",
+          "button_outline_color": "#232020",
+          "sale_label": "#ce373a",
+          "sale_price": "#ce373a",
+          "in_stock": "#1e9458",
+          "low_stock": "#ee0000",
+          "out_stock": "#53565e",
+          "rating_star": "#fdc643"
+        }
+      }
+    }
   },
   "presets": {
     "Limitless": {
