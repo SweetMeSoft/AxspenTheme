@@ -434,20 +434,52 @@
   /* Hours Drawer / Text */
   .axspen-hours-summary {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 6px;
     font-size: 1.25rem;
-    color: #64748b;
+    line-height: 1.4;
+    color: #475569;
     margin-bottom: 14px;
     background: #f8fafc;
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: 1px dashed #cbd5e1;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
   }
-  .axspen-hours-summary svg {
-    width: 14px;
-    height: 14px;
-    color: #64748b;
+  .axspen-hours-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #0f172a;
+    margin-bottom: 2px;
+  }
+  .axspen-hours-head svg {
+    width: 13px;
+    height: 13px;
+    min-width: 13px;
+    color: #475569;
+  }
+  .axspen-hours-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .axspen-hours-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.25rem;
+  }
+  .axspen-hours-row .hours-label {
+    font-weight: 600;
+    color: #334155;
+  }
+  .axspen-hours-row .hours-val {
+    font-weight: 600;
+    color: #0f172a;
   }
 
   /* Card Action Buttons */
@@ -623,7 +655,33 @@
   .axspen-popup-address {
     font-size: 1.3rem;
     color: #334155;
-    margin: 0 0 10px;
+    margin: 0 0 8px;
+  }
+  .axspen-popup-hours {
+    font-size: 1.15rem;
+    color: #475569;
+    margin: 8px 0 10px;
+    line-height: 1.35;
+    background: #f8fafc;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .axspen-popup-hrow {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .axspen-popup-hrow span {
+    color: #64748b;
+    font-weight: 500;
+  }
+  .axspen-popup-hrow strong {
+    color: #0f172a;
+    font-weight: 600;
   }
   .axspen-popup-actions {
     display: flex;
@@ -788,6 +846,114 @@
     // 11 real Axspen physical stores in Bogotá and Soacha
     const STORES_DATA = [
       {
+        id: "san-mateo",
+        name: "San Mateo",
+        mall: "",
+        address: "AC 30 # 1 – 30",
+        city: "Soacha",
+        zone: "Soacha",
+        isMall: false,
+        lat: 4.5823,
+        lng: -74.2251,
+        hoursWeekday: "Lun-Jue: 11:30 AM – 8:30 PM, Vie-Sáb: 11:00 AM – 9:00 PM",
+        hoursMonThu: "11:30 AM – 8:30 PM",
+        hoursFriSat: "11:00 AM – 9:00 PM",
+        hoursSunday: "11:00 AM – 7:00 PM",
+        openMonThuH: 11.5,
+        closeMonThuH: 20.5,
+        openFriSatH: 11,
+        closeFriSatH: 21,
+        openSundayH: 11,
+        closeSundayH: 19,
+        openWeekdayH: 11.5,
+        closeWeekdayH: 20.5
+      },
+      {
+        id: "bosa",
+        name: "Bosa",
+        mall: "",
+        address: "Kra 80c # 65 – 29 Sur",
+        city: "Bogotá",
+        zone: "Bosa",
+        isMall: false,
+        lat: 4.6062,
+        lng: -74.1865,
+        hoursWeekday: "11:00 AM – 8:00 PM",
+        hoursSunday: "11:00 AM – 7:00 PM",
+        openWeekdayH: 11,
+        closeWeekdayH: 20,
+        openSundayH: 11,
+        closeSundayH: 19
+      },
+      {
+        id: "venecia",
+        name: "Venecia",
+        mall: "",
+        address: "Diagonal 45 # 53 – 43 Sur",
+        city: "Bogotá",
+        zone: "Tunjuelito",
+        isMall: false,
+        lat: 4.5954,
+        lng: -74.1352,
+        hoursWeekday: "11:00 AM – 8:00 PM",
+        hoursSunday: "11:00 AM – 7:00 PM",
+        openWeekdayH: 11,
+        closeWeekdayH: 20,
+        openSundayH: 11,
+        closeSundayH: 19
+      },
+      {
+        id: "plaza-americas",
+        name: "Centro Comercial Plaza de las Américas",
+        mall: "Plaza de las Américas",
+        address: "Calle 6 Sur # 71D – 43",
+        city: "Bogotá",
+        zone: "Kennedy",
+        isMall: true,
+        lat: 4.6212,
+        lng: -74.1365,
+        hoursWeekday: "11:00 AM – 8:00 PM",
+        hoursSunday: "11:00 AM – 7:00 PM",
+        openWeekdayH: 11,
+        closeWeekdayH: 20,
+        openSundayH: 11,
+        closeSundayH: 19
+      },
+      {
+        id: "hayuelos",
+        name: "Centro Comercial Hayuelos",
+        mall: "Hayuelos",
+        address: "Calle 20 # 82 – 52 Local 2-74",
+        city: "Bogotá",
+        zone: "Fontibón",
+        isMall: true,
+        lat: 4.6565,
+        lng: -74.1332,
+        hoursWeekday: "11:00 AM – 8:00 PM",
+        hoursSunday: "11:00 AM – 7:00 PM",
+        openWeekdayH: 11,
+        closeWeekdayH: 20,
+        openSundayH: 11,
+        closeSundayH: 19
+      },
+      {
+        id: "salitre-plaza",
+        name: "Centro Comercial Salitre Plaza",
+        mall: "Salitre Plaza",
+        address: "Cra 68B # 24 – 39 Local 168",
+        city: "Bogotá",
+        zone: "Salitre",
+        isMall: true,
+        lat: 4.6542,
+        lng: -74.1107,
+        hoursWeekday: "11:00 AM – 8:00 PM",
+        hoursSunday: "11:00 AM – 7:00 PM",
+        openWeekdayH: 11,
+        closeWeekdayH: 20,
+        openSundayH: 11,
+        closeSundayH: 19
+      },
+      {
         id: "ferias",
         name: "Ferias",
         mall: "",
@@ -797,27 +963,10 @@
         isMall: false,
         lat: 4.6853,
         lng: -74.0898,
-        hoursWeekday: "9:30 AM – 7:30 PM",
-        hoursSunday: "10:00 AM – 6:00 PM",
-        openWeekdayH: 9.5,
-        closeWeekdayH: 19.5,
-        openSundayH: 10,
-        closeSundayH: 18
-      },
-      {
-        id: "plaza-imperial",
-        name: "Centro Comercial Plaza Imperial",
-        mall: "Plaza Imperial",
-        address: "Cra. 104 #148 – 07 Local 1-46",
-        city: "Bogotá",
-        zone: "Suba",
-        isMall: true,
-        lat: 4.7479,
-        lng: -74.0952,
-        hoursWeekday: "10:00 AM – 8:00 PM",
+        hoursWeekday: "10:00 AM – 7:00 PM",
         hoursSunday: "11:00 AM – 7:00 PM",
         openWeekdayH: 10,
-        closeWeekdayH: 20,
+        closeWeekdayH: 19,
         openSundayH: 11,
         closeSundayH: 19
       },
@@ -839,91 +988,6 @@
         closeSundayH: 19
       },
       {
-        id: "bosa",
-        name: "Bosa",
-        mall: "",
-        address: "Kra 80c # 65 – 29 Sur",
-        city: "Bogotá",
-        zone: "Bosa",
-        isMall: false,
-        lat: 4.6062,
-        lng: -74.1865,
-        hoursWeekday: "9:30 AM – 7:30 PM",
-        hoursSunday: "10:00 AM – 6:00 PM",
-        openWeekdayH: 9.5,
-        closeWeekdayH: 19.5,
-        openSundayH: 10,
-        closeSundayH: 18
-      },
-      {
-        id: "san-mateo",
-        name: "San Mateo",
-        mall: "",
-        address: "AC 30 # 1 – 30",
-        city: "Soacha",
-        zone: "Soacha",
-        isMall: false,
-        lat: 4.5823,
-        lng: -74.2251,
-        hoursWeekday: "9:30 AM – 7:30 PM",
-        hoursSunday: "10:00 AM – 6:00 PM",
-        openWeekdayH: 9.5,
-        closeWeekdayH: 19.5,
-        openSundayH: 10,
-        closeSundayH: 18
-      },
-      {
-        id: "venecia",
-        name: "Venecia",
-        mall: "",
-        address: "Diagonal 45 # 53 – 43 Sur",
-        city: "Bogotá",
-        zone: "Tunjuelito",
-        isMall: false,
-        lat: 4.5954,
-        lng: -74.1352,
-        hoursWeekday: "9:30 AM – 7:30 PM",
-        hoursSunday: "10:00 AM – 6:00 PM",
-        openWeekdayH: 9.5,
-        closeWeekdayH: 19.5,
-        openSundayH: 10,
-        closeSundayH: 18
-      },
-      {
-        id: "salitre-plaza",
-        name: "Centro Comercial Salitre Plaza",
-        mall: "Salitre Plaza",
-        address: "Cra 68B # 24 – 39 Local 168",
-        city: "Bogotá",
-        zone: "Salitre",
-        isMall: true,
-        lat: 4.6542,
-        lng: -74.1107,
-        hoursWeekday: "10:00 AM – 8:00 PM",
-        hoursSunday: "11:00 AM – 7:00 PM",
-        openWeekdayH: 10,
-        closeWeekdayH: 20,
-        openSundayH: 11,
-        closeSundayH: 19
-      },
-      {
-        id: "hayuelos",
-        name: "Centro Comercial Hayuelos",
-        mall: "Hayuelos",
-        address: "Calle 20 # 82 – 52 Local 2-74",
-        city: "Bogotá",
-        zone: "Fontibón",
-        isMall: true,
-        lat: 4.6565,
-        lng: -74.1332,
-        hoursWeekday: "10:00 AM – 8:00 PM",
-        hoursSunday: "11:00 AM – 7:00 PM",
-        openWeekdayH: 10,
-        closeWeekdayH: 20,
-        openSundayH: 11,
-        closeSundayH: 19
-      },
-      {
         id: "perdomo",
         name: "Perdomo",
         mall: "",
@@ -933,23 +997,6 @@
         isMall: false,
         lat: 4.5918,
         lng: -74.1672,
-        hoursWeekday: "9:30 AM – 7:30 PM",
-        hoursSunday: "10:00 AM – 6:00 PM",
-        openWeekdayH: 9.5,
-        closeWeekdayH: 19.5,
-        openSundayH: 10,
-        closeSundayH: 18
-      },
-      {
-        id: "plaza-americas",
-        name: "Centro Comercial Plaza de las Américas",
-        mall: "Plaza de las Américas",
-        address: "Calle 6 Sur # 71D – 43",
-        city: "Bogotá",
-        zone: "Kennedy",
-        isMall: true,
-        lat: 4.6212,
-        lng: -74.1365,
         hoursWeekday: "10:00 AM – 8:00 PM",
         hoursSunday: "11:00 AM – 7:00 PM",
         openWeekdayH: 10,
@@ -967,6 +1014,23 @@
         isMall: true,
         lat: 4.6782,
         lng: -74.1165,
+        hoursWeekday: "10:00 AM – 8:00 PM",
+        hoursSunday: "11:00 AM – 7:00 PM",
+        openWeekdayH: 10,
+        closeWeekdayH: 20,
+        openSundayH: 11,
+        closeSundayH: 19
+      },
+      {
+        id: "plaza-imperial",
+        name: "Centro Comercial Plaza Imperial",
+        mall: "Plaza Imperial",
+        address: "Cra. 104 #148 – 07 Local 1-46",
+        city: "Bogotá",
+        zone: "Suba",
+        isMall: true,
+        lat: 4.7479,
+        lng: -74.0952,
         hoursWeekday: "10:00 AM – 8:00 PM",
         hoursSunday: "11:00 AM – 7:00 PM",
         openWeekdayH: 10,
@@ -997,14 +1061,53 @@
       // Adjust to UTC-5
       const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
       const colombiaTime = new Date(utc - (3600000 * 5));
-      const day = colombiaTime.getDay(); // 0 is Sunday
+      const day = colombiaTime.getDay(); // 0 is Sunday, 1-4 Mon-Thu, 5 Fri, 6 Sat
       const hours = colombiaTime.getHours() + (colombiaTime.getMinutes() / 60);
 
       const isSunday = (day === 0);
-      const openH = isSunday ? store.openSundayH : store.openWeekdayH;
-      const closeH = isSunday ? store.closeSundayH : store.closeWeekdayH;
-      const closeLabel = isSunday ? store.hoursSunday.split("–")[1].trim() : store.hoursWeekday.split("–")[1].trim();
-      const nextOpenLabel = isSunday ? store.hoursWeekday.split("–")[0].trim() : (day === 6 ? store.hoursSunday.split("–")[0].trim() : store.hoursWeekday.split("–")[0].trim());
+      let openH, closeH, closeLabel, todayOpenLabel, tomorrowOpenLabel;
+
+      const getTimes = (str) => {
+        if (!str) return ["", ""];
+        const parts = str.split(/[–-]/);
+        return [parts[0] ? parts[0].trim() : "", parts[1] ? parts[1].trim() : ""];
+      };
+
+      if (store.hoursMonThu && store.hoursFriSat) {
+        const [openMonThu, closeMonThu] = getTimes(store.hoursMonThu);
+        const [openFriSat, closeFriSat] = getTimes(store.hoursFriSat);
+        const [openSun, closeSun] = getTimes(store.hoursSunday);
+
+        if (isSunday) {
+          openH = store.openSundayH;
+          closeH = store.closeSundayH;
+          closeLabel = closeSun;
+          todayOpenLabel = openSun;
+          tomorrowOpenLabel = openMonThu;
+        } else if (day >= 1 && day <= 4) {
+          openH = store.openMonThuH;
+          closeH = store.closeMonThuH;
+          closeLabel = closeMonThu;
+          todayOpenLabel = openMonThu;
+          tomorrowOpenLabel = (day === 4) ? openFriSat : openMonThu;
+        } else {
+          // Friday (5) or Saturday (6)
+          openH = store.openFriSatH;
+          closeH = store.closeFriSatH;
+          closeLabel = closeFriSat;
+          todayOpenLabel = openFriSat;
+          tomorrowOpenLabel = (day === 6) ? openSun : openFriSat;
+        }
+      } else {
+        const [openWk, closeWk] = getTimes(store.hoursWeekday);
+        const [openSun, closeSun] = getTimes(store.hoursSunday);
+
+        openH = isSunday ? store.openSundayH : store.openWeekdayH;
+        closeH = isSunday ? store.closeSundayH : store.closeWeekdayH;
+        closeLabel = isSunday ? closeSun : closeWk;
+        todayOpenLabel = isSunday ? openSun : openWk;
+        tomorrowOpenLabel = isSunday ? openWk : (day === 6 ? openSun : openWk);
+      }
 
       if (hours >= openH && hours < closeH) {
         return {
@@ -1012,9 +1115,10 @@
           label: `Abierto · Cierra ${closeLabel}`
         };
       } else {
+        const nextOpen = (hours < openH) ? todayOpenLabel : tomorrowOpenLabel;
         return {
           isOpen: false,
-          label: `Cerrado · Abre ${nextOpenLabel}`
+          label: `Cerrado · Abre ${nextOpen}`
         };
       }
     }
@@ -1085,6 +1189,20 @@
           distanceHtml = `<span class="axspen-tag-distance">⚡ A ${store.distance.toFixed(1)} km</span>`;
         }
 
+        let hoursSummaryHtml = '';
+        if (store.hoursMonThu && store.hoursFriSat) {
+          hoursSummaryHtml = `
+            <div class="axspen-hours-row"><span class="hours-label">Lun - Jue:</span><span class="hours-val">${store.hoursMonThu}</span></div>
+            <div class="axspen-hours-row"><span class="hours-label">Vie - Sáb:</span><span class="hours-val">${store.hoursFriSat}</span></div>
+            <div class="axspen-hours-row"><span class="hours-label">Dom - Fest:</span><span class="hours-val">${store.hoursSunday}</span></div>
+          `;
+        } else {
+          hoursSummaryHtml = `
+            <div class="axspen-hours-row"><span class="hours-label">Lun - Sáb:</span><span class="hours-val">${store.hoursWeekday}</span></div>
+            <div class="axspen-hours-row"><span class="hours-label">Dom - Fest:</span><span class="hours-val">${store.hoursSunday}</span></div>
+          `;
+        }
+
         card.innerHTML = `
           <div class="axspen-card-top">
             <div class="axspen-badges-group">
@@ -1109,10 +1227,15 @@
           </div>
 
           <div class="axspen-hours-summary">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span>Lun - Sáb: ${store.hoursWeekday} | Dom y Fest: ${store.hoursSunday}</span>
+            <div class="axspen-hours-head">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Horarios de atención</span>
+            </div>
+            <div class="axspen-hours-grid">
+              ${hoursSummaryHtml}
+            </div>
           </div>
 
           <div class="axspen-card-actions">
@@ -1262,11 +1385,19 @@
           popupAnchor: [0, -38]
         });
 
+        const popupHours = store.hoursMonThu && store.hoursFriSat
+          ? `<div class="axspen-popup-hrow"><span>Lun - Jue:</span><strong>${store.hoursMonThu}</strong></div>
+             <div class="axspen-popup-hrow"><span>Vie - Sáb:</span><strong>${store.hoursFriSat}</strong></div>
+             <div class="axspen-popup-hrow"><span>Dom - Fest:</span><strong>${store.hoursSunday}</strong></div>`
+          : `<div class="axspen-popup-hrow"><span>Lun - Sáb:</span><strong>${store.hoursWeekday}</strong></div>
+             <div class="axspen-popup-hrow"><span>Dom - Fest:</span><strong>${store.hoursSunday}</strong></div>`;
+
         const popupContent = `
           <div class="axspen-popup-body">
             <span class="axspen-popup-city">${store.city} · ${store.zone}</span>
             <h4>${store.name}</h4>
             <p class="axspen-popup-address">${store.address}</p>
+            <p class="axspen-popup-hours">${popupHours}</p>
             <div class="axspen-popup-actions">
               <a href="${gmapsUrl}" target="_blank" rel="noopener noreferrer" class="axspen-popup-btn axspen-btn-dark">
                 Google Maps
