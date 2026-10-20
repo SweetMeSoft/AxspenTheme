@@ -227,14 +227,14 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background_color": "#FFFEFE",
+          "background_color": "#fffefe",
           "background_gradient": "",
-          "text_color": "#17181C",
-          "heading_color": "#3652DD",
-          "link_color": "#3652DD",
+          "text_color": "#4B440A",
+          "heading_color": "#4B440A",
+          "link_color": "#3652dd",
           "success_color": "#00aa00",
           "error_color": "#ff0000",
-          "loading_color": "#3652DD",
+          "loading_color": "#3652dd",
           "button_bg_color": "#ffffff",
           "button_text_color": "#000000",
           "button_outline_color": "#000000",
