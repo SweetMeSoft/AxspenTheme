@@ -222,6 +222,11 @@
         "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
         "disabled": false,
         "settings": {}
+      },
+      "2000393630213785949": {
+        "type": "shopify://apps/buho-labs-axspen/blocks/buho/01a165f0-8f48-7a51-b17a-1fcf004b148c",
+        "disabled": false,
+        "settings": {}
       }
     },
     "color_schemes": {
@@ -229,8 +234,8 @@
         "settings": {
           "background_color": "#fffefe",
           "background_gradient": "",
-          "text_color": "#4B440A",
-          "heading_color": "#4B440A",
+          "text_color": "#4b440a",
+          "heading_color": "#4b440a",
           "link_color": "#3652dd",
           "success_color": "#00aa00",
           "error_color": "#ff0000",
