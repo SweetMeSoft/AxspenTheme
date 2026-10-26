@@ -26,10 +26,51 @@
       },
       "blocks": {}
     },
-    "image-with-text": {
-      "disabled": true,
+    "17930277429c1e01d5": {
+      "type": "_blocks",
+      "disabled": false,
       "settings": {},
-      "blocks": {}
+      "blocks": {
+        "ai_gen_block_094f5ce_7LEVT": {
+          "type": "ai_gen_block_094f5ce",
+          "disabled": false,
+          "settings": {
+            "image": null,
+            "mobile_image": "shopify://shop_images/Muneca_-_2.jpg",
+            "desktop_width_percent": 100,
+            "aspect_ratio": "1 / 1",
+            "mobile_aspect_ratio": "3 / 2",
+            "heading": "",
+            "description": "",
+            "button_label": "",
+            "banner_link": "",
+            "header-bd423c9c5a6ef86d3aa2df5adbf9471f": null,
+            "text_alignment": "flex-start",
+            "content_position": "center",
+            "heading_size": 48,
+            "text_color": "#FFFFFF",
+            "button_color": "#232020",
+            "button_text_color": "#FFFFFF"
+          }
+        }
+      },
+      "block_order": [
+        "ai_gen_block_094f5ce_7LEVT"
+      ]
     }
-  }
+  },
+  "order": [
+    "gp_global_section_557313572275750081_9djEUM",
+    "gp_global_section_561241152934642544_xXCHfb",
+    "gp_global_section_617682360472699844_CWginx",
+    "testimonial",
+    "new_product_carousel_QUgwqt",
+    "gp_global_section_561243713943110746_tEdXKe",
+    "new_product_carousel_VH9h9m",
+    "gp_global_section_617702271689425568_iaaNFx",
+    "gp_global_section_611115494627345261_p8HjRe",
+    "newsletter",
+    "17568573124160162b",
+    "17930277429c1e01d5"
+  ]
 }
