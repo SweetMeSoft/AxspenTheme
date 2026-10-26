@@ -1,6 +1,168 @@
+{% doc %}
+  @prompt
+    Banner para una imagen, El formato celular
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-image-banner-{{ ai_gen_id }} {
+    display: block;
+    position: relative;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    overflow: hidden;
+    background: #f3f1ed;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-image-banner-{{ ai_gen_id }}:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  .ai-image-banner-{{ ai_gen_id }}__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: {{ block.settings.aspect_ratio }};
+    overflow: hidden;
+  }
+
+  .ai-image-banner-{{ ai_gen_id }}__image,
+  .ai-image-banner-{{ ai_gen_id }}__placeholder svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-image-banner-{{ ai_gen_id }}__image--mobile { display: none; }
+
+  .ai-image-banner-{{ ai_gen_id }}__placeholder {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #f3f1ed;
+  }
+
+  .ai-image-banner-{{ ai_gen_id }}__placeholder svg { color: #77736e; }
+
+  .ai-image-banner-{{ ai_gen_id }}__empty {
+    position: absolute;
+    inset: auto 16px 16px;
+    margin: 0;
+    padding: 10px 14px;
+    background: #fff;
+    color: #232020;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .ai-image-banner-{{ ai_gen_id }}__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: {{ block.settings.content_position }};
+    justify-content: {{ block.settings.text_alignment }};
+    padding: clamp(20px, 5vw, 64px);
+    background: linear-gradient({% if block.settings.text_alignment == 'center' %}180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.5){% elsif block.settings.text_alignment == 'flex-end' %}90deg, rgba(0,0,0,0.02), rgba(0,0,0,0.55){% else %}90deg, rgba(0,0,0,0.55), rgba(0,0,0,0.02){% endif %});
+  }
+
+  .ai-image-banner-{{ ai_gen_id }}__content {
+    width: min(100%, 560px);
+    color: {{ block.settings.text_color }};
+    text-align: {% if block.settings.text_alignment == 'center' %}center{% elsif block.settings.text_alignment == 'flex-end' %}right{% else %}left{% endif %};
+  }
+
+  .ai-image-banner-{{ ai_gen_id }}__heading {
+    margin: 0 0 12px;
+    color: inherit;
+    font-size: clamp(28px, 5vw, {{ block.settings.heading_size }}px);
+    line-height: 1.08;
+    font-weight: 700;
+  }
+
+  .ai-image-banner-{{ ai_gen_id }}__text { margin: 0 0 22px; font-size: 16px; line-height: 1.5; }
+  .ai-image-banner-{{ ai_gen_id }}__text p { margin: 0; }
+
+  .ai-image-banner-{{ ai_gen_id }}__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 12px 22px;
+    background: {{ block.settings.button_color }};
+    color: {{ block.settings.button_text_color }};
+    border: 1px solid {{ block.settings.button_color }};
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-image-banner-{{ ai_gen_id }}__media { aspect-ratio: {{ block.settings.mobile_aspect_ratio }}; }
+    .ai-image-banner-{{ ai_gen_id }}__overlay { padding: 22px; }
+    .ai-image-banner-{{ ai_gen_id }}__heading { font-size: clamp(26px, 8vw, 42px); }
+    .ai-image-banner-{{ ai_gen_id }}__text { font-size: 14px; }
+    {% if block.settings.mobile_image != blank %}
+      .ai-image-banner-{{ ai_gen_id }}__image--desktop { display: none; }
+      .ai-image-banner-{{ ai_gen_id }}__image--mobile { display: block; }
+    {% endif %}
+  }
+{% endstyle %}
+
+<div class="ai-image-banner-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.banner_link != blank %}<a href="{{ block.settings.banner_link }}" class="ai-image-banner-{{ ai_gen_id }}" aria-label="{{ block.settings.heading | default: 'Ver colección' | escape }}">{% endif %}
+    <div class="ai-image-banner-{{ ai_gen_id }}__media">
+      {% if block.settings.image != blank %}
+        <img class="ai-image-banner-{{ ai_gen_id }}__image ai-image-banner-{{ ai_gen_id }}__image--desktop" src="{{ block.settings.image | image_url: width: 2400 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}">
+        {% if block.settings.mobile_image != blank %}
+          <img class="ai-image-banner-{{ ai_gen_id }}__image ai-image-banner-{{ ai_gen_id }}__image--mobile" src="{{ block.settings.mobile_image | image_url: width: 1200 }}" alt="{{ block.settings.mobile_image.alt | escape }}" loading="lazy" width="{{ block.settings.mobile_image.width }}" height="{{ block.settings.mobile_image.height }}">
+        {% endif %}
+      {% elsif block.settings.mobile_image != blank %}
+        <img class="ai-image-banner-{{ ai_gen_id }}__image" src="{{ block.settings.mobile_image | image_url: width: 2000 }}" alt="{{ block.settings.mobile_image.alt | escape }}" loading="lazy" width="{{ block.settings.mobile_image.width }}" height="{{ block.settings.mobile_image.height }}">
+      {% else %}
+        <div class="ai-image-banner-{{ ai_gen_id }}__placeholder">
+          {{ 'image' | placeholder_svg_tag }}
+          <p class="ai-image-banner-{{ ai_gen_id }}__empty">Agrega una imagen para configurar tu banner.</p>
+        </div>
+      {% endif %}
+      {% if block.settings.heading != blank or block.settings.description != blank or block.settings.button_label != blank %}
+        <div class="ai-image-banner-{{ ai_gen_id }}__overlay">
+          <div class="ai-image-banner-{{ ai_gen_id }}__content">
+            {% if block.settings.heading != blank %}<h2 class="ai-image-banner-{{ ai_gen_id }}__heading">{{ block.settings.heading | escape }}</h2>{% endif %}
+            {% if block.settings.description != blank %}<div class="ai-image-banner-{{ ai_gen_id }}__text">{{ block.settings.description }}</div>{% endif %}
+            {% if block.settings.button_label != blank %}<span class="ai-image-banner-{{ ai_gen_id }}__button">{{ block.settings.button_label | escape }}</span>{% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  {% if block.settings.banner_link != blank %}</a>{% endif %}
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Banner de imagen",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Imagen para escritorio" },
+    { "type": "image_picker", "id": "mobile_image", "label": "Imagen para celular" },
+    { "type": "range", "id": "desktop_width_percent", "label": "Ancho en escritorio", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "select", "id": "aspect_ratio", "label": "Proporción en escritorio", "options": [{ "value": "2.4 / 1", "label": "Panorámica" }, { "value": "1.8 / 1", "label": "Ancha" }, { "value": "1 / 1", "label": "Cuadrada" }], "default": "2.4 / 1" },
+    { "type": "select", "id": "mobile_aspect_ratio", "label": "Proporción en celular", "options": [{ "value": "1 / 1", "label": "Cuadrada" }, { "value": "4 / 5", "label": "Vertical" }, { "value": "3 / 2", "label": "Horizontal" }], "default": "4 / 5" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Descubre tu próximo favorito" },
+    { "type": "richtext", "id": "description", "label": "Descripción", "default": "<p>Estilo que acompaña cada momento.</p>" },
+    { "type": "text", "id": "button_label", "label": "Texto del botón", "default": "Comprar ahora" },
+    { "type": "url", "id": "banner_link", "label": "Enlace del banner" },
+    { "type": "header", "content": "Diseño del texto" },
+    { "type": "select", "id": "text_alignment", "label": "Alineación", "options": [{ "value": "flex-start", "label": "Izquierda" }, { "value": "center", "label": "Centro" }, { "value": "flex-end", "label": "Derecha" }], "default": "flex-start" },
+    { "type": "select", "id": "content_position", "label": "Posición vertical", "options": [{ "value": "flex-start", "label": "Arriba" }, { "value": "center", "label": "Centro" }, { "value": "flex-end", "label": "Abajo" }], "default": "center" },
+    { "type": "range", "id": "heading_size", "label": "Tamaño del título", "min": 32, "max": 72, "step": 4, "unit": "px", "default": 48 },
+    { "type": "color", "id": "text_color", "label": "Texto", "default": "#FFFFFF" },
+    { "type": "color", "id": "button_color", "label": "Fondo del botón", "default": "#232020" },
+    { "type": "color", "id": "button_text_color", "label": "Texto del botón", "default": "#FFFFFF" }
+  ],
+  "presets": [{ "name": "Banner de imagen" }],
+  "tag": null,
+  "class": "image-banner-block"
+}
 {% endschema %}
