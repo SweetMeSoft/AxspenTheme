@@ -11,5 +11,26 @@
   "context": {
     "market": "co"
   },
-  "current": {}
+  "current": {
+    "color_schemes": {
+      "scheme-1": {
+        "settings": {
+          "background_color": "#FFFFFF",
+          "text_color": "#D599A5",
+          "heading_color": "#D599A5",
+          "button_bg_color": "#D599A5",
+          "button_text_color": "#FFFFFF"
+        }
+      },
+      "scheme-2": {
+        "settings": {}
+      },
+      "scheme-f6417a66-de69-4b20-8437-8ee13a4b4b42": {
+        "settings": {}
+      },
+      "scheme-f934079b-2f56-489f-8504-574582365f8d": {
+        "settings": {}
+      }
+    }
+  }
 }
