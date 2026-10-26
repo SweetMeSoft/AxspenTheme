@@ -17,8 +17,10 @@
       "settings": {},
       "blocks": {
         "slide_AXY8tD": {
-          "disabled": true,
-          "settings": {}
+          "disabled": false,
+          "settings": {
+            "text": "<p>Jeans desde $89.900 ✨ llevando 2 o más, ¡cada uno baja $20.000! ✨</p>"
+          }
         },
         "slide_wBqpfF": {
           "disabled": false,
@@ -29,11 +31,11 @@
         "slide_yUgcVi": {
           "disabled": false,
           "settings": {
-            "text": "<p>Bienvenid@ a Casa 🏠&nbsp;</p>"
+            "text": "<p>🎀 ¡Bienvenidas al JEAN DOLL DAY!🎀</p>"
           }
         },
         "slide_WpXy9W": {
-          "disabled": false,
+          "disabled": true,
           "settings": {}
         }
       }
