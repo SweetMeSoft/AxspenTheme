@@ -13,19 +13,6 @@
   },
   "parent": "index.json",
   "sections": {
-    "new_product_carousel_QUgwqt": {
-      "settings": {
-        "color_scheme": "scheme-1",
-        "collection": "sabor-a-casa"
-      },
-      "blocks": {}
-    },
-    "new_product_carousel_VH9h9m": {
-      "settings": {
-        "color_scheme": "scheme-bb283ae1-5113-4975-a6d4-9c86e2d83e82"
-      },
-      "blocks": {}
-    },
     "17930277429c1e01d5": {
       "type": "_blocks",
       "disabled": false,
@@ -44,24 +31,19 @@
             "description": "",
             "button_label": "",
             "banner_link": "shopify://collections/nueva-coleccion-1",
-            "header-bd423c9c5a6ef86d3aa2df5adbf9471f": null,
+            "header-74fbabe73c6a6f6f5e1da0c28cd6cbe7": null,
             "text_alignment": "flex-start",
             "content_position": "center",
             "heading_size": 48,
-            "text_color": "#FFFFFF",
+            "text_color": "#ffffff",
             "button_color": "#232020",
-            "button_text_color": "#FFFFFF"
+            "button_text_color": "#ffffff"
           }
         }
       },
       "block_order": [
         "ai_gen_block_094f5ce_7LEVT"
       ]
-    },
-    "gp_global_section_557313572275750081_9djEUM": {
-      "disabled": true,
-      "settings": {},
-      "blocks": {}
     },
     "blocks_FVHcN": {
       "type": "_blocks",
@@ -81,13 +63,13 @@
             "description": "",
             "button_label": "",
             "banner_link": "shopify://collections/jean-apliques",
-            "header-771e5a477df18230155234ddd19732fe": null,
+            "header-4dd1c1b347447f3f73a9d48e7c2d693c": null,
             "text_alignment": "flex-start",
             "content_position": "center",
             "heading_size": 48,
-            "text_color": "#FFFFFF",
+            "text_color": "#ffffff",
             "button_color": "#232020",
-            "button_text_color": "#FFFFFF"
+            "button_text_color": "#ffffff"
           }
         }
       },
@@ -96,9 +78,27 @@
       ],
       "name": "Banner de imagen"
     },
+    "gp_global_section_557313572275750081_9djEUM": {
+      "disabled": true,
+      "settings": {},
+      "blocks": {}
+    },
+    "new_product_carousel_QUgwqt": {
+      "settings": {
+        "color_scheme": "scheme-1",
+        "collection": "sabor-a-casa"
+      },
+      "blocks": {}
+    },
     "gp_global_section_561243713943110746_tEdXKe": {
       "disabled": true,
       "settings": {},
+      "blocks": {}
+    },
+    "new_product_carousel_VH9h9m": {
+      "settings": {
+        "color_scheme": "scheme-bb283ae1-5113-4975-a6d4-9c86e2d83e82"
+      },
       "blocks": {}
     }
   },

@@ -12,5 +12,9 @@
     "market": "co"
   },
   "parent": "product.json",
-  "sections": {}
+  "sections": {},
+  "order": [
+    "main",
+    "recommendations"
+  ]
 }
