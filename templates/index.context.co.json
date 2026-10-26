@@ -13,17 +13,22 @@
   },
   "parent": "index.json",
   "sections": {
+    "new_product_carousel_QUgwqt": {
+      "settings": {
+        "color_scheme": "scheme-1",
+        "collection": "sabor-a-casa"
+      },
+      "blocks": {}
+    },
     "new_product_carousel_VH9h9m": {
       "settings": {
         "color_scheme": "scheme-bb283ae1-5113-4975-a6d4-9c86e2d83e82"
       },
       "blocks": {}
     },
-    "new_product_carousel_QUgwqt": {
-      "settings": {
-        "collection": "sabor-a-casa",
-        "color_scheme": "scheme-1"
-      },
+    "image-with-text": {
+      "disabled": true,
+      "settings": {},
       "blocks": {}
     }
   }
