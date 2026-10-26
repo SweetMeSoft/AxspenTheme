@@ -57,9 +57,15 @@
       "block_order": [
         "ai_gen_block_094f5ce_7LEVT"
       ]
+    },
+    "gp_global_section_557313572275750081_9djEUM": {
+      "disabled": true,
+      "settings": {},
+      "blocks": {}
     }
   },
   "order": [
+    "17930277429c1e01d5",
     "gp_global_section_557313572275750081_9djEUM",
     "gp_global_section_561241152934642544_xXCHfb",
     "gp_global_section_617682360472699844_CWginx",
@@ -70,7 +76,6 @@
     "gp_global_section_617702271689425568_iaaNFx",
     "gp_global_section_611115494627345261_p8HjRe",
     "newsletter",
-    "17568573124160162b",
-    "17930277429c1e01d5"
+    "17568573124160162b"
   ]
 }
