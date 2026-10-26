@@ -38,7 +38,7 @@
             "image": null,
             "mobile_image": "shopify://shop_images/Muneca_-_2.jpg",
             "desktop_width_percent": 100,
-            "aspect_ratio": "1 / 1",
+            "aspect_ratio": "1.8 / 1",
             "mobile_aspect_ratio": "3 / 2",
             "heading": "",
             "description": "",
@@ -62,6 +62,39 @@
       "disabled": true,
       "settings": {},
       "blocks": {}
+    },
+    "blocks_FVHcN": {
+      "type": "_blocks",
+      "disabled": false,
+      "settings": {},
+      "blocks": {
+        "ai_gen_block_094f5ce_x9Vpj": {
+          "type": "ai_gen_block_094f5ce",
+          "disabled": false,
+          "settings": {
+            "image": null,
+            "mobile_image": null,
+            "desktop_width_percent": 100,
+            "aspect_ratio": "2.4 / 1",
+            "mobile_aspect_ratio": "4 / 5",
+            "heading": "Descubre tu próximo favorito",
+            "description": "<p>Estilo que acompaña cada momento.</p>",
+            "button_label": "Comprar ahora",
+            "banner_link": "",
+            "header-771e5a477df18230155234ddd19732fe": null,
+            "text_alignment": "flex-start",
+            "content_position": "center",
+            "heading_size": 48,
+            "text_color": "#FFFFFF",
+            "button_color": "#232020",
+            "button_text_color": "#FFFFFF"
+          }
+        }
+      },
+      "block_order": [
+        "ai_gen_block_094f5ce_x9Vpj"
+      ],
+      "name": "Banner de imagen"
     }
   },
   "order": [
@@ -76,6 +109,7 @@
     "gp_global_section_617702271689425568_iaaNFx",
     "gp_global_section_611115494627345261_p8HjRe",
     "newsletter",
-    "17568573124160162b"
+    "17568573124160162b",
+    "blocks_FVHcN"
   ]
 }
