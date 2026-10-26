@@ -73,14 +73,14 @@
           "disabled": false,
           "settings": {
             "image": null,
-            "mobile_image": null,
+            "mobile_image": "shopify://shop_images/Muneca_-_1.jpg",
             "desktop_width_percent": 100,
-            "aspect_ratio": "2.4 / 1",
-            "mobile_aspect_ratio": "4 / 5",
-            "heading": "Descubre tu próximo favorito",
-            "description": "<p>Estilo que acompaña cada momento.</p>",
-            "button_label": "Comprar ahora",
-            "banner_link": "",
+            "aspect_ratio": "1.8 / 1",
+            "mobile_aspect_ratio": "3 / 2",
+            "heading": "",
+            "description": "",
+            "button_label": "",
+            "banner_link": "shopify://collections/jean-apliques",
             "header-771e5a477df18230155234ddd19732fe": null,
             "text_alignment": "flex-start",
             "content_position": "center",
@@ -95,6 +95,11 @@
         "ai_gen_block_094f5ce_x9Vpj"
       ],
       "name": "Banner de imagen"
+    },
+    "gp_global_section_561243713943110746_tEdXKe": {
+      "disabled": true,
+      "settings": {},
+      "blocks": {}
     }
   },
   "order": [
@@ -104,12 +109,12 @@
     "gp_global_section_617682360472699844_CWginx",
     "testimonial",
     "new_product_carousel_QUgwqt",
+    "blocks_FVHcN",
     "gp_global_section_561243713943110746_tEdXKe",
     "new_product_carousel_VH9h9m",
     "gp_global_section_617702271689425568_iaaNFx",
     "gp_global_section_611115494627345261_p8HjRe",
     "newsletter",
-    "17568573124160162b",
-    "blocks_FVHcN"
+    "17568573124160162b"
   ]
 }
