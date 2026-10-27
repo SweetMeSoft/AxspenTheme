@@ -105,10 +105,108 @@
     },
     "gp_global_section_617702271689425568_iaaNFx": {
       "type": "gp-global-section-617702271689425568",
-      "name": "Copia de carrusel silueta",
+      "blocks": {
+        "slide_clasicos": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-clasicos.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-clasicos.png?v=1793066391",
+            "link": "shopify://collections/jeans-basicos",
+            "title": "Clásicos"
+          }
+        },
+        "slide_premium": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-premium.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-premium.png?v=1793066391",
+            "link": "shopify://collections/sabor-a-casa",
+            "title": "Premium"
+          }
+        },
+        "slide_wide_leg": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-wide-leg.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-wide-leg.png?v=1793066391",
+            "link": "shopify://collections/wide-leg",
+            "title": "Wide Leg"
+          }
+        },
+        "slide_skinny": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-skinny.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-skinny.png?v=1793066391",
+            "link": "shopify://collections/skinny-jeans",
+            "title": "Skinny"
+          }
+        },
+        "slide_mom_fit": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-mom-fit.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-mom-fit.png?v=1793066391",
+            "link": "shopify://collections/mom-fit",
+            "title": "Mom fit"
+          }
+        },
+        "slide_straight": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-straight.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-straight.png?v=1793066391",
+            "link": "shopify://collections/jean-straight-fit",
+            "title": "Straight"
+          }
+        },
+        "slide_cargo": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-cargo.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-cargo.png?v=1793066391",
+            "link": "shopify://collections/cargo-jeans",
+            "title": "Cargo"
+          }
+        },
+        "slide_baggy": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-baggy.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-baggy.png?v=1793066391",
+            "link": "shopify://collections/jean-mujer-baggy",
+            "title": "Baggy"
+          }
+        },
+        "slide_flare": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-flare.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-flare.png?v=1793066391",
+            "link": "shopify://collections/flare",
+            "title": "Flare"
+          }
+        }
+      },
+      "block_order": [
+        "slide_clasicos",
+        "slide_premium",
+        "slide_wide_leg",
+        "slide_skinny",
+        "slide_mom_fit",
+        "slide_straight",
+        "slide_cargo",
+        "slide_baggy",
+        "slide_flare"
+      ],
       "settings": {
-        "section_preload": "off_lazy_script",
-        "checksum": ""
+        "columns_desktop": 4,
+        "columns_tablet": 2,
+        "columns_mobile": 4,
+        "gap_desktop": 10,
+        "gap_mobile": 5,
+        "loop": true,
+        "show_arrows": true
       }
     }
   },

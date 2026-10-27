@@ -37,21 +37,88 @@
     },
     "gp_global_section_617682360472699844_CWginx": {
       "type": "gp-global-section-617682360472699844",
-      "name": "Copia de carrusel home 2",
+      "blocks": {
+        "slide_jeans": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-cat-jeans.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-jeans.png?v=1793066391",
+            "link": "shopify://collections/jeans",
+            "title": "Jeans"
+          }
+        },
+        "slide_bodys": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-cat-bodys.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-bodys.png?v=1793066391",
+            "link": "shopify://collections/body",
+            "title": "Bodys"
+          }
+        },
+        "slide_blusas": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-cat-blusas.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-blusas.png?v=1793066391",
+            "link": "shopify://collections/blusas",
+            "title": "Blusas"
+          }
+        },
+        "slide_chaquetas": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-cat-chaquetas.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-chaquetas.png?v=1793066392",
+            "link": "shopify://collections/chaquetas-mujer",
+            "title": "Chaquetas"
+          }
+        },
+        "slide_buzos": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-cat-buzos.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-buzos.png?v=1793066391",
+            "link": "shopify://collections/buzos-mujer",
+            "title": "Buzos"
+          }
+        },
+        "slide_faldas": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-cat-faldas.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-faldas.png?v=1793066391",
+            "link": "shopify://collections/faldas",
+            "title": "Faldas"
+          }
+        },
+        "slide_blazer": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-cat-blazer.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-blazer.png?v=1793066391",
+            "link": "shopify://collections/blazers",
+            "title": "Blazer"
+          }
+        }
+      },
+      "block_order": [
+        "slide_jeans",
+        "slide_bodys",
+        "slide_blusas",
+        "slide_chaquetas",
+        "slide_buzos",
+        "slide_faldas",
+        "slide_blazer"
+      ],
       "settings": {
-        "section_preload": "off_lazy_script",
-        "checksum": "",
-        "ggEqm9HAcXZ_background_desktop_image_src_-1489687524": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Jeans_5ba39d31-af9d-4fcc-ad8a-f65d9c71e560.jpg?v=1773770885",
-        "ggA0fMVB9wj_background_desktop_image_src_-234885598": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Body_1593e15e-2235-42fc-900b-dd06f5dbf3e1.jpg?v=1773374146",
-        "ggfrtClIMpR_background_desktop_image_src_1160635554": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Blusas_d7cfcd00-1294-43e4-914a-9c2cbb53643c.jpg?v=1773373809",
-        "ggNFFtzaQCH_background_desktop_image_src_623668297": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Chaquetas_5fc6b263-9815-43eb-9ad0-aea1cdf7bf92.jpg?v=1773373847",
-        "gg1wSTU4-zs_background_desktop_image_src_954476554": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/buzos_mayo.png?v=1778770859",
-        "ggWaEZjTxHe_background_desktop_image_src_477077564": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Chalecos_489b6edb-0d39-46db-8849-3497dd7f0eaa.jpg?v=1773373932",
-        "gglU5GuS75G_background_desktop_image_src_-1554457674": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Conjuntos.jpg",
-        "ggeJuhmI51p_background_desktop_image_src_53473375": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Faldas_ae233bcd-abe7-4da5-8724-92812ed5306f.jpg?v=1773374010",
-        "gg9XaoXXcNA_background_desktop_image_src_831129998": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Pantalones_M_9a2756fc-eea4-4454-9463-bac7a5bfcc4a.jpg",
-        "ggU3HjmVfnO_background_desktop_image_src_-460600884": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Blazer_0e2b46c2-d875-4797-8beb-18d89cb7fe2e.jpg",
-        "ggRtf_GiiwQ_background_desktop_image_src_1797228693": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Top_Bralette_cd428653-303c-44dc-932f-c85e2ece611c.jpg"
+        "columns_desktop": 5,
+        "columns_tablet": 2,
+        "columns_mobile": 3,
+        "gap_desktop": 10,
+        "gap_mobile": 5,
+        "loop": true,
+        "show_arrows": true
       }
     },
     "image-with-text": {
@@ -211,18 +278,108 @@
     },
     "gp_global_section_617702271689425568_iaaNFx": {
       "type": "gp-global-section-617702271689425568",
-      "disabled": true,
-      "name": "Copia de carrusel silueta",
+      "blocks": {
+        "slide_clasicos": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-clasicos.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-clasicos.png?v=1793066391",
+            "link": "shopify://collections/jeans-basicos",
+            "title": "Clásicos"
+          }
+        },
+        "slide_premium": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-premium.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-premium.png?v=1793066391",
+            "link": "shopify://collections/sabor-a-casa",
+            "title": "Premium"
+          }
+        },
+        "slide_wide_leg": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-wide-leg.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-wide-leg.png?v=1793066391",
+            "link": "shopify://collections/wide-leg",
+            "title": "Wide Leg"
+          }
+        },
+        "slide_skinny": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-skinny.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-skinny.png?v=1793066391",
+            "link": "shopify://collections/skinny-jeans",
+            "title": "Skinny"
+          }
+        },
+        "slide_mom_fit": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-mom-fit.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-mom-fit.png?v=1793066391",
+            "link": "shopify://collections/mom-fit",
+            "title": "Mom fit"
+          }
+        },
+        "slide_straight": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-straight.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-straight.png?v=1793066391",
+            "link": "shopify://collections/jean-straight-fit",
+            "title": "Straight"
+          }
+        },
+        "slide_cargo": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-cargo.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-cargo.png?v=1793066391",
+            "link": "shopify://collections/cargo-jeans",
+            "title": "Cargo"
+          }
+        },
+        "slide_baggy": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-baggy.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-baggy.png?v=1793066391",
+            "link": "shopify://collections/jean-mujer-baggy",
+            "title": "Baggy"
+          }
+        },
+        "slide_flare": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/jd-sil-flare.png",
+            "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-flare.png?v=1793066391",
+            "link": "shopify://collections/flare",
+            "title": "Flare"
+          }
+        }
+      },
+      "block_order": [
+        "slide_clasicos",
+        "slide_premium",
+        "slide_wide_leg",
+        "slide_skinny",
+        "slide_mom_fit",
+        "slide_straight",
+        "slide_cargo",
+        "slide_baggy",
+        "slide_flare"
+      ],
       "settings": {
-        "section_preload": "off_lazy_script",
-        "checksum": "",
-        "gguSQjbjKsb_background_desktop_image_src_119863656": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Jeans_Apliques.jpg",
-        "gg5u_yeN90o_background_desktop_image_src_1907974251": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Wide_Leg_7283bbe1-62de-479f-b230-78dac03df1ce.jpg",
-        "gge5a2KMgm3_background_desktop_image_src_775055992": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Skinny_6d0a7003-cc0a-4acc-8c92-dc5a3df67029.jpg",
-        "ggKHAMhv-xN_background_desktop_image_src_1300154847": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Straight_M.jpg",
-        "ggzc1xRu54G_background_desktop_image_src_1490331948": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Cargo_702eb57a-e993-469e-b7e0-911e65c0afe6.jpg",
-        "ggxZff3nmeY_background_desktop_image_src_-1771114719": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Baggy_M.jpg",
-        "gg2r8g-T6SQ_background_desktop_image_src_1141558663": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Flare_608d5931-2f98-41cc-9b32-e624547bc334.jpg"
+        "columns_desktop": 4,
+        "columns_tablet": 2,
+        "columns_mobile": 4,
+        "gap_desktop": 10,
+        "gap_mobile": 5,
+        "loop": true,
+        "show_arrows": true
       }
     },
     "gp_global_section_611115494627345261_p8HjRe": {

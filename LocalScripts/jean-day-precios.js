@@ -23,8 +23,8 @@ const REVERT = process.argv.includes('--revert');
 
 const TIERS = [
   { name: '100k', collectionId: '664122294557', match: '100000.00', promo: '89900.00' },
-  { name: '130k', collectionId: '664122327325', match: '130000.00', promo: '120000.00' },
-  { name: '150k', collectionId: '664122491165', match: '150000.00', promo: '140000.00' },
+  { name: '130k', collectionId: '664122327325', match: '130000.00', promo: '119900.00' },
+  { name: '150k', collectionId: '664122491165', match: '150000.00', promo: '139900.00' },
 ];
 
 const env = Object.fromEntries(
