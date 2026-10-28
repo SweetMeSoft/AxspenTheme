@@ -753,6 +753,10 @@
 								</{{ details_tag }}>
 							{%- endif -%}
 						</div>
+					{%- when 'jean-day-urgency' -%}
+						{%- render 'jean-day-product-urgency', product: product, block: block -%}
+					{%- when 'fit-testimonials' -%}
+						{%- render 'product-fit-testimonials', product: product, block: block -%}
 				{%- endcase -%}
 			</div>
 		{%- endfor -%}

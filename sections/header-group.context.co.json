@@ -39,6 +39,14 @@
           "settings": {}
         }
       }
+    },
+    "header": {
+      "settings": {
+        "transparent_color": "#000000",
+        "transparent_logo_image": "shopify://shop_images/LOGO_-_500X500_-_1_-_Editado.png",
+        "transparent_logo_mobile_image": "shopify://shop_images/LOGO_-_500X500_-_1_-_Editado.png"
+      },
+      "blocks": {}
     }
   }
 }

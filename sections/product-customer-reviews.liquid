@@ -1,0 +1,702 @@
+{% comment %}
+{%- liquid
+  assign section_id = '#shopify-section-' | append: section.id
+  assign total_blocks = section.blocks.size
+  assign sum_rating = 0
+  for block in section.blocks
+    assign r = block.settings.rating | default: 5
+    assign sum_rating = sum_rating | plus: r
+  endfor
+
+  if product != blank and product.metafields.reviews.rating.value != blank and product.metafields.reviews.rating_count.value > 0
+    assign avg_rating = product.metafields.reviews.rating.value.rating | round: 1
+    assign total_reviews = product.metafields.reviews.rating_count.value
+  elsif total_blocks > 0
+    assign avg_rating = sum_rating | times: 1.0 | divided_by: total_blocks | round: 1
+    assign total_reviews = total_blocks
+  else
+    assign avg_rating = 5.0
+    assign total_reviews = 0
+  endif
+-%}
+
+<style>
+  {{ section_id }} .pcr-wrap {
+    padding-top: {{ section.settings.padding_top_mobile | default: 32 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 40 }}px;
+    background-color: {{ section.settings.bg_color | default: '#faf9f7' }};
+    border-top: 1px solid #ebe6e0;
+    border-bottom: 1px solid #ebe6e0;
+  }
+
+  @media (min-width: 992px) {
+    {{ section_id }} .pcr-wrap {
+      padding-top: {{ section.settings.padding_top | default: 56 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 64 }}px;
+    }
+  }
+
+  {{ section_id }} .pcr-header {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid #e5e0d8;
+  }
+
+  @media (min-width: 992px) {
+    {{ section_id }} .pcr-header {
+      grid-template-columns: 1.1fr 1.3fr auto;
+      align-items: center;
+      gap: 36px;
+    }
+  }
+
+  {{ section_id }} .pcr-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #232020;
+    margin: 0 0 8px;
+    line-height: 1.2;
+  }
+
+  {{ section_id }} .pcr-subtitle {
+    font-size: 14px;
+    color: #5c5752;
+    margin: 0 0 14px;
+  }
+
+  {{ section_id }} .pcr-score-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  {{ section_id }} .pcr-score-num {
+    font-size: 28px;
+    font-weight: 800;
+    color: #232020;
+    line-height: 1;
+  }
+
+  {{ section_id }} .pcr-stars {
+    display: inline-flex;
+    gap: 3px;
+    color: #fdc643;
+  }
+
+  {{ section_id }} .pcr-count {
+    font-size: 13px;
+    color: #6b6661;
+    font-weight: 500;
+  }
+
+  {{ section_id }} .pcr-metrics {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  @media (min-width: 576px) {
+    {{ section_id }} .pcr-metrics {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+  }
+
+  {{ section_id }} .pcr-metric-box {
+    background: #ffffff;
+    border: 1px solid #e8e4de;
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  {{ section_id }} .pcr-metric-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b6661;
+    margin: 0 0 4px;
+  }
+
+  {{ section_id }} .pcr-metric-val {
+    font-size: 14px;
+    font-weight: 700;
+    color: #232020;
+    margin: 0;
+  }
+
+  {{ section_id }} .pcr-write-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 22px;
+    background-color: #232020;
+    color: #ffffff;
+    border: 1px solid #232020;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  {{ section_id }} .pcr-write-btn:hover {
+    background-color: #ffffff;
+    color: #232020;
+  }
+
+  {{ section_id }} .pcr-form-drawer {
+    background: #ffffff;
+    border: 1px solid #e5e0d8;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+
+  {{ section_id }} .pcr-form-drawer[hidden] {
+    display: none;
+  }
+
+  {{ section_id }} .pcr-form-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #232020;
+    margin: 0 0 16px;
+  }
+
+  {{ section_id }} .pcr-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 768px) {
+    {{ section_id }} .pcr-form-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  {{ section_id }} .pcr-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  {{ section_id }} .pcr-field.is-full {
+    grid-column: 1 / -1;
+  }
+
+  {{ section_id }} .pcr-field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #232020;
+  }
+
+  {{ section_id }} .pcr-field input,
+  {{ section_id }} .pcr-field select,
+  {{ section_id }} .pcr-field textarea {
+    padding: 10px 12px;
+    border: 1px solid #d6d1c9;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #232020;
+    background: #ffffff;
+    font-family: inherit;
+  }
+
+  {{ section_id }} .pcr-field textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  {{ section_id }} .pcr-star-picker {
+    display: inline-flex;
+    gap: 6px;
+  }
+
+  {{ section_id }} .pcr-star-btn {
+    background: none;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+    color: #d6d1c9;
+    transition: color 0.15s ease;
+  }
+
+  {{ section_id }} .pcr-star-btn.is-active {
+    color: #fdc643;
+  }
+
+  {{ section_id }} .pcr-submit-btn {
+    align-self: flex-start;
+    padding: 12px 26px;
+    background-color: #232020;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+  }
+
+  {{ section_id }} .pcr-alert {
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  {{ section_id }} .pcr-alert.is-success {
+    background: #f2faf5;
+    color: #1e9458;
+    border: 1px solid rgba(30, 148, 88, 0.3);
+  }
+
+  {{ section_id }} .pcr-alert.is-error {
+    background: #fff2f2;
+    color: #ce373a;
+    border: 1px solid rgba(206, 55, 58, 0.3);
+  }
+
+  {{ section_id }} .pcr-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  @media (min-width: 768px) {
+    {{ section_id }} .pcr-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  {{ section_id }} .pcr-card {
+    background: #ffffff;
+    border: 1px solid #e8e4de;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  {{ section_id }} .pcr-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  {{ section_id }} .pcr-fit-pill {
+    font-size: 11px;
+    font-weight: 600;
+    color: #232020;
+    background: #f3f0eb;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  {{ section_id }} .pcr-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #232020;
+    margin: 10px 0 6px;
+  }
+
+  {{ section_id }} .pcr-card-body {
+    font-size: 14px;
+    line-height: 1.55;
+    color: #3d3935;
+    margin: 0;
+  }
+
+  {{ section_id }} .pcr-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid #f0ece6;
+    font-size: 12px;
+    color: #6b6661;
+  }
+
+  {{ section_id }} .pcr-author {
+    font-weight: 700;
+    color: #232020;
+  }
+
+  {{ section_id }} .pcr-verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #1e9458;
+    font-weight: 600;
+  }
+</style>
+
+<div id="product-customer-reviews" class="pcr-wrap">
+  <div class="container">
+    <div class="pcr-header">
+      <div>
+        <h2 class="pcr-title">{{ section.settings.heading | default: 'Opiniones de clientas Axspen' | escape }}</h2>
+        <p class="pcr-subtitle">{{ section.settings.subheading | default: 'Experiencias reales sobre horma, talla y calidad de tela' | escape }}</p>
+        <div class="pcr-score-row">
+          <span class="pcr-score-num">{{ avg_rating }}</span>
+          <span class="pcr-stars" aria-label="Calificación promedio {{ avg_rating }} de 5">
+            {%- for i in (1..5) -%}
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            {%- endfor -%}
+          </span>
+          <span class="pcr-count">({{ total_reviews }} opiniones verificadas)</span>
+        </div>
+      </div>
+
+      <div class="pcr-metrics">
+        <div class="pcr-metric-box">
+          <p class="pcr-metric-label">Fidelidad de talla</p>
+          <p class="pcr-metric-val">{{ section.settings.metric_1 | default: 'Horma fiel a tu talla' | escape }}</p>
+        </div>
+        <div class="pcr-metric-box">
+          <p class="pcr-metric-label">Calidad de tela</p>
+          <p class="pcr-metric-val">{{ section.settings.metric_2 | default: 'Denim grueso que no cede' | escape }}</p>
+        </div>
+        <div class="pcr-metric-box">
+          <p class="pcr-metric-label">Comodidad y realce</p>
+          <p class="pcr-metric-val">{{ section.settings.metric_3 | default: 'Elongación suave y tiro alto' | escape }}</p>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" class="pcr-write-btn" data-pcr-toggle aria-expanded="false">
+          Escribir una reseña
+        </button>
+      </div>
+    </div>
+
+    {%- form 'contact', id: 'pcr-review-form' -%}
+      {%- assign form_open = false -%}
+      {%- if form.posted_successfully? or form.errors -%}
+        {%- assign form_open = true -%}
+      {%- endif -%}
+
+      {%- if form.posted_successfully? -%}
+        <div class="pcr-alert is-success" role="status">
+          ¡Gracias por compartir tu opinión! Tu reseña ha sido recibida para verificación.
+        </div>
+      {%- endif -%}
+
+      {%- if form.errors -%}
+        <div class="pcr-alert is-error" role="alert">
+          No se pudo enviar tu reseña: {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+
+      <div class="pcr-form-drawer" data-pcr-drawer {% unless form_open %}hidden{% endunless %}>
+        <h3 class="pcr-form-title">Comparte tu experiencia con esta prenda</h3>
+        <input type="hidden" name="contact[subject]" value="Nueva reseña de producto - {{ product.title | default: 'Tienda Axspen' | escape }}">
+        <input type="hidden" name="contact[producto]" value="{{ product.title | escape }} ({{ product.url }})">
+        <input type="hidden" name="contact[calificacion]" value="5" data-pcr-rating-input>
+
+        <div class="pcr-form-grid">
+          <div class="pcr-field">
+            <label>Calificación *</label>
+            <div class="pcr-star-picker" role="radiogroup" aria-label="Calificación de 1 a 5 estrellas">
+              {%- for i in (1..5) -%}
+                <button type="button" class="pcr-star-btn is-active" data-pcr-star="{{ i }}" aria-label="{{ i }} estrellas">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                </button>
+              {%- endfor -%}
+            </div>
+          </div>
+
+          <div class="pcr-field">
+            <label for="pcr-fit-{{ section.id }}">¿Cómo sentiste la talla y horma?</label>
+            <select id="pcr-fit-{{ section.id }}" name="contact[ajuste_talla]">
+              <option value="Fiel a la talla">Fiel a la talla (horma exacta)</option>
+              <option value="Un poco ajustada">Un poco ajustada</option>
+              <option value="Un poco holgada">Un poco holgada</option>
+            </select>
+          </div>
+
+          <div class="pcr-field">
+            <label for="pcr-name-{{ section.id }}">Tu nombre *</label>
+            <input id="pcr-name-{{ section.id }}" type="text" name="contact[name]" required placeholder="Ej. Laura Gómez">
+          </div>
+
+          <div class="pcr-field">
+            <label for="pcr-email-{{ section.id }}">Correo electrónico *</label>
+            <input id="pcr-email-{{ section.id }}" type="email" name="contact[email]" required placeholder="tucorreo@ejemplo.com">
+          </div>
+
+          <div class="pcr-field">
+            <label for="pcr-size-{{ section.id }}">Talla comprada</label>
+            <input id="pcr-size-{{ section.id }}" type="text" name="contact[talla_comprada]" placeholder="Ej. Talla 8 / M">
+          </div>
+
+          <div class="pcr-field">
+            <label for="pcr-title-{{ section.id }}">Título de tu opinión</label>
+            <input id="pcr-title-{{ section.id }}" type="text" name="contact[titulo_resena]" placeholder="Ej. Horma perfecta y tela gruesa">
+          </div>
+
+          <div class="pcr-field is-full">
+            <label for="pcr-body-{{ section.id }}">Cuéntanos qué tal te pareció la talla, horma y calidad de la tela *</label>
+            <textarea id="pcr-body-{{ section.id }}" name="contact[body]" required placeholder="Escribe aquí tu experiencia con la prenda..."></textarea>
+          </div>
+
+          <div class="pcr-field is-full">
+            <button type="submit" class="pcr-submit-btn">Publicar reseña</button>
+          </div>
+        </div>
+      </div>
+    {%- endform -%}
+
+    <div class="pcr-grid">
+      {%- for block in section.blocks -%}
+        <article class="pcr-card" {{ block.shopify_attributes }}>
+          <div>
+            <div class="pcr-card-top">
+              <span class="pcr-stars" aria-label="{{ block.settings.rating }} de 5 estrellas">
+                {%- assign r_val = block.settings.rating | default: 5 -%}
+                {%- for s in (1..r_val) -%}
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                {%- endfor -%}
+              </span>
+              {%- if block.settings.fit_tag != blank -%}
+                <span class="pcr-fit-pill">{{ block.settings.fit_tag | escape }}</span>
+              {%- endif -%}
+            </div>
+
+            {%- if block.settings.title != blank -%}
+              <h3 class="pcr-card-title">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+
+            {%- if block.settings.body != blank -%}
+              <p class="pcr-card-body">“{{ block.settings.body | escape }}”</p>
+            {%- endif -%}
+          </div>
+
+          <div class="pcr-card-footer">
+            <div>
+              <span class="pcr-author">{{ block.settings.author | escape }}</span>
+              {%- if block.settings.location != blank -%}
+                <span> · {{ block.settings.location | escape }}</span>
+              {%- endif -%}
+            </div>
+            {%- if block.settings.verified -%}
+              <span class="pcr-verified">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+                Verificada
+              </span>
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    var root = document.querySelector('{{ section_id }}');
+    if (!root) return;
+
+    var toggleBtn = root.querySelector('[data-pcr-toggle]');
+    var drawer = root.querySelector('[data-pcr-drawer]');
+    if (toggleBtn && drawer) {
+      toggleBtn.addEventListener('click', function() {
+        var isHidden = drawer.hasAttribute('hidden');
+        if (isHidden) {
+          drawer.removeAttribute('hidden');
+          toggleBtn.setAttribute('aria-expanded', 'true');
+        } else {
+          drawer.setAttribute('hidden', '');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    var starBtns = root.querySelectorAll('[data-pcr-star]');
+    var ratingInput = root.querySelector('[data-pcr-rating-input]');
+    if (starBtns.length > 0 && ratingInput) {
+      starBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var val = parseInt(btn.getAttribute('data-pcr-star'), 10) || 5;
+          ratingInput.value = String(val);
+          starBtns.forEach(function(b) {
+            var bVal = parseInt(b.getAttribute('data-pcr-star'), 10);
+            if (bVal <= val) {
+              b.classList.add('is-active');
+            } else {
+              b.classList.remove('is-active');
+            }
+          });
+        });
+      });
+    }
+  })();
+</script>
+{% endcomment %}
+
+{% schema %}
+{
+  "name": "Reseñas Talla y Calidad",
+  "tag": "section",
+  "class": "product-customer-reviews-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título de la sección",
+      "default": "Opiniones de clientas Axspen"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Experiencias reales sobre horma, talla y calidad de tela"
+    },
+    {
+      "type": "text",
+      "id": "metric_1",
+      "label": "Indicador 1 (Talla)",
+      "default": "Horma fiel a tu talla"
+    },
+    {
+      "type": "text",
+      "id": "metric_2",
+      "label": "Indicador 2 (Tela)",
+      "default": "Denim grueso que no cede"
+    },
+    {
+      "type": "text",
+      "id": "metric_3",
+      "label": "Indicador 3 (Ajuste)",
+      "default": "Elongación suave y tiro alto"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Color de fondo",
+      "default": "#faf9f7"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Espaciado superior (Desktop)",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Espaciado inferior (Desktop)",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Espaciado superior (Móvil)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Espaciado inferior (Móvil)",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Reseña de clienta",
+      "settings": [
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Nombre de la clienta",
+          "default": "Valentina M."
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Ciudad",
+          "default": "Bogotá"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5,
+          "label": "Estrellas"
+        },
+        {
+          "type": "text",
+          "id": "fit_tag",
+          "label": "Etiqueta de talla / ajuste",
+          "default": "Talla 8 · Horma exacta"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título de la reseña",
+          "default": "Horma perfecta y el denim es de excelente calidad"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Comentario",
+          "default": "Pedí mi talla habitual guiándome por la tabla de medidas y me quedó exacto. La tela es gruesa pero con la elongación justa para no incomodar."
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Compra verificada",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reseñas Talla y Calidad"
+    }
+  ]
+}
+{% endschema %}

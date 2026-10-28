@@ -100,12 +100,20 @@
         "color_scheme": "scheme-bb283ae1-5113-4975-a6d4-9c86e2d83e82"
       },
       "blocks": {}
+    },
+    "jean_day_countdown": {
+      "disabled": false,
+      "settings": {
+        "button_link": "shopify://collections/sabor-a-casa"
+      },
+      "blocks": {}
     }
   },
   "order": [
     "17930277429c1e01d5",
     "gp_global_section_557313572275750081_9djEUM",
     "gp_global_section_561241152934642544_xXCHfb",
+    "jean_day_countdown",
     "gp_global_section_617682360472699844_CWginx",
     "testimonial",
     "new_product_carousel_QUgwqt",

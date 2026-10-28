@@ -15,6 +15,7 @@
   "sections": {},
   "order": [
     "main",
+    "customer_reviews",
     "recommendations"
   ]
 }

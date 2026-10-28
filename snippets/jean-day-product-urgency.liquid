@@ -1,0 +1,382 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign low_threshold = block.settings.low_stock_threshold | default: 5
+  assign end_time_iso = block.settings.end_time | default: '2026-10-30T23:59:59-05:00'
+  assign now_ts = 'now' | date: '%s' | plus: 0
+  assign end_ts = end_time_iso | date: '%s' | plus: 0
+  assign diff_seconds = end_ts | minus: now_ts
+
+  if diff_seconds > 0
+    assign init_days = diff_seconds | divided_by: 86400
+    assign rem_days = diff_seconds | modulo: 86400
+    assign init_hours = rem_days | divided_by: 3600
+    assign rem_hours = rem_days | modulo: 3600
+    assign init_minutes = rem_hours | divided_by: 60
+    assign init_seconds = rem_hours | modulo: 60
+  else
+    assign init_days = 0
+    assign init_hours = 0
+    assign init_minutes = 0
+    assign init_seconds = 0
+  endif
+
+  assign is_bestseller = false
+  if block.settings.always_show_bestseller
+    assign is_bestseller = true
+  elsif product.compare_at_price > product.price
+    assign is_bestseller = true
+  else
+    for tag in product.tags
+      assign t_down = tag | downcase
+      if t_down contains 'mas-vendido' or t_down contains 'más vendido' or t_down contains 'bestseller' or t_down contains 'favorito'
+        assign is_bestseller = true
+        break
+      endif
+    endfor
+  endif
+
+  assign var_qty = current_variant.inventory_quantity | default: 0
+  assign is_managed = false
+  if current_variant.inventory_management != blank and current_variant.inventory_policy == 'deny'
+    assign is_managed = true
+  endif
+-%}
+
+<style>
+  .jd-prod-urgency-{{ block.id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 4px 0;
+  }
+
+  .jd-prod-badges-{{ block.id }} {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .jd-badge-bestseller-{{ block.id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #232020;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 4px;
+    line-height: 1.2;
+  }
+
+  .jd-badge-stock-{{ block.id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    line-height: 1.2;
+    border: 1px solid transparent;
+  }
+
+  .jd-badge-stock-{{ block.id }}.is-low {
+    background-color: #fff2f2;
+    color: #ce373a;
+    border-color: rgba(206, 55, 58, 0.25);
+  }
+
+  .jd-badge-stock-{{ block.id }}.is-in-stock {
+    background-color: #f2faf5;
+    color: #1e9458;
+    border-color: rgba(30, 148, 88, 0.22);
+  }
+
+  .jd-badge-stock-{{ block.id }}.is-out {
+    background-color: #f4f4f5;
+    color: #53565e;
+    border-color: #e4e4e7;
+  }
+
+  .jd-stock-bar-wrap-{{ block.id }} {
+    width: 100%;
+    height: 5px;
+    background-color: #f1e4e4;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .jd-stock-bar- wrap-{{ block.id }}[hidden],
+  .jd-stock-bar-wrap-{{ block.id }}.is-hidden {
+    display: none;
+  }
+
+  .jd-stock-bar-fill-{{ block.id }} {
+    height: 100%;
+    background-color: #ce373a;
+    border-radius: 3px;
+    transition: width 0.25s ease;
+  }
+
+  .jd-prod-timer-{{ block.id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    padding: 10px 12px;
+    background-color: #faf7f5;
+    border: 1px solid #ece5df;
+    border-radius: 8px;
+  }
+
+  .jd-prod-timer-label-{{ block.id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #232020;
+  }
+
+  .jd-prod-timer-label-{{ block.id }} svg {
+    color: #ce373a;
+    flex-shrink: 0;
+  }
+
+  .jd-prod-timer-digits-{{ block.id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ce373a;
+  }
+
+  .jd-prod-timer-chip-{{ block.id }} {
+    background: #ffffff;
+    border: 1px solid rgba(206, 55, 58, 0.22);
+    border-radius: 4px;
+    padding: 2px 6px;
+    min-width: 32px;
+    text-align: center;
+  }
+</style>
+
+<div
+  class="jd-prod-urgency-{{ block.id }}"
+  data-jd-product-urgency
+  data-low-threshold="{{ low_threshold }}"
+  data-end-time="{{ end_time_iso | escape }}"
+>
+  <div class="jd-prod-badges-{{ block.id }}">
+    {%- if is_bestseller -%}
+      <span class="jd-badge-bestseller-{{ block.id }}">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l7.1-1.01L12 2z"/>
+        </svg>
+        {{ block.settings.bestseller_label | default: 'Más vendido · Jean Day' | escape }}
+      </span>
+    {%- endif -%}
+
+    {%- if current_variant.available == false -%}
+      <span class="jd-badge-stock-{{ block.id }} is-out" data-jd-stock-badge>
+        <span data-jd-stock-text>Agotado en esta talla — elige otra opción</span>
+      </span>
+    {%- elsif is_managed and var_qty > 0 and var_qty <= low_threshold -%}
+      <span class="jd-badge-stock-{{ block.id }} is-low" data-jd-stock-badge>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 8v4m0 4h.01"/>
+        </svg>
+        <span data-jd-stock-text>
+          {%- if var_qty == 1 -%}
+            ¡Última unidad disponible en esta talla!
+          {%- else -%}
+            ¡Pocas unidades! Quedan {{ var_qty }} en esta talla
+          {%- endif -%}
+        </span>
+      </span>
+    {%- else -%}
+      <span class="jd-badge-stock-{{ block.id }} is-in-stock" data-jd-stock-badge>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+        <span data-jd-stock-text>{{ block.settings.in_stock_label | default: 'Alta demanda · Disponible para envío rápido' | escape }}</span>
+      </span>
+    {%- endif -%}
+  </div>
+
+  {%- assign fill_pct = var_qty | times: 100 | divided_by: low_threshold | at_least: 18 | at_most: 100 -%}
+  <div
+    class="jd-stock-bar-wrap-{{ block.id }}{% unless current_variant.available and is_managed and var_qty > 0 and var_qty <= low_threshold %} is-hidden{% endunless %}"
+    data-jd-stock-bar
+  >
+    <div class="jd-stock-bar-fill-{{ block.id }}" data-jd-stock-fill style="width: {{ fill_pct }}%;"></div>
+  </div>
+
+  {%- if block.settings.show_countdown and diff_seconds > 0 -%}
+    <div class="jd-prod-timer-{{ block.id }}" data-jd-prod-timer>
+      <span class="jd-prod-timer-label-{{ block.id }}">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 7v5l3 2"/>
+        </svg>
+        {{ block.settings.countdown_label | default: 'Jean Day termina en:' | escape }}
+      </span>
+      <div class="jd-prod-timer-digits-{{ block.id }}" role="timer" aria-live="polite">
+        <span class="jd-prod-timer-chip-{{ block.id }}" data-jd-d>{{ init_days }}d</span>
+        <span>:</span>
+        <span class="jd-prod-timer-chip-{{ block.id }}" data-jd-h>{{ init_hours | prepend: '00' | slice: -2, 2 }}h</span>
+        <span>:</span>
+        <span class="jd-prod-timer-chip-{{ block.id }}" data-jd-m>{{ init_minutes | prepend: '00' | slice: -2, 2 }}m</span>
+        <span>:</span>
+        <span class="jd-prod-timer-chip-{{ block.id }}" data-jd-s>{{ init_seconds | prepend: '00' | slice: -2, 2 }}s</span>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <script type="application/json" data-jd-variants-meta>
+    [
+      {%- for v in product.variants -%}
+        {
+          "id": {{ v.id }},
+          "available": {{ v.available | json }},
+          "managed": {% if v.inventory_management != blank and v.inventory_policy == 'deny' %}true{% else %}false{% endif %},
+          "qty": {{ v.inventory_quantity | default: 0 }},
+          "options": {{ v.options | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  </script>
+</div>
+
+<script>
+  (function() {
+    var root = document.querySelector('.jd-prod-urgency-{{ block.id }}');
+    if (!root) return;
+
+    var lowThreshold = parseInt(root.getAttribute('data-low-threshold'), 10) || 5;
+    var inStockText = {{ block.settings.in_stock_label | default: 'Alta demanda · Disponible para envío rápido' | json }};
+    var badgeEl = root.querySelector('[data-jd-stock-badge]');
+    var textEl = root.querySelector('[data-jd-stock-text]');
+    var barWrap = root.querySelector('[data-jd-stock-bar]');
+    var barFill = root.querySelector('[data-jd-stock-fill]');
+
+    var metaScript = root.querySelector('[data-jd-variants-meta]');
+    var variants = [];
+    if (metaScript) {
+      try {
+        variants = JSON.parse(metaScript.textContent);
+      } catch (err) {
+        console.error('Error parsing variant inventory metadata:', err);
+      }
+    }
+
+    function renderVariantStock(v) {
+      if (!v || !badgeEl || !textEl) return;
+      badgeEl.classList.remove('is-low', 'is-in-stock', 'is-out');
+
+      if (!v.available) {
+        badgeEl.classList.add('is-out');
+        textEl.textContent = 'Agotado en esta talla — elige otra opción';
+        if (barWrap) barWrap.classList.add('is-hidden');
+        return;
+      }
+
+      if (v.managed && v.qty > 0 && v.qty <= lowThreshold) {
+        badgeEl.classList.add('is-low');
+        textEl.textContent = v.qty === 1
+          ? '¡Última unidad disponible en esta talla!'
+          : '¡Pocas unidades! Quedan ' + v.qty + ' en esta talla';
+        if (barWrap && barFill) {
+          var pct = Math.max(18, Math.min(100, Math.round((v.qty / lowThreshold) * 100)));
+          barFill.style.width = pct + '%';
+          barWrap.classList.remove('is-hidden');
+        }
+      } else {
+        badgeEl.classList.add('is-in-stock');
+        textEl.textContent = inStockText;
+        if (barWrap) barWrap.classList.add('is-hidden');
+      }
+    }
+
+    var summary = root.closest('.product-summary');
+    if (summary && variants.length > 0) {
+      summary.addEventListener('change', function() {
+        setTimeout(function() {
+          var idInput = summary.querySelector('input.main-input-product-id[name="id"]');
+          if (idInput && idInput.value) {
+            var vid = parseInt(idInput.value, 10);
+            var match = variants.find(function(item) { return item.id === vid; });
+            if (match) {
+              renderVariantStock(match);
+              return;
+            }
+          }
+          var selectedOpts = [];
+          var variantFields = summary.querySelectorAll('.product-variants .variant-field');
+          variantFields.forEach(function(field) {
+            var checked = field.querySelector('input[type="radio"]:checked');
+            if (checked) {
+              selectedOpts.push(checked.value);
+            } else {
+              var sel = field.querySelector('select');
+              if (sel) selectedOpts.push(sel.value);
+            }
+          });
+          if (selectedOpts.length > 0) {
+            var byOpt = variants.find(function(item) {
+              return selectedOpts.every(function(val, idx) { return item.options[idx] === val; });
+            });
+            if (byOpt) renderVariantStock(byOpt);
+          }
+        }, 30);
+      });
+    }
+
+    var timerWrap = root.querySelector('[data-jd-prod-timer]');
+    var endIso = root.getAttribute('data-end-time');
+    if (timerWrap && endIso) {
+      var targetMs = Date.parse(endIso);
+      if (!isNaN(targetMs)) {
+        var elD = timerWrap.querySelector('[data-jd-d]');
+        var elH = timerWrap.querySelector('[data-jd-h]');
+        var elM = timerWrap.querySelector('[data-jd-m]');
+        var elS = timerWrap.querySelector('[data-jd-s]');
+
+        function pad(n) {
+          return n < 10 ? '0' + n : String(n);
+        }
+
+        function tick() {
+          var rem = Math.floor((targetMs - Date.now()) / 1000);
+          if (rem <= 0) {
+            timerWrap.style.display = 'none';
+            return false;
+          }
+          var d = Math.floor(rem / 86400);
+          var h = Math.floor((rem % 86400) / 3600);
+          var m = Math.floor((rem % 3600) / 60);
+          var s = rem % 60;
+          if (elD) elD.textContent = d + 'd';
+          if (elH) elH.textContent = pad(h) + 'h';
+          if (elM) elM.textContent = pad(m) + 'm';
+          if (elS) elS.textContent = pad(s) + 's';
+          return true;
+        }
+
+        if (tick()) {
+          var interval = setInterval(function() {
+            if (!tick()) clearInterval(interval);
+          }, 1000);
+        }
+      }
+    }
+  })();
+</script>

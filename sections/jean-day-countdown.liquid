@@ -1,0 +1,438 @@
+{%- liquid
+  assign section_id = '#shopify-section-' | append: section.id
+  assign end_time_iso = section.settings.end_time | default: '2026-10-30T23:59:59-05:00'
+  assign now_ts = 'now' | date: '%s' | plus: 0
+  assign end_ts = end_time_iso | date: '%s' | plus: 0
+  assign diff_seconds = end_ts | minus: now_ts
+
+  if diff_seconds > 0
+    assign init_days = diff_seconds | divided_by: 86400
+    assign rem_days = diff_seconds | modulo: 86400
+    assign init_hours = rem_days | divided_by: 3600
+    assign rem_hours = rem_days | modulo: 3600
+    assign init_minutes = rem_hours | divided_by: 60
+    assign init_seconds = rem_hours | modulo: 60
+  else
+    assign init_days = 3
+    assign init_hours = 4
+    assign init_minutes = 50
+    assign init_seconds = 0
+  endif
+-%}
+
+<style>
+  {{ section_id }} {
+    display: block !important;
+    width: 100%;
+  }
+
+  {{ section_id }} .jd-countdown-bar {
+    background-color: {{ section.settings.bg_color | default: '#232020' }};
+    color: {{ section.settings.text_color | default: '#ffffff' }};
+    padding-top: {{ section.settings.padding_top_mobile | default: 18 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 18 }}px;
+    border-top: 2px solid {{ section.settings.accent_color | default: '#ce373a' }};
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  @media (min-width: 992px) {
+    {{ section_id }} .jd-countdown-bar {
+      padding-top: {{ section.settings.padding_top | default: 24 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 24 }}px;
+    }
+  }
+
+  {{ section_id }} .jd-countdown-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 14px;
+  }
+
+  {{ section_id }} .jd-countdown-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+  }
+
+  {{ section_id }} .jd-countdown-top-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px 12px;
+  }
+
+  {{ section_id }} .jd-countdown-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: {{ section.settings.accent_color | default: '#ce373a' }};
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 4px;
+    line-height: 1;
+  }
+
+  {{ section_id }} .jd-countdown-heading {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+    color: {{ section.settings.text_color | default: '#ffffff' }};
+  }
+
+  {{ section_id }} .jd-countdown-subtext {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  {{ section_id }} .jd-countdown-right {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px 24px;
+  }
+
+  {{ section_id }} .jd-timer-units {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  {{ section_id }} .jd-timer-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 68px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+  }
+
+  {{ section_id }} .jd-timer-num {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.05;
+    color: #ffffff;
+  }
+
+  {{ section_id }} .jd-timer-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.78);
+    margin-top: 4px;
+  }
+
+  {{ section_id }} .jd-timer-sep {
+    font-size: 22px;
+    font-weight: 800;
+    color: {{ section.settings.accent_color | default: '#ce373a' }};
+    padding: 0 2px;
+  }
+
+  {{ section_id }} .jd-countdown-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 24px;
+    background-color: {{ section.settings.accent_color | default: '#ce373a' }};
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+    white-space: nowrap;
+  }
+
+  {{ section_id }} .jd-countdown-cta:hover {
+    background-color: #ffffff;
+    color: #232020;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 767px) {
+    {{ section_id }} .jd-countdown-inner {
+      flex-direction: column;
+      text-align: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    {{ section_id }} .jd-countdown-copy {
+      align-items: center;
+    }
+
+    {{ section_id }} .jd-countdown-top-row {
+      justify-content: center;
+    }
+
+    {{ section_id }} .jd-countdown-heading {
+      font-size: 18px;
+    }
+
+    {{ section_id }} .jd-countdown-subtext {
+      width: 100%;
+      font-size: 13px;
+    }
+
+    {{ section_id }} .jd-countdown-right {
+      justify-content: center;
+      width: 100%;
+      gap: 12px;
+    }
+
+    {{ section_id }} .jd-timer-box {
+      min-width: 56px;
+      padding: 6px 8px;
+    }
+
+    {{ section_id }} .jd-timer-num {
+      font-size: 20px;
+    }
+
+    {{ section_id }} .jd-countdown-cta {
+      width: 100%;
+      max-width: 280px;
+    }
+  }
+</style>
+
+<div
+  class="jd-countdown-bar"
+  data-jd-countdown
+  data-end-time="{{ end_time_iso | escape }}"
+>
+  <div class="jd-countdown-inner">
+    <div class="jd-countdown-copy">
+      <div class="jd-countdown-top-row">
+        {%- if section.settings.badge_text != blank -%}
+          <span class="jd-countdown-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7v5l3 2"/>
+            </svg>
+            {{ section.settings.badge_text | escape }}
+          </span>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="jd-countdown-heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.subtext != blank -%}
+        <p class="jd-countdown-subtext">{{ section.settings.subtext | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="jd-countdown-right">
+      <div class="jd-timer-units" role="timer" aria-live="polite" aria-label="{{ section.settings.heading | escape }}">
+        <div class="jd-timer-box">
+          <span class="jd-timer-num" data-jd-days>{{ init_days | prepend: '00' | slice: -2, 2 }}</span>
+          <span class="jd-timer-label">Días</span>
+        </div>
+        <span class="jd-timer-sep" aria-hidden="true">:</span>
+        <div class="jd-timer-box">
+          <span class="jd-timer-num" data-jd-hours>{{ init_hours | prepend: '00' | slice: -2, 2 }}</span>
+          <span class="jd-timer-label">Horas</span>
+        </div>
+        <span class="jd-timer-sep" aria-hidden="true">:</span>
+        <div class="jd-timer-box">
+          <span class="jd-timer-num" data-jd-minutes>{{ init_minutes | prepend: '00' | slice: -2, 2 }}</span>
+          <span class="jd-timer-label">Min</span>
+        </div>
+        <span class="jd-timer-sep" aria-hidden="true">:</span>
+        <div class="jd-timer-box">
+          <span class="jd-timer-num" data-jd-seconds>{{ init_seconds | prepend: '00' | slice: -2, 2 }}</span>
+          <span class="jd-timer-label">Seg</span>
+        </div>
+      </div>
+
+      {%- if section.settings.button_label != blank -%}
+        <a href="{{ section.settings.button_link | default: '/collections/sabor-a-casa' }}" class="jd-countdown-cta">
+          {{ section.settings.button_label | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    var root = document.querySelector('{{ section_id }} [data-jd-countdown]');
+    if (!root) return;
+    var endIso = root.getAttribute('data-end-time') || '2026-10-30T23:59:59-05:00';
+    var targetMs = Date.parse(endIso);
+    if (isNaN(targetMs)) {
+      targetMs = new Date(2026, 9, 30, 23, 59, 59).getTime();
+    }
+
+    var elDays = root.querySelector('[data-jd-days]');
+    var elHours = root.querySelector('[data-jd-hours]');
+    var elMinutes = root.querySelector('[data-jd-minutes]');
+    var elSeconds = root.querySelector('[data-jd-seconds]');
+
+    function pad(n) {
+      return n < 10 ? '0' + n : String(n);
+    }
+
+    function tick() {
+      var rem = Math.floor((targetMs - Date.now()) / 1000);
+      if (rem <= 0) {
+        if (elDays) elDays.textContent = '00';
+        if (elHours) elHours.textContent = '00';
+        if (elMinutes) elMinutes.textContent = '00';
+        if (elSeconds) elSeconds.textContent = '00';
+        return false;
+      }
+      var d = Math.floor(rem / 86400);
+      var h = Math.floor((rem % 86400) / 3600);
+      var m = Math.floor((rem % 3600) / 60);
+      var s = rem % 60;
+      if (elDays) elDays.textContent = pad(d);
+      if (elHours) elHours.textContent = pad(h);
+      if (elMinutes) elMinutes.textContent = pad(m);
+      if (elSeconds) elSeconds.textContent = pad(s);
+      return true;
+    }
+
+    if (tick()) {
+      var timer = setInterval(function() {
+        if (!tick()) clearInterval(timer);
+      }, 1000);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Cuenta Regresiva Jean Day",
+  "tag": "section",
+  "class": "jean-day-countdown-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Etiqueta",
+      "default": "JEAN DAY AXSPEN"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título principal",
+      "default": "¡Aprovecha antes de que termine el Jean Day!"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Subtítulo",
+      "default": "Jeans desde $89.900 · Llevando 2 o más cada uno baja $20.000 (hasta el 30 de octubre 11:59 p.m.)"
+    },
+    {
+      "type": "text",
+      "id": "end_time",
+      "label": "Fecha y hora de cierre (ISO 8601)",
+      "default": "2026-10-30T23:59:59-05:00",
+      "info": "Formato: YYYY-MM-DDTHH:MM:SS-05:00 (Hora Colombia)"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto del botón",
+      "default": "Ver Jeans en Oferta"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Enlace del botón"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Color de fondo",
+      "default": "#232020"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color de texto",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Color de acento",
+      "default": "#ce373a"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Espaciado superior (Desktop)",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Espaciado inferior (Desktop)",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Espaciado superior (Móvil)",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Espaciado inferior (Móvil)",
+      "default": 18
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cuenta Regresiva Jean Day"
+    }
+  ]
+}
+{% endschema %}

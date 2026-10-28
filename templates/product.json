@@ -93,16 +93,49 @@
             "icon": "truck",
             "padding_bottom": 0
           }
+        },
+        "jd_urgency": {
+          "type": "jean-day-urgency",
+          "settings": {
+            "bestseller_label": "Más vendido · Jean Day",
+            "always_show_bestseller": false,
+            "low_stock_threshold": 5,
+            "in_stock_label": "Alta demanda · Disponible para envío rápido",
+            "show_countdown": true,
+            "countdown_label": "Jean Day termina en:",
+            "end_time": "2026-10-30T23:59:59-05:00",
+            "padding_bottom": 14
+          }
+        },
+        "fit_testimonials": {
+          "type": "fit-testimonials",
+          "settings": {
+            "fit_heading": "Ajuste y horma verificada",
+            "fit_badge": "Fiel a la talla",
+            "quote_1_text": "Pedí mi talla habitual y me quedó pintado. El denim es grueso, recoge súper bien y no cede con las lavadas.",
+            "quote_1_author": "Valentina M. · Bogotá",
+            "quote_1_meta": "Talla 8 · Horma fiel",
+            "quote_2_text": "La calidad de la tela me sorprendió, tiene la elongación justa para estar cómoda todo el día y realza muy bonito.",
+            "quote_2_author": "Camila R. · Medellín",
+            "quote_2_meta": "Talla 10 · Excelente tela",
+            "quote_3_text": "Tenía duda con la talla pero me guié por la tabla de medidas y acerté total. El tiro alto estiliza muchísimo.",
+            "quote_3_author": "Daniela G. · Cali",
+            "quote_3_meta": "Talla 6 · Ajuste exacto",
+            "padding_bottom": 16
+          },
+          "disabled": true
         }
       },
       "block_order": [
         "gfx",
         "title",
         "price",
+        "jd_urgency",
         "variant",
         "delivery",
         "atc",
         "tallaje",
+        "fit_testimonials",
         "pay",
         "desc_tab",
         "cambios_tab",
@@ -142,7 +175,109 @@
         "padding_top": 20,
         "padding_bottom": 50
       }
+    },
+    "customer_reviews": {
+      "type": "product-customer-reviews",
+      "blocks": {
+        "rev_1": {
+          "type": "review",
+          "settings": {
+            "author": "Valentina M.",
+            "location": "Bogotá",
+            "rating": 5,
+            "fit_tag": "Talla 8 · Horma exacta",
+            "title": "Horma perfecta y el denim es de excelente calidad",
+            "body": "Pedí mi talla habitual guiándome por la tabla de medidas y me quedó exacto. La tela es gruesa pero con la elongación justa para no incomodar.",
+            "verified": true
+          }
+        },
+        "rev_2": {
+          "type": "review",
+          "settings": {
+            "author": "Camila R.",
+            "location": "Medellín",
+            "rating": 5,
+            "fit_tag": "Talla 10 · Fiel a la talla",
+            "title": "No cede con el uso y realza hermoso",
+            "body": "Ya es mi tercer jean de Axspen. Me encanta porque la horma recoge muy bien la cintura sin apretar de más y la tela mantiene su forma todo el día.",
+            "verified": true
+          }
+        },
+        "rev_3": {
+          "type": "review",
+          "settings": {
+            "author": "Daniela G.",
+            "location": "Cali",
+            "rating": 5,
+            "fit_tag": "Talla 6 · Tiro alto cómodo",
+            "title": "Acerté a la primera con la guía de tallas",
+            "body": "Siempre me cuesta comprar jeans por internet, pero las medidas de la tabla son tal cual. El acabado de las costuras y el color superaron mis expectativas.",
+            "verified": true
+          }
+        },
+        "rev_4": {
+          "type": "review",
+          "settings": {
+            "author": "Laura P.",
+            "location": "Barranquilla",
+            "rating": 5,
+            "fit_tag": "Talla 12 · Tela suave",
+            "title": "Súper cómodo y llegó muy rápido",
+            "body": "La tela se siente premium desde que lo sacas del empaque. No transparenta nada, moldea muy bien la cadera y el tiro alto estiliza bastante.",
+            "verified": true
+          }
+        },
+        "rev_5": {
+          "type": "review",
+          "settings": {
+            "author": "Natalia S.",
+            "location": "Bucaramanga",
+            "rating": 5,
+            "fit_tag": "Talla 8 · Horma fiel",
+            "title": "El mejor fit que he probado",
+            "body": "Se ajusta perfecto en cintura y cadera sin dejar ese espacio atrás. Recomendadísimo pedir la talla que usas normalmente en horma colombiana.",
+            "verified": true
+          }
+        },
+        "rev_6": {
+          "type": "review",
+          "settings": {
+            "author": "Paula V.",
+            "location": "Pereira",
+            "rating": 5,
+            "fit_tag": "Talla 10 · Denim resistente",
+            "title": "Calidad 10/10 para el precio de Jean Day",
+            "body": "Aproveché el Jean Day para pedir dos referencias y ambas me quedaron perfectas de largo y cintura. La tela tiene cuerpo y horma increíble.",
+            "verified": true
+          }
+        }
+      },
+      "block_order": [
+        "rev_1",
+        "rev_2",
+        "rev_3",
+        "rev_4",
+        "rev_5",
+        "rev_6"
+      ],
+      "settings": {
+        "heading": "Opiniones de clientas Axspen",
+        "subheading": "Experiencias reales sobre horma, talla y calidad de tela",
+        "metric_1": "Horma fiel a tu talla",
+        "metric_2": "Denim grueso que no cede",
+        "metric_3": "Elongación suave y tiro alto",
+        "bg_color": "#faf9f7",
+        "padding_top": 56,
+        "padding_bottom": 64,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 40
+      },
+      "disabled": true
     }
   },
-  "order": ["main", "recommendations"]
+  "order": [
+    "main",
+    "customer_reviews",
+    "recommendations"
+  ]
 }

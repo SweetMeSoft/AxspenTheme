@@ -1,0 +1,214 @@
+{% comment %}
+<style>
+  .jd-fit-proof-{{ block.id }} {
+    background-color: #faf9f7;
+    border: 1px solid #e8e4de;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 4px 0;
+  }
+
+  .jd-fit-scale-header-{{ block.id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .jd-fit-scale-title-{{ block.id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #232020;
+  }
+
+  .jd-fit-scale-badge-{{ block.id }} {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1e9458;
+    background: rgba(30, 148, 88, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .jd-fit-track-{{ block.id }} {
+    position: relative;
+    height: 6px;
+    background: #e5e0d8;
+    border-radius: 3px;
+    margin: 6px 0 4px;
+  }
+
+  .jd-fit-marker-{{ block.id }} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #232020;
+    border: 2px solid #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  }
+
+  .jd-fit-labels-{{ block.id }} {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #6b6661;
+    margin-bottom: 12px;
+  }
+
+  .jd-fit-quotes-{{ block.id }} {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 10px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    border-top: 1px solid #ebe6e0;
+    padding-top: 12px;
+  }
+
+  .jd-fit-quotes-{{ block.id }}::-webkit-scrollbar {
+    display: none;
+  }
+
+  .jd-fit-quote-card-{{ block.id }} {
+    flex: 0 0 88%;
+    scroll-snap-align: start;
+    background: #ffffff;
+    border: 1px solid #ece8e2;
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+
+  @media (min-width: 576px) {
+    .jd-fit-quote-card-{{ block.id }} {
+      flex: 0 0 82%;
+    }
+  }
+
+  .jd-fit-quote-top-{{ block.id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .jd-fit-stars-{{ block.id }} {
+    display: inline-flex;
+    gap: 2px;
+    color: #fdc643;
+  }
+
+  .jd-fit-tag-{{ block.id }} {
+    font-size: 11px;
+    font-weight: 600;
+    color: #53565e;
+    background: #f4f3f1;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .jd-fit-quote-text-{{ block.id }} {
+    font-size: 13px;
+    line-height: 1.45;
+    color: #232020;
+    margin: 4px 0 6px;
+  }
+
+  .jd-fit-quote-author-{{ block.id }} {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #6b6661;
+    font-weight: 600;
+  }
+
+  .jd-fit-quote-author-{{ block.id }} svg {
+    color: #1e9458;
+    flex-shrink: 0;
+  }
+
+  .jd-fit-footer-link-{{ block.id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #232020;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>
+
+<div class="jd-fit-proof-{{ block.id }}">
+  <div class="jd-fit-scale-header-{{ block.id }}">
+    <span class="jd-fit-scale-title-{{ block.id }}">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M21 6H3v12h18V6z"/>
+        <path d="M7 6v4M11 6v6M15 6v4M19 6v6"/>
+      </svg>
+      {{ block.settings.fit_heading | default: 'Ajuste y horma verificada' | escape }}
+    </span>
+    <span class="jd-fit-scale-badge-{{ block.id }}">{{ block.settings.fit_badge | default: 'Fiel a la talla' | escape }}</span>
+  </div>
+
+  <div class="jd-fit-track-{{ block.id }}" aria-hidden="true">
+    <span class="jd-fit-marker-{{ block.id }}"></span>
+  </div>
+  <div class="jd-fit-labels-{{ block.id }}" aria-hidden="true">
+    <span>Pequeña</span>
+    <span><strong>Horma exacta</strong></span>
+    <span>Grande</span>
+  </div>
+
+  <div class="jd-fit-quotes-{{ block.id }}" aria-label="Opiniones sobre talla y calidad">
+    {%- for i in (1..3) -%}
+      {%- liquid
+        assign q_text_key = 'quote_' | append: i | append: '_text'
+        assign q_author_key = 'quote_' | append: i | append: '_author'
+        assign q_meta_key = 'quote_' | append: i | append: '_meta'
+        assign q_text = block.settings[q_text_key]
+        assign q_author = block.settings[q_author_key]
+        assign q_meta = block.settings[q_meta_key]
+      -%}
+      {%- if q_text != blank -%}
+        <div class="jd-fit-quote-card-{{ block.id }}">
+          <div class="jd-fit-quote-top-{{ block.id }}">
+            <span class="jd-fit-stars-{{ block.id }}" aria-label="5 de 5 estrellas">
+              {%- for s in (1..5) -%}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              {%- endfor -%}
+            </span>
+            {%- if q_meta != blank -%}
+              <span class="jd-fit-tag-{{ block.id }}">{{ q_meta | escape }}</span>
+            {%- endif -%}
+          </div>
+          <p class="jd-fit-quote-text-{{ block.id }}">“{{ q_text | escape }}”</p>
+          <div class="jd-fit-quote-author-{{ block.id }}">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            <span>{{ q_author | escape }} · Compra verificada</span>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <a href="#product-customer-reviews" class="jd-fit-footer-link-{{ block.id }}">
+    Ver todas las opiniones de clientas o dejar tu reseña
+  </a>
+</div>
+{% endcomment %}

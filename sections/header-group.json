@@ -110,13 +110,13 @@
         "mobile_menu": "menu-head",
         "uppercase_menu": false,
         "menu_space": 28,
-        "transparent_logo_image": "shopify://shop_images/IMG_6880.png",
-        "transparent_logo_mobile_image": "shopify://shop_images/IMG_6880.png",
+        "transparent_logo_image": "shopify://shop_images/LOGO_-_500X500_-_1_-_Editado.png",
+        "transparent_logo_mobile_image": "shopify://shop_images/LOGO_-_500X500_-_1_-_Editado.png",
         "enable_transparent_header": true,
         "transparent_collection": false,
         "transparent_custom": "",
         "transparent_separator_line": false,
-        "transparent_color": "#ffffff",
+        "transparent_color": "#000000",
         "country_selector": false,
         "language_selector": false
       }

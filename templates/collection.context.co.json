@@ -12,29 +12,8 @@
     "market": "co"
   },
   "parent": "collection.json",
-  "sections": {
-    "gp_global_section_617702271689425568_ehdDz": {
-      "type": "gp-global-section-617702271689425568",
-      "disabled": false,
-      "settings": {
-        "paragraph-5a9a511b4461e27a0508870854243389": null,
-        "section_preload": "off_lazy_script",
-        "checksum": "",
-        "gguSQjbjKsb_background_desktop_image_src_119863656": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Jeans_Apliques.jpg",
-        "gg5u_yeN90o_background_desktop_image_src_1907974251": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Wide_Leg_7283bbe1-62de-479f-b230-78dac03df1ce.jpg",
-        "gge5a2KMgm3_background_desktop_image_src_775055992": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Skinny_6d0a7003-cc0a-4acc-8c92-dc5a3df67029.jpg",
-        "ggKHAMhv-xN_background_desktop_image_src_1300154847": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Straight_M.jpg",
-        "ggzc1xRu54G_background_desktop_image_src_1490331948": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Cargo_702eb57a-e993-469e-b7e0-911e65c0afe6.jpg",
-        "ggxZff3nmeY_background_desktop_image_src_-1771114719": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Baggy_M.jpg",
-        "gg2r8g-T6SQ_background_desktop_image_src_1141558663": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/Flare_608d5931-2f98-41cc-9b32-e624547bc334.jpg"
-      },
-      "blocks": {},
-      "block_order": [],
-      "name": "carrusel silueta"
-    }
-  },
+  "sections": {},
   "order": [
-    "gp_global_section_617702271689425568_ehdDz",
     "image_with_text_overlay_eqfWxX",
     "collections"
   ]

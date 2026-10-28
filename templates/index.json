@@ -43,7 +43,7 @@
           "settings": {
             "image": "shopify://shop_images/jd-cat-jeans.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-jeans.png?v=1793066391",
-            "link": "shopify://collections/jeans",
+            "link": "shopify://collections/sabor-a-casa",
             "title": "Jeans"
           }
         },
@@ -429,11 +429,30 @@
         "padding_top_mobile": 0,
         "padding_bottom_mobile": 0
       }
+    },
+    "jean_day_countdown": {
+      "type": "jean-day-countdown",
+      "settings": {
+        "badge_text": "JEAN DAY AXSPEN",
+        "heading": "¡Aprovecha antes de que termine el Jean Day!",
+        "subtext": "Precios especiales desde $89.900 hasta el 30 de octubre a las 11:59 p.m.",
+        "end_time": "2026-10-30T23:59:59-05:00",
+        "button_label": "Ver Jeans en Oferta",
+        "button_link": "shopify://collections/jeans",
+        "bg_color": "#232020",
+        "text_color": "#ffffff",
+        "accent_color": "#ce373a",
+        "padding_top": 18,
+        "padding_bottom": 18,
+        "padding_top_mobile": 14,
+        "padding_bottom_mobile": 14
+      }
     }
   },
   "order": [
     "gp_global_section_557313572275750081_9djEUM",
     "gp_global_section_561241152934642544_xXCHfb",
+    "jean_day_countdown",
     "gp_global_section_617682360472699844_CWginx",
     "image-with-text",
     "testimonial",
