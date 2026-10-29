@@ -341,7 +341,7 @@
     <div class="ai-review-form-section-{{ ai_gen_id }}">
       <h3 class="ai-review-form-title-{{ ai_gen_id }}">{{ block.settings.form_title }}</h3>
       
-      {%- form 'contact', id: 'review-form-' | append: ai_gen_id -%}
+      {%- form ai_gen_id -%}
         <input type="hidden" name="contact[subject]" value="Nueva reseña de producto">
         <input type="hidden" name="contact[product_id]" value="{{ product.id }}">
         <input type="hidden" name="contact[product_title]" value="{{ product.title }}">
@@ -1104,4 +1104,13 @@
   ],
   "tag": null
 }
-{% endschema %}
+{% endschema %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- form 'contact', id: 'review-form-' | append: ai_gen_id -%}"
+  to: "{%- form ai_gen_id -%}"
+  position: 9645..9667
+{%- endcomment -%}

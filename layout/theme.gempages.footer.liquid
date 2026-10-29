@@ -26,7 +26,7 @@
 		<span class="loading-bar"></span>
 
 		{%- liquid
-echo "<div style='display:none'>" 			sections 'header-group' echo "</div>"
+echo "<div style='display:none'>"
 
 			if settings.breadcrumb and template != '404' and template != 'index'
 				section 'breadcrumb'
@@ -121,3 +121,13 @@ echo "<div style='display:none'>" 			sections 'header-group' echo "</div>"
 		</script>
 	</body>
 </html>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "echo \"<div style='display:none'>\" \t\t\tsections 'header-group' echo \"</div>\""
+  to: echo "<div style='display:none'>"
+  position: 719..752
+{% endcomment %}
