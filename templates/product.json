@@ -101,7 +101,7 @@
             "always_show_bestseller": false,
             "low_stock_threshold": 5,
             "in_stock_label": "Alta demanda · Disponible para envío rápido",
-            "show_countdown": true,
+            "show_countdown": false,
             "countdown_label": "Jean Day termina en:",
             "end_time": "2026-10-30T23:59:59-05:00",
             "padding_bottom": 14

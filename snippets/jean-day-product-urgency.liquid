@@ -220,6 +220,7 @@
     <div class="jd-stock-bar-fill-{{ block.id }}" data-jd-stock-fill style="width: {{ fill_pct }}%;"></div>
   </div>
 
+  {% comment %}
   {%- if block.settings.show_countdown and diff_seconds > 0 -%}
     <div class="jd-prod-timer-{{ block.id }}" data-jd-prod-timer>
       <span class="jd-prod-timer-label-{{ block.id }}">
@@ -240,6 +241,7 @@
       </div>
     </div>
   {%- endif -%}
+  {% endcomment %}
 
   <script type="application/json" data-jd-variants-meta>
     [

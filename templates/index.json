@@ -438,7 +438,7 @@
         "subtext": "Precios especiales desde $89.900 hasta el 30 de octubre a las 11:59 p.m.",
         "end_time": "2026-10-30T23:59:59-05:00",
         "button_label": "Ver Jeans en Oferta",
-        "button_link": "shopify://collections/jeans",
+        "button_link": "shopify://collections/sabor-a-casa",
         "bg_color": "#232020",
         "text_color": "#ffffff",
         "accent_color": "#ce373a",
@@ -446,7 +446,8 @@
         "padding_bottom": 18,
         "padding_top_mobile": 14,
         "padding_bottom_mobile": 14
-      }
+      },
+      "disabled": true
     }
   },
   "order": [
