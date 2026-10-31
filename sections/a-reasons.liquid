@@ -203,7 +203,7 @@
 >
   <div id="reasons-to-buy-{{ section_id_variable }}" class="reasons-to-buy page-width">
     <div class="reasons-to-buy__container">
-      {% capture 'reasons_blocks' %}
+      {% capture reasons_blocks %}
         {% content_for 'blocks' %}
       {% endcapture %}
       {% if reasons_blocks contains '<!-- start _reasons-to-buy-content.liquid -->' %}
@@ -378,3 +378,13 @@
   }
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% capture 'reasons_blocks' %}"
+  to: "{% capture reasons_blocks %}"
+  position: 7373..7401
+{% endcomment %}

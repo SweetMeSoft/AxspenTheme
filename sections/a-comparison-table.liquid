@@ -317,7 +317,7 @@
   }
 </style>
 
-{% capture 'blocks_content' %}
+{% capture blocks_content %}
   {% content_for 'blocks' %}
 {% endcapture %}
 {% if blocks_content contains '<!--start _comparison-table-content.liquid-->' %}
@@ -588,3 +588,13 @@
   }
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% capture 'blocks_content' %}"
+  to: "{% capture blocks_content %}"
+  position: 12763..12791
+{% endcomment %}
