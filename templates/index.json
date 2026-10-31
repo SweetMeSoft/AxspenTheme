@@ -14,9 +14,9 @@
       "settings": {
         "section_preload": "off_lazy_script",
         "checksum": "",
-        "ggL0N9rU2dy_srcSet_desktop_src_1182510035": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/El_texto_del_parrafo_-_1.jpg",
-        "ggL0N9rU2dy_srcSet_tablet_src_1182510035": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/El_texto_del_parrafo_-_1.jpg",
-        "ggL0N9rU2dy_srcSet_mobile_src_107181392": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/El_texto_del_parrafo.jpg"
+        "ggL0N9rU2dy_srcSet_desktop_src_107181392": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/El_texto_del_parrafo.jpg",
+        "ggL0N9rU2dy_srcSet_tablet_src_107181392": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/El_texto_del_parrafo.jp",
+        "ggL0N9rU2dy_srcSet_mobile_src_1182510035": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/El_texto_del_parrafo_-_1.jpg"
       }
     },
     "gp_global_section_561241152934642544_xXCHfb": {
@@ -35,70 +35,88 @@
         "ggZmfiCIwLj_background_desktop_image_src_712933788": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/BUZOS_-_7.png?v=1777696337"
       }
     },
+    "jean_day_countdown": {
+      "type": "jean-day-countdown",
+      "settings": {
+        "badge_text": "JEAN DAY AXSPEN",
+        "heading": "¡Aprovecha antes de que termine el Jean Day!",
+        "subtext": "Precios especiales desde $89.900 hasta el 30 de octubre a las 11:59 p.m.",
+        "end_time": "2026-10-30T23:59:59-05:00",
+        "button_label": "Ver Jeans en Oferta",
+        "button_link": "shopify://collections/jeans",
+        "bg_color": "#232020",
+        "text_color": "#ffffff",
+        "accent_color": "#ce373a",
+        "padding_top": 18,
+        "padding_bottom": 18,
+        "padding_top_mobile": 14,
+        "padding_bottom_mobile": 14
+      }
+    },
     "gp_global_section_617682360472699844_CWginx": {
       "type": "gp-global-section-617682360472699844",
       "blocks": {
         "slide_jeans": {
           "type": "slide",
           "settings": {
+            "title": "Jeans",
             "image": "shopify://shop_images/jd-cat-jeans.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-jeans.png?v=1793066391",
-            "link": "shopify://collections/sabor-a-casa",
-            "title": "Jeans"
+            "link": "shopify://collections/sabor-a-casa"
           }
         },
         "slide_bodys": {
           "type": "slide",
           "settings": {
+            "title": "Bodys",
             "image": "shopify://shop_images/jd-cat-bodys.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-bodys.png?v=1793066391",
-            "link": "shopify://collections/body",
-            "title": "Bodys"
+            "link": "shopify://collections/body"
           }
         },
         "slide_blusas": {
           "type": "slide",
           "settings": {
+            "title": "Blusas",
             "image": "shopify://shop_images/jd-cat-blusas.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-blusas.png?v=1793066391",
-            "link": "shopify://collections/blusas",
-            "title": "Blusas"
+            "link": "shopify://collections/blusas"
           }
         },
         "slide_chaquetas": {
           "type": "slide",
           "settings": {
+            "title": "Chaquetas",
             "image": "shopify://shop_images/jd-cat-chaquetas.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-chaquetas.png?v=1793066392",
-            "link": "shopify://collections/chaquetas-mujer",
-            "title": "Chaquetas"
+            "link": "shopify://collections/chaquetas-mujer"
           }
         },
         "slide_buzos": {
           "type": "slide",
           "settings": {
+            "title": "Buzos",
             "image": "shopify://shop_images/jd-cat-buzos.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-buzos.png?v=1793066391",
-            "link": "shopify://collections/buzos-mujer",
-            "title": "Buzos"
+            "link": "shopify://collections/buzos-mujer"
           }
         },
         "slide_faldas": {
           "type": "slide",
           "settings": {
+            "title": "Faldas",
             "image": "shopify://shop_images/jd-cat-faldas.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-faldas.png?v=1793066391",
-            "link": "shopify://collections/faldas",
-            "title": "Faldas"
+            "link": "shopify://collections/faldas"
           }
         },
         "slide_blazer": {
           "type": "slide",
           "settings": {
+            "title": "Blazer",
             "image": "shopify://shop_images/jd-cat-blazer.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-cat-blazer.png?v=1793066391",
-            "link": "shopify://collections/blazers",
-            "title": "Blazer"
+            "link": "shopify://collections/blazers"
           }
         }
       },
@@ -117,8 +135,12 @@
         "columns_mobile": 3,
         "gap_desktop": 10,
         "gap_mobile": 5,
-        "loop": true,
-        "show_arrows": true
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": false,
+        "padding_top": 8,
+        "padding_bottom": 8,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0
       }
     },
     "image-with-text": {
@@ -282,82 +304,82 @@
         "slide_clasicos": {
           "type": "slide",
           "settings": {
+            "title": "Clásicos",
             "image": "shopify://shop_images/jd-sil-clasicos.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-clasicos.png?v=1793066391",
-            "link": "shopify://collections/jeans-basicos",
-            "title": "Clásicos"
+            "link": "shopify://collections/jeans-basicos"
           }
         },
         "slide_premium": {
           "type": "slide",
           "settings": {
+            "title": "Premium",
             "image": "shopify://shop_images/jd-sil-premium.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-premium.png?v=1793066391",
-            "link": "shopify://collections/sabor-a-casa",
-            "title": "Premium"
+            "link": "shopify://collections/sabor-a-casa"
           }
         },
         "slide_wide_leg": {
           "type": "slide",
           "settings": {
+            "title": "Wide Leg",
             "image": "shopify://shop_images/jd-sil-wide-leg.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-wide-leg.png?v=1793066391",
-            "link": "shopify://collections/wide-leg",
-            "title": "Wide Leg"
+            "link": "shopify://collections/wide-leg"
           }
         },
         "slide_skinny": {
           "type": "slide",
           "settings": {
+            "title": "Skinny",
             "image": "shopify://shop_images/jd-sil-skinny.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-skinny.png?v=1793066391",
-            "link": "shopify://collections/skinny-jeans",
-            "title": "Skinny"
+            "link": "shopify://collections/skinny-jeans"
           }
         },
         "slide_mom_fit": {
           "type": "slide",
           "settings": {
+            "title": "Mom fit",
             "image": "shopify://shop_images/jd-sil-mom-fit.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-mom-fit.png?v=1793066391",
-            "link": "shopify://collections/mom-fit",
-            "title": "Mom fit"
+            "link": "shopify://collections/mom-fit"
           }
         },
         "slide_straight": {
           "type": "slide",
           "settings": {
+            "title": "Straight",
             "image": "shopify://shop_images/jd-sil-straight.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-straight.png?v=1793066391",
-            "link": "shopify://collections/jean-straight-fit",
-            "title": "Straight"
+            "link": "shopify://collections/jean-straight-fit"
           }
         },
         "slide_cargo": {
           "type": "slide",
           "settings": {
+            "title": "Cargo",
             "image": "shopify://shop_images/jd-sil-cargo.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-cargo.png?v=1793066391",
-            "link": "shopify://collections/cargo-jeans",
-            "title": "Cargo"
+            "link": "shopify://collections/cargo-jeans"
           }
         },
         "slide_baggy": {
           "type": "slide",
           "settings": {
+            "title": "Baggy",
             "image": "shopify://shop_images/jd-sil-baggy.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-baggy.png?v=1793066391",
-            "link": "shopify://collections/jean-mujer-baggy",
-            "title": "Baggy"
+            "link": "shopify://collections/jean-mujer-baggy"
           }
         },
         "slide_flare": {
           "type": "slide",
           "settings": {
+            "title": "Flare",
             "image": "shopify://shop_images/jd-sil-flare.png",
             "image_url": "https://cdn.shopify.com/s/files/1/0926/2350/3645/files/jd-sil-flare.png?v=1793066391",
-            "link": "shopify://collections/flare",
-            "title": "Flare"
+            "link": "shopify://collections/flare"
           }
         }
       },
@@ -378,8 +400,12 @@
         "columns_mobile": 4,
         "gap_desktop": 10,
         "gap_mobile": 5,
-        "loop": true,
-        "show_arrows": true
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_top_mobile": 3,
+        "padding_bottom_mobile": 3
       }
     },
     "gp_global_section_611115494627345261_p8HjRe": {
@@ -414,7 +440,6 @@
             "title": "",
             "title_color": "",
             "alignment": "center",
-            "feed_id": "",
             "html_area": ""
           }
         }
@@ -429,25 +454,6 @@
         "padding_top_mobile": 0,
         "padding_bottom_mobile": 0
       }
-    },
-    "jean_day_countdown": {
-      "type": "jean-day-countdown",
-      "settings": {
-        "badge_text": "JEAN DAY AXSPEN",
-        "heading": "¡Aprovecha antes de que termine el Jean Day!",
-        "subtext": "Precios especiales desde $89.900 hasta el 30 de octubre a las 11:59 p.m.",
-        "end_time": "2026-10-30T23:59:59-05:00",
-        "button_label": "Ver Jeans en Oferta",
-        "button_link": "shopify://collections/sabor-a-casa",
-        "bg_color": "#232020",
-        "text_color": "#ffffff",
-        "accent_color": "#ce373a",
-        "padding_top": 18,
-        "padding_bottom": 18,
-        "padding_top_mobile": 14,
-        "padding_bottom_mobile": 14
-      },
-      "disabled": true
     }
   },
   "order": [
