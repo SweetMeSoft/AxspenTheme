@@ -12,9 +12,30 @@
     "market": "co"
   },
   "parent": "collection.json",
-  "sections": {},
+  "sections": {
+    "gp_global_section_617702271689425568_Phqe6": {
+      "type": "gp-global-section-617702271689425568",
+      "disabled": false,
+      "settings": {
+        "columns_desktop": 4,
+        "columns_tablet": 2,
+        "columns_mobile": 4,
+        "gap_desktop": 10,
+        "gap_mobile": 5,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_top_mobile": 3,
+        "padding_bottom_mobile": 3
+      },
+      "blocks": {},
+      "block_order": [],
+      "name": "Carrusel Siluetas Jeans"
+    }
+  },
   "order": [
-    "image_with_text_overlay_eqfWxX",
+    "gp_global_section_617702271689425568_Phqe6",
     "collections"
   ]
 }
