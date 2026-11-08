@@ -440,6 +440,7 @@
             "title": "",
             "title_color": "",
             "alignment": "center",
+            "feed_id": 0,
             "html_area": ""
           }
         }

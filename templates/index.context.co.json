@@ -31,7 +31,7 @@
             "description": "",
             "button_label": "",
             "banner_link": "shopify://collections/nueva-coleccion-1",
-            "header-2082adc36d030b0074dce0d11287a39b": null,
+            "header-7677f8b0b0e350ec61205aa9701f37c9": null,
             "text_alignment": "center",
             "content_position": "center",
             "heading_size": 48,
@@ -63,7 +63,7 @@
             "description": "",
             "button_label": "",
             "banner_link": "shopify://collections/jean-apliques",
-            "header-8cc5f2af2ad3b7adfa0a07ac86408247": null,
+            "header-e5f3f4e97cc8d747f38d167228aaa819": null,
             "text_alignment": "flex-start",
             "content_position": "center",
             "heading_size": 48,
@@ -100,6 +100,11 @@
       "settings": {
         "color_scheme": "scheme-bb283ae1-5113-4975-a6d4-9c86e2d83e82"
       },
+      "blocks": {}
+    },
+    "gp_global_section_617702271689425568_iaaNFx": {
+      "disabled": true,
+      "settings": {},
       "blocks": {}
     }
   },
