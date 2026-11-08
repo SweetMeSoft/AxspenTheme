@@ -19,7 +19,7 @@
         "slide_AXY8tD": {
           "disabled": false,
           "settings": {
-            "text": "<p>Jeans desde <strong>$89.900</strong> ✨ llevando 2 o más, ¡cada uno baja<strong> $20.000</strong>! ✨</p>"
+            "text": "<p>¡3 Jeans desde $270.000!</p>"
           }
         },
         "slide_wBqpfF": {
@@ -31,7 +31,7 @@
         "slide_yUgcVi": {
           "disabled": false,
           "settings": {
-            "text": "<p>🎀 ¡Bienvenidas al <strong>JEAN DOLL DAY</strong>!🎀</p>"
+            "text": "<p>Bienvenidas a <strong>CASA</strong></p>"
           }
         },
         "slide_WpXy9W": {
@@ -42,11 +42,11 @@
     },
     "header": {
       "settings": {
+        "full": true,
         "transparent_logo_image": "shopify://shop_images/LOGO_-_500X500_-_1_-_Editado.png",
         "transparent_logo_mobile_image": "shopify://shop_images/LOGO_-_500X500_-_1_-_Editado.png",
-        "transparent_color": "#000000",
-        "full": true,
-        "transparent_separator_line": false
+        "transparent_separator_line": false,
+        "transparent_color": "#000000"
       },
       "blocks": {}
     }
