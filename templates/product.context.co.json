@@ -12,10 +12,28 @@
     "market": "co"
   },
   "parent": "product.json",
-  "sections": {},
+  "sections": {
+    "main": {
+      "settings": {},
+      "blocks": {},
+      "block_order": [
+        "gfx",
+        "title",
+        "price",
+        "jd_urgency",
+        "variant",
+        "delivery",
+        "atc",
+        "tallaje",
+        "fit_testimonials",
+        "desc_tab",
+        "cambios_tab",
+        "envios_tab"
+      ]
+    }
+  },
   "order": [
     "main",
-    "customer_reviews",
     "recommendations"
   ]
 }
