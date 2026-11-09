@@ -15,11 +15,11 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background_color": "#FFFFFF",
-          "text_color": "#D599A5",
-          "heading_color": "#D599A5",
-          "button_bg_color": "#D599A5",
-          "button_text_color": "#FFFFFF"
+          "background_color": "#ffffff",
+          "text_color": "#943044",
+          "heading_color": "#691828",
+          "button_bg_color": "#d599a5",
+          "button_text_color": "#ffffff"
         }
       },
       "scheme-2": {
