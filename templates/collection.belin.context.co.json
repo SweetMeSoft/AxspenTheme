@@ -12,5 +12,12 @@
     "market": "co"
   },
   "parent": "collection.belin.json",
-  "sections": {}
+  "sections": {
+    "collections": {
+      "settings": {
+        "color_scheme": "scheme-1"
+      },
+      "blocks": {}
+    }
+  }
 }
