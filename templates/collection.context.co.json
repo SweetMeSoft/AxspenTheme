@@ -32,6 +32,12 @@
       "blocks": {},
       "block_order": [],
       "name": "Carrusel Siluetas Jeans"
+    },
+    "collections": {
+      "settings": {
+        "color_scheme": "scheme-1"
+      },
+      "blocks": {}
     }
   },
   "order": [
