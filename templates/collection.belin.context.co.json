@@ -15,7 +15,9 @@
   "sections": {
     "collections": {
       "settings": {
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-1",
+        "show_filters": false,
+        "show_sorting": false
       },
       "blocks": {}
     }
