@@ -30,10 +30,50 @@
         "cambios_tab",
         "envios_tab"
       ]
+    },
+    "recommendations": {
+      "disabled": true,
+      "settings": {},
+      "blocks": {}
+    },
+    "product_carousel_GPMqT": {
+      "type": "product-carousel",
+      "disabled": false,
+      "settings": {
+        "full": false,
+        "color_scheme": "",
+        "bg_image": null,
+        "collection": "belin",
+        "header-ad1e3e613a22f6e29e4938c7f95b29e9": null,
+        "heading_text": "<p>BELIN</p>",
+        "heading_font_size": 48,
+        "header-21d59da961ce7350bab9a9071594a2e9": null,
+        "sub_heading_text": "<p>Gafas de sol plegables</p>",
+        "sub_heading_font_size": 48,
+        "header-64b1b2f4ac43d9114be49a0b108b777d": null,
+        "mousewheel": false,
+        "autoplay": false,
+        "delay": 5,
+        "width": 370,
+        "column_gap": 30,
+        "total": 10,
+        "header-6aa9c28f9e5cc741594dbebd3a1b93dc": null,
+        "column_gap_mobile": "1",
+        "header-a0896db7bfeed55484a89346a29f3b70": null,
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "paragraph-966e7c431c587a0329ce3af0a1944c56": null,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 20
+      },
+      "blocks": {},
+      "block_order": [],
+      "name": "t:sections.product-carousel.presets.name"
     }
   },
   "order": [
     "main",
-    "recommendations"
+    "recommendations",
+    "product_carousel_GPMqT"
   ]
 }
