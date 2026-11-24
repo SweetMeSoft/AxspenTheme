@@ -91,7 +91,14 @@
                         <p class="predictive-search__item-heading h5">{{ product.title }}
                         </p>
                         {%- if settings.predictive_search_show_price -%}
-                          {% render 'a-price', product: product, use_variant: true, show_badges: false %}
+                          {%- capture bf_price -%}
+                            {%- render 'bf-price', product: product, price_style: 'atlas', hide_currency_code: true -%}
+                          {%- endcapture -%}
+                          {%- if bf_price != blank -%}
+                            {{- bf_price -}}
+                          {%- else -%}
+                            {% render 'a-price', product: product, use_variant: true, show_badges: false %}
+                          {%- endif -%}
                         {%- endif -%}
                       </div>
                     </a>
