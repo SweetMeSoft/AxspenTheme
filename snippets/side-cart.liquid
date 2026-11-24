@@ -15,6 +15,9 @@
 				<p>{{- 'cart.general.empty' | t -}}</p>
 			{%- else -%}
 				{%- for item in cart.items -%}
+					{%- capture bf_price -%}
+						{%- render 'bf-price', product: item.product, variant: item.variant -%}
+					{%- endcapture -%}
 					<div class="product-item" data-id="{{ item.id }}" data-key="{{ item.key }}" data-line="{{ forloop.index }}">
 						{%- if item.image -%}
 							<a href="{{ item.url | default: '#' }}" class="product-image{% unless item.image %} no-image{% endunless %}" tabindex="-1">
@@ -64,7 +67,11 @@
 
 							{% comment %} Price {% endcomment %}
 							<div class="hidden-desktop">
-								{%- render 'price', product: item.variant -%}
+								{%- if bf_price != blank -%}
+									{{- bf_price -}}
+								{%- else -%}
+									{%- render 'price', product: item.variant -%}
+								{%- endif -%}
 
 								{% if item.unit_price_measurement %}
 									<span class="unit-price">
@@ -109,7 +116,11 @@
 								</div>
 
 								<div class="hidden-tablet hidden-mobile">
-									{%- render 'price', product: item.variant -%}
+									{%- if bf_price != blank -%}
+										{{- bf_price -}}
+									{%- else -%}
+										{%- render 'price', product: item.variant -%}
+									{%- endif -%}
 
 									{% if item.unit_price_measurement %}
 										<span class="unit-price">

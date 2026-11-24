@@ -53,10 +53,29 @@
 
 						<tbody>
 							{%- for item in cart.items -%}
+								{%- capture bf_price -%}
+									{%- render 'bf-price', product: item.product, variant: item.variant -%}
+								{%- endcapture -%}
+								{%- capture unit_price -%}
+									{% if item.unit_price_measurement %}
+										<span class="unit-price">
+											{%- render 'get-price', price: item.unit_price %}
+											/
+											{% if item.unit_price_measurement.reference_value != 1 -%}
+												{{- item.unit_price_measurement.reference_value -}}
+											{%- endif -%}
+											{{- item.unit_price_measurement.reference_unit -}}
+										</span>
+									{% endif %}
+								{%- endcapture -%}
 								{% comment %} Price {% endcomment %}
 								{%- capture product_price -%}
-									<div class="product-price">
-										{%- if item.original_price > item.final_price -%}
+									{%- if bf_price != blank -%}
+										{{- bf_price -}}
+										{{- unit_price -}}
+									{%- else -%}
+										<div class="product-price">
+											{%- if item.original_price > item.final_price -%}
 											<s class="regular-price">
 												<span class="sr-only">{{ 'products.product.price.regular_price' | t }}: </span>
 												{%- render 'get-price', price: item.original_price -%}
@@ -93,17 +112,9 @@
 											{%- endif -%}
 										{%- endif -%}
 
-										{% if item.unit_price_measurement %}
-											<span class="unit-price">
-												{%- render 'get-price', price: item.unit_price %}
-												/
-												{% if item.unit_price_measurement.reference_value != 1 -%}
-													{{- item.unit_price_measurement.reference_value -}}
-												{%- endif -%}
-												{{- item.unit_price_measurement.reference_unit -}}
-											</span>
-										{% endif %}
-									</div>
+											{{- unit_price -}}
+										</div>
+									{%- endif -%}
 								{%- endcapture -%}
 
 								{% comment %} Quantity {% endcomment %}

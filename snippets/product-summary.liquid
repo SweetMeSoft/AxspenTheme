@@ -5,10 +5,14 @@
 	capture saved_number
 		render 'saved-price'
 	endcapture
+
+	capture bf_config
+		render 'bf-promo', product: product, mode: 'config'
+	endcapture
 -%}
 
 <div class="product-summary{% if class != blank %} {{ class }}{% endif %}">
-	<div class="product-summary-inner text-{{ section.settings.alignment }}{% if section.settings.sticky_content %} is-sticky{% endif %}" data-url="{{ shop.url | append: product.url }}" data-selected-id="{{ product.selected_or_first_available_variant.id }}">
+	<div class="product-summary-inner text-{{ section.settings.alignment }}{% if section.settings.sticky_content %} is-sticky{% endif %}" data-url="{{ shop.url | append: product.url }}" data-selected-id="{{ product.selected_or_first_available_variant.id }}" {{- bf_config -}}>
 		<div class="sr-only">
 			{%- liquid
 				if product.featured_media
@@ -56,7 +60,25 @@
 							{{- product.title | escape -}}
 						</h1>
 					{%- when 'price' -%}
-						{%- render 'price', product: product, use_variant: true -%}
+						{%- liquid
+							capture bf_badge
+								render 'bf-badge', product: product
+							endcapture
+
+							capture bf_price
+								render 'bf-price', product: product, variant: current_variant
+							endcapture
+						-%}
+
+						{%- if bf_badge != blank -%}
+							<div class="bf-pdp-badge">{{- bf_badge -}}</div>
+						{%- endif -%}
+
+						{%- if bf_price != blank -%}
+							{{- bf_price -}}
+						{%- else -%}
+							{%- render 'price', product: product, use_variant: true -%}
+						{%- endif -%}
 
 						{%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
 							<div class="tax-note">

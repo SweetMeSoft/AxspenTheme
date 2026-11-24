@@ -66,6 +66,12 @@
       assign card_color_scheme = custom_color_scheme
     endif
   -%}
+  {%- capture bf_badge -%}
+    {%- render 'bf-badge', product: card_product -%}
+  {%- endcapture -%}
+  {%- capture bf_price -%}
+    {%- render 'bf-price', product: card_product, price_style: 'atlas', hide_currency_code: true -%}
+  {%- endcapture -%}
   <div class="card-wrapper product-card-wrapper underline-links-hover">
     <div
       class="
@@ -262,6 +268,8 @@
                 >
                   Sold out
                 </span>
+              {%- elsif bf_badge != blank -%}
+                {{- bf_badge -}}
               {%- endif -%}
             </div>
           {% else %}
@@ -273,6 +281,8 @@
                 >
                   Sold out
                 </span>
+              {%- elsif bf_badge != blank -%}
+                {{- bf_badge -}}
               {%- endif -%}
             </div>
           {% endif %}
@@ -737,7 +747,11 @@
               </p>
             {%- endif -%}
 
-            {% render 'a-price', product: card_product, price_class: '', hide_currency_code: true %}
+            {%- if bf_price != blank -%}
+              {{- bf_price -}}
+            {%- else -%}
+              {% render 'a-price', product: card_product, price_class: '', hide_currency_code: true %}
+            {%- endif -%}
             {% assign card_stock_indicator_svg_color_1 = settings.card_stock_indicator_svg_color_1 %}
             {% if product_card_has_custom_settings %}
               {% assign card_stock_indicator_svg_color_1 = section.settings.card_stock_indicator_svg_color_1 %}
@@ -819,6 +833,8 @@
             >
               Sold out
             </span>
+          {%- elsif bf_badge != blank -%}
+            {{- bf_badge -}}
           {%- endif -%}
         </div>
       </div>

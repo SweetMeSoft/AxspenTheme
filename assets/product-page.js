@@ -668,7 +668,7 @@ function btyStickyAddToCart( doc = document ) {
 
 						// Update price.
 						if ( price ) {
-							price.innerHTML = btyPriceHtml( selected.price, selected.compare_at_price, selected.unit_price, selected.unit_price_measurement );
+							price.innerHTML = btyPriceHtml( selected.price, selected.compare_at_price, selected.unit_price, selected.unit_price_measurement, selected.available );
 						}
 
 						// Set max quantity.
