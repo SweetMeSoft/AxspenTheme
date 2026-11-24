@@ -1,0 +1,109 @@
+{%- liquid
+  assign bf_product = product | default: card_product
+  if variant != blank
+    assign bf_variant = variant
+  else
+    assign bf_variant = false
+  endif
+  assign bf_now = 'now' | date: '%s' | plus: 0
+  assign bf_start = 1795500000
+  assign bf_end = 1796101199
+  assign bf_discount_collection_handles = 'rebajas' | split: ','
+  assign bf_active = false
+  assign bf_has_discount_collection = false
+
+  assign bf_is_available = bf_product.available
+  if bf_variant
+    assign bf_is_available = bf_variant.available
+  endif
+
+  if bf_is_available and bf_now >= bf_start and bf_now <= bf_end
+    for bf_collection in bf_product.collections
+      assign bf_collection_handle = bf_collection.handle | downcase
+      if bf_discount_collection_handles contains bf_collection_handle
+        assign bf_has_discount_collection = true
+        break
+      endif
+    endfor
+
+    if bf_has_discount_collection
+      assign bf_pct = 40
+    else
+      assign bf_pct = 20
+    endif
+
+    assign bf_active = true
+    if bf_variant
+      assign bf_base_price = bf_variant.price | default: 0
+    else
+      assign bf_base_price = bf_product.price | default: 0
+      if bf_product.price_varies
+        assign bf_base_price = bf_product.price_min | default: bf_product.price
+      endif
+    endif
+    assign bf_original_price = bf_base_price
+    if bf_variant
+      if bf_variant.compare_at_price > bf_original_price
+        assign bf_original_price = bf_variant.compare_at_price
+      endif
+    else
+      if bf_product.compare_at_price > bf_original_price
+        assign bf_original_price = bf_product.compare_at_price
+      endif
+      if bf_product.price_varies and bf_product.compare_at_price_varies
+        assign bf_compare_at_price = bf_product.compare_at_price_min | default: bf_original_price
+        if bf_compare_at_price > bf_original_price
+          assign bf_original_price = bf_compare_at_price
+        endif
+      endif
+    endif
+
+    assign bf_keep = 100 | minus: bf_pct
+    assign bf_final_price = bf_base_price | times: bf_keep | divided_by: 100
+  endif
+-%}
+{%- if bf_active -%}
+  {%- if mode == 'badge' -%}
+    <span class="badge bf-badge{% if bf_pct == 40 %} bf-badge--40{% endif %}" aria-hidden="true">BLACK FRIDAY -{{ bf_pct }}%</span>
+  {%- elsif mode == 'config' -%}
+    data-bf-active="true" data-bf-pct="{{ bf_pct }}" data-bf-start="{{ bf_start }}" data-bf-end="{{ bf_end }}"
+  {%- elsif mode == 'price' -%}
+    {%- assign bf_money_original = bf_original_price | money -%}
+    {%- assign bf_money_final = bf_final_price | money -%}
+    {%- unless hide_currency_code -%}
+      {%- if settings.currency_code_enabled -%}
+        {%- assign bf_money_original = bf_original_price | money_with_currency -%}
+        {%- assign bf_money_final = bf_final_price | money_with_currency -%}
+      {%- endif -%}
+    {%- endunless -%}
+    {%- if price_style == 'atlas' -%}
+      <div class="price price--on-sale bf-price{% if price_class %} {{ price_class }}{% endif %}">
+        <div class="price__container">
+          <div class="price__sale">
+            <span class="visually-hidden visually-hidden--inline regular-price-label">Sale price</span>
+            <span class="price-item price-item--sale price-item--last">{{ bf_money_final }}</span>
+            <span class="visually-hidden visually-hidden--inline compare-price-label">Regular price</span>
+            <span class="price__compare-price">
+              <s class="price-item price-item--regular">{{ bf_money_original }}</s>
+            </span>
+          </div>
+        </div>
+      </div>
+    {%- else -%}
+      <div class="product-price bf-price{% if price_class %} {{ price_class }}{% endif %}">
+        <s class="regular-price">
+          <span class="sr-only">{{ 'products.product.price.regular_price' | t }} </span>
+          {{- bf_money_original -}}
+        </s>
+        <span class="price">
+          <span class="sr-only">{{ 'products.product.price.sale_price' | t }} </span>
+          {{- bf_money_final -}}
+        </span>
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+{%- else -%}
+  {%- if mode == 'config' -%}
+    data-bf-active="false" data-bf-pct="0" data-bf-start="{{ bf_start }}" data-bf-end="{{ bf_end }}"
+  {%- endif -%}
+{%- endif -%}

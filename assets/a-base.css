@@ -6663,3 +6663,28 @@ ul:empty {
     cursor: grabbing;
   }
 }
+
+.atlas-isolation-wrapper .badge.bf-badge {
+  background: #111;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.atlas-isolation-wrapper .badge.bf-badge--40 {
+  background: #c00;
+}
+
+.atlas-isolation-wrapper
+  .price.bf-price.price--on-sale
+  .price-item--sale.price-item--last {
+  color: #c00;
+  font-weight: 600;
+}
+
+.atlas-isolation-wrapper
+  .price.bf-price.price--on-sale
+  .price__compare-price
+  .price-item--regular {
+  color: rgba(var(--atlas-color-foreground), 0.65);
+  text-decoration: line-through;
+}

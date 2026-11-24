@@ -42,12 +42,26 @@
 	capture sold_out_tag
 		echo 'products.product.sold_out' | t
 	endcapture
+
+	capture bf_badge
+		render 'bf-badge', product: product
+	endcapture
+
+	capture bf_price
+		render 'bf-price', product: product
+	endcapture
+
+	if bf_price != blank
+		assign product_sale = false
+	endif
 -%}
 
 {% comment %} Badge {% endcomment %}
 {%- capture product_badge -%}
 	{%- if product.available == false and sold_out_tag != blank -%}
 		<span class="badge sold-out" aria-hidden="true">{{- sold_out_tag -}}</span>
+	{%- elsif bf_badge != blank -%}
+		{{- bf_badge -}}
 	{%- elsif product_sale and sale_tag != blank -%}
 		<span class="badge on-sale" aria-hidden="true">
 			{%- liquid
@@ -487,7 +501,11 @@
 		{% comment %} Price {% endcomment %}
 		{%- liquid
 			if settings.card_show_price
-				render 'price', product: product, use_variant: false
+				if bf_price != blank
+					echo bf_price
+				else
+					render 'price', product: product, use_variant: false
+				endif
 			endif
 		-%}
 

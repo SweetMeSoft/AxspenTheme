@@ -452,8 +452,55 @@ function btyFormatPrice( money = 0, format = false ) {
 	return format.replace( placeholderRegex, value );
 }
 
+function btyBfPriceHtml( price, compare_price = false, unit_price = false, unit_price_measurement = {}, available = true) {
+	let summary = document.querySelector( '.product-summary-inner[data-bf-active="true"]' );
+
+	if ( ! summary || ! available ) {
+		return '';
+	}
+
+	let pct   = parseInt( summary.getAttribute( 'data-bf-pct' ), 10 ) || 0,
+		start = parseInt( summary.getAttribute( 'data-bf-start' ), 10 ) || 0,
+		end   = parseInt( summary.getAttribute( 'data-bf-end' ), 10 ) || 0,
+		now   = Math.floor( Date.now() / 1000 );
+
+	if ( ! pct || ( start && now < start ) || ( end && now > end ) ) {
+		return '';
+	}
+
+	let basePrice   = parseInt( price, 10 ) || 0,
+		comparePrice = parseInt( compare_price, 10 ) || 0,
+		original     = comparePrice > basePrice ? comparePrice : basePrice,
+		finalPrice   = Math.floor( basePrice * ( 100 - pct ) / 100 ),
+		html         = '';
+
+	html += '<s class="regular-price">';
+	html += '<span class="sr-only">' + btyStrings.product.regular_price + ': </span>';
+	html += btyFormatPrice( original );
+	html += '</s>';
+
+	html += '<span class="price">';
+	html += '<span class="sr-only">' + btyStrings.product.sale_price + ': </span>';
+	html += btyFormatPrice( finalPrice );
+	html += '</span>';
+
+	if ( unit_price && unit_price_measurement.quantity_unit ) {
+		html += '<span class="unit-price">';
+		html += btyFormatPrice( unit_price ) + '/' + unit_price_measurement.quantity_unit;
+		html += '</span>';
+	}
+
+	return html;
+}
+
 // Render price html.
-function btyPriceHtml( price, compare_price = false, unit_price = false, unit_price_measurement = {}) {
+function btyPriceHtml( price, compare_price = false, unit_price = false, unit_price_measurement = {}, available = true) {
+	let bfHtml = btyBfPriceHtml( price, compare_price, unit_price, unit_price_measurement, available );
+
+	if ( bfHtml ) {
+		return bfHtml;
+	}
+
 	let html         = '',
 		regularPrice = btyStrings.product.regular_price;
 
@@ -2094,7 +2141,7 @@ function btyProductVariants( doc = document ) {
 
 							// Update price.
 							if ( price ) {
-								price.innerHTML = btyPriceHtml( selected.price, selected.compare_at_price, selected.unit_price, selected.unit_price_measurement );
+								price.innerHTML = btyPriceHtml( selected.price, selected.compare_at_price, selected.unit_price, selected.unit_price_measurement, selected.available );
 							}
 
 							// Update saved price badge.
@@ -2307,7 +2354,7 @@ function btyQuickViewVariants( doc = document, slider = {}) {
 
 				// Update price.
 				if ( price ) {
-					price.innerHTML = btyPriceHtml( selected.price, selected.compare_at_price, selected.unit_price, selected.unit_price_measurement );
+					price.innerHTML = btyPriceHtml( selected.price, selected.compare_at_price, selected.unit_price, selected.unit_price_measurement, selected.available );
 				}
 
 				// Update selected value.
@@ -2543,7 +2590,7 @@ function btyVariantsPopup( doc = document, popup ) {
 
 						// Update price.
 						if ( price ) {
-							price.innerHTML = btyPriceHtml( selected.price, selected.compare_at_price );
+							price.innerHTML = btyPriceHtml( selected.price, selected.compare_at_price, false, {}, selected.available );
 						}
 					}
 				}
@@ -2574,7 +2621,7 @@ function btyVariantsPopup( doc = document, popup ) {
 			}
 
 			if ( price ) {
-				price.innerHTML = btyPriceHtml( firstSelected.price, firstSelected.compare_at_price );
+				price.innerHTML = btyPriceHtml( firstSelected.price, firstSelected.compare_at_price, false, {}, firstSelected.available );
 			}
 		}
 	);
@@ -3069,7 +3116,7 @@ function btyQuickAdd( doc = document ) {
 						// Update product price.
 						let price = card.querySelector( '.product-price' );
 						if ( price ) {
-							price.innerHTML = btyPriceHtml( selected.price, selected.compare_at_price, selected.unit_price, selected.unit_price_measurement );
+							price.innerHTML = btyPriceHtml( selected.price, selected.compare_at_price, selected.unit_price, selected.unit_price_measurement, selected.available );
 						}
 
 						if ( selected.available ) {

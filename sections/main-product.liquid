@@ -367,7 +367,15 @@
 						<a href="{{ product.url | split: '?' | first }}">{{- product.title | escape -}}</a>
 					</h2>
 
-					{%- render 'price', product: product -%}
+					{%- capture bf_price -%}
+						{%- render 'bf-price', product: product, variant: selected_product -%}
+					{%- endcapture -%}
+
+					{%- if bf_price != blank -%}
+						{{- bf_price -}}
+					{%- else -%}
+						{%- render 'price', product: product -%}
+					{%- endif -%}
 				</div>
 			</div>
 
