@@ -14,8 +14,15 @@
     "topbar": {
       "type": "topbar",
       "blocks": {
+        "slide_8cjNAf": {
+          "type": "slide",
+          "settings": {
+            "text": "<h4>🛍️ BLACK FRIDAY · 20% en toda la tienda</h4>"
+          }
+        },
         "slide_AXY8tD": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "text": "<p>Jeans desde 89,900</p>"
           }
@@ -42,6 +49,7 @@
         }
       },
       "block_order": [
+        "slide_8cjNAf",
         "slide_AXY8tD",
         "slide_wBqpfF",
         "slide_yUgcVi",
