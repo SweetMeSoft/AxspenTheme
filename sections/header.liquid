@@ -714,7 +714,7 @@ document.addEventListener('click', function(e) {
   }
 
   // CASO 5: DETECTAR CLIC EN EL BOTÓN DE COMPRA (Añadir al carrito)
-  const addButton = e.target.closest('button[type="submit"], .add-to-cart-button, [name="add"], .gp-product-button');
+  const addButton = e.target.closest('.add-to-cart-button, [name="add"], .gp-product-button');
   if (addButton && !addButton.closest('.side-cart') && !addButton.closest('cart-drawer') && !addButton.closest('.go-to-checkout')) {
     console.log('¡Click de compra detectado!');
     setTimeout(function() {
